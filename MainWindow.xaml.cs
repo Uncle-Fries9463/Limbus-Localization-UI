@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -59,7 +59,6 @@ namespace Limbus_Json_Preview
                 "<sprite name=\\\"Vibration\\\"><color=#e30000>Тремор</color>\n" +
                 " - <sprite name=\\\"VibrationExplosion\\\"><color=#e30000>Провоцирование тремора</color>\n";
 
-            Def = "При нанесении навыком единиц потенциала <sprite name=\\\\\\\\\"Combustion\\\"><color=#e30000><u><link=\\\"Combustion\\\">Огня</link></u></color> или особого <sprite name=\\\"Combustion\\\"><color=#e30000><u><link=\\\"Combustion\\\">Огня</link></u></color> противнику, уже имеющего <sprite name=\\\"Combustion\\\"><color=#e30000><u><link=\\\"Combustion\\\">Огонь</link></u></color> или особый <sprite name=\\\"Combustion\\\"><color=#e30000><u><link=\\\"Combustion\\\">Огонь</link></u></color></color>, наносит в общей сложности <color=#f8c200>4 единицы потенциала <sprite name=\\\"Combustion\\\"><color=#e30000><u><link=\\\"Combustion\\\">Огня</link></u></color></color> всем противникам.\n\nПри активации абсолютного резонанса Гнева, наносит в общей сложности <color=#f8c200>6 единиц потенциала <sprite name=\\\"Combustion\\\"><color=#e30000><u><link=\\\"Combustion\\\">Огня</link></u></color></color> всем противникам в начале боевой фазы.";
             Export.SetValue(Paragraph.LineHeightProperty, 30.0);
             InputJson.Text = Def;
         }
@@ -159,6 +158,8 @@ namespace Limbus_Json_Preview
 
             input = Regex.Replace(input, @"(?<=<\/color>)([а-яА-Яa-zA-Z])", " $1");
             input = Regex.Replace(input, @"<link=\\\"".*?\\\"">", "");
+            input = input.Replace("<sprite name=\\\"Breath\\\">\0<color=#f8c200>", "<sprite name=\\\"Breath\\\">\0<color=#fac400>")
+                         .Replace("<sprite name=\\\"Charge\\\">\0<color=#f8c200>", "<sprite name=\\\"Breath\\\">\0<color=#fac400>");
 
             string[] parts = $"<s>\0{input.Replace("\\n", "\n")}".Split(['<', '>'], StringSplitOptions.RemoveEmptyEntries);
 
