@@ -255,7 +255,8 @@ namespace Limbus_Json_Preview
                                .Replace("</style>", "</color>")
                                .Replace("</link>", "")
                                .Replace("<u>", "")
-                               .Replace("</u>", "");
+                               .Replace("</u>", "")
+                               .Replace("<>", "<s>");
 
             JsonDesc = Regex.Replace(JsonDesc, @"(?<=<\/color>)([а-яА-Яa-zA-Z])", " $1");
             JsonDesc = Regex.Replace(JsonDesc, @"<link=\\\"".*?\\\"">", "");
