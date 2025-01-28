@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Limbus_Json_Preview"
-        mc:Ignorable="d"
         
         Closing="Window_Closing"
         Topmost="True"
@@ -14,37 +13,41 @@
         
     <Grid x:Name="Limbus_Json_Preview" Background="#0f0f0f">
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="90"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
 
+        <TextBox x:Name="InputJson"
+                 BorderThickness="0"
+                 TextChanged="TextChanged"
+                 Grid.Row="0"
+                 Margin="5"
+                 Height="80"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 FontFamily="Lucida Sans Unicode"
+                 FontWeight="Bold"
+                 FontSize="12.8"
+                 Foreground="#a69885"
+                 Background="#FF191919"/>
 
-        <TextBox x:Name="InputJson" Background="#0f0f0f" Grid.Row="0" Grid.Column="0" AcceptsReturn="True" TextWrapping="Wrap" FontFamily="Lucida Console" Foreground="#707070" TextChanged="TextChanged" BorderThickness="0,0,0,0" Margin="2,5,2,5">
-            <TextBox.Style>
-                <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                    <Style.Resources>
-                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Top" Stretch="None">
-                            <VisualBrush.Visual>
-                                <Label Content="Json desc" Foreground="LightGray"/>
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Style.Resources>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
+        <Image x:Name="TextBG" Grid.Row="1" Source="Фон.png" Stretch="UniformToFill"/>
 
-        <Image x:Name="TextBG" Grid.Column="0" Grid.Row="1" Source="Фон.png" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-
-
-        <RichTextBox IsReadOnly="True" Focusable="False" BorderThickness="0" Foreground="#eacaa0" FontFamily="Arial" FontStyle="Normal" FontSize="21" Background="{x:Null}" x:Name="Export" Grid.Row="1" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="57,40,0,0" Width="476" Height="185">
-            <FlowDocument>
-                <Paragraph LineHeight="10">
-                    Тут будет обработанный Json desc элемент
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
+        <RichTextBox x:Name="PreviewLayout"
+                     
+                     IsReadOnly="True"
+                     Focusable="False"
+                     BorderThickness="0"
+                     Foreground="#eacaa0"
+                     FontFamily="Arial"
+                     FontSize="21"
+                     FontStretch="UltraExpanded"
+                     Background="{x:Null}"
+                     Grid.Row="1"
+                     VerticalAlignment="Bottom"
+                     HorizontalAlignment="Left"
+                     Margin="53, 0, 0, 54"
+                     Width="480" 
+                     Height="180"/>
     </Grid>
 </Window>
