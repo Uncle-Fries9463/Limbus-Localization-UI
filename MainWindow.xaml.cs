@@ -336,7 +336,7 @@ namespace Limbus_Json_Preview
                             }
                             catch
                             {
-                                AddSprite(@"$Другое\Unknown.png");
+                                AddSprite(@"Unknown.png");
                             }
                         }
 
@@ -372,7 +372,7 @@ namespace Limbus_Json_Preview
                     }
                     catch
                     {
-                        AddSprite(@"$Другое\Unknown.png");
+                        AddSprite(@"Unknown.png");
                     }
                 }
             }
