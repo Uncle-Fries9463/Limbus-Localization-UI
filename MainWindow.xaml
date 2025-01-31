@@ -5,49 +5,832 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Limbus_Json_Preview"
         
+        WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
         Topmost="True"
-        ResizeMode="CanMinimize"
+        ResizeMode="CanResize"
+        SizeChanged="Limbus_Json_to_Text_SizeChanged"
         
-        Title="Limbus Json desc Preview" Height="400" Width="600">
+        MinHeight="320"
+        MinWidth="600"
+        MaxWidth="900"
+        Width="900" 
+        Height="443"
         
-    <Grid x:Name="Limbus_Json_Preview" Background="#0f0f0f">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="90"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+        Title="Limbus Json desc Preview">
+    
+    
+    <Window.Resources>
+        <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsFlicksEnabled" Value="True" />
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Vertical">
+                    <Setter Property="Width" Value="29" />
+                    <Setter Property="MinWidth" Value="29" />
+                    <Setter Property="Margin" Value="0, 0, 3, 0" />
+                    <Setter Property="Background" Value="AliceBlue" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#FF191919"/>
+            <Setter Property="Foreground" Value="#EE2D2D"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="#FF333333"/>
+            <Setter Property="FontFamily" Value="Cascadia Mono SemiLight"/>
+            <Setter Property="FontSize" Value="19"/>
+            <Setter Property="Foreground" Value="#A69885"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#eebe2d"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#ffffff"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
+    
+
+
+
+    <Grid x:Name="Limbus_Json_Preview" Background="#0F0F0F">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="590"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <!-- <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="1" Grid.Column="1" Panel.ZIndex="1" Focusable="False"/> -->
+        <!-- <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="1" Grid.Column="0" Panel.ZIndex="1" Focusable="False"/> -->
         <TextBox x:Name="InputJson"
                  BorderThickness="0"
                  TextChanged="TextChanged"
                  Grid.Row="0"
-                 Margin="5"
-                 Height="80"
                  TextWrapping="Wrap"
                  AcceptsReturn="True"
+                 VerticalAlignment="Top"
+                 HorizontalAlignment="Left"
+                 Width="580"
+                 Height="133"
+                 Margin="5"
                  FontFamily="Lucida Sans Unicode"
                  FontWeight="Bold"
                  FontSize="12.8"
-                 Foreground="#a69885"
-                 Background="#FF191919"/>
+                 Foreground="#A69885"
+                 Background="#FF191919" UndoLimit="100500"/>
 
-        <Image x:Name="TextBG" Grid.Row="1" Source="Фон.png" Stretch="UniformToFill"/>
+        <Image x:Name="TextBG" Source="Спрайты\$Другое\Фон.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
 
         <RichTextBox x:Name="PreviewLayout"
-                     
                      IsReadOnly="True"
                      Focusable="False"
                      BorderThickness="0"
-                     Foreground="#eacaa0"
+                     Foreground="#EACAA0"
                      FontFamily="Arial"
                      FontSize="21"
-                     FontStretch="UltraExpanded"
                      Background="{x:Null}"
                      Grid.Row="1"
                      VerticalAlignment="Bottom"
                      HorizontalAlignment="Left"
-                     Margin="53, 0, 0, 54"
+                     Margin="53, 0, 0, 60"
                      Width="480" 
-                     Height="180"/>
+                     Height="180"
+                     Cursor="Pen"/>
+
+
+
+
+
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition           />
+                <ColumnDefinition Width="10"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10" />
+                <RowDefinition Height="140"/>
+                <RowDefinition             />
+                <RowDefinition Height="10" />
+            </Grid.RowDefinitions>
+
+
+            <Border Grid.Column="1"
+                    Grid.Row="1"
+                    Height="29"
+                    Width="241"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    BorderThickness="2"
+                    BorderBrush="#FF333333">
+                <TextBox x:Name="JsonFilepath"
+                         Grid.Column="1" 
+                         Grid.Row="1" 
+                         VerticalAlignment="Top"
+                         HorizontalAlignment="Left"
+                         TextChanged="JsonPath_TextChanged"
+                          
+                         Width="212"
+                         Height="25"
+                          
+                         TextAlignment="Left"
+                         
+                         BorderThickness="0"
+                         
+                         Foreground="#A69885"
+                         Background="#E9191919"
+                         
+                         SelectionBrush="#FF939393"
+                         SelectionTextBrush="#A69885"
+                         CaretBrush="#A69885"
+                               
+                         FontFamily="Cascadia Mono SemiLight"
+                         FontSize="19">
+                </TextBox>
+            </Border>
+            <Border Grid.Column="1"
+                    Grid.Row="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Height="25"
+                    Width="25"
+                    Background="#E9191919"
+                    Margin="214, 2, 0, 0"
+                    ToolTipService.InitialShowDelay="0">
+                <Button x:Name="JsonFile_SelectFile_Button"
+                        Click="JsonFile_SelectFile"
+                        Width="23"
+                        Height="23">
+                    <Button.ToolTip>
+                        <ToolTip x:Name="LoadJson_Tooltip"
+                                 Background="#605B5B5B"
+                                 Foreground="White"
+                                 HasDropShadow="False"
+                                 Placement="MousePoint"
+                                 HorizontalOffset="15"
+                                 VerticalOffset="10"
+                                 >
+                            <StackPanel>
+                                <TextBlock x:Name="LoadJson_Tooltip_Text">Выбрать в проводнике</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
+            </Border>
+
+            <Label x:Name="JsonFilepath_bgtext"
+                   FontStyle="Italic"
+                   Grid.Column="1" 
+                   Grid.Row="1" 
+                   VerticalAlignment="Top"
+                   HorizontalAlignment="Left"
+                   IsHitTestVisible="False"
+                   Background="{x:Null}"
+                   Margin="0, -2, 0, 0"
+                   Height="35" 
+                   Width="238"
+                   
+                   Focusable="False"
+                   
+                   FontFamily="Cascadia Mono SemiLight"
+                   FontSize="19"
+                   Foreground="#FF514C46"
+                   
+                   Content="Путь к Json файлу">
+            </Label>
+
+            <Button x:Name="JsonFilepath_ReadFile"
+                    Click="LoadJsonFile_Button"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
+                    Margin="247, 0, 0, 0"
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    Content=""
+                    Width="29"
+                    Height="29"
+                    ToolTipService.InitialShowDelay="0">
+                <Button.ToolTip>
+                    <ToolTip
+                             Background="#605B5B5B"
+                             Foreground="White"
+                             HasDropShadow="False"
+                             Placement="MousePoint"
+                             HorizontalOffset="15"
+                             VerticalOffset="10" >
+                        <StackPanel>
+                            <TextBlock>Загрузить .json файл с локализацией</TextBlock>
+                            <TextBlock>(Режим ЭГО Даров)</TextBlock>
+                        </StackPanel>
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+
+            <StackPanel Grid.Column="1"
+                        Grid.Row="1"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="0, 60, 0, 0"
+                        Width="275"
+                        Height="82"
+                        Focusable="False">
+
+                <Border BorderThickness="1.8"
+                        BorderBrush="#eebe2d"
+                        CornerRadius="3"
+                        Height="40">
+                    <ScrollViewer
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        VerticalAlignment="Center">
+                        <RichTextBox Background="{x:Null}"
+                                     IsReadOnly="True"
+                                     Focusable="False"
+                                     BorderThickness="0">
+                            <FlowDocument>
+                                <Paragraph TextAlignment="Center">
+                                    <Run x:Name="EgoGift_Name_Show"
+                                         Text="Название"
+                                         FontFamily="./#Mikodacs"
+                                         Foreground="#eecea4"
+                                         FontSize="20.5">
+                                    </Run>
+                                </Paragraph>
+                            </FlowDocument>
+                        </RichTextBox>
+                    </ScrollViewer>
+                </Border>
+
+
+                <StackPanel Orientation="Horizontal" Height="42" Margin="0, 3, 0, 0">
+                    <Border Height="29"
+                            Width="241"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            BorderThickness="2"
+                            BorderBrush="#FF333333">
+                        <TextBox x:Name="EgoGift_JumpToID_Input"
+                                 Grid.Column="1" 
+                                 Grid.Row="1" 
+                                 Margin="0, 0, 0, 0"
+                                 VerticalAlignment="Top"
+                                 HorizontalAlignment="Left"
+                                 TextChanged="EgoGift_JumpToID_Input_TextChanged"
+              
+                                 Width="239"
+                                 Height="27"
+              
+                                 TextAlignment="Left"
+             
+                                 BorderThickness="0"
+             
+                                 Foreground="#A69885"
+                                 Background="#E9191919"
+             
+                                 SelectionBrush="#FF939393"
+                                 SelectionTextBrush="#A69885"
+                                 CaretBrush="#A69885"
+                   
+                                 FontFamily="Cascadia Mono SemiLight"
+                                 FontSize="19"/>
+                    </Border>
+
+                    <Label x:Name="EgoGift_JumpToID_bgtext"
+                           FontStyle="Italic"
+                           Grid.Column="1" 
+                           Grid.Row="1" 
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Left"
+                           IsHitTestVisible="False"
+                           Background="{x:Null}"
+                           Margin="-242, -2, 0, 0"
+                           Height="35" 
+                           Width="238"
+       
+                           Focusable="False"
+       
+                           FontFamily="Cascadia Mono SemiLight"
+                           FontSize="19"
+                           Foreground="#FF514C46"
+       
+                           Content="Перейти к ID..">
+                    </Label>
+
+                    <Button x:Name="EgoGift_JumpToID_Button"
+                            Click="EgoGift_JumpToID_Button_Click"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Left"
+                            Margin="5, 0, 0, 0"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            Content=""
+                            Width="29"
+                            Height="29"
+                            ToolTipService.InitialShowDelay="0">
+                        <Button.ToolTip>
+                            <ToolTip x:Name="s3"
+                                     Background="#605B5B5B"
+                                     Foreground="White"
+                                     HasDropShadow="False"
+                                     Placement="MousePoint"
+                                     HorizontalOffset="15"
+                                     VerticalOffset="10" >
+                                <StackPanel>
+                                    <TextBlock x:Name="s2">Перейти к объекту через ID</TextBlock>
+                                </StackPanel>
+                            </ToolTip>
+                        </Button.ToolTip>
+                    </Button>
+                </StackPanel>
+                <Border Height="2" Margin="0, -1, 0, 0" Background="#eecea4"/>
+            </StackPanel>
+
+            <Button x:Name="EgoGift_ID_SwitchPrev"
+                    Click="EgoGift_ID_SwitchPrev_Click"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Width="70"
+                    Height="16"
+                    Margin="0, 41, 0, 0"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    HorizontalContentAlignment="Stretch"/>
+
+            <Button x:Name="EgoGift_ID_SwitchNext"
+                    Click="EgoGift_ID_SwitchNext_Click"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Width="70"
+                    Height="16"
+                    Margin="204, 41, 0, 0"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    HorizontalContentAlignment="Stretch"/>
+
+            <Border Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Width="115"
+                    Height="16"
+                    BorderThickness="1"
+                    Margin="80, 41, 0, 0"
+                    BorderBrush="#FF333333" Background="#FF171717">
+                <Label x:Name="EgoGift_ID_Show"
+                       FontStyle="Italic"
+                       Grid.Column="1" 
+                       Grid.Row="1" 
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Left"
+                       IsHitTestVisible="False"
+                       Background="{x:Null}"
+                       Margin="-1, -5.5, 0, 0"
+                       Height="35" 
+                       Width="115"
+       
+                       Focusable="False"
+       
+                       FontFamily="Cascadia Mono SemiLight"
+                       FontSize="12"
+                       Foreground="#FF7C746B"
+       
+                       HorizontalContentAlignment="Center"
+                       Content="ID">
+                </Label>
+            </Border>
+
+            
+            <Border Grid.Column="1" 
+                    Grid.Row="2"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Width="276"
+                    BorderBrush="#FF4B4B4B" 
+                    BorderThickness="2" 
+                    CornerRadius="3">
+                
+                <ScrollViewer Margin="3, 35, 0, 0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <Button x:Name="EgoGift_SwitchEditorTo_Desc"
+                                Click="EgoGift_SwitchEditorTo_Desc_Button"
+                                Content="Описание"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Margin="0, 0, 0, 0"
+                                Width="232.5"
+                                Height="30"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Background="#FF191919"
+                                BorderThickness="2"
+                                BorderBrush="#FF414141"
+                                FontFamily="Cascadia Mono SemiLight"
+                                FontSize="19"
+                                Foreground="#A69885">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc1"
+                                Click="EgoGift_SwitchEditorTo_SimpleDesc1_Button"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Width="232.5"
+                                Height="30"
+                                Margin="0, 4, 0, 0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Content="Простое описание 1"
+                                Background="#FF191919"
+                                BorderThickness="2"
+                                BorderBrush="#FF414141"
+                                FontFamily="Cascadia Mono SemiLight"
+                                FontSize="19"
+                                Foreground="#A69885">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc2"
+                                Click="EgoGift_SwitchEditorTo_SimpleDesc2_Button"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Width="232.5"
+                                Height="30"
+                                Margin="0, 4, 0, 0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Content="Простое описание 2"
+                                Background="#FF191919"
+                                BorderThickness="2"
+                                BorderBrush="#FF414141"
+                                FontFamily="Cascadia Mono SemiLight"
+                                FontSize="19"
+                                Foreground="#A69885">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Border x:Name="EgoGift_SimpleDesc2_Cover"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Background="#7F000000"
+                                Margin="0, -30, 0, 0"
+                                Width="232.5"
+                                Height="30"
+                                Focusable="False"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"/>
+                        <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc3"
+                                Click="EgoGift_SwitchEditorTo_SimpleDesc3_Button"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Width="232.5"
+                                Height="30"
+                                Margin="0, 4, 0, 0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Content="Простое описание 3"
+                                Background="#FF191919"
+                                BorderThickness="2"
+                                BorderBrush="#FF414141"
+                                FontFamily="Cascadia Mono SemiLight"
+                                FontSize="19"
+                                Foreground="#A69885">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Border x:Name="EgoGift_SimpleDesc3_Cover"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Background="#7F000000"
+                                Margin="0, -30, 0, 0"
+                                Width="232.5"
+                                Height="30"
+                                Focusable="False"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"/>
+                        <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc4"
+                                Click="EgoGift_SwitchEditorTo_SimpleDesc4_Button"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Width="232.5"
+                                Height="30"
+                                Margin="0, 4, 0, 0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Content="Простое описание 4"
+                                Background="#FF191919"
+                                BorderThickness="2"
+                                BorderBrush="#FF414141"
+                                FontFamily="Cascadia Mono SemiLight"
+                                FontSize="19"
+                                Foreground="#A69885">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border"
+                                                            Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Border x:Name="EgoGift_SimpleDesc4_Cover"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Background="#7F000000"
+                                Margin="0, -30, 0, 0"
+                                Width="232.5"
+                                Height="30"
+                                Focusable="False"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"/>
+                        <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc5"
+                                Click="EgoGift_SwitchEditorTo_SimpleDesc5_Button"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Width="232.5"
+                                Height="30"
+                                Margin="0, 4, 0, 0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Content="Простое описание 5"
+                                Background="#FF191919"
+                                BorderThickness="2"
+                                BorderBrush="#FF414141"
+                                FontFamily="Cascadia Mono SemiLight"
+                                FontSize="19"
+                                Foreground="#A69885">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border"
+                                                            Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Border x:Name="EgoGift_SimpleDesc5_Cover"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Background="#7F000000"
+                                Margin="0, -30, 0, 0"
+                                Width="232.5"
+                                Height="30"
+                                Focusable="False"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"/>
+                        <Border Margin="2"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <StackPanel Grid.Column="1"
+                        Grid.Row="2"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top">
+
+
+                <Border Margin="5, 5, 0, 0"
+                        BorderBrush="#FF333333"
+                        BorderThickness="2"
+                        Width="232.5"
+                        Height="29">
+                    <TextBox x:Name="EgoGift_Name"
+                             Grid.Column="1" 
+                             Grid.Row="2" 
+                             VerticalAlignment="Top"
+                             HorizontalAlignment="Left"
+                             TextChanged="EgoGift_Name_TextChanged"
+                     
+                             Height="25" 
+                             Width="228"
+                     
+                             TextAlignment="Left"
+                     
+                             BorderThickness="0"
+                     
+                             Background="#E9191919"
+                     
+                             Foreground="#A69885"
+                             SelectionBrush="#FF939393"
+                             SelectionTextBrush="#A69885"
+                             CaretBrush="#A69885"
+                               
+                             FontFamily="Cascadia Mono SemiLight"
+                             FontSize="19"/>
+                </Border>
+
+                <Label x:Name="EgoGift_Name_bgtext"
+                       FontStyle="Italic"
+                       Grid.Column="1" 
+                       Grid.Row="2" 
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Left"
+                       IsHitTestVisible="False"
+                       Background="{x:Null}"
+                       Margin="5, -31, 0, 0"
+                       Height="35" 
+                       Width="228"
+       
+                       Focusable="False"
+       
+                       FontFamily="Cascadia Mono SemiLight"
+                       FontSize="19"
+                       Foreground="#FF514C46"
+       
+                       Content="Название ЭГО Дара">
+            </Label>
+            </StackPanel>
+            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" Width="29" Height="232" Margin="242, 5, 0, 0">
+                <Button x:Name="EgoGift_Name_ChangeName_Button"
+                        Click="EgoGift_Name_ChangeName"
+                        Width="29" Height="29">
+                </Button>
+                
+                <Button x:Name="EgoGift_Desc_ChangeDesc_Button"
+                        Click="EgoGift_Desc_ChangeDesc"
+                        Width="29" Height="30" Margin="0, 3, 0, 0">
+                </Button>
+                <Button x:Name="EgoGift_Desc_SimpleDesc1_Button"
+                        Click="EgoGift_Desc_ChangeSimpleDesc1"
+                        Width="29" Height="30" Margin="0, 4, 0, 0">
+                </Button>
+                <Button x:Name="EgoGift_Desc_SimpleDesc2_Button"
+                        Click="EgoGift_Desc_ChangeSimpleDesc2"
+                        Width="29" Height="30" Margin="0, 4, 0, 0">
+                </Button>
+                <Border x:Name="SimpleDesc2_Change_Cover"
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Background="#7F000000"
+                        Margin="0, -30, 0, 0"
+                        Width="29"
+                        Height="30"
+                        Focusable="False"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"/>
+                
+                <Button x:Name="EgoGift_Desc_SimpleDesc3_Button"
+                        Click="EgoGift_Desc_ChangeSimpleDesc3"
+                        Width="29" Height="30" Margin="0, 4, 0, 0">
+                </Button>
+                <Border x:Name="SimpleDesc3_Change_Cover"
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Background="#7F000000"
+                        Margin="0, -30, 0, 0"
+                        Width="29"
+                        Height="30"
+                        Focusable="False"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"/>
+
+                <Button x:Name="EgoGift_Desc_SimpleDesc4_Button"
+                        Click="EgoGift_Desc_ChangeSimpleDesc4"
+                        Width="29" Height="30" Margin="0, 4, 0, 0">
+                </Button>
+                <Border x:Name="SimpleDesc4_Change_Cover"
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Background="#7F000000"
+                        Margin="0, -30, 0, 0"
+                        Width="29"
+                        Height="30"
+                        Focusable="False"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"/>
+
+                <Button x:Name="EgoGift_Desc_SimpleDesc5_Button"
+                        Click="EgoGift_Desc_ChangeSimpleDesc5"
+                        Width="29" Height="30" Margin="0, 4, 0, 0">
+                </Button>
+                <Border x:Name="SimpleDesc5_Change_Cover"
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Background="#7F000000"
+                        Margin="0, -30, 0, 0"
+                        Width="29"
+                        Height="30"
+                        Focusable="False"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
