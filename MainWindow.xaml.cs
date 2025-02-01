@@ -1,21 +1,12 @@
 ﻿using System.IO;
-using System.Reflection.Emit;
-using System.Security.Policy;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using SixLabors.ImageSharp;
-using Image = System.Windows.Controls.Image;
 
-
-namespace Limbus_Json_Preview
+namespace Limbus_Localization_UI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -36,21 +27,20 @@ namespace Limbus_Json_Preview
         {
             InitializeComponent();
 
-
             TextBG.Source = SpriteBitmaps[@"$Другое\Фон.png"];
             JsonFile_SelectFile_Button.Content     = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-text-document-32329.png"]};
             JsonFilepath_ReadFile.Content          = new Image{Source = SpriteBitmaps[@"$Другое\free_icon_book_14095035.png"   ], Margin = new Thickness(-1, 0, 0, 0)};
             EgoGift_ID_SwitchPrev.Content          = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-growth-4534634_1.png"], Margin = new Thickness(-1, 0, 0, 0)};
             EgoGift_ID_SwitchNext.Content          = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-growth-4534634_2.png"], Margin = new Thickness( 1, 0, 0, 0)};
             EgoGift_JumpToID_Button.Content        = new Image{Source = SpriteBitmaps[@"$Другое\free_icon_book_14095035.png"   ], Margin = new Thickness(-2, 0, 0, 0)};
-            EgoGift_Name_ChangeName_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-check-mark-11382946.png"] };
+            EgoGift_Name_ChangeName_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png" ]};
             
-            EgoGift_Desc_ChangeDesc_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-check-mark-11382946.png"] };
-              EgoGift_Desc_SimpleDesc1_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-check-mark-11382946.png"] };
-              EgoGift_Desc_SimpleDesc2_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-check-mark-11382946.png"] };
-              EgoGift_Desc_SimpleDesc3_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-check-mark-11382946.png"] };
-              EgoGift_Desc_SimpleDesc4_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-check-mark-11382946.png"] };
-              EgoGift_Desc_SimpleDesc5_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-check-mark-11382946.png"] };
+            EgoGift_Desc_ChangeDesc_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
+              EgoGift_Desc_SimpleDesc1_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
+              EgoGift_Desc_SimpleDesc2_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
+              EgoGift_Desc_SimpleDesc3_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
+              EgoGift_Desc_SimpleDesc4_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
+              EgoGift_Desc_SimpleDesc5_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
 
             PreviewLayout.Document.Blocks.Clear();
             string Def = "Статусные эффекты, <style=\\\"upgradeHighlight\\\">Подсветка улучшения</style>\r\n<sprite name=\\\"Breath\\\"><color=#f8c200>Дыхание</color>\r\n<sprite name=\\\"Charge\\\"><color=#f8c200>Заряд</color>\r\n<sprite name=\\\"Laceration\\\"><color=#e30000>Кровотечение</color>\r\n<sprite name=\\\"Combustion\\\"><color=#e30000>Огонь</color>\r\n<sprite name=\\\"Burst\\\"><color=#e30000>Разрыв</color>\r\n<sprite name=\\\"Sinking\\\"><color=#e30000>Утопание</color>\r\n<sprite name=\\\"Vibration\\\"><color=#e30000>Тремор</color>\r\n - <sprite name=\\\"VibrationExplosion\\\"><color=#e30000>Провоцирование тремора</color>\r\n\r\n<sprite name=\\\"Ктокто\\\"><color=#e30000>Неправильный спрайт</color>\r\n<color=#e30000>Неправильный поломанный текст (цвет используется без спрайта, для подсветки улучшения ЭГО Дара должен использоваться вышеуказанный <style=\\\"upgradeHighlight\\\">upgradeHighlight</style>)\r\n\r\n< Поломанный текст после незакрытой острой скобки, всегда закрывайте их\r\n<sprite name=\\\"Burst\\\"><color=#e30000>Разрыв</color>";
@@ -67,7 +57,7 @@ namespace Limbus_Json_Preview
             PreviewLayout.Document.Blocks.Clear();
             UpdatePreview(InputJson.Text);
 
-            await Task.Delay(50);
+            await Task.Delay(10);
             if (Json_Dictionary_CurrentID != -1)
             {
                 switch (CurrentDesc)
@@ -211,16 +201,18 @@ namespace Limbus_Json_Preview
             if (IsOneWord & WordWrap_WithSprites || (Is_MultWords_Queued & WordWrap_WithSprites))
             {
                 InlineUIContainer SpriteImageContainer = new();
-                Image SpriteImage = new() {Source = SpriteBitmaps[SpriteName]};
-
-                SpriteImage.Width = 23;
-                SpriteImage.Height = 23;
-                SpriteImage.Margin = new Thickness(-2, -1, -2, 0);
+                Image SpriteImage = new()
+                {
+                    Source = SpriteBitmaps[SpriteName],
+                    Width = 23,
+                    Height = 23,
+                    Margin = new Thickness(-2, -1, -2, 0)
+                };
 
                 StackPanel SpritePlusEffectname = new StackPanel()
                 {
                     Orientation = Orientation.Horizontal,
-                    // Background = new SolidColorBrush(Colors.Gray), // Border
+                    //Background = new SolidColorBrush(Colors.Gray), // Border
                 };
                 SpritePlusEffectname.Children.Add(new TextBlock(new InlineUIContainer(SpriteImage)));
                 Run EffectName = new Run(NextWord) {TextDecorations = TextDecorations.Underline};
@@ -343,8 +335,8 @@ namespace Limbus_Json_Preview
                             }
 
                             string spritename = parts[i].Split("\\\"")[1];
-                            if (SpriteBitmaps.Keys.Contains($"{spritename}.png")) spritename = $"{spritename}.png";
-                            else if (SpriteBitmaps.Keys.Contains($"{spritename}.webp")) spritename = $"{spritename}.webp";
+                            if (SpriteBitmaps.ContainsKey($"{spritename}.png")) spritename = $"{spritename}.png";
+                            else if (SpriteBitmaps.ContainsKey($"{spritename}.webp")) spritename = $"{spritename}.webp";
                             try
                             {
                                 AddSprite(spritename, NextWord: NextWord, NextColor: NextColor, IsOneWord: IsOneWord);
@@ -398,14 +390,37 @@ namespace Limbus_Json_Preview
             MessageBoxResult result = MessageBox.Show("Папка \"Спрайты\" потерялась, она должна быть прямо тут", "Что-то не так", MessageBoxButton.OK, MessageBoxImage.Information);
             if (result == MessageBoxResult.OK) Environment.Exit(0);
         }
+        
+
+        private void Exit_Yes(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+        private void Exit_No(object sender, RoutedEventArgs e)
+        {
+            OverrideCover1.Margin = new Thickness(1000);
+            OverrideCover2.Margin = new Thickness(1000);
+            ExitDialog.Margin = new Thickness(1000);
+        }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Вы завершили редактирование?", "Закрытие приложения", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (result == MessageBoxResult.No) e.Cancel = true;
-            else
+            if (Json_Dictionary_CurrentID != -1)
             {
-                if (File.Exists(JsonFilepath_PATH)) РазноеДругое.SetRW(JsonFilepath_PATH); 
+                (string, string) ExitData = JsonLoader.GetUnsavedContent(EditBuffer);
+
+                if (Convert.ToInt32(ExitData.Item2) != 0)
+                {
+                    OverrideCover1.Margin = new Thickness(0);
+                    OverrideCover2.Margin = new Thickness(0);
+                    ExitDialog.Margin = new Thickness(0);
+
+                    e.Cancel = true;
+                    UnsavedChangesTooltip_Text.Text = ExitData.Item1.Trim();
+                   // UnsavedChangesTooltip.Height = 20 * ExitData.Item1.Trim().Split('\n').Length;
+                    UnsavedChangesCount.Text = ExitData.Item2;
+                }
+
             }
         }
 
@@ -420,7 +435,7 @@ namespace Limbus_Json_Preview
             else this.MaxWidth = 900;
         }
 
-        private void Check_bgtext(TextBox tb, System.Windows.Controls.Label lb, string lb_text)
+        private static void Check_bgtext(TextBox tb, System.Windows.Controls.Label lb, string lb_text)
         {
             if(tb.Text != "") lb.Content = "";
             else lb.Content = lb_text;
@@ -481,7 +496,9 @@ namespace Limbus_Json_Preview
         {
             Json_Dictionary_CurrentID = ID;
             IDSwitch_CheckEditBufferDescs();
-
+            EgoGift_ID_Switch_CheckButtons();
+            InputJson.IsUndoEnabled = false;
+            InputJson.IsUndoEnabled = true;
 
             EgoGift_Name_Show.Text = Convert.ToString(Json_Dictionary[Json_Dictionary_CurrentID]["Name"]);
             EgoGift_Name.Text = Convert.ToString(Json_Dictionary[Json_Dictionary_CurrentID]["Name"]);
@@ -528,7 +545,7 @@ namespace Limbus_Json_Preview
                 EgoGift_SimpleDesc5_Cover.Height = 30;
                 SimpleDesc5_Change_Cover.Height = 30;
             }
-            EgoGift_ID_Show.Content = Json_Dictionary_CurrentID;
+            EgoGift_ID_CopyID_Button.Content = Json_Dictionary_CurrentID;
 
             CurrentDesc = "Desc";
             if (EditBuffer[Json_Dictionary_CurrentID]["Desc"].Equals("{unedited}"))
@@ -574,23 +591,43 @@ namespace Limbus_Json_Preview
 
         private void JsonFile_SelectFile(object sender, RoutedEventArgs e)
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-
-            dialog.InitialDirectory = $@"{Directory.GetDirectories(@"C:\Program Files (x86)\Steam\steamapps\common\Limbus Company\BepInEx\plugins")[0]}\Localize\RU";
-            dialog.DefaultExt = ".json";
-            dialog.Filter = "Text documents (.json)|*.json";
-
-            bool? result = dialog.ShowDialog();
-
-            if (result == true)
+            try
             {
-                string filename = dialog.FileName;
-                JsonFilepath.Text = filename;
-                LoadJsonFile(filename);
+                var dialog = new Microsoft.Win32.OpenFileDialog();
+
+                try   { dialog.InitialDirectory = $@"{Directory.GetDirectories(@"C:\Program Files (x86)\Steam\steamapps\common\Limbus Company\BepInEx\plugins")[0]}\Localize\RU"; }
+                catch { dialog.InitialDirectory = ""; }
+                dialog.DefaultExt = ".json";
+                dialog.Filter = "Text documents (.json)|*.json";
+
+                bool? result = dialog.ShowDialog();
+
+                if (result == true)
+                {
+                    string filename = dialog.FileName;
+                    JsonFilepath.Text = filename;
+                    LoadJsonFile(filename);
+                }
+            }
+            catch
+            {
+                TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Ошибка при чтении файла", "Путь к Json файлу", "Check_JsonFilepath_bgtext");
             }
         }
 
-        private async void LoadJsonFile(string path)
+        private async void Notify(string text)
+        {
+            JsonFilepath.Focusable = false;
+            JsonFilepath.Foreground = РазноеДругое.GetColorFromHexa("#FF191919");
+            JsonFilepath_bgtext.Content = text;
+            JsonFilepath_bgtext.Foreground = РазноеДругое.GetColorFromHexa("#FF39CF2B");
+            await Task.Delay(1150);
+            JsonFilepath_bgtext.Content = "";
+            JsonFilepath.Focusable = true;
+            JsonFilepath.Foreground = РазноеДругое.GetColorFromHexa("#FFA69885");
+        }
+
+        private void LoadJsonFile(string path)
         {
             if (!File.Exists(path))
             {
@@ -619,19 +656,22 @@ namespace Limbus_Json_Preview
                         };
                         
                     }
+                    Name_ChangeNameInput_Cover.Height = 0;
+                    Name_ChangeName_Cover.Height = 0;
+
+                    EgoGift_Desc_Cover.Height = 0;
+                    Desc_Change_Cover.Height = 0;
+
+                    EgoGift_SimpleDesc1_Cover.Height = 0;
+                    SimpleDesc1_Change_Cover.Height = 0;
+
+
                     Json_Dictionary_CurrentID = JsonKeys[0];
                     EgoGiftMenu_SwitchToID(Json_Dictionary_CurrentID);
 
                     РазноеДругое.SetRO(path);
 
-                    JsonFilepath.Focusable = false;
-                    JsonFilepath.Foreground = РазноеДругое.GetColorFromHexa("#FF191919");
-                    JsonFilepath_bgtext.Content = "Json загружен";
-                    JsonFilepath_bgtext.Foreground = РазноеДругое.GetColorFromHexa("#FF39CF2B");
-                    await Task.Delay(1050);
-                    JsonFilepath_bgtext.Content = "";
-                    JsonFilepath.Focusable = true;
-                    JsonFilepath.Foreground = РазноеДругое.GetColorFromHexa("#FFA69885");
+                    Notify("Json загружен");
                 }
                 catch
                 {
@@ -649,7 +689,15 @@ namespace Limbus_Json_Preview
 
 
 
-
+        private void EgoGift_ID_Switch_CheckButtons()
+        {
+            EgoGift_ID_SwitchPrev_Cover.Height = 0;
+            EgoGift_ID_SwitchNext_Cover.Height = 0;
+            try { var PrevCheck = JsonKeys[JsonKeys.IndexOf(Json_Dictionary_CurrentID) - 1]; }
+            catch { EgoGift_ID_SwitchPrev_Cover.Height = 16; }
+            try { var NextCheck = JsonKeys[JsonKeys.IndexOf(Json_Dictionary_CurrentID) + 1]; }
+            catch { EgoGift_ID_SwitchNext_Cover.Height = 16; }
+        }
         private void EgoGift_ID_SwitchPrev_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -657,15 +705,20 @@ namespace Limbus_Json_Preview
                 Json_Dictionary_CurrentID = JsonKeys[JsonKeys.IndexOf(Json_Dictionary_CurrentID) - 1];
                 EgoGiftMenu_SwitchToID(Json_Dictionary_CurrentID);
 
+                EgoGift_ID_Switch_CheckButtons();
             }
             catch { }
         }
+
+        
         private void EgoGift_ID_SwitchNext_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 Json_Dictionary_CurrentID = JsonKeys[JsonKeys.IndexOf(Json_Dictionary_CurrentID) + 1];
                 EgoGiftMenu_SwitchToID(Json_Dictionary_CurrentID);
+
+                EgoGift_ID_Switch_CheckButtons();
             }
             catch { }
         }
@@ -740,13 +793,26 @@ namespace Limbus_Json_Preview
                 EgoGiftMenu_SwitchToID(Convert.ToInt32(EgoGift_JumpToID_Input.Text));
                 EgoGift_JumpToID_Input.Text = "";
                 Check_JsonFilepath_bgtext();
-                
+                EgoGift_ID_Switch_CheckButtons();
             }
             catch
             {
                 TextBoxFlashWarning(EgoGift_JumpToID_Input, EgoGift_JumpToID_bgtext, "ID Не найден", "Перейти к ID..", "Check_EgoGift_JumpToID_bgtext");
             }
         }
+
+        private async void EgoGift_ID_CopyID(object sender, RoutedEventArgs e)
+        {
+            if (Json_Dictionary_CurrentID != -1)
+            {
+                Clipboard.SetText(Convert.ToString(EgoGift_ID_CopyID_Button.Content));
+                EgoGift_ID_CopyID_Button.Content = "ID Скопирован";
+
+                await Task.Delay(920);
+                EgoGift_ID_CopyID_Button.Content = Json_Dictionary_CurrentID;
+            }
+        }
+
 
 
 
@@ -757,116 +823,45 @@ namespace Limbus_Json_Preview
 
         private void EgoGift_Name_ChangeName(object sender, RoutedEventArgs e)
         {
-
             try{
                 РазноеДругое.SetRW(JsonFilepath_PATH);
                 РазноеДругое.RewriteFileLine($"      \"name\": \"{EgoGift_Name.Text}\",",
                                 Json_Filepath_str,
                                 Convert.ToInt32(Json_Dictionary[Json_Dictionary_CurrentID]["LineIndex_Name"]));
                 РазноеДругое.SetRO(JsonFilepath_PATH);
-            }catch{}
+                Notify("Файл обновлён");
+            } catch { TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Ошибка сохранения", "Путь к Json файлу", "Check_JsonFilepath_bgtext", rounds: 3, AfterAwait: 600); }
         }
-        private void EgoGift_Desc_ChangeDesc(object sender, RoutedEventArgs e)
+
+        private void EgoGift_Desc_ChangeOver(string ThisDesc)
         {
-            try{
-                if (!EditBuffer[Json_Dictionary_CurrentID]["Desc"].Equals("{unedited}"))
+            try
+            {
+                if (!EditBuffer[Json_Dictionary_CurrentID][ThisDesc].Equals("{unedited}"))
                 {
                     РазноеДругое.SetRW(JsonFilepath_PATH);
-                    РазноеДругое.RewriteFileLine($"      \"desc\": \"{Convert.ToString(EditBuffer[Json_Dictionary_CurrentID]["Desc"]).Replace("\n", "\\n")}\",",
-                                    Json_Filepath_str,
-                                    Convert.ToInt32(Json_Dictionary[Json_Dictionary_CurrentID]["LineIndex_Desc"]));
+                    РазноеДругое.RewriteFileLine($"{(ThisDesc.StartsWith("SimpleDesc") ? "          \"simpleDesc\": \"" : "      \"desc\": \"")}" +
+                                                 $"{Convert.ToString(EditBuffer[Json_Dictionary_CurrentID][ThisDesc]).Replace("\n", "\\n").Replace("\r", "\\n")}" +
+                                                 $"{(ThisDesc.StartsWith("SimpleDesc") ? "\"" : "\",")}",
+                                                 Json_Filepath_str,
+                                                 Convert.ToInt32(Json_Dictionary[Json_Dictionary_CurrentID][$"LineIndex_{ThisDesc}"]));
 
-                    Json_Dictionary[Json_Dictionary_CurrentID]["Desc"] = EditBuffer[Json_Dictionary_CurrentID]["Desc"];
-                    EditBuffer[Json_Dictionary_CurrentID]["Desc"] = "{unedited}";
+                    Json_Dictionary[Json_Dictionary_CurrentID][ThisDesc] = EditBuffer[Json_Dictionary_CurrentID][ThisDesc];
+                    EditBuffer[Json_Dictionary_CurrentID][ThisDesc] = "{unedited}";
                     IDSwitch_CheckEditBufferDescs();
+                    Notify("Файл обновлён");
                     РазноеДругое.SetRO(JsonFilepath_PATH);
                 }
-            }catch{}
+            }
+            catch { TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Ошибка сохранения", "Путь к Json файлу", "Check_JsonFilepath_bgtext", rounds: 3, AfterAwait: 600); }
         }
-        private void EgoGift_Desc_ChangeSimpleDesc1(object sender, RoutedEventArgs e)
-        {
-            try{
-                if (!EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc1"].Equals("{unedited}"))
-                {
-                    РазноеДругое.SetRW(JsonFilepath_PATH);
-                    РазноеДругое.RewriteFileLine($"          \"simpleDesc\": \"{Convert.ToString(EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc1"]).Replace("\n", "\\n")}\"",
-                                Json_Filepath_str,
-                                Convert.ToInt32(Json_Dictionary[Json_Dictionary_CurrentID]["LineIndex_SimpleDesc1"]));
 
-                    Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc1"] = EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc1"];
-                    EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc1"] = "{unedited}";
-                    IDSwitch_CheckEditBufferDescs();
-                    РазноеДругое.SetRO(JsonFilepath_PATH);
-                }
-            }catch{}
-        }
-        private void EgoGift_Desc_ChangeSimpleDesc2(object sender, RoutedEventArgs e)
-        {
-            try{
-                if (!EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc2"].Equals("{unedited}"))
-                {
-                    РазноеДругое.SetRW(JsonFilepath_PATH);
-                    РазноеДругое.RewriteFileLine($"          \"simpleDesc\": \"{Convert.ToString(EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc2"]).Replace("\n", "\\n")}\"",
-                                Json_Filepath_str,
-                                Convert.ToInt32(Json_Dictionary[Json_Dictionary_CurrentID]["LineIndex_SimpleDesc2"]));
 
-                    Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc2"] = EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc2"];
-                    EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc2"] = "{unedited}";
-                    IDSwitch_CheckEditBufferDescs();
-                    РазноеДругое.SetRO(JsonFilepath_PATH);
-                }
-            }catch{}
-        }
-        private void EgoGift_Desc_ChangeSimpleDesc3(object sender, RoutedEventArgs e)
-        {
-            try{
-                if (!EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc3"].Equals("{unedited}"))
-                {
-                    РазноеДругое.SetRW(JsonFilepath_PATH);
-                    РазноеДругое.RewriteFileLine($"          \"simpleDesc\": \"{Convert.ToString(EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc3"]).Replace("\n", "\\n")}\"",
-                                Json_Filepath_str,
-                                Convert.ToInt32(Json_Dictionary[Json_Dictionary_CurrentID]["LineIndex_SimpleDesc3"]));
-
-                    Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc3"] = EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc3"];
-                    EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc3"] = "{unedited}";
-                    IDSwitch_CheckEditBufferDescs();
-                    РазноеДругое.SetRO(JsonFilepath_PATH);
-                }
-            }catch{}
-        }
-        private void EgoGift_Desc_ChangeSimpleDesc4(object sender, RoutedEventArgs e)
-        {
-            try{
-                if (!EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc4"].Equals("{unedited}"))
-                {
-                    РазноеДругое.SetRW(JsonFilepath_PATH);
-                    РазноеДругое.RewriteFileLine($"          \"simpleDesc\": \"{Convert.ToString(EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc4"]).Replace("\n", "\\n")}\"",
-                                Json_Filepath_str,
-                                Convert.ToInt32(Json_Dictionary[Json_Dictionary_CurrentID]["LineIndex_SimpleDesc4"]));
-
-                    Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc4"] = EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc4"];
-                    EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc4"] = "{unedited}";
-                    IDSwitch_CheckEditBufferDescs();
-                    РазноеДругое.SetRO(JsonFilepath_PATH);
-                }
-            }catch{}
-        }
-        private void EgoGift_Desc_ChangeSimpleDesc5(object sender, RoutedEventArgs e)
-        {
-            try{
-                if (!EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc2"].Equals("{unedited}"))
-                {
-                    РазноеДругое.SetRW(JsonFilepath_PATH);
-                    РазноеДругое.RewriteFileLine($"          \"simpleDesc\": \"{Convert.ToString(EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc5"]).Replace("\n", "\\n")}\"",
-                                    Json_Filepath_str,
-                                    Convert.ToInt32(Json_Dictionary[Json_Dictionary_CurrentID]["LineIndex_SimpleDesc5"]));
-
-                    Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc5"] = EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc5"];
-                    EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc5"] = "{unedited}";
-                    IDSwitch_CheckEditBufferDescs();
-                    РазноеДругое.SetRO(JsonFilepath_PATH);
-                }
-            }catch{}
-        }
+        private void EgoGift_Desc_ChangeDesc(object sender, RoutedEventArgs e) => EgoGift_Desc_ChangeOver("Desc");
+        private void EgoGift_Desc_ChangeSimpleDesc1(object sender, RoutedEventArgs e) => EgoGift_Desc_ChangeOver("SimpleDesc1");
+        private void EgoGift_Desc_ChangeSimpleDesc2(object sender, RoutedEventArgs e) => EgoGift_Desc_ChangeOver("SimpleDesc2");
+        private void EgoGift_Desc_ChangeSimpleDesc3(object sender, RoutedEventArgs e) => EgoGift_Desc_ChangeOver("SimpleDesc3");
+        private void EgoGift_Desc_ChangeSimpleDesc4(object sender, RoutedEventArgs e) => EgoGift_Desc_ChangeOver("SimpleDesc4");
+        private void EgoGift_Desc_ChangeSimpleDesc5(object sender, RoutedEventArgs e) => EgoGift_Desc_ChangeOver("SimpleDesc5");
     }
 }

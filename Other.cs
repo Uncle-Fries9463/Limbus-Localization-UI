@@ -1,14 +1,9 @@
 ﻿using SixLabors.ImageSharp;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Limbus_Json_Preview
+namespace Limbus_Localization_UI
 {
     internal class РазноеДругое
     {
@@ -71,9 +66,9 @@ namespace Limbus_Json_Preview
                 if (image.EndsWith(".png") | image.EndsWith(".webp"))
                 {
                     exp[image[8..]] = File.ReadAllBytes(image);
-                    Console.WriteLine($"Спрайт загружен: {image}");
                 }
             }
+            Console.WriteLine($"Загружено {exp.Keys.Count} спрайтов");
             return exp;
         }
 

@@ -1,9 +1,9 @@
-﻿<Window x:Name="Limbus_Json_to_Text" x:Class="Limbus_Json_Preview.MainWindow"
+﻿<Window x:Name="Limbus_Localization_UI" x:Class="Limbus_Localization_UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Limbus_Json_Preview"
+        xmlns:local="clr-namespace:Limbus_Localization_UI"
         
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
@@ -21,17 +21,7 @@
     
     
     <Window.Resources>
-        <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
-            <Setter Property="Stylus.IsFlicksEnabled" Value="True" />
-            <Style.Triggers>
-                <Trigger Property="Orientation" Value="Vertical">
-                    <Setter Property="Width" Value="29" />
-                    <Setter Property="MinWidth" Value="29" />
-                    <Setter Property="Margin" Value="0, 0, 3, 0" />
-                    <Setter Property="Background" Value="AliceBlue" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+
         <Style TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#FF191919"/>
             <Setter Property="Foreground" Value="#EE2D2D"/>
@@ -62,6 +52,43 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="ExitButtons" TargetType="Button">
+            <Setter Property="Background" Value="#FF191919"/>
+            <Setter Property="Foreground" Value="#EE2D2D"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="#FF333333"/>
+            <Setter Property="FontFamily" Value="Cascadia Mono SemiLight"/>
+            <Setter Property="FontSize" Value="19"/>
+            <Setter Property="Foreground" Value="#A69885"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#646464"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF222222"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CascadiaText" TargetType="Paragraph">
+            <Setter Property="FontFamily" Value="Cascadia Mono SemiLight"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="#eecea4"/>
+        </Style>
     </Window.Resources>
 
     
@@ -74,14 +101,112 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <!-- <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="1" Grid.Column="1" Panel.ZIndex="1" Focusable="False"/> -->
-        <!-- <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="1" Grid.Column="0" Panel.ZIndex="1" Focusable="False"/> -->
+        
+        <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="1" Grid.Column="1" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
+        <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="1" Grid.Column="0" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
+        
+        <Border x:Name="ExitDialog"
+                Margin="1000"
+                
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Grid.Column="0"
+                Width="360"
+                Height="150"
+                BorderThickness="2"
+                BorderBrush="#FF333333"
+                Background="#FF191919"
+                Panel.ZIndex="1" >
+            <StackPanel>
+                <TextBlock x:Name="CloseEditor_Header"
+                           HorizontalAlignment="Center"
+                           Foreground="#eecea4"
+                           Margin="0, 15, 0, 0"
+                           FontSize="20"
+                           FontFamily="Cascadia Mono SemiLight"
+                           Text="Закрыть редактор?">
+                    <TextBlock.RenderTransform>
+                        <TranslateTransform X="0" Y="0"/>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+                <StackPanel Height="30">
+                    <RichTextBox IsDocumentEnabled="True"
+                                 BorderThickness="0"
+                                 Background="{x:Null}"
+                                 HorizontalAlignment="Center"
+                                 Margin="0, 15, 0, 0"
+                                 ToolTipService.InitialShowDelay="0">
+                        <FlowDocument>
+                            <Paragraph TextAlignment="Center" Foreground="#eecea4" FontSize="14" FontFamily="Cascadia Mono SemiLight">
+                                <Run>
+                                    Изменений не сохранено:
+                                </Run>
+                                <Run Foreground="AliceBlue" ToolTipService.InitialShowDelay="0" x:Name="UnsavedChangesCount">
+                                    <Run.ToolTip>
+                                        <ToolTip x:Name="UnsavedChangesTooltip"
+                                                 Background="#895B5B5B"
+                                                 BorderThickness="2"
+                                                 HasDropShadow="False"
+                                                 Placement="MousePoint"
+                                                 Width="185"
+                                                 Height="Auto"
+                                                 HorizontalOffset="15"
+                                                 VerticalOffset="10">
+                                            <RichTextBox Background="{x:Null}" BorderThickness="0">
+                                                <FlowDocument>
+                                                    <Paragraph Style="{StaticResource CascadiaText}" FontSize="12" Foreground="#C3C3C3">
+                                                        <Run x:Name="UnsavedChangesTooltip_Text" Text="newe\ns" BaselineAlignment="TextTop">
+                                                        </Run>
+                                                    </Paragraph>
+                                                </FlowDocument>
+                                            </RichTextBox>
+                                        </ToolTip>
+                                    </Run.ToolTip>
+                                </Run>
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0, 20, 0, 0" Height="40" Width="310">
+                    <StackPanel Width="155">
+                        <Button Click="Exit_Yes"
+                                HorizontalAlignment="Left" 
+                                Style="{StaticResource ExitButtons}"
+                                Margin="3"
+                                Width="150"
+                                Height="35"
+                                BorderThickness="4"
+                                Content="Да">
+                        
+                    </Button>
+                    </StackPanel>
+                    <StackPanel Width="155">
+                        <Button Click="Exit_No"
+                                HorizontalAlignment="Right" 
+                                Style="{StaticResource ExitButtons}"
+                                Margin="3"
+                                Width="150"
+                                Height="35"
+                                BorderThickness="4"
+                                Content="Нет">
+                        </Button>
+                    </StackPanel>
+                    
+                </StackPanel>
+            </StackPanel>
+            <Border.RenderTransform>
+                <TranslateTransform X="300" Y="0" />
+            </Border.RenderTransform>
+        </Border>
+        
+        
+        
+        
         <TextBox x:Name="InputJson"
                  BorderThickness="0"
                  TextChanged="TextChanged"
-                 Grid.Row="0"
                  TextWrapping="Wrap"
-                 AcceptsReturn="True"
+                 Grid.Row="0"
                  VerticalAlignment="Top"
                  HorizontalAlignment="Left"
                  Width="580"
@@ -177,15 +302,17 @@
                         Height="23">
                     <Button.ToolTip>
                         <ToolTip x:Name="LoadJson_Tooltip"
-                                 Background="#605B5B5B"
+                                 Background="#895B5B5B"
                                  Foreground="White"
                                  HasDropShadow="False"
                                  Placement="MousePoint"
                                  HorizontalOffset="15"
-                                 VerticalOffset="10"
-                                 >
+                                 VerticalOffset="10">
                             <StackPanel>
-                                <TextBlock x:Name="LoadJson_Tooltip_Text">Выбрать в проводнике</TextBlock>
+                                <TextBlock>Выбрать в проводнике</TextBlock>
+                                <TextBlock TextAlignment="Center">(Режим ЭГО Даров [Только EGOgift_x.json файлы])</TextBlock>
+                                <TextBlock TextAlignment="Center">(Так же необходимо количество пробелов такое же,</TextBlock>
+                                <TextBlock TextAlignment="Center">как в EGOgift_MirrorDungeon.json)</TextBlock>
                             </StackPanel>
                         </ToolTip>
                     </Button.ToolTip>
@@ -226,15 +353,17 @@
                     ToolTipService.InitialShowDelay="0">
                 <Button.ToolTip>
                     <ToolTip
-                             Background="#605B5B5B"
+                             Background="#895B5B5B"
                              Foreground="White"
                              HasDropShadow="False"
                              Placement="MousePoint"
                              HorizontalOffset="15"
                              VerticalOffset="10" >
                         <StackPanel>
-                            <TextBlock>Загрузить .json файл с локализацией</TextBlock>
-                            <TextBlock>(Режим ЭГО Даров)</TextBlock>
+                            <TextBlock TextAlignment="Center">Загрузить .json файл с локализацией</TextBlock>
+                            <TextBlock TextAlignment="Center">(Режим ЭГО Даров [Только EGOgift_x.json файлы])</TextBlock>
+                            <TextBlock TextAlignment="Center">(Так же необходимо количество пробелов такое же,</TextBlock>
+                            <TextBlock TextAlignment="Center">как в EGOgift_MirrorDungeon.json)</TextBlock>
                         </StackPanel>
                     </ToolTip>
                 </Button.ToolTip>
@@ -276,7 +405,7 @@
                 </Border>
 
 
-                <StackPanel Orientation="Horizontal" Height="42" Margin="0, 3, 0, 0">
+                <StackPanel Orientation="Horizontal" Height="42" Margin="0, 6, 0, 0">
                     <Border Height="29"
                             Width="241"
                             HorizontalAlignment="Left"
@@ -343,7 +472,7 @@
                             ToolTipService.InitialShowDelay="0">
                         <Button.ToolTip>
                             <ToolTip x:Name="s3"
-                                     Background="#605B5B5B"
+                                     Background="#895B5B5B"
                                      Foreground="White"
                                      HasDropShadow="False"
                                      Placement="MousePoint"
@@ -359,13 +488,35 @@
                 <Border Height="2" Margin="0, -1, 0, 0" Background="#eecea4"/>
             </StackPanel>
 
+
+            <Border x:Name="EgoGift_ID_SwitchPrev_Cover"
+                    Background="#7F000000"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Width="70"
+                    Height="16"
+                    Margin="0, 39, 0, 0"
+                    HorizontalAlignment="Left"
+                    Panel.ZIndex="1"
+                    VerticalAlignment="Top"/>
+            <Border x:Name="EgoGift_ID_SwitchNext_Cover"
+                    Background="#7F000000"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Width="70"
+                    Height="16"
+                    Margin="204, 39, 0, 0"
+                    HorizontalAlignment="Left"
+                    Panel.ZIndex="1"
+                    VerticalAlignment="Top"/>
+
             <Button x:Name="EgoGift_ID_SwitchPrev"
                     Click="EgoGift_ID_SwitchPrev_Click"
                     Grid.Row="1"
                     Grid.Column="1"
                     Width="70"
                     Height="16"
-                    Margin="0, 41, 0, 0"
+                    Margin="0, 39, 0, 0"
                     BorderThickness="1"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
@@ -377,11 +528,13 @@
                     Grid.Column="1"
                     Width="70"
                     Height="16"
-                    Margin="204, 41, 0, 0"
+                    Margin="204, 39, 0, 0"
                     BorderThickness="1"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Stretch"/>
+
+            
 
             <Border Grid.Row="1"
                     Grid.Column="1"
@@ -389,30 +542,42 @@
                     VerticalAlignment="Top"
                     Width="115"
                     Height="16"
+                    Background="#FF191919"
                     BorderThickness="1"
-                    Margin="80, 41, 0, 0"
-                    BorderBrush="#FF333333" Background="#FF171717">
-                <Label x:Name="EgoGift_ID_Show"
-                       FontStyle="Italic"
-                       Grid.Column="1" 
-                       Grid.Row="1" 
-                       VerticalAlignment="Top"
-                       HorizontalAlignment="Left"
-                       IsHitTestVisible="False"
-                       Background="{x:Null}"
-                       Margin="-1, -5.5, 0, 0"
-                       Height="35" 
-                       Width="115"
-       
-                       Focusable="False"
-       
-                       FontFamily="Cascadia Mono SemiLight"
-                       FontSize="12"
-                       Foreground="#FF7C746B"
-       
-                       HorizontalContentAlignment="Center"
-                       Content="ID">
-                </Label>
+                    Margin="80, 39, 0, 0"
+                    BorderBrush="#FF333333">
+                <Button x:Name="EgoGift_ID_CopyID_Button"
+                        Click="EgoGift_ID_CopyID"
+                        Background="{x:Null}"
+                        Content="ID"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Width="113"
+                        Height="16"
+                        BorderThickness="0"
+                        Margin="0, -2, 0, 0"
+                        FontFamily="Cascadia Mono SemiLight"
+                        FontSize="13"
+                        Foreground="#FF7C746B"
+                        Panel.ZIndex="1"
+                        HorizontalContentAlignment="Stretch"
+                        ToolTipService.InitialShowDelay="0">
+                    <Button.ToolTip>
+                        <ToolTip x:Name="EgoGift_ID_CopyID_Tooltip"
+                                 Background="#895B5B5B"
+                                 Foreground="White"
+                                 HasDropShadow="False"
+                                 Placement="MousePoint"
+                                 HorizontalOffset="15"
+                                 VerticalOffset="10">
+                            <StackPanel>
+                                <TextBlock>Копировать ID</TextBlock>
+                            </StackPanel>
+                        </ToolTip>
+                    </Button.ToolTip>
+                </Button>
             </Border>
 
             
@@ -465,6 +630,17 @@
                                 </Style>
                             </Button.Style>
                         </Button>
+                        <Border x:Name="EgoGift_Desc_Cover"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Background="#7F000000"
+                                Margin="0, -30, 0, 0"
+                                Width="232.5"
+                                Height="30"
+                                Focusable="False"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"/>
+                        
                         <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc1"
                                 Click="EgoGift_SwitchEditorTo_SimpleDesc1_Button"
                                 Grid.Column="1"
@@ -503,6 +679,17 @@
                                 </Style>
                             </Button.Style>
                         </Button>
+                        <Border x:Name="EgoGift_SimpleDesc1_Cover"
+                                Grid.Column="1"
+                                Grid.Row="2"
+                                Background="#7F000000"
+                                Margin="0, -30, 0, 0"
+                                Width="232.5"
+                                Height="30"
+                                Focusable="False"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"/>
+                        
                         <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc2"
                                 Click="EgoGift_SwitchEditorTo_SimpleDesc2_Button"
                                 Grid.Column="1"
@@ -551,6 +738,7 @@
                                 Focusable="False"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Left"/>
+                        
                         <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc3"
                                 Click="EgoGift_SwitchEditorTo_SimpleDesc3_Button"
                                 Grid.Column="1"
@@ -599,6 +787,7 @@
                                 Focusable="False"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Left"/>
+                        
                         <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc4"
                                 Click="EgoGift_SwitchEditorTo_SimpleDesc4_Button"
                                 Grid.Column="1"
@@ -647,6 +836,7 @@
                                 Focusable="False"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Left"/>
+                        
                         <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc5"
                                 Click="EgoGift_SwitchEditorTo_SimpleDesc5_Button"
                                 Grid.Column="1"
@@ -735,6 +925,16 @@
                              FontFamily="Cascadia Mono SemiLight"
                              FontSize="19"/>
                 </Border>
+                <Border x:Name="Name_ChangeNameInput_Cover"
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Background="#7F000000"
+                        Margin="5, -30, 0, 0"
+                        Width="232.5"
+                        Height="30"
+                        Focusable="False"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"/>
 
                 <Label x:Name="EgoGift_Name_bgtext"
                        FontStyle="Italic"
@@ -762,15 +962,47 @@
                         Click="EgoGift_Name_ChangeName"
                         Width="29" Height="29">
                 </Button>
+                <Border x:Name="Name_ChangeName_Cover"
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Background="#7F000000"
+                        Margin="0, -30, 0, 0"
+                        Width="29"
+                        Height="30"
+                        Focusable="False"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"/>
                 
                 <Button x:Name="EgoGift_Desc_ChangeDesc_Button"
                         Click="EgoGift_Desc_ChangeDesc"
                         Width="29" Height="30" Margin="0, 3, 0, 0">
                 </Button>
+                <Border x:Name="Desc_Change_Cover"
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Background="#7F000000"
+                        Margin="0, -30, 0, 0"
+                        Width="29"
+                        Height="30"
+                        Focusable="False"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"/>
+                
                 <Button x:Name="EgoGift_Desc_SimpleDesc1_Button"
                         Click="EgoGift_Desc_ChangeSimpleDesc1"
                         Width="29" Height="30" Margin="0, 4, 0, 0">
                 </Button>
+                <Border x:Name="SimpleDesc1_Change_Cover"
+                        Grid.Column="1"
+                        Grid.Row="2"
+                        Background="#7F000000"
+                        Margin="0, -30, 0, 0"
+                        Width="29"
+                        Height="30"
+                        Focusable="False"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"/>
+                
                 <Button x:Name="EgoGift_Desc_SimpleDesc2_Button"
                         Click="EgoGift_Desc_ChangeSimpleDesc2"
                         Width="29" Height="30" Margin="0, 4, 0, 0">
