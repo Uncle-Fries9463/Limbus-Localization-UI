@@ -443,12 +443,12 @@ namespace Limbus_Localization_UI
 
         private void Check_JsonFilepath_bgtext()     => Check_bgtext(JsonFilepath, JsonFilepath_bgtext, "Путь к Json файлу");
         //private void Check_EgoGift_Name_bgtext()     => Check_bgtext(EgoGift_Name, EgoGift_Name_bgtext, "Название ЭГО Дара");
-        private void Check_EgoGift_JumpToID_bgtext() => Check_bgtext(EgoGift_JumpToID_Input, EgoGift_JumpToID_bgtext, "ID");
+        private void Check_EgoGift_JumpToID_bgtext() => Check_bgtext(EgoGift_JumpToID_Input, EgoGift_JumpToID_bgtext, "Перейти к ID..");
 
 
         private void JsonPath_TextChanged(object sender, TextChangedEventArgs e) => Check_bgtext(JsonFilepath, JsonFilepath_bgtext, "Путь к Json файлу");
         private void EgoGift_Name_TextChanged(object sender, TextChangedEventArgs e) => Check_bgtext(EgoGift_Name, EgoGift_Name_bgtext, "Название ЭГО Дара");
-        private void EgoGift_JumpToID_Input_TextChanged(object sender, TextChangedEventArgs e) => Check_bgtext(EgoGift_JumpToID_Input, EgoGift_JumpToID_bgtext, "ID");
+        private void EgoGift_JumpToID_Input_TextChanged(object sender, TextChangedEventArgs e) => Check_bgtext(EgoGift_JumpToID_Input, EgoGift_JumpToID_bgtext, "Перейти к ID..");
 
 
 
