@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -829,6 +829,7 @@ namespace Limbus_Localization_UI
                                 Json_Filepath_str,
                                 Convert.ToInt32(Json_Dictionary[Json_Dictionary_CurrentID]["LineIndex_Name"]));
                 РазноеДругое.SetRO(JsonFilepath_PATH);
+                Json_Dictionary[Json_Dictionary_CurrentID]["Name"] = EgoGift_Name.Text;
                 Notify("Файл обновлён");
             } catch { TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Ошибка сохранения", "Путь к Json файлу", "Check_JsonFilepath_bgtext", rounds: 3, AfterAwait: 600); }
         }
