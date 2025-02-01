@@ -229,7 +229,7 @@ namespace Limbus_Localization_UI
                 // 30 line height = |10|  'y' value
                 /* ///////// ВЫРАВНИВАНИЕ СТРОК И СПРАЙТОВ С НАЗВАНИЯМИ ЭФФЕКТОВ ///////// */
                 SpritePlusEffectname.Margin = new Thickness(0, -11, 0, 0);
-                SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.5); // 'y' value-0.5, может быть, наверное
+                SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.6); // 'y' value-0.5, может быть, наверное
                 /* ///////// ВЫРАВНИВАНИЕ СТРОК И СПРАЙТОВ С НАЗВАНИЯМИ ЭФФЕКТОВ ///////// */
 
                 SpritePlusEffectname.VerticalAlignment = VerticalAlignment.Bottom;
