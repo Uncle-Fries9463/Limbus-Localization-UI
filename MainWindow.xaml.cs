@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -229,7 +230,7 @@ namespace Limbus_Localization_UI
                 // 30 line height = |10|  'y' value
                 /* ///////// ВЫРАВНИВАНИЕ СТРОК И СПРАЙТОВ С НАЗВАНИЯМИ ЭФФЕКТОВ ///////// */
                 SpritePlusEffectname.Margin = new Thickness(0, -11, 0, 0);
-                SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.6); // 'y' value-0.5, может быть, наверное
+                SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.6); // 'y' value- (~0.5), может быть, наверное
                 /* ///////// ВЫРАВНИВАНИЕ СТРОК И СПРАЙТОВ С НАЗВАНИЯМИ ЭФФЕКТОВ ///////// */
 
                 SpritePlusEffectname.VerticalAlignment = VerticalAlignment.Bottom;
@@ -865,5 +866,29 @@ namespace Limbus_Localization_UI
         private void EgoGift_Desc_ChangeSimpleDesc3(object sender, RoutedEventArgs e) => EgoGift_Desc_ChangeOver("SimpleDesc3");
         private void EgoGift_Desc_ChangeSimpleDesc4(object sender, RoutedEventArgs e) => EgoGift_Desc_ChangeOver("SimpleDesc4");
         private void EgoGift_Desc_ChangeSimpleDesc5(object sender, RoutedEventArgs e) => EgoGift_Desc_ChangeOver("SimpleDesc5");
+
+
+        private bool isCtrlSPressed = false;
+
+        private void Limbus_Localization_UI_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                if (e.Key == Key.S && !isCtrlSPressed)
+                {
+                    isCtrlSPressed = true; // Устанавливаем флаг, чтобы избежать повторного срабатывания
+                    EgoGift_Desc_ChangeOver(CurrentDesc);
+                    Console.WriteLine("Комбинация Ctrl + S была нажата.");
+                }
+            }
+        }
+
+        private void Limbus_Localization_UI_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.S)
+            {
+                isCtrlSPressed = false; // Сбрасываем флаг при отпускании клавиши S
+            }
+        }
     }
 }
