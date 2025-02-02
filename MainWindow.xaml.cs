@@ -44,7 +44,7 @@ namespace Limbus_Localization_UI
               EgoGift_Desc_SimpleDesc5_Button.Content = new Image{Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
 
             PreviewLayout.Document.Blocks.Clear();
-            string Def = "Статусные эффекты, <style=\\\"upgradeHighlight\\\">Подсветка улучшения</style>\r\n<sprite name=\\\"Breath\\\"><color=#f8c200>Дыхание</color>\r\n<sprite name=\\\"Charge\\\"><color=#f8c200>Заряд</color>\r\n<sprite name=\\\"Laceration\\\"><color=#e30000>Кровотечение</color>\r\n<sprite name=\\\"Combustion\\\"><color=#e30000>Огонь</color>\r\n<sprite name=\\\"Burst\\\"><color=#e30000>Разрыв</color>\r\n<sprite name=\\\"Sinking\\\"><color=#e30000>Утопание</color>\r\n<sprite name=\\\"Vibration\\\"><color=#e30000>Тремор</color>\r\n - <sprite name=\\\"VibrationExplosion\\\"><color=#e30000>Провоцирование тремора</color>\r\n\r\n<sprite name=\\\"Ктокто\\\"><color=#e30000>Неправильный спрайт</color>\r\n<color=#e30000>Неправильный поломанный текст (цвет используется без спрайта, для подсветки улучшения ЭГО Дара должен использоваться вышеуказанный <style=\\\"upgradeHighlight\\\">upgradeHighlight</style>)\r\n\r\n< Поломанный текст после незакрытой острой скобки, всегда закрывайте их\r\n<sprite name=\\\"Burst\\\"><color=#e30000>Разрыв</color>";
+            string Def = "Статусные эффекты, <style=\\\"upgradeHighlight\\\">Подсветка улучшения</style>\n<sprite name=\\\"Breath\\\"><color=#f8c200>Дыхание</color>\n<sprite name=\\\"Charge\\\"><color=#f8c200>Заряд</color>\n<sprite name=\\\"Laceration\\\"><color=#e30000>Кровотечение</color>\n<sprite name=\\\"Combustion\\\"><color=#e30000>Огонь</color>\n<sprite name=\\\"Burst\\\"><color=#e30000>Разрыв</color>\n<sprite name=\\\"Sinking\\\"><color=#e30000>Утопание</color>\n<sprite name=\\\"Vibration\\\"><color=#e30000>Тремор</color>\n - <sprite name=\\\"VibrationExplosion\\\"><color=#e30000>Провоцирование тремора</color>\n\n\n<sprite name=\\\"Какой то\\\"><color=#e30000>Неизвестный спрайт</color>\\nПоломанный текст:\\n             < Поломанный текст после незакрытой острой скобки, всегда закрывайте их<sprite name=\\\"Burst\\\"><color=#e30000>Разрыв</color>";
 
             //Def = "Конец хода: даёт 1 <sprite name=\\\"Agility\\\"><color=#f8c200><u><link=\\\"Agility\\\">Спешку</link></u></color>, 1 <sprite name=\\\"AttackUp\\\"><color=#f8c200><u><link=\\\"AttackUp\\\">Повышение уровня атаки</link></u></color></style> <style=\\\"upgradeHighlight\\\">и 1</style> <sprite name=\\\"AttackDmgUp\\\"><color=#f8c200><u><link=\\\"AttackDmgUp\\\">Повышение урона</link></u></color> на следующий ход 1 грешнику с наибольшим потенциалом <sprite name=\\\"Breath\\\"><color=#f8c200><u><link=\\\"Breath\\\">Дыхания</link></u></color> и ещё 1 грешнику с наибольшим счётчиком <sprite name=\\\"Breath\\\"><color=#f8c200><u><link=\\\"Breath\\\">Дыхания</link></u></color>. (Оба эффекта могу быть применены к одной идентичности)\n\nЕсли же грешник имеет Атакующий навык с Грехом похоти, тогда даёт 2 <sprite name=\\\"Agility\\\"><color=#f8c200><u><link=\\\"Agility\\\">Спешки</link></u></color>, 2 <sprite name=\\\"AttackUp\\\"><color=#f8c200><u><link=\\\"AttackUp\\\">Повышения уровня атаки</link></u></color></style> <style=\\\"upgradeHighlight\\\">и 2</style> <sprite name=\\\"AttackDmgUp\\\"><color=#f8c200><u><link=\\\"AttackDmgUp\\\">Повышения урона</link></u></color>. (ЭГО навыки не учитываются)";
 
@@ -202,9 +202,13 @@ namespace Limbus_Localization_UI
             if (IsOneWord & WordWrap_WithSprites || (Is_MultWords_Queued & WordWrap_WithSprites))
             {
                 InlineUIContainer SpriteImageContainer = new();
+
+                BitmapImage source;
+                if (SpriteBitmaps.ContainsKey(SpriteName)) source = SpriteBitmaps[SpriteName];
+                else source = SpriteBitmaps[@"Unknown.png"];
                 Image SpriteImage = new()
                 {
-                    Source = SpriteBitmaps[SpriteName],
+                    Source = source,
                     Width = 23,
                     Height = 23,
                     Margin = new Thickness(-2, -1, -2, 0)
@@ -498,8 +502,7 @@ namespace Limbus_Localization_UI
             Json_Dictionary_CurrentID = ID;
             IDSwitch_CheckEditBufferDescs();
             EgoGift_ID_Switch_CheckButtons();
-            InputJson.IsUndoEnabled = false;
-            InputJson.IsUndoEnabled = true;
+           
 
             EgoGift_Name_Show.Text = Convert.ToString(Json_Dictionary[Json_Dictionary_CurrentID]["Name"]);
             EgoGift_Name.Text = Convert.ToString(Json_Dictionary[Json_Dictionary_CurrentID]["Name"]);
@@ -557,6 +560,7 @@ namespace Limbus_Localization_UI
             {
                 InputJson.Text = Convert.ToString(EditBuffer[Json_Dictionary_CurrentID]["Desc"]);
             }
+            ResetUndo();
         }
 
         private async void TextBoxFlashWarning(System.Windows.Controls.TextBox TB,
@@ -742,12 +746,17 @@ namespace Limbus_Localization_UI
         }
 
 
-        
+        private void ResetUndo()
+        {
+            InputJson.IsUndoEnabled = false;
+            InputJson.IsUndoEnabled = true;
+        }
         private void EgoGift_SwitchEditorTo_Desc_Button(object sender, RoutedEventArgs e)       
         {
-            try{ 
+            try{
                 CurrentDesc = "Desc";
                 CheckEditBuffer("Desc");
+                ResetUndo();
             }catch{}
         }
         private void EgoGift_SwitchEditorTo_SimpleDesc1_Button(object sender, RoutedEventArgs e)
@@ -755,14 +764,15 @@ namespace Limbus_Localization_UI
             try{
                 CurrentDesc = "SimpleDesc1";
                 CheckEditBuffer("SimpleDesc1");
+                ResetUndo();
             }catch {}
         }
         private void EgoGift_SwitchEditorTo_SimpleDesc2_Button(object sender, RoutedEventArgs e)
         {
-            try
-            {
+            try{
                 CurrentDesc = "SimpleDesc2";
                 CheckEditBuffer("SimpleDesc2");
+                ResetUndo();
             }catch{}
         }
         private void EgoGift_SwitchEditorTo_SimpleDesc3_Button(object sender, RoutedEventArgs e)
@@ -770,6 +780,7 @@ namespace Limbus_Localization_UI
             try{
                 CurrentDesc = "SimpleDesc3";
                 CheckEditBuffer("SimpleDesc3");
+                ResetUndo();
             }catch{}
         }
         private void EgoGift_SwitchEditorTo_SimpleDesc4_Button(object sender, RoutedEventArgs e)
@@ -777,11 +788,13 @@ namespace Limbus_Localization_UI
             try{
                 CurrentDesc = "SimpleDesc4";
                 CheckEditBuffer("SimpleDesc4");
+                ResetUndo();
             }catch{}
         }
         private void EgoGift_SwitchEditorTo_SimpleDesc5_Button(object sender, RoutedEventArgs e)
         {
             try{
+                ResetUndo();
                 CurrentDesc = "SimpleDesc5";
                 CheckEditBuffer("SimpleDesc5");
             }catch{}
