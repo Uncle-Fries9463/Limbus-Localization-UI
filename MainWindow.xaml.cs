@@ -794,9 +794,9 @@ namespace Limbus_Localization_UI
         private void EgoGift_SwitchEditorTo_SimpleDesc5_Button(object sender, RoutedEventArgs e)
         {
             try{
-                ResetUndo();
                 CurrentDesc = "SimpleDesc5";
                 CheckEditBuffer("SimpleDesc5");
+                ResetUndo();
             }catch{}
         }
 
