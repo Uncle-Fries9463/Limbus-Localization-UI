@@ -1,18 +1,17 @@
 <Window x:Name="Limbus_Localization_UI" x:Class="Limbus_Localization_UI.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Limbus_Localization_UI"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:local="clr-namespace:Limbus_Localization_UI"
         
-        PreviewKeyDown="Limbus_Localization_UI_PreviewKeyDown"
-        PreviewKeyUp="Limbus_Localization_UI_PreviewKeyUp"
-        
+        PreviewKeyDown="Window_PreviewKeyDown"
+        PreviewKeyUp="Window_PreviewKeyUp"
         WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
         Topmost="True"
         ResizeMode="CanResize"
-        SizeChanged="Limbus_Json_to_Text_SizeChanged"
+        SizeChanged="Window_SizeChanged"
         
         MinHeight="320"
         MinWidth="600"
@@ -21,10 +20,7 @@
         Height="443"
         
         Title="Limbus Localization UI">
-    
-    
     <Window.Resources>
-
         <Style TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#FF191919"/>
             <Setter Property="Foreground" Value="#EE2D2D"/>
@@ -55,7 +51,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="ExitButtons" TargetType="Button">
             <Setter Property="Background" Value="#FF191919"/>
             <Setter Property="Foreground" Value="#EE2D2D"/>
@@ -86,28 +81,19 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="CascadiaText" TargetType="Paragraph">
             <Setter Property="FontFamily" Value="Cascadia Mono SemiLight"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Foreground" Value="#eecea4"/>
         </Style>
     </Window.Resources>
-
-    
-
-
-
     <Grid x:Name="Limbus_Json_Preview" Background="#0F0F0F">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="590"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-
-        
         <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="1" Grid.Column="1" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
         <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="1" Grid.Column="0" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
-        
         <Border x:Name="ExitDialog"
                 Margin="1000"
                 
@@ -158,8 +144,7 @@
                                             <RichTextBox Background="{x:Null}" BorderThickness="0">
                                                 <FlowDocument>
                                                     <Paragraph Style="{StaticResource CascadiaText}" FontSize="12" Foreground="#C3C3C3">
-                                                        <Run x:Name="UnsavedChangesTooltip_Text" Text="newe\ns" BaselineAlignment="TextTop">
-                                                        </Run>
+                                                        <Run x:Name="UnsavedChangesTooltip_Text" Text="newe\ns" BaselineAlignment="TextTop"/>
                                                     </Paragraph>
                                                 </FlowDocument>
                                             </RichTextBox>
@@ -179,9 +164,7 @@
                                 Width="150"
                                 Height="35"
                                 BorderThickness="4"
-                                Content="Да">
-                        
-                    </Button>
+                                Content="Да"></Button>
                     </StackPanel>
                     <StackPanel Width="155">
                         <Button Click="Exit_No"
@@ -191,21 +174,15 @@
                                 Width="150"
                                 Height="35"
                                 BorderThickness="4"
-                                Content="Нет">
-                        </Button>
+                                Content="Нет"></Button>
                     </StackPanel>
-                    
                 </StackPanel>
             </StackPanel>
             <Border.RenderTransform>
                 <TranslateTransform X="300" Y="0" />
             </Border.RenderTransform>
         </Border>
-        
-        
-        
-        
-        <TextBox x:Name="InputJson"
+        <TextBox x:Name="JsonEditor"
                  BorderThickness="0"
                  TextChanged="TextChanged"
                  TextWrapping="Wrap"
@@ -220,10 +197,8 @@
                  FontSize="12.8"
                  Foreground="#A69885"
                  Background="#FF191919" UndoLimit="100500"/>
-
-        <Image x:Name="TextBG" Source="Спрайты\$Другое\Фон.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-
-        <RichTextBox x:Name="PreviewLayout"
+        <Image x:Name="EGOgift_Background" Source="Спрайты\$Другое\Фон.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+        <RichTextBox x:Name="PreviewLayout_EGOgift"
                      IsReadOnly="True"
                      Focusable="False"
                      BorderThickness="0"
@@ -238,11 +213,6 @@
                      Width="480" 
                      Height="180"
                      Cursor="Pen"/>
-
-
-
-
-
         <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10"/>
@@ -255,8 +225,6 @@
                 <RowDefinition             />
                 <RowDefinition Height="10" />
             </Grid.RowDefinitions>
-
-
             <Border Grid.Column="1"
                     Grid.Row="1"
                     Height="29"
@@ -287,8 +255,7 @@
                          CaretBrush="#A69885"
                                
                          FontFamily="Cascadia Mono SemiLight"
-                         FontSize="19">
-                </TextBox>
+                         FontSize="19"></TextBox>
             </Border>
             <Border Grid.Column="1"
                     Grid.Row="1"
@@ -321,7 +288,6 @@
                     </Button.ToolTip>
                 </Button>
             </Border>
-
             <Label x:Name="JsonFilepath_bgtext"
                    FontStyle="Italic"
                    Grid.Column="1" 
@@ -340,10 +306,8 @@
                    FontSize="19"
                    Foreground="#FF514C46"
                    
-                   Content="Путь к Json файлу">
-            </Label>
-
-            <Button x:Name="JsonFilepath_ReadFile"
+                   Content="Путь к Json файлу"></Label>
+            <Button x:Name="JsonFile_ReadFile"
                     Click="LoadJsonFile_Button"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Left"
@@ -371,7 +335,6 @@
                     </ToolTip>
                 </Button.ToolTip>
             </Button>
-
             <StackPanel Grid.Column="1"
                         Grid.Row="1"
                         HorizontalAlignment="Left"
@@ -380,7 +343,6 @@
                         Width="275"
                         Height="82"
                         Focusable="False">
-
                 <Border BorderThickness="1.8"
                         BorderBrush="#eebe2d"
                         CornerRadius="3"
@@ -395,19 +357,16 @@
                                      BorderThickness="0">
                             <FlowDocument>
                                 <Paragraph TextAlignment="Center">
-                                    <Run x:Name="EgoGift_Name_Show"
+                                    <Run x:Name="Name_Label"
                                          Text="Название"
                                          FontFamily="./#Mikodacs"
                                          Foreground="#eecea4"
-                                         FontSize="20.5">
-                                    </Run>
+                                         FontSize="20.5"></Run>
                                 </Paragraph>
                             </FlowDocument>
                         </RichTextBox>
                     </ScrollViewer>
                 </Border>
-
-
                 <StackPanel Orientation="Horizontal" Height="42" Margin="0, 6, 0, 0">
                     <Border Height="29"
                             Width="241"
@@ -415,13 +374,13 @@
                             VerticalAlignment="Top"
                             BorderThickness="2"
                             BorderBrush="#FF333333">
-                        <TextBox x:Name="EgoGift_JumpToID_Input"
+                        <TextBox x:Name="JumpToID_Input"
                                  Grid.Column="1" 
                                  Grid.Row="1" 
                                  Margin="0, 0, 0, 0"
                                  VerticalAlignment="Top"
                                  HorizontalAlignment="Left"
-                                 TextChanged="EgoGift_JumpToID_Input_TextChanged"
+                                 TextChanged="JumpToID_Input_TextChanged"
               
                                  Width="239"
                                  Height="27"
@@ -440,8 +399,7 @@
                                  FontFamily="Cascadia Mono SemiLight"
                                  FontSize="19"/>
                     </Border>
-
-                    <Label x:Name="EgoGift_JumpToID_bgtext"
+                    <Label x:Name="JumpToID_bgtext"
                            FontStyle="Italic"
                            Grid.Column="1" 
                            Grid.Row="1" 
@@ -459,11 +417,9 @@
                            FontSize="19"
                            Foreground="#FF514C46"
        
-                           Content="Перейти к ID..">
-                    </Label>
-
-                    <Button x:Name="EgoGift_JumpToID_Button"
-                            Click="EgoGift_JumpToID_Button_Click"
+                           Content="Перейти к ID.."></Label>
+                    <Button x:Name="ID_JumpTo"
+                            Click="JumpToID_Button_Click"
                             VerticalAlignment="Top"
                             HorizontalAlignment="Left"
                             Margin="5, 0, 0, 0"
@@ -490,9 +446,7 @@
                 </StackPanel>
                 <Border Height="2" Margin="0, -1, 0, 0" Background="#eecea4"/>
             </StackPanel>
-
-
-            <Border x:Name="EgoGift_ID_SwitchPrev_Cover"
+            <Border x:Name="ID_SwitchPrev_Cover"
                     Background="#7F000000"
                     Grid.Row="1"
                     Grid.Column="1"
@@ -502,7 +456,7 @@
                     HorizontalAlignment="Left"
                     Panel.ZIndex="1"
                     VerticalAlignment="Top"/>
-            <Border x:Name="EgoGift_ID_SwitchNext_Cover"
+            <Border x:Name="ID_SwitchNext_Cover"
                     Background="#7F000000"
                     Grid.Row="1"
                     Grid.Column="1"
@@ -512,9 +466,8 @@
                     HorizontalAlignment="Left"
                     Panel.ZIndex="1"
                     VerticalAlignment="Top"/>
-
-            <Button x:Name="EgoGift_ID_SwitchPrev"
-                    Click="EgoGift_ID_SwitchPrev_Click"
+            <Button x:Name="ID_SwitchPrev"
+                    Click="ID_SwitchPrev_Click"
                     Grid.Row="1"
                     Grid.Column="1"
                     Width="70"
@@ -524,9 +477,8 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Stretch"/>
-
-            <Button x:Name="EgoGift_ID_SwitchNext"
-                    Click="EgoGift_ID_SwitchNext_Click"
+            <Button x:Name="ID_SwitchNext"
+                    Click="ID_SwitchNext_Click"
                     Grid.Row="1"
                     Grid.Column="1"
                     Width="70"
@@ -536,9 +488,6 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Stretch"/>
-
-            
-
             <Border Grid.Row="1"
                     Grid.Column="1"
                     HorizontalAlignment="Left"
@@ -549,8 +498,8 @@
                     BorderThickness="1"
                     Margin="80, 39, 0, 0"
                     BorderBrush="#FF333333">
-                <Button x:Name="EgoGift_ID_CopyID_Button"
-                        Click="EgoGift_ID_CopyID"
+                <Button x:Name="ID_Copy_Button"
+                        Click="ID_Copy"
                         Background="{x:Null}"
                         Content="ID"
                         Grid.Row="1"
@@ -568,8 +517,7 @@
                         HorizontalContentAlignment="Stretch"
                         ToolTipService.InitialShowDelay="0">
                     <Button.ToolTip>
-                        <ToolTip x:Name="EgoGift_ID_CopyID_Tooltip"
-                                 Background="#895B5B5B"
+                        <ToolTip Background="#895B5B5B"
                                  Foreground="White"
                                  HasDropShadow="False"
                                  Placement="MousePoint"
@@ -582,8 +530,6 @@
                     </Button.ToolTip>
                 </Button>
             </Border>
-
-            
             <Border Grid.Column="1" 
                     Grid.Row="2"
                     HorizontalAlignment="Left"
@@ -592,11 +538,10 @@
                     BorderBrush="#FF4B4B4B" 
                     BorderThickness="2" 
                     CornerRadius="3">
-                
                 <ScrollViewer Margin="3, 35, 0, 0" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                     <StackPanel>
-                        <Button x:Name="EgoGift_SwitchEditorTo_Desc"
-                                Click="EgoGift_SwitchEditorTo_Desc_Button"
+                        <Button x:Name="SwitchEditorTo_Desc"
+                                Click="SwitchEditorTo_Desc_Button"
                                 Content="Описание"
                                 Grid.Column="1"
                                 Grid.Row="2"
@@ -633,7 +578,7 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <Border x:Name="EgoGift_Desc_Cover"
+                        <Border x:Name="Desc_Cover"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Background="#7F000000"
@@ -643,9 +588,8 @@
                                 Focusable="False"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Left"/>
-                        
-                        <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc1"
-                                Click="EgoGift_SwitchEditorTo_SimpleDesc1_Button"
+                        <Button x:Name="SwitchEditorTo_SubDesc1"
+                                Click="SwitchEditorTo_SubDesc1_Button"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Width="232.5"
@@ -682,7 +626,7 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <Border x:Name="EgoGift_SimpleDesc1_Cover"
+                        <Border x:Name="SubDesc1_Cover"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Background="#7F000000"
@@ -692,9 +636,8 @@
                                 Focusable="False"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Left"/>
-                        
-                        <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc2"
-                                Click="EgoGift_SwitchEditorTo_SimpleDesc2_Button"
+                        <Button x:Name="SwitchEditorTo_SubDesc2"
+                                Click="SwitchEditorTo_SubDesc2_Button"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Width="232.5"
@@ -731,7 +674,7 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <Border x:Name="EgoGift_SimpleDesc2_Cover"
+                        <Border x:Name="SubDesc2_Cover"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Background="#7F000000"
@@ -741,9 +684,8 @@
                                 Focusable="False"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Left"/>
-                        
-                        <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc3"
-                                Click="EgoGift_SwitchEditorTo_SimpleDesc3_Button"
+                        <Button x:Name="SwitchEditorTo_SubDesc3"
+                                Click="SwitchEditorTo_SubDesc3_Button"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Width="232.5"
@@ -780,7 +722,7 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <Border x:Name="EgoGift_SimpleDesc3_Cover"
+                        <Border x:Name="SubDesc3_Cover"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Background="#7F000000"
@@ -790,9 +732,8 @@
                                 Focusable="False"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Left"/>
-                        
-                        <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc4"
-                                Click="EgoGift_SwitchEditorTo_SimpleDesc4_Button"
+                        <Button x:Name="SwitchEditorTo_SubDesc4"
+                                Click="SwitchEditorTo_SubDesc4_Button"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Width="232.5"
@@ -829,7 +770,7 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <Border x:Name="EgoGift_SimpleDesc4_Cover"
+                        <Border x:Name="SubDesc4_Cover"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Background="#7F000000"
@@ -839,9 +780,8 @@
                                 Focusable="False"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Left"/>
-                        
-                        <Button x:Name="EgoGift_SwitchEditorTo_SimpleDesc5"
-                                Click="EgoGift_SwitchEditorTo_SimpleDesc5_Button"
+                        <Button x:Name="SwitchEditorTo_SubDesc5"
+                                Click="SwitchEditorTo_SubDesc5_Button"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Width="232.5"
@@ -878,7 +818,7 @@
                                 </Style>
                             </Button.Style>
                         </Button>
-                        <Border x:Name="EgoGift_SimpleDesc5_Cover"
+                        <Border x:Name="SubDesc5_Cover"
                                 Grid.Column="1"
                                 Grid.Row="2"
                                 Background="#7F000000"
@@ -892,24 +832,21 @@
                     </StackPanel>
                 </ScrollViewer>
             </Border>
-
             <StackPanel Grid.Column="1"
                         Grid.Row="2"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top">
-
-
                 <Border Margin="5, 5, 0, 0"
                         BorderBrush="#FF333333"
                         BorderThickness="2"
                         Width="232.5"
                         Height="29">
-                    <TextBox x:Name="EgoGift_Name"
+                    <TextBox x:Name="Name_EditBox"
                              Grid.Column="1" 
                              Grid.Row="2" 
                              VerticalAlignment="Top"
                              HorizontalAlignment="Left"
-                             TextChanged="EgoGift_Name_TextChanged"
+                             TextChanged="Name_EditBox_TextChanged"
                      
                              Height="25" 
                              Width="228"
@@ -938,8 +875,7 @@
                         Focusable="False"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"/>
-
-                <Label x:Name="EgoGift_Name_bgtext"
+                <Label x:Name="Name_Label_bgtext"
                        FontStyle="Italic"
                        Grid.Column="1" 
                        Grid.Row="2" 
@@ -957,14 +893,12 @@
                        FontSize="19"
                        Foreground="#FF514C46"
        
-                       Content="Название ЭГО Дара">
-            </Label>
+                       Content="Название ЭГО Дара"></Label>
             </StackPanel>
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" Width="29" Height="232" Margin="242, 5, 0, 0">
-                <Button x:Name="EgoGift_Name_ChangeName_Button"
-                        Click="EgoGift_Name_ChangeName"
-                        Width="29" Height="29">
-                </Button>
+                <Button x:Name="Name_Change_Button"
+                        Click="Name_ChangeName"
+                        Width="29" Height="29"></Button>
                 <Border x:Name="Name_ChangeName_Cover"
                         Grid.Column="1"
                         Grid.Row="2"
@@ -975,11 +909,9 @@
                         Focusable="False"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"/>
-                
-                <Button x:Name="EgoGift_Desc_ChangeDesc_Button"
-                        Click="EgoGift_Desc_ChangeDesc"
-                        Width="29" Height="30" Margin="0, 3, 0, 0">
-                </Button>
+                <Button x:Name="Desc_Change_Button"
+                        Click="Desc_ChangeDesc"
+                        Width="29" Height="30" Margin="0, 3, 0, 0"></Button>
                 <Border x:Name="Desc_Change_Cover"
                         Grid.Column="1"
                         Grid.Row="2"
@@ -990,12 +922,10 @@
                         Focusable="False"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"/>
-                
-                <Button x:Name="EgoGift_Desc_SimpleDesc1_Button"
-                        Click="EgoGift_Desc_ChangeSimpleDesc1"
-                        Width="29" Height="30" Margin="0, 4, 0, 0">
-                </Button>
-                <Border x:Name="SimpleDesc1_Change_Cover"
+                <Button x:Name="SubDesc1_Change_Button"
+                        Click="Desc_ChangeSubDesc1"
+                        Width="29" Height="30" Margin="0, 4, 0, 0"></Button>
+                <Border x:Name="SubDesc1_Change_Cover"
                         Grid.Column="1"
                         Grid.Row="2"
                         Background="#7F000000"
@@ -1005,12 +935,10 @@
                         Focusable="False"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"/>
-                
-                <Button x:Name="EgoGift_Desc_SimpleDesc2_Button"
-                        Click="EgoGift_Desc_ChangeSimpleDesc2"
-                        Width="29" Height="30" Margin="0, 4, 0, 0">
-                </Button>
-                <Border x:Name="SimpleDesc2_Change_Cover"
+                <Button x:Name="SubDesc2_Change_Button"
+                        Click="Desc_ChangeSubDesc2"
+                        Width="29" Height="30" Margin="0, 4, 0, 0"></Button>
+                <Border x:Name="SubDesc2_Change_Cover"
                         Grid.Column="1"
                         Grid.Row="2"
                         Background="#7F000000"
@@ -1020,12 +948,10 @@
                         Focusable="False"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"/>
-                
-                <Button x:Name="EgoGift_Desc_SimpleDesc3_Button"
-                        Click="EgoGift_Desc_ChangeSimpleDesc3"
-                        Width="29" Height="30" Margin="0, 4, 0, 0">
-                </Button>
-                <Border x:Name="SimpleDesc3_Change_Cover"
+                <Button x:Name="SubDesc3_Change_Button"
+                        Click="Desc_ChangeSubDesc3"
+                        Width="29" Height="30" Margin="0, 4, 0, 0"></Button>
+                <Border x:Name="SubDesc3_Change_Cover"
                         Grid.Column="1"
                         Grid.Row="2"
                         Background="#7F000000"
@@ -1035,12 +961,10 @@
                         Focusable="False"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"/>
-
-                <Button x:Name="EgoGift_Desc_SimpleDesc4_Button"
-                        Click="EgoGift_Desc_ChangeSimpleDesc4"
-                        Width="29" Height="30" Margin="0, 4, 0, 0">
-                </Button>
-                <Border x:Name="SimpleDesc4_Change_Cover"
+                <Button x:Name="SubDesc4_Change_Button"
+                        Click="Desc_ChangeSubDesc4"
+                        Width="29" Height="30" Margin="0, 4, 0, 0"></Button>
+                <Border x:Name="SubDesc4_Change_Cover"
                         Grid.Column="1"
                         Grid.Row="2"
                         Background="#7F000000"
@@ -1050,12 +974,10 @@
                         Focusable="False"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left"/>
-
-                <Button x:Name="EgoGift_Desc_SimpleDesc5_Button"
-                        Click="EgoGift_Desc_ChangeSimpleDesc5"
-                        Width="29" Height="30" Margin="0, 4, 0, 0">
-                </Button>
-                <Border x:Name="SimpleDesc5_Change_Cover"
+                <Button x:Name="SubDesc5_Change_Button"
+                        Click="Desc_ChangeSubDesc5"
+                        Width="29" Height="30" Margin="0, 4, 0, 0"></Button>
+                <Border x:Name="SubDesc5_Change_Cover"
                         Grid.Column="1"
                         Grid.Row="2"
                         Background="#7F000000"
