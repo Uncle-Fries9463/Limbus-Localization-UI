@@ -18,7 +18,7 @@
         MinWidth="600"
         MaxWidth="895"
         Width="895" 
-        Height="560"
+        Height="443"
         
         Title="Limbus Localization UI"> <!--443 height-->
     <Window.Resources>
