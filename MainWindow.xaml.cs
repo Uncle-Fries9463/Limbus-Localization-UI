@@ -7,44 +7,118 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
+using Limbus_Localization_UI.Json;
 using Limbus_Localization_UI.Additions;
+using Limbus_Localization_UI.Mode_Handlers;
 
 namespace Limbus_Localization_UI
 {
     public partial class MainWindow : Window
     {
         readonly static Dictionary<string, BitmapImage> SpriteBitmaps = РазноеДругое.GetSpritesBitmaps();
-        public static Dictionary<string, Tuple<Button, StackPanel, RichTextBox, TextBox, Label, Border, Image>> StaticLinks = new();
 
         static string Json_Filepath;
-        static Dictionary<int, Dictionary<string, object>> EGOgift_Json_Dictionary; // В случае редактирования ЭГО даров они редактируются через удобный словарь, а не Json элемент
-        static Dictionary<int, Dictionary<string, object>> EGOgift_EditBuffer = new();      // Буфер не сохранённых изменений (копия верхнего, но с "{unedited}" вместо строк)
-        static int Json_Dictionary_CurrentID = -1; // ID редактруемого ЭГО дара
-        static List<int> JsonKeys; // Список всех ID 
+        public static Dictionary<int, Dictionary<string, object>> EGOgift_Json_Dictionary = new();
+        public static Dictionary<int, Dictionary<string, object>> EGOgift_EditBuffer = new(); // Буфер не сохранённых изменений (копия верхнего, но с "{unedited}" вместо строк)
+        public static Dictionary<int, dynamic> Skills_Json_Dictionary = new();
+        public static Dictionary<int, dynamic> Skills_EditBuffer = new();
+        public static string Skills_CurrentEditingField = "Desc";
+        public static void Update_CurrentEditingField(string New) => Skills_CurrentEditingField=New;
+
+
+        static List<int> EGOgift_JsonKeys; // Список всех ID 
+        static List<int> Skills_JsonKeys; // Список всех ID 
+
+        static int EGOgift_Json_Dictionary_CurrentID = -1; // ID редактруемого ЭГО дара
+        static int Skills_Json_Dictionary_CurrentID = -1; // ID редактруемого Навыка
+
+        public static int Skills_Json_Dictionary_CurrentUptieLevel = 0; // ID редактруемого Навыка
+
         string CurrentDesc = "Desc"; // Текущее редактруемое поле
         string JsonFilepath_FullPath = "";
 
-        // Список ссылок на все объекты интерфейса для обращения к ним в других классах без мороки с MVVM
-        public static void InitializeStaticLinks()
-        {
-            StaticLinks = new()
-            {
+        static string EditorMode = "EGOgift";
 
+        // Список ссылок на все объекты интерфейса с понятным именем для обращения к ним в других классах без мороки с MVVM и { get; set; }, так и не пошло с ними
+        public Dictionary<string, dynamic> T = new();
+        public void InitializeStaticLinks()
+        {
+            T = new()
+            {
+                ["Window"] = this,
+                ["JsonIO Column"] = JsonIO_Column,
+                ["Left Menu Buttons box"] = LeftMenu_Box,
+
+                ["Json EditBox"] = JsonEditor,
+                ["PreviewLayout Background"] = PreviewLayout_BackgroundImage,
+                ["PreviewLayout @ EGO Gift"] = PreviewLayout_EGOgift,
+                ["PreviewLayout @ Skill"   ] = PreviewLayout_Skills,
+
+
+                ["Name EditBox"] = Name_EditBox, ["Name EditBox Shadow"] = Name_Label_bgtext, 
+                ["Name EditBox [UnavalibleCover]"    ] = Name_ChangeNameInput_Cover,
+                ["Name SaveChanges [UnavalibleCover]"] = Name_ChangeName_Cover,
+                ["ID Input"] = JumpToID_Input,
+
+                ["ID Label"] = ID_Copy_Button, ["Name Label"] = Name_Label,
+
+
+                ["Left Menu Buttons Box"] = LeftMenu_Box,
+
+                ["EditorSwitch Desc"     ] = SwitchEditorTo_Desc    ,  ["EditorSwitch Desc [UnavalibleCover]"     ] = Desc_Cover    ,
+                ["EditorSwitch SubDesc 1"] = SwitchEditorTo_SubDesc1,  ["EditorSwitch SubDesc 1 [UnavalibleCover]"] = SubDesc1_Cover,
+                ["EditorSwitch SubDesc 2"] = SwitchEditorTo_SubDesc2,  ["EditorSwitch SubDesc 2 [UnavalibleCover]"] = SubDesc2_Cover,
+                ["EditorSwitch SubDesc 3"] = SwitchEditorTo_SubDesc3,  ["EditorSwitch SubDesc 3 [UnavalibleCover]"] = SubDesc3_Cover,
+                ["EditorSwitch SubDesc 4"] = SwitchEditorTo_SubDesc4,  ["EditorSwitch SubDesc 4 [UnavalibleCover]"] = SubDesc4_Cover,
+                ["EditorSwitch SubDesc 5"] = SwitchEditorTo_SubDesc5,  ["EditorSwitch SubDesc 5 [UnavalibleCover]"] = SubDesc5_Cover,
+
+                ["SaveChanges Desc"      ] = Desc_Change_Button     ,  ["SaveChanges Desc [UnavalibleCover]"      ] = Desc_Change_Cover    ,
+                ["SaveChanges SubDesc 1" ] = SubDesc1_Change_Button ,  ["SaveChanges SubDesc 1 [UnavalibleCover]" ] = SubDesc1_Change_Cover,
+                ["SaveChanges SubDesc 2" ] = SubDesc2_Change_Button ,  ["SaveChanges SubDesc 2 [UnavalibleCover]" ] = SubDesc2_Change_Cover,
+                ["SaveChanges SubDesc 3" ] = SubDesc3_Change_Button ,  ["SaveChanges SubDesc 3 [UnavalibleCover]" ] = SubDesc3_Change_Cover,
+                ["SaveChanges SubDesc 4" ] = SubDesc4_Change_Button ,  ["SaveChanges SubDesc 4 [UnavalibleCover]" ] = SubDesc4_Change_Cover,
+                ["SaveChanges SubDesc 5" ] = SubDesc5_Change_Button ,  ["SaveChanges SubDesc 5 [UnavalibleCover]" ] = SubDesc5_Change_Cover,
+
+
+
+                ["Skill PreviewLayout Desc"] = MainSkillDesc,
+                ["Skill PreviewLayout Coin 1 Panel"] = Skill_Coin1, ["Skill PreviewLayout Coin 1"] = Skill_Coin1_Desc,
+                ["Skill PreviewLayout Coin 2 Panel"] = Skill_Coin2, ["Skill PreviewLayout Coin 2"] = Skill_Coin2_Desc,
+                ["Skill PreviewLayout Coin 3 Panel"] = Skill_Coin3, ["Skill PreviewLayout Coin 3"] = Skill_Coin3_Desc,
+                ["Skill PreviewLayout Coin 4 Panel"] = Skill_Coin4, ["Skill PreviewLayout Coin 4"] = Skill_Coin4_Desc,
+                ["Skill PreviewLayout Coin 5 Panel"] = Skill_Coin5, ["Skill PreviewLayout Coin 5"] = Skill_Coin5_Desc,
+
+                ["Skill UptieLevel Selection Box"] = Skill_UptieLevel_Selection_Box,
+                ["Uptie Level Icons"] = UptieLevelIcons,
+
+                ["Uptie Level 1"] = UptieLevel1_Button, ["Uptie Level 1 [UnavalibleCover]"] = UptieLevel1_Cover, ["Uptie Level 1 [UnavalibleSubCover]"] = UptieLevel1_SubCover, 
+                ["Uptie Level 2"] = UptieLevel2_Button, ["Uptie Level 2 [UnavalibleCover]"] = UptieLevel2_Cover, ["Uptie Level 2 [UnavalibleSubCover]"] = UptieLevel2_SubCover, 
+                ["Uptie Level 3"] = UptieLevel3_Button, ["Uptie Level 3 [UnavalibleCover]"] = UptieLevel3_Cover, ["Uptie Level 3 [UnavalibleSubCover]"] = UptieLevel3_SubCover, 
+                ["Uptie Level 4"] = UptieLevel4_Button, ["Uptie Level 4 [UnavalibleCover]"] = UptieLevel4_Cover, ["Uptie Level 4 [UnavalibleSubCover]"] = UptieLevel4_SubCover, 
             };
+            Console.WriteLine("Ссылки на статические объекты интерфейса готовы");
         }
 
         public MainWindow()
         {
             InitializeComponent();
-
-
             InitializeStaticLinks();
+
+            PreviewLayout_Skills.PreviewMouseLeftButtonDown += SurfaceScroll_MouseLeftButtonDown;
+            PreviewLayout_Skills.PreviewMouseMove += SurfaceScroll_MouseMove;
+            PreviewLayout_Skills.PreviewMouseLeftButtonUp += SurfaceScroll_MouseLeftButtonUp;
+
             StartInits();
+            РазноеДругое                .InitTDictionaryHere(T);
+            Mode_Handlers.Mode_Skills   .InitTDictionaryHere(T);
+            Mode_Handlers.Mode_EGO_Gifts.InitTDictionaryHere(T);
         }
+
+
 
         private void StartInits()
         {
-            EGOgift_Background.Source = SpriteBitmaps[@"$Другое\Фон.png"];
+            //EGOgift_Background.Source = SpriteBitmaps[@"$Другое\Фон.png"];
             JsonFile_SelectFile_Button.Content = new Image { Source = SpriteBitmaps[@"$Другое\free-icon-text-document-32329.png"] };
             JsonFile_ReadFile.Content = new Image { Source = SpriteBitmaps[@"$Другое\free_icon_book_14095035.png"], Margin = new Thickness(-1, 0, 0, 0) };
             ID_SwitchPrev.Content = new Image { Source = SpriteBitmaps[@"$Другое\free-icon-growth-4534634_1.png"], Margin = new Thickness(-1, 0, 0, 0) };
@@ -52,19 +126,23 @@ namespace Limbus_Localization_UI
             ID_JumpTo.Content = new Image { Source = SpriteBitmaps[@"$Другое\free_icon_book_14095035.png"], Margin = new Thickness(-2, 0, 0, 0) };
 
             Name_Change_Button.Content = new Image { Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
-
             Desc_Change_Button.Content = new Image { Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
-            SubDesc1_Change_Button.Content = new Image { Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
-            SubDesc2_Change_Button.Content = new Image { Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
-            SubDesc3_Change_Button.Content = new Image { Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
-            SubDesc4_Change_Button.Content = new Image { Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
-            SubDesc5_Change_Button.Content = new Image { Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
+
+            for (int i = 1; i <= 5; i++) T[$"SaveChanges SubDesc {i}"].Content = new Image { Source = SpriteBitmaps[@"$Другое\free-icon-checked_4736822.png"] };
+
 
             string Def = "Статусные эффекты, <style=\\\"upgradeHighlight\\\">Подсветка улучшения</style>\n<sprite name=\\\"Breath\\\"><color=#f8c200>Дыхание</color>\n<sprite name=\\\"Charge\\\"><color=#f8c200>Заряд</color>\n<sprite name=\\\"Laceration\\\"><color=#e30000>Кровотечение</color>\n<sprite name=\\\"Combustion\\\"><color=#e30000>Огонь</color>\n<sprite name=\\\"Burst\\\"><color=#e30000>Разрыв</color>\n<sprite name=\\\"Sinking\\\"><color=#e30000>Утопание</color>\n<sprite name=\\\"Vibration\\\"><color=#e30000>Тремор</color>\n - <sprite name=\\\"VibrationExplosion\\\"><color=#e30000>Провоцирование тремора</color>\n\n\n<sprite name=\\\"Какой то\\\"><color=#e30000>Неизвестный спрайт</color>\\nПоломанный текст:\\n             < Поломанный текст после незакрытой острой скобки, всегда закрывайте их<sprite name=\\\"Burst\\\"><color=#e30000>Разрыв</color>";
 
             PreviewLayout_EGOgift.SetValue(Paragraph.LineHeightProperty, 30.0);
 
-            JsonEditor.Text = Def;
+            T[$"Skill PreviewLayout Desc"].SetValue(Paragraph.LineHeightProperty, 30.0);
+            for (int i = 1; i <= 5; i++)
+            {
+                T[$"Skill PreviewLayout Coin {i}"].SetValue(Paragraph.LineHeightProperty, 30.0);
+            }
+
+            //JsonEditor.Text = Def;
+            T["Json EditBox"].Text = Def;
         }
 
 
@@ -72,107 +150,99 @@ namespace Limbus_Localization_UI
 
 
 
-
-
-
-
-        private void TextChanged(object sender, TextChangedEventArgs e)
+        /// <summary>
+        /// При редактировании Json элемента обновлять предпросмотр и добавлять к кнопкам звёздочку при наличии несохранённых изменений
+        /// </summary>
+        private void Json_EditBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            PreviewLayout_EGOgift.Document.Blocks.Clear();
             // Обновить предпросмотр
-            UpdatePreview(JsonEditor.Text);
+
+            if (EditorMode == "EGOgift")
+            {
+                PreviewLayout_EGOgift.Document.Blocks.Clear();
+                UpdatePreview(JsonEditor.Text, PreviewLayout_EGOgift);
+            }
+
+            else if (EditorMode == "Skills")
+            {
+                var UpdatePreview_Target = MainSkillDesc;
+                var UpdatePreview_Text = "";
+                switch (Skills_CurrentEditingField[0..4])
+                {
+                    case "Desc":
+                        // Если поле ввода пустое, скрыть описание навыка на предпросмотре
+                        //bool IsJsonEditBoxEmpty = JsonEditor.Text.Equals("");
+                        //T["Skill PreviewLayout Desc"].Height = IsJsonEditBoxEmpty? 0 : Double.NaN;
+                        //T["Skill PreviewLayout Desc"].MinHeight = IsJsonEditBoxEmpty? 0 : 30;
+
+
+                        // Обновить контент для предпросмотра
+                        if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"].Equals("{unedited}"))
+                        {
+                            UpdatePreview_Text = JsonEditor.Text.Replace("\"", "\\\"");
+                        }
+                        else
+                        {
+                            UpdatePreview_Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"];
+                        }
+
+                        UpdatePreview_Target = MainSkillDesc;
+                        break;
+
+
+                    default:
+                        ///...
+                        break;
+                }
+                UpdatePreview(UpdatePreview_Text, UpdatePreview_Target);
+            }
+
 
             // Проверить буфер не сохранённых изменений для обозначения соответсвующих кнопок звёздочкой
-            if (Json_Dictionary_CurrentID != -1)
+            if (EGOgift_Json_Dictionary_CurrentID != -1 & EditorMode == "EGOgift")
             {
                 switch (CurrentDesc)
                 {
                     case "Desc":
-                        if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["Desc"]))
+
+                        if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID]["Desc"]))
                         {
                             SwitchEditorTo_Desc.Content = "Описание";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["Desc"] = "{unedited}";
+                            EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"] = "{unedited}";
                         }
                         else
                         {
                             SwitchEditorTo_Desc.Content = "Описание*";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["Desc"] = JsonEditor.Text;
+                            EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"] = JsonEditor.Text;
                         }
+
                         break;
 
-                    case "SimpleDesc1":
-                        if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc1"]))
+
+                    default:
+
+                        char DescNumber = CurrentDesc[^1];
+
+                        if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"]))
                         {
-                            SwitchEditorTo_SubDesc1.Content = "Простое описание 1";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc1"] = "{unedited}";
+                            T[$"EditorSwitch SubDesc {DescNumber}"].Content = $"Простое описание {DescNumber}";
+                            EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"] = "{unedited}";
                         }
                         else
                         {
-                            SwitchEditorTo_SubDesc1.Content = "Простое описание 1*";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc1"] = JsonEditor.Text;
+                            T[$"EditorSwitch SubDesc {DescNumber}"].Content = $"Простое описание {DescNumber}*";
+                            EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"] = JsonEditor.Text;
                         }
-                        break;
 
-                    case "SimpleDesc2":
-                        if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc2"]))
-                        {
-                            SwitchEditorTo_SubDesc2.Content = "Простое описание 2";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc2"] = "{unedited}";
-                        }
-                        else
-                        {
-                            SwitchEditorTo_SubDesc2.Content = "Простое описание 2*";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc2"] = JsonEditor.Text;
-                        }
                         break;
-
-                    case "SimpleDesc3":
-                        if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc3"]))
-                        {
-                            SwitchEditorTo_SubDesc3.Content = "Простое описание 3";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc3"] = "{unedited}";
-                        }
-                        else
-                        {
-                            SwitchEditorTo_SubDesc3.Content = "Простое описание 3*";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc3"] = JsonEditor.Text;
-                        }
-                        break;
-
-                    case "SimpleDesc4":
-                        if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc4"]))
-                        {
-                            SwitchEditorTo_SubDesc4.Content = "Простое описание 4";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc4"] = "{unedited}";
-                        }
-                        else
-                        {
-                            SwitchEditorTo_SubDesc4.Content = "Простое описание 4*";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc4"] = JsonEditor.Text;
-                        }
-                        break;
-
-                    case "SimpleDesc5":
-                        if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc5"]))
-                        {
-                            SwitchEditorTo_SubDesc5.Content = "Простое описание 5";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc5"] = "{unedited}";
-                        }
-                        else
-                        {
-                            SwitchEditorTo_SubDesc5.Content = "Простое описание 5*";
-                            EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc5"] = JsonEditor.Text;
-                        }
-                        break;
-
                 }
             }
         }
 
 
-        public bool WordWrap_WithSprites = true;
+        public static bool WordWrap_WithSprites = true;
 
-        private void AddText(string text, RichTextBox Target)
+        private static void AddText(string text, RichTextBox Target)
         {
             var document = Target.Document;
             if (document.Blocks.LastBlock is not Paragraph lastParagraph)
@@ -187,13 +257,13 @@ namespace Limbus_Localization_UI
             {
                 if (i % 3 == 0 & TextParts[i] != "" & TextParts[i] != "\0") // Цветной текст
                 {
-                    lastParagraph.Inlines.Add(new Run(TextParts[i]));
+                    lastParagraph.Inlines.Add(new Run(TextParts[i].Replace("\\\"", "\"")));
                 }
                 else if (i % 3 == 1) // Цветной текст
                 {
                     if (ColorConverter.ConvertFromString(TextParts[i]) is Color color)
                     {
-                        Run coloredRun = new(TextParts[i + 1])
+                        Run coloredRun = new(TextParts[i + 1].Replace("\\\"", "\""))
                         {
                             Foreground = new SolidColorBrush(color),
                         };
@@ -206,10 +276,11 @@ namespace Limbus_Localization_UI
             }
         }
 
-        public bool Is_OneWord_Queued = false;
-        public bool Is_MultWords_Queued = false;
 
-        private void AddSprite(string SpriteName, RichTextBox Target, bool IsOneWord = true, string NextWord = "Кто это?", string NextColor = "#fac400")
+        public static bool Is_OneWord_Queued = false;
+        public static bool Is_MultWords_Queued = false;
+
+        private static void AddSprite(string SpriteName, RichTextBox Target, bool IsOneWord = true, string NextWord = "Кто это?", string NextColor = "#fac400")
         {
             if (IsOneWord & WordWrap_WithSprites) Is_OneWord_Queued = true;
 
@@ -240,7 +311,7 @@ namespace Limbus_Localization_UI
                     //Background = new SolidColorBrush(Colors.Gray), // Граница контейнера спрайта и названия статусного эффекта (Для цельного переноса на новую строку)
                 };
                 SpritePlusEffectname.Children.Add(new TextBlock(new InlineUIContainer(SpriteImage)));
-                Run EffectName = new(NextWord) {TextDecorations = TextDecorations.Underline};
+                Run EffectName = new(NextWord.Replace("\\\"", "\"")) {TextDecorations = TextDecorations.Underline};
 
                 if (ColorConverter.ConvertFromString(NextColor) is Color color)
                 {
@@ -252,8 +323,16 @@ namespace Limbus_Localization_UI
 
                 // 24 line height = |4.5| 'y' value
                 // 30 line height = |10|  'y' value
-                SpritePlusEffectname.Margin = new Thickness(0, -11, 0, 0);
-                SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.6); // 'y' value- (~0.5), может быть, наверное
+                if (EditorMode.Equals("EGOgift"))
+                {
+                    SpritePlusEffectname.Margin = new Thickness(0, -11, 0, 0);
+                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.6); // 'y' value- (~0.5), может быть, наверное
+                }
+                else if (EditorMode.Equals("Skills"))
+                {
+                    SpritePlusEffectname.Margin = new Thickness(0, -11.5, 0, 0);
+                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 11.6);
+                }
 
                 SpritePlusEffectname.VerticalAlignment = VerticalAlignment.Bottom;
 
@@ -277,8 +356,9 @@ namespace Limbus_Localization_UI
         /// <summary>
         /// Обработать вводимый Json desc текст и вывести в окно
         /// </summary>
-        private void UpdatePreview(string JsonDesc)
+        public static void UpdatePreview(string JsonDesc, RichTextBox Target)
         {
+            Target.Document.Blocks.Clear();
             JsonDesc = JsonDesc.Replace("color=#None", "color=#ffffff")
                                .Replace("<style=\\\"highlight\\\">", "<style=\\\"upgradeHighlight\\\">") // Подсветка изменений подобно upgradeHighlight, но для навыков
                                .Replace("<style=\\\"upgradeHighlight\\\">", "<color=#f8c200>")
@@ -287,6 +367,21 @@ namespace Limbus_Localization_UI
                                .Replace("<u>", "")
                                .Replace("</u>", "")
                                .Replace("<>", "<s>")
+
+                               .Replace("[WhenUse]", "<color=#27cefe>[При использовании]</color>")
+                               .Replace("[OnSucceedAttackHead]", "<color=#c6fe94>[Выпал орёл]</color>")
+
+                               .Replace("[OnSucceedAttack]", "<color=#93f03f>[При ударе]</color>")
+                               .Replace("[CriticalOnSucceedAttack]", "<color=#93f03f>[Критическая атака]</color>")
+                               .Replace("[StartBattle]", "<color=#93f03f>[В начале хода]</color>")
+                               .Replace("[EndSkill]", "<color=#93f03f>[В конце атаки]</color>")
+                               .Replace("[EndBattle]", "<color=#93f03f>[В конце хода]</color>")
+                               .Replace("[BeforeAttack]", "<color=#93f03f>[Перед атакой]</color>")
+
+                               .Replace("[CantIdentify]", "<color=#fe0000>[Неуправляемый]</color>")
+
+                               .Replace("[DuelCounter]", "<color=#f95e00>[Контратака с поединком]</color>")
+
                                .Replace("><", ">\0<");
 
             JsonDesc = Regex.Replace(JsonDesc, @"(?<=<\/color>)([а-яА-Яa-zA-Z])", " $1");
@@ -299,7 +394,15 @@ namespace Limbus_Localization_UI
             string[] Colors = {
                 "color=#e30000", // Красный текст, Негативные статусные эффекты, подчёркивается
                 "color=#fac400", // Жёлтый текст, Позитивные статусные эффекты (Спешка, Повышение уровня атаки, ..) + Заряд и Дыхание, подчёркивается
-                "color=#ffffff",  // Белый текст (У Дон Кихот в идентичности Менеджера Ла-Манчалаенда эффект Кровавая броня) 
+                "color=#ffffff", // Белый текст (У Дон Кихот в идентичности Менеджера Ла-Манчалаенда эффект Кровавая броня) 
+                
+                "color=#93f03f", // [При ударе] и т.д.         \ Зелёный
+                "color=#27cefe", // [При использовании] и т.д. \ Синий
+                "color=#c6fe94", // [Выпал орёл] и т.д.        \ Блеклый зелёный
+                "color=#f95e00", // [Выпал орёл] и т.д.        \ Контратака с поедником
+
+                "color=#fe0000", // [Выпал орёл] и т.д.        \ Красный (Случайные цели)
+
 
                 "color=#f8c200", // Подсветка изменений в ЭГО Даре при улучшении (<style=\"upgradeHighlight\">XXX</style> в англ файле локализации (вполне работает), <color=#f8c200>XXX</color> в существующем переводе)
             };
@@ -312,7 +415,7 @@ namespace Limbus_Localization_UI
                     {
                         if (!Colors.Contains(parts[i - 1]))
                         {
-                            AddText(parts[i], PreviewLayout_EGOgift);
+                            AddText(parts[i], Target);
                         }
                     }
                     catch { }
@@ -345,7 +448,7 @@ namespace Limbus_Localization_UI
                         }
 
 
-                        if (parts[i].StartsWith("sprite name"))
+                        if (parts[i].StartsWith("sprite name=\\\"") & parts[i].EndsWith("\\\""))
                         {
                             NextWordCheck = NextWord.Split(' ');
                             NextWordCheck_Count = NextWordCheck.Count();
@@ -364,7 +467,7 @@ namespace Limbus_Localization_UI
                             else if (SpriteBitmaps.ContainsKey($"{spritename}.webp")) spritename = $"{spritename}.webp";
                             try
                             {
-                                AddSprite(spritename, PreviewLayout_EGOgift, NextWord: NextWord, NextColor: NextColor, IsOneWord: IsOneWord);
+                                AddSprite(spritename, Target, NextWord: NextWord, NextColor: NextColor, IsOneWord: IsOneWord);
                             }
                             catch
                             {
@@ -383,26 +486,29 @@ namespace Limbus_Localization_UI
                                     AddT = " " + String.Join(' ', parts[i + 1].Split(' ')[1..]);
                                     Is_MultWords_Queued = false;
                                 }
-                                switch ("<" + parts[i] + ">")
-                                {
-                                    case "<color=#e30000>":
-                                        AddText($"<color=#e30000>{AddT}</color>", PreviewLayout_EGOgift);
-                                        break;
 
-                                    case "<color=#f8c200>":
-                                        AddText($"<color=#f8c200>{AddT}</color>", PreviewLayout_EGOgift);
-                                        break;
 
-                                    case "<color=#fac400>":
-                                        AddText($"<color=#fac400>{AddT}</color>", PreviewLayout_EGOgift);
-                                        break;
+                                AddText($"<{parts[i]}>{AddT}</color>", Target);
+                                //switch ("<" + parts[i] + ">")
+                                //{
+                                //    case "<color=#e30000>":
+                                //        AddText($"<color=#e30000>{AddT}</color>", Target);
+                                //        break;
+
+                                //    case "<color=#f8c200>":
+                                //        AddText($"<color=#f8c200>{AddT}</color>", Target);
+                                //        break;
+
+                                //    case "<color=#fac400>":
+                                //        AddText($"<color=#fac400>{AddT}</color>", Target);
+                                //        break;
                                     
-                                    case "<color=#ffffff>":
-                                        AddText($"<color=#ffffff>{AddT}</color>", PreviewLayout_EGOgift);
-                                        break;
+                                //    case "<color=#ffffff>":
+                                //        AddText($"<color=#ffffff>{AddT}</color>", Target);
+                                //        break;
 
-                                    default: break;
-                                }
+                                //    default: break;
+                                //}
                             }
                             else Is_OneWord_Queued = false;
                         }
@@ -441,7 +547,7 @@ namespace Limbus_Localization_UI
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (Json_Dictionary_CurrentID != -1)
+            if (EGOgift_Json_Dictionary_CurrentID != -1)
             {
                 (string, string) ExitData = JsonLoader_EGOgifts.GetUnsavedChanges(EGOgift_EditBuffer);
 
@@ -461,29 +567,31 @@ namespace Limbus_Localization_UI
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            JsonEditor.SetValue(HeightProperty, this.ActualHeight - 320);
-            if (this.Height == 320)
+            // Сворачивание богового меню при высоте окна равной окну предпросмотра (Чистый режим)
+
+            if (EditorMode == "EGOgift")
             {
-                this.Height = 320.1;
-                this.MaxWidth = 600;
+                JsonEditor.SetValue(HeightProperty, this.ActualHeight - 320);
+                if (this.Height == 320)
+                {
+                    this.Height = 320.1;
+                    this.MaxWidth = 600;
+                }
+                else this.MaxWidth = 895;
             }
-            else this.MaxWidth = 900;
+
+            else if (EditorMode == "Skills")
+            {
+                JsonEditor.SetValue(HeightProperty, this.ActualHeight - 421);
+                if (this.Height == 420.8)
+                {
+                    this.Height = 420.9;
+                    this.MaxWidth = 702;
+                }
+                else this.MaxWidth = 1005;
+            }
+
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         private static void BackgroundShadowTextCheck(TextBox TextBox, Label Label, string Label_DefaultText)
         {
@@ -495,7 +603,6 @@ namespace Limbus_Localization_UI
         //private void Check_Name_Label_bgtext()       => BackgroundShadowTextCheck(Name_EditBox,   Name_Label_bgtext,   "Название ЭГО Дара");
         private void Check_JumpToID_bgtext() => BackgroundShadowTextCheck(JumpToID_Input, JumpToID_bgtext,     "Перейти к ID..");
 
-
         private void JsonPath_TextChanged(object sender, TextChangedEventArgs e) => BackgroundShadowTextCheck(JsonFilepath, JsonFilepath_bgtext, "Путь к Json файлу");
         private void Name_EditBox_TextChanged(object sender, TextChangedEventArgs e) => BackgroundShadowTextCheck(Name_EditBox, Name_Label_bgtext, "Название ЭГО Дара");
         private void JumpToID_Input_TextChanged(object sender, TextChangedEventArgs e) => BackgroundShadowTextCheck(JumpToID_Input, JumpToID_bgtext, "Перейти к ID..");
@@ -505,110 +612,63 @@ namespace Limbus_Localization_UI
 
         private void IDSwitch_CheckEditBufferDescs()
         {
-            if (!EGOgift_EditBuffer[Json_Dictionary_CurrentID]["Desc"].Equals("{unedited}"))
+            if (!EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"].Equals("{unedited}"))
                 SwitchEditorTo_Desc.Content = "Описание*";
             else
                 SwitchEditorTo_Desc.Content = "Описание";
 
+            for (int i = 1; i <= 5; i++)
+            {
+                if (!EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{i}"].Equals("{unedited}"))
+                {
+                    T[$"EditorSwitch SubDesc {i}"].Content = $"Простое описание {i}*";
+                }
+                else
+                {
+                    T[$"EditorSwitch SubDesc {i}"].Content = $"Простое описание {i}";
+                }
 
-            if (!EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc1"].Equals("{unedited}"))
-                SwitchEditorTo_SubDesc1.Content = "Простое описание 1*";
-            else
-                SwitchEditorTo_SubDesc1.Content = "Простое описание 1";
-
-
-            if (!EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc2"].Equals("{unedited}"))
-                SwitchEditorTo_SubDesc2.Content = "Простое описание 2*";
-            else
-                SwitchEditorTo_SubDesc2.Content = "Простое описание 2";
-
-
-            if (!EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc3"].Equals("{unedited}"))
-                SwitchEditorTo_SubDesc3.Content = "Простое описание 3*";
-            else
-                SwitchEditorTo_SubDesc3.Content = "Простое описание 3";
-
-
-            if (!EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc4"].Equals("{unedited}"))
-                SwitchEditorTo_SubDesc4.Content = "Простое описание 4*";
-            else
-                SwitchEditorTo_SubDesc4.Content = "Простое описание 4";
-
-
-            if (!EGOgift_EditBuffer[Json_Dictionary_CurrentID]["SimpleDesc5"].Equals("{unedited}"))
-                SwitchEditorTo_SubDesc5.Content = "Простое описание 5*";
-            else
-                SwitchEditorTo_SubDesc5.Content = "Простое описание 5";
+            }
         }
 
 
 
         private void SwitchToID(int ID)
         {
-            Json_Dictionary_CurrentID = ID;
+            EGOgift_Json_Dictionary_CurrentID = ID;
             IDSwitch_CheckEditBufferDescs();
             ID_Switch_CheckButtons();
-           
+            
+            Name_Label.Text = Convert.ToString(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID]["Name"]);
+            Name_EditBox.Text = Convert.ToString(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID]["Name"]);
+            ID_Copy_Button.Content = EGOgift_Json_Dictionary_CurrentID;
 
-            Name_Label.Text = Convert.ToString(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["Name"]);
-            Name_EditBox.Text = Convert.ToString(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["Name"]);
-            if (!EGOgift_Json_Dictionary[ID]["SimpleDesc2"].Equals("{none}"))
+            for (int i = 1; i <= 5; i++)
             {
-                SubDesc2_Cover.Height = 0;
-                SubDesc2_Change_Cover.Height = 0;
-            }
-            else 
-            {
-                SubDesc2_Cover.Height = 30;
-                SubDesc2_Change_Cover.Height = 30;
-            }
-
-            if (!EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc3"].Equals("{none}"))
-            {
-                SubDesc3_Cover.Height = 0;
-                SubDesc3_Change_Cover.Height = 0;
-            }
-            else
-            {
-                SubDesc3_Cover.Height = 30;
-                SubDesc3_Change_Cover.Height = 30;
+                if (!EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{i}"].Equals("{none}"))
+                {
+                    T[$"EditorSwitch SubDesc {i} [UnavalibleCover]"].Height = 0;
+                    T[$"SaveChanges SubDesc {i} [UnavalibleCover]"].Height = 0;
+                }
+                else
+                {
+                    T[$"EditorSwitch SubDesc {i} [UnavalibleCover]"].Height = 30;
+                    T[$"SaveChanges SubDesc {i} [UnavalibleCover]"].Height = 30;
+                }
             }
             
-            if (!EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc4"].Equals("{none}"))
-            {
-                SubDesc4_Cover.Height = 0;
-                SubDesc4_Change_Cover.Height = 0;
-            }
-            else
-            {
-                SubDesc4_Cover.Height = 30;
-                SubDesc4_Change_Cover.Height = 30;
-            }
-            
-            if (!EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["SimpleDesc5"].Equals("{none}"))
-            {
-                SubDesc5_Cover.Height = 0;
-                SubDesc5_Change_Cover.Height = 0;
-            }
-            else
-            {
-                SubDesc5_Cover.Height = 30;
-                SubDesc5_Change_Cover.Height = 30;
-            }
-            ID_Copy_Button.Content = Json_Dictionary_CurrentID;
-
             CurrentDesc = "Desc";
-            if (EGOgift_EditBuffer[Json_Dictionary_CurrentID]["Desc"].Equals("{unedited}"))
+            if (EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"].Equals("{unedited}"))
             {
-                JsonEditor.Text = Convert.ToString(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["Desc"]);
+                JsonEditor.Text = Convert.ToString(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID]["Desc"]);
             }
             else
             {
-                JsonEditor.Text = Convert.ToString(EGOgift_EditBuffer[Json_Dictionary_CurrentID]["Desc"]);
+                JsonEditor.Text = Convert.ToString(EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"]);
             }
+
             ResetUndo();
         }
-
 
 
         private async void TextBoxFlashWarning(TextBox TB,
@@ -641,6 +701,7 @@ namespace Limbus_Localization_UI
             if (WhatsNext == "Check_JumpToID_bgtext") Check_JumpToID_bgtext();
             else Check_JsonFilepath_bgtext();
         }
+
 
         private void JsonFile_SelectFile(object sender, RoutedEventArgs e)
         {
@@ -680,6 +741,12 @@ namespace Limbus_Localization_UI
             JsonFilepath.Foreground = РазноеДругое.GetColorFromHEXA("#FFA69885");
         }
 
+
+
+
+        /////////////////////////////////////////////////////////////
+        ///  * * * Загрузка Json файлов и адаптация режима * * *  ///
+        /////////////////////////////////////////////////////////////
         private void LoadJsonFile(string path)
         {
             if (!File.Exists(path))
@@ -692,45 +759,85 @@ namespace Limbus_Localization_UI
                 {
                     //EGOgift mode
                     Json_Filepath = JsonFilepath.Text;
-                    JsonFilepath_FullPath = path; 
-                    EGOgift_Json_Dictionary = JsonLoader_EGOgifts.Json_GetAdressBook(Json_Filepath);
+                    JsonFilepath_FullPath = path;
+                    string Filename = JsonFilepath_FullPath.Split('\\')[^1];
 
-                    JsonKeys = EGOgift_Json_Dictionary.Keys.ToList();
-                    foreach(var ID in JsonKeys)
+                    if (Filename.StartsWith("EGOgift_"))
                     {
-                        EGOgift_EditBuffer[ID] = new Dictionary<string, object>
+                        EditorMode = "EGOgift";
+                        Mode_Handlers.Mode_EGO_Gifts.AdjustUI();
+                        EGOgift_Json_Dictionary = JsonLoader_EGOgifts.GetJsonDictionary(Json_Filepath);
+                        EGOgift_JsonKeys = EGOgift_Json_Dictionary.Keys.ToList();
+
+                        foreach(var ID in EGOgift_JsonKeys) // Получние буфера не сохранённых изменений ЭГО даров
                         {
-                            ["Name"] = "{unedited}",
-                            ["Desc"] = "{unedited}",
-                            ["SimpleDesc1"] = "{unedited}",
-                            ["SimpleDesc2"] = "{unedited}",
-                            ["SimpleDesc3"] = "{unedited}",
-                            ["SimpleDesc4"] = "{unedited}",
-                            ["SimpleDesc5"] = "{unedited}",
-                        };
-                        
+                            EGOgift_EditBuffer[ID] = new Dictionary<string, object>
+                            {
+                                ["Name"] = "{unedited}",
+                                ["Desc"] = "{unedited}",
+                                ["SimpleDesc1"] = "{unedited}",
+                                ["SimpleDesc2"] = "{unedited}",
+                                ["SimpleDesc3"] = "{unedited}",
+                                ["SimpleDesc4"] = "{unedited}",
+                                ["SimpleDesc5"] = "{unedited}",
+                            };
+                        }
+
+                        EGOgift_Json_Dictionary_CurrentID = EGOgift_JsonKeys[0];
+                        SwitchToID(EGOgift_Json_Dictionary_CurrentID);
+
+
+                        Name_ChangeNameInput_Cover.Height = 0;
+                        Name_ChangeName_Cover.Height = 0;
+
+                        Desc_Cover.Height = 0;
+                        Desc_Change_Cover.Height = 0;
+
+                        SubDesc1_Cover.Height = 0;
+                        SubDesc1_Change_Cover.Height = 0;
+                        РазноеДругое.SetRO(path);
+                        Notify("Json загружен");
                     }
-                    Name_ChangeNameInput_Cover.Height = 0;
-                    Name_ChangeName_Cover.Height = 0;
 
-                    Desc_Cover.Height = 0;
-                    Desc_Change_Cover.Height = 0;
+                    else if(Filename.StartsWith("Skills_"))
+                    {
+                        EditorMode = "Skills";
+                        // Основной словарь со ссылками на jsonData и Буфер не сохранённых изменений
+                        (Skills_Json_Dictionary, Skills_EditBuffer) = JsonLoader_Skills.GetJsonDictionary(Json_Filepath);
+                        Skills_JsonKeys = Skills_Json_Dictionary.Keys.ToList();
 
-                    SubDesc1_Cover.Height = 0;
-                    SubDesc1_Change_Cover.Height = 0;
+                        // По умолчанию переключиться на самый первый ID в файле
+                        Skills_Json_Dictionary_CurrentID = Skills_JsonKeys[0];
+
+                        foreach(var MinUptieLevel in Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID])
+                        {
+                            Skills_Json_Dictionary_CurrentUptieLevel = MinUptieLevel.Key;
+                            break;
+                        }
+
+                        // Адаптировать интерфейс под навыки
+                        Mode_Handlers.Mode_Skills.AdjustUI();
+
+                        T["Name EditBox [UnavalibleCover]"]    .Height = 0; // Разблокировать кнопку имени
+                        T["Name SaveChanges [UnavalibleCover]"].Height = 0;
+
+                        T["EditorSwitch Desc [UnavalibleCover]"].Height = 0; // Разблокировать кнопку описания
+                        T["SaveChanges Desc [UnavalibleCover]"].Height = 0;
+
+                        //ID_SwitchPrev_Cover.Height = 0;
+                        ID_SwitchNext_Cover.Height = 0;
 
 
-                    Json_Dictionary_CurrentID = JsonKeys[0];
-                    SwitchToID(Json_Dictionary_CurrentID);
-
-                    РазноеДругое.SetRO(path);
-
-                    Notify("Json загружен");
+                        Mode_Handlers.Mode_Skills.UpdateMenuInfo(Skills_Json_Dictionary_CurrentID); // Взять самый первый ID из списка, его первый по номеру уровень связи и обновить боковое меню в соответствии с ним
+                    }
                 }
-                catch
+                catch (Exception ex)
                 {
                     JsonFilepath.Text = "";
                     TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Неверный формат", "Путь к Json файлу", "Check_JsonFilepath_bgtext");
+                    Console.WriteLine(ex.StackTrace);
+                    Console.WriteLine(ex.Source);
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
@@ -742,35 +849,74 @@ namespace Limbus_Localization_UI
         }
 
 
-
+        /// <summary>
+        /// Проверка доступности следующего ID из списка. Если ID последний в списке и не удалось найти следующий, отключить кнопку переключения по порядку
+        /// </summary>
         private void ID_Switch_CheckButtons()
         {
             ID_SwitchPrev_Cover.Height = 0;
             ID_SwitchNext_Cover.Height = 0;
-            try { var PrevCheck = JsonKeys[JsonKeys.IndexOf(Json_Dictionary_CurrentID) - 1]; }
-            catch { ID_SwitchPrev_Cover.Height = 16; }
-            try { var NextCheck = JsonKeys[JsonKeys.IndexOf(Json_Dictionary_CurrentID) + 1]; }
-            catch { ID_SwitchNext_Cover.Height = 16; }
+            try
+            {
+                if (EditorMode == "EGOgift")
+                {
+                    var PrevCheck = EGOgift_JsonKeys[EGOgift_JsonKeys.IndexOf(EGOgift_Json_Dictionary_CurrentID) - 1];
+                }
+                else if (EditorMode == "Skills")
+                {
+                    var PrevCheck = Skills_JsonKeys[Skills_JsonKeys.IndexOf(Skills_Json_Dictionary_CurrentID) - 1];
+                }
+            }
+            catch{ID_SwitchPrev_Cover.Height = 16;}
+
+
+            try
+            {
+                if (EditorMode == "EGOgift")
+                {
+                    var PrevCheck = EGOgift_JsonKeys[EGOgift_JsonKeys.IndexOf(EGOgift_Json_Dictionary_CurrentID) + 1];
+                }
+                else if (EditorMode == "Skills")
+                {
+                    var PrevCheck = Skills_JsonKeys[Skills_JsonKeys.IndexOf(Skills_Json_Dictionary_CurrentID) + 1];
+                }
+            }
+            catch{ID_SwitchNext_Cover.Height = 16;}
         }
+        
         private void ID_SwitchPrev_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                Json_Dictionary_CurrentID = JsonKeys[JsonKeys.IndexOf(Json_Dictionary_CurrentID) - 1];
-                SwitchToID(Json_Dictionary_CurrentID);
+                if (EditorMode == "EGOgift")
+                {
+                    EGOgift_Json_Dictionary_CurrentID = EGOgift_JsonKeys[EGOgift_JsonKeys.IndexOf(EGOgift_Json_Dictionary_CurrentID) - 1];
+                    SwitchToID(EGOgift_Json_Dictionary_CurrentID);
+                }
+                else if (EditorMode == "Skills")
+                {
+                    Skills_Json_Dictionary_CurrentID = Skills_JsonKeys[Skills_JsonKeys.IndexOf(Skills_Json_Dictionary_CurrentID) - 1];
+                    Mode_Handlers.Mode_Skills.UpdateMenuInfo(Skills_Json_Dictionary_CurrentID);
+                }
 
                 ID_Switch_CheckButtons();
             }
             catch { }
         }
-
-        
         private void ID_SwitchNext_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                Json_Dictionary_CurrentID = JsonKeys[JsonKeys.IndexOf(Json_Dictionary_CurrentID) + 1];
-                SwitchToID(Json_Dictionary_CurrentID);
+                if (EditorMode == "EGOgift")
+                {
+                    EGOgift_Json_Dictionary_CurrentID = EGOgift_JsonKeys[EGOgift_JsonKeys.IndexOf(EGOgift_Json_Dictionary_CurrentID) + 1];
+                    SwitchToID(EGOgift_Json_Dictionary_CurrentID);
+                }
+                else if (EditorMode == "Skills")
+                {
+                    Skills_Json_Dictionary_CurrentID = Skills_JsonKeys[Skills_JsonKeys.IndexOf(Skills_Json_Dictionary_CurrentID) + 1];
+                    Mode_Handlers.Mode_Skills.UpdateMenuInfo(Skills_Json_Dictionary_CurrentID);
+                }
 
                 ID_Switch_CheckButtons();
             }
@@ -782,13 +928,13 @@ namespace Limbus_Localization_UI
         {
             try
             {
-                if (EGOgift_EditBuffer[Json_Dictionary_CurrentID][CurrentDesc].Equals("{unedited}"))
+                if (EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][CurrentDesc].Equals("{unedited}"))
                 {
-                    JsonEditor.Text = Convert.ToString(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID][CurrentDesc]);
+                    JsonEditor.Text = Convert.ToString(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID][CurrentDesc]);
                 }
                 else
                 {
-                    JsonEditor.Text = Convert.ToString(EGOgift_EditBuffer[Json_Dictionary_CurrentID][CurrentDesc]);
+                    JsonEditor.Text = Convert.ToString(EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][CurrentDesc]);
                 }
             }
             catch { }
@@ -853,9 +999,17 @@ namespace Limbus_Localization_UI
         {
             try
             {
-                SwitchToID(Convert.ToInt32(JumpToID_Input.Text));
+                if (EditorMode == "EGOgift")
+                {
+                    SwitchToID(Convert.ToInt32(JumpToID_Input.Text));
+                    Check_JsonFilepath_bgtext();
+                }
+                else if (EditorMode == "Skills")
+                {
+                    Skills_Json_Dictionary_CurrentID = Convert.ToInt32(JumpToID_Input.Text);
+                    Mode_Handlers.Mode_Skills.UpdateMenuInfo(Convert.ToInt32(JumpToID_Input.Text));
+                }
                 JumpToID_Input.Text = "";
-                Check_JsonFilepath_bgtext();
                 ID_Switch_CheckButtons();
             }
             catch
@@ -866,21 +1020,80 @@ namespace Limbus_Localization_UI
 
         private async void ID_Copy(object sender, RoutedEventArgs e)
         {
-            if (Json_Dictionary_CurrentID != -1)
+            if (EGOgift_Json_Dictionary_CurrentID != -1 | Skills_Json_Dictionary_CurrentID != -1)
             {
                 Clipboard.SetText(Convert.ToString(ID_Copy_Button.Content));
                 ID_Copy_Button.Content = "ID Скопирован";
 
                 await Task.Delay(890);
-                ID_Copy_Button.Content = Json_Dictionary_CurrentID;
+                ID_Copy_Button.Content = EditorMode.Equals("EGOgift")? EGOgift_Json_Dictionary_CurrentID : Skills_Json_Dictionary_CurrentID;
             }
         }
 
 
+        public static Dictionary<int, Image> UptieLevelIcons = new()
+        {
+            [0] = new Image(),
 
+            [1] = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Images/UptieLevels/1 Уровень связи.png")), Stretch = Stretch.Fill, Width = 40, Height = 40 },
+            [2] = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Images/UptieLevels/2 Уровень связи.png")), Stretch = Stretch.Fill, Width = 40, Height = 40 },
+            [3] = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Images/UptieLevels/3 Уровень связи.png")), Stretch = Stretch.Fill, Width = 40, Height = 40 },
+            [4] = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Images/UptieLevels/4 Уровень связи.png")), Stretch = Stretch.Fill, Width = 40, Height = 40 },
+        };
 
+        private void UptieLevel1_Button_MouseEnter(object sender, MouseEventArgs e) => UptieLevel1_Button.Content = UptieLevelIcons[1];
+        private void UptieLevel1_Button_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (Skills_Json_Dictionary_CurrentUptieLevel != 1) UptieLevel1_Button.Content = UptieLevelIcons[0];
+        }
 
+        private void UptieLevel2_Button_MouseEnter(object sender, MouseEventArgs e) => UptieLevel2_Button.Content = UptieLevelIcons[2];
+        private void UptieLevel2_Button_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (Skills_Json_Dictionary_CurrentUptieLevel != 2) UptieLevel2_Button.Content = UptieLevelIcons[0];
+        }
 
+        private void UptieLevel3_Button_MouseEnter(object sender, MouseEventArgs e) => UptieLevel3_Button.Content = UptieLevelIcons[3];
+        private void UptieLevel3_Button_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (Skills_Json_Dictionary_CurrentUptieLevel != 3) UptieLevel3_Button.Content = UptieLevelIcons[0];
+        }
+
+        private void UptieLevel4_Button_MouseEnter(object sender, MouseEventArgs e) => UptieLevel4_Button.Content = UptieLevelIcons[4];
+        private void UptieLevel4_Button_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (Skills_Json_Dictionary_CurrentUptieLevel != 4) UptieLevel4_Button.Content = UptieLevelIcons[0];
+        }
+
+        private void UptieLevel1_Button_Click(object sender, RoutedEventArgs e) => Mode_Handlers.Mode_Skills.UpdateMenuInfo(Skills_Json_Dictionary_CurrentID, 1);
+        private void UptieLevel2_Button_Click(object sender, RoutedEventArgs e) => Mode_Handlers.Mode_Skills.UpdateMenuInfo(Skills_Json_Dictionary_CurrentID, 2);
+        private void UptieLevel3_Button_Click(object sender, RoutedEventArgs e) => Mode_Handlers.Mode_Skills.UpdateMenuInfo(Skills_Json_Dictionary_CurrentID, 3);
+        private void UptieLevel4_Button_Click(object sender, RoutedEventArgs e) => Mode_Handlers.Mode_Skills.UpdateMenuInfo(Skills_Json_Dictionary_CurrentID, 4);
+
+        private void CoinDescs_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void CoinDescs_2(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void CoinDescs_3(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void CoinDescs_4(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void CoinDescs_5(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void CoinDescs_6(object sender, RoutedEventArgs e)
+        {
+
+        }
 
 
 
@@ -888,12 +1101,12 @@ namespace Limbus_Localization_UI
         {
             try{
                 РазноеДругое.SetRW(JsonFilepath_FullPath);
-                РазноеДругое.RewriteFileLine($"      \"name\": \"{Name_EditBox.Text}\",",
+                РазноеДругое.RewriteFileLine($"\"name\": \"{Name_EditBox.Text}\",",
                                 Json_Filepath,
-                                Convert.ToInt32(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["LineIndex_Name"]));
+                                Convert.ToInt32(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID]["LineIndex_Name"]));
                 РазноеДругое.SetRO(JsonFilepath_FullPath);
                 Name_Label.Text = Name_EditBox.Text;
-                EGOgift_Json_Dictionary[Json_Dictionary_CurrentID]["Name"] = Name_EditBox.Text;
+                EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID]["Name"] = Name_EditBox.Text;
             } catch { TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Ошибка сохранения", "Путь к Json файлу", "Check_JsonFilepath_bgtext", rounds: 3, AfterAwait: 600); }
         }
 
@@ -901,17 +1114,17 @@ namespace Limbus_Localization_UI
         {
             try
             {
-                if (!EGOgift_EditBuffer[Json_Dictionary_CurrentID][ThisDesc].Equals("{unedited}"))
+                if (!EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][ThisDesc].Equals("{unedited}"))
                 {
                     РазноеДругое.SetRW(JsonFilepath_FullPath);
                     РазноеДругое.RewriteFileLine($"{(ThisDesc.StartsWith("SimpleDesc") ? "\"simpleDesc\": \"" : "\"desc\": \"")}" +
-                                                 $"{Convert.ToString(EGOgift_EditBuffer[Json_Dictionary_CurrentID][ThisDesc]).Replace("\n", "\\n").Replace("\r", "\\n")}" +
+                                                 $"{Convert.ToString(EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][ThisDesc]).Replace("\n", "\\n").Replace("\r", "\\n")}" +
                                                  $"{(ThisDesc.StartsWith("SimpleDesc") ? "\"" : "\",")}",
                                                  Json_Filepath,
-                                                 Convert.ToInt32(EGOgift_Json_Dictionary[Json_Dictionary_CurrentID][$"LineIndex_{ThisDesc}"]));
+                                                 Convert.ToInt32(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID][$"LineIndex_{ThisDesc}"]));
 
-                    EGOgift_Json_Dictionary[Json_Dictionary_CurrentID][ThisDesc] = EGOgift_EditBuffer[Json_Dictionary_CurrentID][ThisDesc];
-                    EGOgift_EditBuffer[Json_Dictionary_CurrentID][ThisDesc] = "{unedited}";
+                    EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID][ThisDesc] = EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][ThisDesc];
+                    EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][ThisDesc] = "{unedited}";
                     IDSwitch_CheckEditBufferDescs();
                     //Notify("Файл обновлён");
                     РазноеДругое.SetRO(JsonFilepath_FullPath);
@@ -927,6 +1140,11 @@ namespace Limbus_Localization_UI
         private void Desc_ChangeSubDesc3(object sender, RoutedEventArgs e) => Desc_ChangeOver("SimpleDesc3");
         private void Desc_ChangeSubDesc4(object sender, RoutedEventArgs e) => Desc_ChangeOver("SimpleDesc4");
         private void Desc_ChangeSubDesc5(object sender, RoutedEventArgs e) => Desc_ChangeOver("SimpleDesc5");
+
+
+
+
+
 
 
         // Сохранение на CTRL + S
@@ -948,5 +1166,37 @@ namespace Limbus_Localization_UI
         {
             if (e.Key == Key.S) isCtrlSPressed = false;
         }
+
+
+
+        // Прокрутка предпросмотра навыка на перетягивание через ЛКМ господи наконец-то
+        private bool isDragging = false;
+        private Point lastMousePosition;
+        private void SurfaceScroll_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            isDragging = true;
+            lastMousePosition = e.GetPosition(PreviewLayout_Skills);
+            PreviewLayout_Skills.CaptureMouse();
+        }
+
+        private void SurfaceScroll_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                Point currentPosition = e.GetPosition(PreviewLayout_Skills);
+                Vector diff = lastMousePosition - currentPosition;
+                PreviewLayout_Skills.ScrollToVerticalOffset(PreviewLayout_Skills.VerticalOffset + diff.Y);
+                PreviewLayout_Skills.ScrollToHorizontalOffset(PreviewLayout_Skills.HorizontalOffset + diff.X);
+                lastMousePosition = currentPosition;
+            }
+        }
+
+        private void SurfaceScroll_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            isDragging = false;
+            PreviewLayout_Skills.ReleaseMouseCapture();
+        }
+
+        
     }
 }

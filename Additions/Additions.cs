@@ -1,14 +1,17 @@
 ﻿using Newtonsoft.Json.Linq;
 using SixLabors.ImageSharp;
 using System.IO;
-using System.Text;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Limbus_Localization_UI
+namespace Limbus_Localization_UI.Additions
 {
     internal class РазноеДругое
     {
+        static Dictionary<string, dynamic> T;
+        public static void InitTDictionaryHere(Dictionary<string, dynamic> FromExternal) => T = FromExternal;
+
+
         public static void SetRO(string path)
         {
             var attr = File.GetAttributes(path);
@@ -30,7 +33,7 @@ namespace Limbus_Localization_UI
             LineArray[LineNumber - 1] = NewLineText;
 
             // Образцовое форматирование Json с LF переносом строк и адекватным количеством пробелов
-            var ParsedJson = JToken.Parse(String.Join('\n', LineArray));
+            var ParsedJson = JToken.Parse(string.Join('\n', LineArray));
             var FormattedJson = ParsedJson.ToString(Newtonsoft.Json.Formatting.Indented).Replace("\r", "");
             File.WriteAllText(Filepath, FormattedJson);
         }
@@ -39,7 +42,7 @@ namespace Limbus_Localization_UI
         private static byte[] ConvertWebPToPng(byte[] webpData)
         {
             using (var inputStream = new MemoryStream(webpData))
-            using (var image = SixLabors.ImageSharp.Image.Load(inputStream))
+            using (var image = Image.Load(inputStream))
             {
                 using (var outputStream = new MemoryStream())
                 {
@@ -95,6 +98,7 @@ namespace Limbus_Localization_UI
                     SpriteBitmaps[Sprite.Key] = bitmapImage;
                 }
             }
+
             return SpriteBitmaps;
         }
     }
