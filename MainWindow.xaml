@@ -613,6 +613,17 @@
                     Margin="0, 0, 0, 0"> <!--Margin="0, 0, 0, 0"-->
                 <ScrollViewer x:Name="LeftMenuContent" Margin="3, 3, 0, 0" ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <StackPanel>
+                        <Border x:Name="CurrentHighlight"
+                                Width="8"
+                                Height="26"
+                                Background="#FFD1CDC5"
+                                Panel.ZIndex="1"
+                                HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                                Margin="0, -40, 0, 0">
+                            <Border.RenderTransform>
+                                <TranslateTransform X="1000" Y="1000"/>
+                            </Border.RenderTransform>
+                        </Border>
                         <StackPanel Margin="-2.5, 0, 0, 0"
                                     HorizontalAlignment="Left">
                             <Border BorderBrush="#FF414141"
@@ -1061,15 +1072,14 @@
                         <Border Style="{StaticResource Skill_CoinIcon}">
                             <Image x:Name="Skill_Coin1_Icon" Source="Images\Coins\Coin 1.png"/>
                         </Border>
-                        <RichTextBox x:Name="Skill_Coin1_Desc" Style="{StaticResource Skill_CoinDescriptoin}">
-                            <FlowDocument>
-                                <Paragraph>
-                                    <Run x:Name="asda">
-                                        Тратит 1 патрон
-                                    </Run>
-                                </Paragraph>
-                            </FlowDocument>
-                        </RichTextBox>
+                        <StackPanel>
+                            <RichTextBox x:Name="Skill_Coin1_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin1_Desc2" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin1_Desc3" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin1_Desc4" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin1_Desc5" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin1_Desc6" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
@@ -1080,15 +1090,14 @@
                         <Border Style="{StaticResource Skill_CoinIcon}">
                             <Image x:Name="Skill_Coin2_Icon" Source="Images\Coins\Coin 2.png"/>
                         </Border>
-                        <RichTextBox x:Name="Skill_Coin2_Desc" Style="{StaticResource Skill_CoinDescriptoin}">
-                            <FlowDocument>
-                                <Paragraph>
-                                    <Run>
-                                        Coin desc,  Coin desc,  Coin desc,  Coin desc
-                                    </Run>
-                                </Paragraph>
-                            </FlowDocument>
-                        </RichTextBox>
+                        <StackPanel>
+                            <RichTextBox x:Name="Skill_Coin2_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin2_Desc2" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin2_Desc3" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin2_Desc4" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin2_Desc5" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin2_Desc6" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
@@ -1099,15 +1108,14 @@
                         <Border Style="{StaticResource Skill_CoinIcon}">
                             <Image x:Name="Skill_Coin3_Icon" Source="Images\Coins\Coin 3.png"/>
                         </Border>
-                        <RichTextBox x:Name="Skill_Coin3_Desc" Style="{StaticResource Skill_CoinDescriptoin}">
-                            <FlowDocument>
-                                <Paragraph>
-                                    <Run>
-                                        Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc
-                                    </Run>
-                                </Paragraph>
-                            </FlowDocument>
-                        </RichTextBox>
+                        <StackPanel>
+                            <RichTextBox x:Name="Skill_Coin3_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin3_Desc2" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin3_Desc3" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin3_Desc4" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin3_Desc5" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin3_Desc6" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
@@ -1118,15 +1126,14 @@
                         <Border Style="{StaticResource Skill_CoinIcon}">
                             <Image x:Name="Skill_Coin4_Icon" Source="Images\Coins\Coin 4.png"/>
                         </Border>
-                        <RichTextBox x:Name="Skill_Coin4_Desc" Style="{StaticResource Skill_CoinDescriptoin}">
-                            <FlowDocument>
-                                <Paragraph>
-                                    <Run>
-                                        Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc
-                                    </Run>
-                                </Paragraph>
-                            </FlowDocument>
-                        </RichTextBox>
+                        <StackPanel>
+                            <RichTextBox x:Name="Skill_Coin4_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin4_Desc2" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin4_Desc3" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin4_Desc4" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin4_Desc5" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin4_Desc6" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
 
@@ -1137,15 +1144,22 @@
                         <Border Style="{StaticResource Skill_CoinIcon}">
                             <Image x:Name="Skill_Coin5_Icon" Source="Images\Coins\Coin 5.png"/>
                         </Border>
-                        <RichTextBox x:Name="Skill_Coin5_Desc" Style="{StaticResource Skill_CoinDescriptoin}">
-                            <FlowDocument>
-                                <Paragraph>
-                                    <Run>
-                                        Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc,  Coin desc
-                                    </Run>
-                                </Paragraph>
-                            </FlowDocument>
-                        </RichTextBox>
+                        <StackPanel>
+                            <RichTextBox x:Name="Skill_Coin5_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin5_Desc2" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin5_Desc3" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin5_Desc4" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin5_Desc5" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin5_Desc6" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <!--
+                             Background="Red"      
+                             Background="Green"    
+                             Background="Blue"     
+                             Background="Yellow"   
+                             Background="Orange"   
+                             Background="AliceBlue"
+                            -->
+                        </StackPanel>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

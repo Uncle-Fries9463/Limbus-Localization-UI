@@ -82,11 +82,51 @@ namespace Limbus_Localization_UI
 
 
                 ["Skill PreviewLayout Desc"] = MainSkillDesc,
-                ["Skill PreviewLayout Coin 1 Panel"] = Skill_Coin1, ["Skill PreviewLayout Coin 1"] = Skill_Coin1_Desc,
-                ["Skill PreviewLayout Coin 2 Panel"] = Skill_Coin2, ["Skill PreviewLayout Coin 2"] = Skill_Coin2_Desc,
-                ["Skill PreviewLayout Coin 3 Panel"] = Skill_Coin3, ["Skill PreviewLayout Coin 3"] = Skill_Coin3_Desc,
-                ["Skill PreviewLayout Coin 4 Panel"] = Skill_Coin4, ["Skill PreviewLayout Coin 4"] = Skill_Coin4_Desc,
-                ["Skill PreviewLayout Coin 5 Panel"] = Skill_Coin5, ["Skill PreviewLayout Coin 5"] = Skill_Coin5_Desc,
+
+                ["Skill PreviewLayout Coin 1 Panel"] = Skill_Coin1,
+                ["Skill PreviewLayout Coin 2 Panel"] = Skill_Coin2,
+                ["Skill PreviewLayout Coin 3 Panel"] = Skill_Coin3,
+                ["Skill PreviewLayout Coin 4 Panel"] = Skill_Coin4,
+                ["Skill PreviewLayout Coin 5 Panel"] = Skill_Coin5,
+
+
+                ["Skill PreviewLayout Coin 1 Desc 1"] = Skill_Coin1_Desc1,
+                ["Skill PreviewLayout Coin 1 Desc 2"] = Skill_Coin1_Desc2,
+                ["Skill PreviewLayout Coin 1 Desc 3"] = Skill_Coin1_Desc3,
+                ["Skill PreviewLayout Coin 1 Desc 4"] = Skill_Coin1_Desc4,
+                ["Skill PreviewLayout Coin 1 Desc 5"] = Skill_Coin1_Desc5,
+                ["Skill PreviewLayout Coin 1 Desc 6"] = Skill_Coin1_Desc6,
+
+                ["Skill PreviewLayout Coin 2 Desc 1"] = Skill_Coin2_Desc1,
+                ["Skill PreviewLayout Coin 2 Desc 2"] = Skill_Coin2_Desc2,
+                ["Skill PreviewLayout Coin 2 Desc 3"] = Skill_Coin2_Desc3,
+                ["Skill PreviewLayout Coin 2 Desc 4"] = Skill_Coin2_Desc4,
+                ["Skill PreviewLayout Coin 2 Desc 5"] = Skill_Coin2_Desc5,
+                ["Skill PreviewLayout Coin 2 Desc 6"] = Skill_Coin2_Desc6,
+
+                ["Skill PreviewLayout Coin 3 Desc 1"] = Skill_Coin3_Desc1,
+                ["Skill PreviewLayout Coin 3 Desc 2"] = Skill_Coin3_Desc2,
+                ["Skill PreviewLayout Coin 3 Desc 3"] = Skill_Coin3_Desc3,
+                ["Skill PreviewLayout Coin 3 Desc 4"] = Skill_Coin3_Desc4,
+                ["Skill PreviewLayout Coin 3 Desc 5"] = Skill_Coin3_Desc5,
+                ["Skill PreviewLayout Coin 3 Desc 6"] = Skill_Coin3_Desc6,
+
+                ["Skill PreviewLayout Coin 4 Desc 1"] = Skill_Coin4_Desc1,
+                ["Skill PreviewLayout Coin 4 Desc 2"] = Skill_Coin4_Desc2,
+                ["Skill PreviewLayout Coin 4 Desc 3"] = Skill_Coin4_Desc3,
+                ["Skill PreviewLayout Coin 4 Desc 4"] = Skill_Coin4_Desc4,
+                ["Skill PreviewLayout Coin 4 Desc 5"] = Skill_Coin4_Desc5,
+                ["Skill PreviewLayout Coin 4 Desc 6"] = Skill_Coin4_Desc6,
+
+                ["Skill PreviewLayout Coin 5 Desc 1"] = Skill_Coin5_Desc1,
+                ["Skill PreviewLayout Coin 5 Desc 2"] = Skill_Coin5_Desc2,
+                ["Skill PreviewLayout Coin 5 Desc 3"] = Skill_Coin5_Desc3,
+                ["Skill PreviewLayout Coin 5 Desc 4"] = Skill_Coin5_Desc4,
+                ["Skill PreviewLayout Coin 5 Desc 5"] = Skill_Coin5_Desc5,
+                ["Skill PreviewLayout Coin 5 Desc 6"] = Skill_Coin5_Desc6,
+
+
+
 
                 ["Skill UptieLevel Selection Box"] = Skill_UptieLevel_Selection_Box,
                 ["Uptie Level Icons"] = UptieLevelIcons,
@@ -138,7 +178,11 @@ namespace Limbus_Localization_UI
             T[$"Skill PreviewLayout Desc"].SetValue(Paragraph.LineHeightProperty, 30.0);
             for (int i = 1; i <= 5; i++)
             {
-                T[$"Skill PreviewLayout Coin {i}"].SetValue(Paragraph.LineHeightProperty, 30.0);
+                for (int e = 1; e <= 6; e++)
+                {
+                    T[$"Skill PreviewLayout Coin {i} Desc {e}"].SetValue(Paragraph.LineHeightProperty, 30.0);
+
+                }
             }
 
             //JsonEditor.Text = Def;
@@ -377,6 +421,7 @@ namespace Limbus_Localization_UI
                                .Replace("[EndSkill]", "<color=#93f03f>[В конце атаки]</color>")
                                .Replace("[EndBattle]", "<color=#93f03f>[В конце хода]</color>")
                                .Replace("[BeforeAttack]", "<color=#93f03f>[Перед атакой]</color>")
+                               .Replace("[EnemyKill]", "<color=#93f03f>[При убийстве]</color>")
 
                                .Replace("[CantIdentify]", "<color=#fe0000>[Неуправляемый]</color>")
 
@@ -635,6 +680,7 @@ namespace Limbus_Localization_UI
 
         private void SwitchToID(int ID)
         {
+            CurrentHighlight.RenderTransform = new TranslateTransform(2, 61);
             EGOgift_Json_Dictionary_CurrentID = ID;
             IDSwitch_CheckEditBufferDescs();
             ID_Switch_CheckButtons();
@@ -840,6 +886,7 @@ namespace Limbus_Localization_UI
                     Console.WriteLine(ex.Message);
                 }
             }
+            CurrentHighlight.RenderTransform = new TranslateTransform(2, 61);
         }
 
         private void LoadJsonFile_Button(object sender, RoutedEventArgs e)
@@ -948,7 +995,9 @@ namespace Limbus_Localization_UI
         }
         private void SwitchEditorTo_Desc_Button(object sender, RoutedEventArgs e)       
         {
-            try{
+            CurrentHighlight.RenderTransform = new TranslateTransform(2, 61);
+            try
+            {
                 CurrentDesc = "Desc";
                 CheckEditBuffer("Desc");
                 ResetUndo();
@@ -956,7 +1005,9 @@ namespace Limbus_Localization_UI
         }
         private void SwitchEditorTo_SubDesc1_Button(object sender, RoutedEventArgs e)
         {
-            try{
+            CurrentHighlight.RenderTransform = new TranslateTransform(2, 95);
+            try
+            {
                 CurrentDesc = "SimpleDesc1";
                 CheckEditBuffer("SimpleDesc1");
                 ResetUndo();
@@ -964,7 +1015,9 @@ namespace Limbus_Localization_UI
         }
         private void SwitchEditorTo_SubDesc2_Button(object sender, RoutedEventArgs e)
         {
-            try{
+            CurrentHighlight.RenderTransform = new TranslateTransform(2, 129);
+            try
+            {
                 CurrentDesc = "SimpleDesc2";
                 CheckEditBuffer("SimpleDesc2");
                 ResetUndo();
@@ -972,7 +1025,9 @@ namespace Limbus_Localization_UI
         }
         private void SwitchEditorTo_SubDesc3_Button(object sender, RoutedEventArgs e)
         {
-            try{
+            CurrentHighlight.RenderTransform = new TranslateTransform(2, 163);
+            try
+            {
                 CurrentDesc = "SimpleDesc3";
                 CheckEditBuffer("SimpleDesc3");
                 ResetUndo();
@@ -980,7 +1035,9 @@ namespace Limbus_Localization_UI
         }
         private void SwitchEditorTo_SubDesc4_Button(object sender, RoutedEventArgs e)
         {
-            try{
+            CurrentHighlight.RenderTransform = new TranslateTransform(2, 197);
+            try
+            {
                 CurrentDesc = "SimpleDesc4";
                 CheckEditBuffer("SimpleDesc4");
                 ResetUndo();
@@ -997,6 +1054,7 @@ namespace Limbus_Localization_UI
 
         private void JumpToID_Button_Click(object sender, RoutedEventArgs e)
         {
+            CurrentHighlight.RenderTransform = new TranslateTransform(2, 231);
             try
             {
                 if (EditorMode == "EGOgift")

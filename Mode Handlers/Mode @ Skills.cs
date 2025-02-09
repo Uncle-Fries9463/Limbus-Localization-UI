@@ -124,19 +124,20 @@ namespace Limbus_Localization_UI.Mode_Handlers
                     if (Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Equals("{unedited}"))
                     {
                         //Console.WriteLine(CoinDesc);
-                        CoinDescExport.Add(CoinDesc.Replace("\"", "\\\""));
+                        T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex + 1}"].Height = Double.NaN;
+                        MainWindow.UpdatePreview(CoinDesc.Replace("\"", "\\\""), T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
                     }
                     else
                     {
                         //Console.WriteLine(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex]);
-                        CoinDescExport.Add(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Replace("\"", "\\\""));
+                        //CoinDescExport.Add(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Replace("\"", "\\\""));
+                        MainWindow.UpdatePreview(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Replace("\"", "\\\""), T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
                     }
 
                     DescIndex++;
                 }
                 CoinDescExportString = String.Join("\n", CoinDescExport);
 
-                MainWindow.UpdatePreview(CoinDescExportString, T[$"Skill PreviewLayout Coin {CoinNumber}"]);
             }
 
 
@@ -218,6 +219,10 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 // Скрыть описание монеты на предпросмтре (Высота и минимальная высота стековой панели = 0)
                 T[$"Skill PreviewLayout Coin {CoinNumber} Panel"].Height = 0;
                 T[$"Skill PreviewLayout Coin {CoinNumber} Panel"].MinHeight = 0;
+                for (int CoinDescNumber = 1; CoinDescNumber <= 6; CoinDescNumber++)
+                {
+                    T[$"Skill PreviewLayout Coin {CoinNumber} Desc {CoinDescNumber}"].Height = 0;
+                }
             }
         }
 

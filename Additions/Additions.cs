@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Limbus_Localization_UI.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SixLabors.ImageSharp;
 using System.IO;
 using System.Windows.Media;
@@ -33,9 +35,14 @@ namespace Limbus_Localization_UI.Additions
             LineArray[LineNumber - 1] = NewLineText;
 
             // Образцовое форматирование Json с LF переносом строк и адекватным количеством пробелов
-            var ParsedJson = JToken.Parse(string.Join('\n', LineArray));
-            var FormattedJson = ParsedJson.ToString(Newtonsoft.Json.Formatting.Indented).Replace("\r", "");
+            var ParsedJson = JToken.Parse(String.Join('\n', LineArray));
+            var FormattedJson = ParsedJson.ToString(Formatting.Indented).Replace("\r", "");
             File.WriteAllText(Filepath, FormattedJson);
+        }
+
+        public static void SaveJson(JsonData JSON, string Path)
+        {
+            File.WriteAllText(Path, JsonConvert.SerializeObject(JSON, Formatting.Indented).Replace("\r", ""));
         }
 
 
