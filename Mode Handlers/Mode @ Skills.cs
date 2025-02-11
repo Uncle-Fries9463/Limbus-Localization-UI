@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using Limbus_Localization_UI.Additions;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 using static Limbus_Localization_UI.MainWindow;
 
@@ -28,7 +30,7 @@ namespace Limbus_Localization_UI.Mode_Handlers
             T["Window"].MaxWidth = 1005; // Максимальная ширина с боковым меню
 
             T["Window"].Width = 1005;    // Ширина и высота по умолчанию
-            T["Window"].Height = 560;
+            T["Window"].Height = 545;
 
             T["JsonIO Column"].Width = new GridLength(702); // Ширина поля предпросмотра и редактора json элемента
             T["Json EditBox"].Width = 692.2;
@@ -39,15 +41,48 @@ namespace Limbus_Localization_UI.Mode_Handlers
             T["Left Menu Buttons box"].Margin = new Thickness(0, 56, 0, 0);
             T["Skill UptieLevel Selection Box"].Height = 52;
 
-            //T["Left Menu Buttons Box"].Height = 286;
+            T["Coin Desc Selection Box"].Height = 42;
+            T["Coin Desc Selection Box sub"].Height = 3.5;
+
+
+            // Отключить все боковые кнопки сохранения кроме имени, сохранение только на Ctrl + S
+            T["SaveChanges Desc"].Margin = new Thickness(4000, 0, 0, 0);
+            T["SaveChanges Desc [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
+            T["EditorSwitch Desc"].Width = 265;
+            T["EditorSwitch Desc [UnavalibleCover]"].Width = 265;
+
+            T["SaveChanges SubDesc 1"].Margin = new Thickness(4000, 0, 0, 0);
+            T["SaveChanges SubDesc 1 [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
+            T["EditorSwitch SubDesc 1"].Width = 265;
+            T["EditorSwitch SubDesc 1 [UnavalibleCover]"].Width = 265;
+
+            T["SaveChanges SubDesc 2"].Margin = new Thickness(4000, 0, 0, 0);
+            T["SaveChanges SubDesc 2 [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
+            T["EditorSwitch SubDesc 2"].Width = 265;
+            T["EditorSwitch SubDesc 2 [UnavalibleCover]"].Width = 265;
+
+            T["SaveChanges SubDesc 3"].Margin = new Thickness(4000, 0, 0, 0);
+            T["SaveChanges SubDesc 3 [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
+            T["EditorSwitch SubDesc 3"].Width = 265;
+            T["EditorSwitch SubDesc 3 [UnavalibleCover]"].Width = 265;
+
+            T["SaveChanges SubDesc 4"].Margin = new Thickness(4000, 0, 0, 0);
+            T["SaveChanges SubDesc 4 [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
+            T["EditorSwitch SubDesc 4"].Width = 265;
+            T["EditorSwitch SubDesc 4 [UnavalibleCover]"].Width = 265;
+
+            T["SaveChanges SubDesc 5"].Margin = new Thickness(4000, 0, 0, 0);
+            T["SaveChanges SubDesc 5 [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
+            T["EditorSwitch SubDesc 5"].Width = 265;
+            T["EditorSwitch SubDesc 5 [UnavalibleCover]"].Width = 265;
+
+            T["Unsaved Changes Tooltip"].Width = 190;
 
             T["Name EditBox Shadow"].Content = "Название навыка";
             for (int i = 1; i <= 5;  i++) // Изменить текст на 5 кнопкахс Простого описания на Монету
             {
                 T[$"EditorSwitch SubDesc {i}"].Content = $"Монета {i}";
             }
-
-            T["Json EditBox"].Text = "";
         }
 
         /// <summary>
@@ -62,11 +97,12 @@ namespace Limbus_Localization_UI.Mode_Handlers
             if (UptieLevel == 0)
             {
                 UptieLevel = UptieLevelsAvalible[0];
-                Skills_CurrentEditingField = "Desc"; // При переключении между ID выбирать Desc как стандартое редактируемое поле
             }
             Skills_Json_Dictionary_CurrentUptieLevel = UptieLevel; // Обновить значение текущего уровня связи для MainWindow
 
-
+            Skills_CurrentEditingField = "Desc"; // Выбирать по умолчанию при любом переходе описание в качестве редактируемого объекта..
+            T["Current Highlight"].RenderTransform = new TranslateTransform(2, 61);
+            ReEnableAvalibleCoinDescs(Disable: true);
 
             // По умолчанию сделать недоступными все кнопки монет и скрыть их на предпросмотре вместе с описанием навыка
             ResetInformationVisiblity();
@@ -111,7 +147,6 @@ namespace Limbus_Localization_UI.Mode_Handlers
             UnlockAvalibleCoins(CoinsAvalible);
 
             // Перебрать описания каждой из монет и обновить предпросмотр
-
             foreach(var Coin in Skills_Json_Dictionary[SkillID][UptieLevel]["Coins"])
             {
                 int CoinNumber = Coin.Key;
@@ -123,22 +158,30 @@ namespace Limbus_Localization_UI.Mode_Handlers
                     // Если это описание монеты не пустое в буфере редактирования
                     if (Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Equals("{unedited}"))
                     {
-                        //Console.WriteLine(CoinDesc);
                         T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex + 1}"].Height = Double.NaN;
                         MainWindow.UpdatePreview(CoinDesc.Replace("\"", "\\\""), T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
                     }
                     else
                     {
-                        //Console.WriteLine(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex]);
-                        //CoinDescExport.Add(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Replace("\"", "\\\""));
+                        T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex + 1}"].Height = Double.NaN;
                         MainWindow.UpdatePreview(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Replace("\"", "\\\""), T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
                     }
 
                     DescIndex++;
                 }
                 CoinDescExportString = String.Join("\n", CoinDescExport);
-
             }
+
+            // При переходе между ID или уровнем связи обновить текст описания
+            if (Skills_EditBuffer[SkillID][UptieLevel]["Desc"].Equals("{unedited}"))
+            {
+                T["Json EditBox"].Text = Skills_Json_Dictionary[SkillID][UptieLevel]["Desc"].Replace("\n", "\\n");
+            }
+            else // Иначе вставлять из буфера
+            {
+                T["Json EditBox"].Text = Skills_EditBuffer[SkillID][UptieLevel]["Desc"].Replace("\n", "\\n");
+            }
+
 
 
 
@@ -149,20 +192,9 @@ namespace Limbus_Localization_UI.Mode_Handlers
             T["Name Label"].Text = Skills_Json_Dictionary[SkillID][UptieLevel]["Name"];   // Имя на заголовке
             T["ID Label"].Content = $"{SkillID}"; // ID на кнопке копирования ID
 
-
-            // Задать текст в поле редактирования Json (+ Проверка буфера изменений)
-            if (Skills_CurrentEditingField.Equals("Desc"))
-            {
-                // Если буфер редактирования пустой (= "{unedited}"), показывать текст из JsonData
-                if (Skills_EditBuffer[SkillID][UptieLevel][Skills_CurrentEditingField].Equals("{unedited}"))
-                {
-                    T["Json EditBox"].Text = Skills_Json_Dictionary[SkillID][UptieLevel][Skills_CurrentEditingField];
-                }
-                else // Иначе вставлять из буфера
-                {
-                    T["Json EditBox"].Text = Skills_EditBuffer[SkillID][UptieLevel][Skills_CurrentEditingField];
-                }
-            }
+            // Сброс буфера отмены
+            T["Json EditBox"].IsUndoEnabled = false;
+            T["Json EditBox"].IsUndoEnabled = true;
         }
 
 
@@ -241,5 +273,49 @@ namespace Limbus_Localization_UI.Mode_Handlers
             }
         }
 
+        /// <summary>
+        /// При нажатии на кнопку монеты проверить сколько у неё доступно описаний и разблокировать соответствующие кнопки
+        /// </summary>
+        public static void ReEnableAvalibleCoinDescs(int DescsCount = 1, bool Disable = false)
+        {
+            // Отключить все 6 кнопок
+            for (int i = 1; i <= 6; i++)
+            {
+                T[$"Coin Descs {i} Button"].Foreground = РазноеДругое.GetColorFromAHEX("#FF333333");
+                T[$"Coin Descs {i} Button"].BorderBrush = РазноеДругое.GetColorFromAHEX("#FF333333");
+                T[$"Coin Descs {i} Button"].IsEnabled = false;
+                T[$"Coin Descs {i} Button"].Content = $"№{i}";
+            }
+
+            // Включить соответствующее количество (Или же не включать и оставить все недоступными при Disable = true (Смена на 'Desc'))
+            if (!Disable)
+            {
+                for (int i = 1; i <= DescsCount; i++)
+                {
+                    T[$"Coin Descs {i} Button"].Foreground = РазноеДругое.GetColorFromAHEX("#FFA69885");
+                    T[$"Coin Descs {i} Button"].BorderBrush = РазноеДругое.GetColorFromAHEX("#FF6B6B6B");
+                    T[$"Coin Descs {i} Button"].IsEnabled = true;
+                    if (!Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][i-1].Equals("{unedited}"))
+                    {
+                        T[$"Coin Descs {i} Button"].Content = $"№{i}*";
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Подсветить кнопку текущего редактируемого описания монеты
+        /// </summary>
+        public static void SetCurrentCoinDescHighlight(int DescIndex, int DescsCount)
+        {
+            // Отключить подсветку для всех остальных
+            for (int i = 1; i <= DescsCount; i++)
+            {
+                T[$"Coin Descs {i} Button"].BorderBrush = РазноеДругое.GetColorFromAHEX("#FF6B6B6B");
+            }
+
+            // Включить для выбранного
+            T[$"Coin Descs {DescIndex+1} Button"].BorderBrush = РазноеДругое.GetColorFromAHEX("#FFD1CDC5");
+        }
     }
 }

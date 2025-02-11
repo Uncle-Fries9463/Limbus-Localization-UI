@@ -5,7 +5,7 @@ namespace Limbus_Localization_UI.Json
     // Основная структура json файлов
     public class JsonData
     {
-        public List<Data> DataList { get; set; }
+        public List<Data> dataList { get; set; }
     }
     public class Data
     {
@@ -28,6 +28,7 @@ namespace Limbus_Localization_UI.Json
     {
         public int level { get; set; } // (Уровень связи)
         public string name { get; set; }
+        public string abName { get; set; } // Фоновое имя ЭГО
         public string desc { get; set; }
         public List<coinlist> coinlist { get; set; } // Список монет
     }

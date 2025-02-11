@@ -6,23 +6,39 @@ namespace Limbus_Localization_UI.Json
     internal class JsonLoader_Skills
     {
         // ID > Уровень связи > Описания и список монет
+
+        public static JsonData JSON;
+        public static Dictionary<int, int> ID_AND_INDEX = new();
+        public static Dictionary<int, Dictionary<int, int>> UPTIELEVEL_AND_INDEX = new();
+        public static Dictionary<int, Dictionary<int, Dictionary<int, int>>> COIN_AND_INDEX = new();
+        public static Dictionary<int, Dictionary<int, Dictionary<int, Dictionary<int, int>>>> COINDESC_AND_INDEX = new();
+
         public static (Dictionary<int, dynamic>, Dictionary<int, dynamic>) GetJsonDictionary(string Json_Файл)
         {
-            var JSON = JsonConvert.DeserializeObject<JsonData>(File.ReadAllText(Json_Файл));
+            JSON = JsonConvert.DeserializeObject<JsonData>(File.ReadAllText(Json_Файл));
             bool WriteInfo = false;
+
+            
 
             Dictionary<int, dynamic> Skills_Json_Dictionary = new();
             Dictionary<int, dynamic> Skills_EditBuffer = new();      // EditBuffer — копия верхнего, но вместо всех строковых значений числится {unedited}. При изменении текста и отличии его от оригинала из Json_Dictionary, EditBuffer принимает новое значение вместо {unedited}
             
             // Для каждого ID в списке всех ID файла
-            foreach (var ThisID in JSON.DataList)
+            int ID_Index = 0;
+            foreach (var ThisID in JSON.dataList)
             {
                 int Skill_ID = ThisID.id;
+                ID_AND_INDEX[Skill_ID] = ID_Index;////////////////////////////////////////////////////////////////////////////////////////////////////////
+
                 Skills_Json_Dictionary[Skill_ID] = new Dictionary<int, dynamic>();
                 Skills_EditBuffer     [Skill_ID] = new Dictionary<int, dynamic>();
                 if (WriteInfo) Console.WriteLine($"--(ID {Skill_ID})------------------------------------------------");
 
                 // Для каждого навыка по уровню его уровню связи в списке навыков по ID
+                int UptieLevelIndex = 0;
+                UPTIELEVEL_AND_INDEX[Skill_ID] = new();///////////////////////////////////////////////////////////////////////////////////////////////////
+                COIN_AND_INDEX[Skill_ID] = new();/////////////////////////////////////////////////////////////////////////////////////////////////////////
+                COINDESC_AND_INDEX[Skill_ID] = new();/////////////////////////////////////////////////////////////////////////////////////////////////////
                 foreach (var ThisUptieLevel in ThisID.levelList)
                 {
                     int Skill_UptieLevel = ThisUptieLevel.level;
@@ -32,49 +48,63 @@ namespace Limbus_Localization_UI.Json
                     string Skill_Name = ThisUptieLevel.name;
                     string Skill_Desc = ThisUptieLevel.desc;
 
+                    UPTIELEVEL_AND_INDEX[Skill_ID][Skill_UptieLevel] = UptieLevelIndex;////////////////////////////////////////////////////////////////////
+                    COIN_AND_INDEX[Skill_ID][Skill_UptieLevel] = new();////////////////////////////////////////////////////////////////////////////////////
+                    COINDESC_AND_INDEX[Skill_ID][Skill_UptieLevel] = new();////////////////////////////////////////////////////////////////////////////////
+
                     Dictionary<int, List<string>> Skill_CoinDescs      = new();
                     Dictionary<int, List<string>> EditBuffer_CoinDescs = new();
 
                     if (WriteInfo) Console.WriteLine($"Name: {Skill_Name} (Tier {Skill_UptieLevel}):\n  {Skill_Desc.Replace("\n", "\\n")}");
 
-                    int CoinCouner = 0;
+                    int CoinCounter = 0;
+                    int COININDEX = 0;
                     // Для каждой монеты в списке монет
                     foreach (var Coin in ThisUptieLevel.coinlist)
                     {
-                        CoinCouner++;
-                        Skill_CoinDescs     [CoinCouner] = new List<string>();
-                        EditBuffer_CoinDescs[CoinCouner] = new List<string>();
+                        CoinCounter++;
+
+                        COIN_AND_INDEX[Skill_ID][Skill_UptieLevel][CoinCounter] = COININDEX;/////////////////////////////////////////////////////////////////
+                        COINDESC_AND_INDEX[Skill_ID][Skill_UptieLevel][CoinCounter] = new();/////////////////////////////////////////////////////////////////
+
+                        Skill_CoinDescs     [CoinCounter] = new List<string>();
+                        EditBuffer_CoinDescs[CoinCounter] = new List<string>();
                         try
                         {
                             // Если у монеты есть описание
                             var EmptyCoinTryCheck = Coin.coindescs[0];
-                            if (WriteInfo) Console.WriteLine($"    (Coin {CoinCouner}):");
+                            if (WriteInfo) Console.WriteLine($"    (Coin {CoinCounter}):");
+                            int COINDESC_INDEX = 0;
                             foreach (var coindesc in Coin.coindescs)
                             {
+                                COINDESC_AND_INDEX[Skill_ID][Skill_UptieLevel][CoinCounter][COINDESC_INDEX] = COINDESC_INDEX;
                                 string CoinDesc = coindesc.desc;
                                 if (WriteInfo) Console.WriteLine($"      - '{coindesc.desc}'");
 
                                 if (CoinDesc.Equals(""))
                                 {
                                     // Если описание монеты есть, но оно пустое
-                                    Skill_CoinDescs     .Remove(CoinCouner);
-                                    EditBuffer_CoinDescs.Remove(CoinCouner);
+                                    Skill_CoinDescs     .Remove(CoinCounter);
+                                    EditBuffer_CoinDescs.Remove(CoinCounter);
                                 }
                                 else
                                 {
                                     // Добавить описание монеты в список её описаний
-                                    Skill_CoinDescs     [CoinCouner].Add(coindesc.desc);
-                                    EditBuffer_CoinDescs[CoinCouner].Add("{unedited}");
+                                    Skill_CoinDescs     [CoinCounter].Add(coindesc.desc);
+                                    EditBuffer_CoinDescs[CoinCounter].Add("{unedited}");
                                 }
+                                COINDESC_INDEX++;
                             }
                         }
                         catch
                         {
                             // Если у монеты нет описания, удалить ключ (Монеты  1, 2(Пусто), 3  ->  1, 3)
-                            Skill_CoinDescs     .Remove(CoinCouner);
-                            EditBuffer_CoinDescs.Remove(CoinCouner);
+                            Skill_CoinDescs     .Remove(CoinCounter);
+                            EditBuffer_CoinDescs.Remove(CoinCounter);
 
                         }
+
+                        COININDEX++;
                     }
                     if (WriteInfo) Console.WriteLine("\n");
 
@@ -94,9 +124,10 @@ namespace Limbus_Localization_UI.Json
                         ["Coins"] = EditBuffer_CoinDescs
                     };
 
+                    UptieLevelIndex++;
                 }
                 if (WriteInfo) Console.WriteLine("\n\n");
-
+                ID_Index++;
             }
 
             if (WriteInfo)
@@ -122,6 +153,62 @@ namespace Limbus_Localization_UI.Json
 
 
             return (Skills_Json_Dictionary, Skills_EditBuffer);
+        }
+
+        public static (string, int) GetUnsavedChanges(Dictionary<int, dynamic> CheckDictionary)
+        {
+            string Info = "";
+            string Info_Sub;
+            
+
+
+            int EditsCount = 0;
+            string ex_Info = "";
+
+            foreach (var ID in CheckDictionary)
+            {
+                int CurrentID = ID.Key;
+                bool IsEditedID = false;
+                //Console.WriteLine("¤ ID " + CurrentID);
+                List<int> EditedUptieLevels = new();
+                foreach (var UptieLevel in CheckDictionary[CurrentID])
+                {
+                    int CurrentUptieLevel = UptieLevel.Key;
+                    //Console.WriteLine("  - UL " + CurrentUptieLevel);
+                    //Console.WriteLine("    - DESC " + UptieLevel.Value["Desc"]);
+                    if (!UptieLevel.Value["Desc"].Equals("{unedited}"))
+                    {
+                        IsEditedID = true;
+                        if (!EditedUptieLevels.Contains(CurrentUptieLevel)) EditedUptieLevels.Add(CurrentUptieLevel);
+                        EditsCount++;
+                    }
+
+                    foreach(var Coin in CheckDictionary[CurrentID][CurrentUptieLevel]["Coins"])
+                    {
+                        int CoinNumber = Coin.Key;
+                        //Console.WriteLine("      - COIN " + CoinNumber);
+
+                        int CoinDescNumber = 1;
+                        foreach(var CoinDesc in Coin.Value)
+                        {
+                            //Console.WriteLine("        - COINDESC " + CoinDesc);
+                            if (!CoinDesc.Equals("{unedited}"))
+                            {
+                                IsEditedID = true;
+                                if(!EditedUptieLevels.Contains(CurrentUptieLevel)) EditedUptieLevels.Add(CurrentUptieLevel);
+                                EditsCount++;
+                            }
+                            CoinDescNumber++;
+                        }
+                    }
+
+                }
+                if (IsEditedID)
+                {
+                    Info += $"ID {CurrentID}\n - Уровни связи: {String.Join(", ", EditedUptieLevels)}\n\n";
+                }
+            }
+            return (Info, EditsCount);
         }
     }
 }

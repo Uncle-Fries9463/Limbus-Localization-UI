@@ -24,7 +24,7 @@ namespace Limbus_Localization_UI.Json
             string SimpleDesc5_JSON; int LineIndex_SimpleDesc5;
 
             // Содержимое Json через десериализацию
-            foreach (var data in JsonConvert.DeserializeObject<JsonData>(File.ReadAllText(Json_Файл)).DataList)
+            foreach (var data in JsonConvert.DeserializeObject<JsonData>(File.ReadAllText(Json_Файл)).dataList)
             {
                 ID_JSON = data.id;
                 Name_JSON = data.name.Replace("\"", "\\\"").Replace("\n", "\\n");
@@ -130,7 +130,7 @@ namespace Limbus_Localization_UI.Json
             return Json_Dictionary;
         }
 
-        public static (string, string) GetUnsavedChanges(Dictionary<int, Dictionary<string, object>> CheckDictionary)
+        public static (string, int) GetUnsavedChanges(Dictionary<int, Dictionary<string, object>> CheckDictionary)
         {
             string Info = "";
             string Info_Sub = "";
@@ -161,7 +161,7 @@ namespace Limbus_Localization_UI.Json
                 }
             }
 
-            return (Info, Convert.ToString(EditsCount));
+            return (Info, EditsCount);
         }
 
 

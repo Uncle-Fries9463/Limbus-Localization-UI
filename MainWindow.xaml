@@ -18,7 +18,7 @@
         MinWidth="600"
         MaxWidth="895"
         Width="895" 
-        Height="443"
+        Height="440"
         
         Title="Limbus Localization UI"> <!--443 height-->
     <Window.Resources>
@@ -345,44 +345,12 @@
                                  HorizontalOffset="15"
                                  VerticalOffset="10">
                             <StackPanel>
-                                <TextBlock>Выбрать в проводнике</TextBlock>
-                                <TextBlock TextAlignment="Center">(Режим ЭГО Даров [Только EGOgift_x.json файлы])</TextBlock>
-                                <TextBlock TextAlignment="Center">(Так же необходимо количество пробелов такое же,</TextBlock>
-                                <TextBlock TextAlignment="Center">как в EGOgift_MirrorDungeon.json)</TextBlock>
+                                <TextBlock>Выбрать файл в проводнике</TextBlock>
                             </StackPanel>
                         </ToolTip>
                     </Button.ToolTip>
                 </Button>
             </Border>
-
-            <Button x:Name="JsonFile_ReadFile"
-                    Click="LoadJsonFile_Button"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Margin="2460, 0, 0, 0"
-                    Grid.Column="1"
-                    Grid.Row="1"
-                    Content=""
-                    Width="29"
-                    Height="29"
-                    ToolTipService.InitialShowDelay="0">
-                <Button.ToolTip>
-                    <ToolTip
-                             Background="#895B5B5B"
-                             Foreground="White"
-                             HasDropShadow="False"
-                             Placement="MousePoint"
-                             HorizontalOffset="15"
-                             VerticalOffset="10" >
-                        <StackPanel>
-                            <TextBlock TextAlignment="Center">Загрузить .json файл с локализацией</TextBlock>
-                            <TextBlock TextAlignment="Center">(Режим ЭГО Даров [Только EGOgift_x.json файлы])</TextBlock>
-                            <TextBlock TextAlignment="Center">(Так же необходимо количество пробелов такое же,</TextBlock>
-                            <TextBlock TextAlignment="Center">как в EGOgift_MirrorDungeon.json)</TextBlock>
-                        </StackPanel>
-                    </ToolTip>
-                </Button.ToolTip>
-            </Button>
             <StackPanel Grid.Column="1"
                         Grid.Row="1"
                         HorizontalAlignment="Left"
@@ -498,21 +466,21 @@
                     <Image x:Name="SkillTierBox_Background" Source="Images\UptieLevels\Фон уровней связи.png"/>
                     
                     <Button x:Name="UptieLevel1_Button"   Click="UptieLevel1_Button_Click" Background="#00191919" Margin="110.7, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel1_Button_MouseEnter" MouseLeave="UptieLevel1_Button_MouseLeave"/>
-                    <Border x:Name="UptieLevel1_Cover"    Margin="111.7, -53, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
+                    <Border x:Name="UptieLevel1_Cover"    Margin="110.7, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
                     <Border x:Name="UptieLevel1_SubCover" Margin="115, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
 
                     <Button x:Name="UptieLevel2_Button"   Click="UptieLevel2_Button_Click" Background="#00191919" Margin="151, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel2_Button_MouseEnter" MouseLeave="UptieLevel2_Button_MouseLeave"/>
-                    <Border x:Name="UptieLevel2_Cover"    Margin="152, -53, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
+                    <Border x:Name="UptieLevel2_Cover"    Margin="151, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
                     <Border x:Name="UptieLevel2_SubCover" Margin="155, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
 
 
                     <Button x:Name="UptieLevel3_Button"   Click="UptieLevel3_Button_Click" Background="#00191919" Margin="191, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel3_Button_MouseEnter" MouseLeave="UptieLevel3_Button_MouseLeave"/>
-                    <Border x:Name="UptieLevel3_Cover"    Margin="192, -53, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
+                    <Border x:Name="UptieLevel3_Cover"    Margin="191, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
                     <Border x:Name="UptieLevel3_SubCover" Margin="195.5, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
 
 
                     <Button x:Name="UptieLevel4_Button"   Click="UptieLevel4_Button_Click" Background="#00191919" Margin="231.3, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel4_Button_MouseEnter" MouseLeave="UptieLevel4_Button_MouseLeave"/>
-                    <Border x:Name="UptieLevel4_Cover"    Margin="232.3, -53, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
+                    <Border x:Name="UptieLevel4_Cover"    Margin="231.3, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
                     <Border x:Name="UptieLevel4_SubCover" Margin="235.4, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
                 </StackPanel>
             </Border>
@@ -609,8 +577,7 @@
                     Width="276"
                     BorderBrush="#FF4B4B4B" 
                     BorderThickness="2" 
-                    CornerRadius="3"
-                    Margin="0, 0, 0, 0"> <!--Margin="0, 0, 0, 0"-->
+                    CornerRadius="3">
                 <ScrollViewer x:Name="LeftMenuContent" Margin="3, 3, 0, 0" ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <StackPanel>
                         <Border x:Name="CurrentHighlight"
@@ -674,8 +641,9 @@
                                    FontSize="19"
                                    Foreground="#FF514C46"
        
-                                   Content="Название ЭГО Дара"></Label>
+                                   Content="Название ЭГО Дара"/>
                         </StackPanel>
+                        
                         <Button x:Name="SwitchEditorTo_Desc"
                                 Click="SwitchEditorTo_Desc_Button"
                                 Content="Описание"
@@ -712,25 +680,25 @@
                             </Button.Style>
                         </Button>
                         <Border x:Name="Desc_Cover"
-                                    Background="#7F000000"
-                                    Margin="0, -30, 0, 0"
-                                    Width="232.5"
-                                    Height="30"
-                                    Focusable="False"
-                                    HorizontalAlignment="Left"/>
+                                Background="#7F000000"
+                                Margin="0, -30, 0, 0"
+                                Width="232.5"
+                                Height="30"
+                                Focusable="False"
+                                HorizontalAlignment="Left"/>
                         <Button x:Name="SwitchEditorTo_SubDesc1"
-                                    Click="SwitchEditorTo_SubDesc1_Button"
-                                    Width="232.5"
-                                    Height="30"
-                                    Margin="0, 4, 0, 0"
-                                    HorizontalAlignment="Left"
-                                    Content="Простое описание 1"
-                                    Background="#FF191919"
-                                    BorderThickness="2"
-                                    BorderBrush="#FF414141"
-                                    FontFamily="Consolas"
-                                    FontSize="19"
-                                    Foreground="#A69885">
+                                Click="SwitchEditorTo_SubDesc1_Button"
+                                Width="232.5"
+                                Height="30"
+                                Margin="0, 4, 0, 0"
+                                HorizontalAlignment="Left"
+                                Content="Простое описание 1"
+                                Background="#FF191919"
+                                BorderThickness="2"
+                                BorderBrush="#FF414141"
+                                FontFamily="Consolas"
+                                FontSize="19"
+                                Foreground="#A69885">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Template">
@@ -1015,17 +983,17 @@
                             
                         </StackPanel>
 
-                        <StackPanel Height="42" Margin="0, -1, 0, 0" VerticalAlignment="Bottom">
+                        <StackPanel x:Name="CoinDescsSelectionBox" Height="0" Margin="0, 1, 0, 0" Width="265" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                             <TextBlock Foreground="#FF514C46" Height="15" FontFamily="Cascadia Code" HorizontalAlignment="Center">
                                 ————————Список описаний монеты————————
                             </TextBlock>
                             <StackPanel Height="27" Orientation="Horizontal">
-                                <Button Click="CoinDescs_1" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№1"/>
-                                <Button Click="CoinDescs_2" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№2"/>
-                                <Button Click="CoinDescs_3" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№3"/>
-                                <Button Click="CoinDescs_4" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№4"/>
-                                <Button Click="CoinDescs_5" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№5"/>
-                                <Button Click="CoinDescs_6" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№6"/>
+                                <Button x:Name="CoinDescs_1_Button" Click="CoinDescs_1" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№1"/>
+                                <Button x:Name="CoinDescs_2_Button" Click="CoinDescs_2" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№2"/>
+                                <Button x:Name="CoinDescs_3_Button" Click="CoinDescs_3" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№3"/>
+                                <Button x:Name="CoinDescs_4_Button" Click="CoinDescs_4" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№4"/>
+                                <Button x:Name="CoinDescs_5_Button" Click="CoinDescs_5" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№5"/>
+                                <Button x:Name="CoinDescs_6_Button" Click="CoinDescs_6" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№6"/>
                                 
                                 <!--Эффект нижнего подсвета у кнопки вместо обводки-->
                                 <Border Background="#0F0F0F" Height="6"  Width="269" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-269,   -1, 0, 0"/>
@@ -1039,7 +1007,7 @@
                             </StackPanel>
                         </StackPanel>
 
-                        <StackPanel Background="#0F0F0F" Height="3.5" VerticalAlignment="Bottom"/>
+                        <StackPanel x:Name="CoinDescsSelectionBox_Sub" Background="#0F0F0F" Height="0" VerticalAlignment="Bottom"/>
 
                     </StackPanel>
                     <ScrollViewer.Resources>
@@ -1074,11 +1042,11 @@
                         </Border>
                         <StackPanel>
                             <RichTextBox x:Name="Skill_Coin1_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin1_Desc2" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin1_Desc3" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin1_Desc4" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin1_Desc5" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin1_Desc6" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin1_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin1_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin1_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin1_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin1_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -1092,11 +1060,11 @@
                         </Border>
                         <StackPanel>
                             <RichTextBox x:Name="Skill_Coin2_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin2_Desc2" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin2_Desc3" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin2_Desc4" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin2_Desc5" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin2_Desc6" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin2_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin2_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin2_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin2_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin2_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -1110,11 +1078,11 @@
                         </Border>
                         <StackPanel>
                             <RichTextBox x:Name="Skill_Coin3_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin3_Desc2" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin3_Desc3" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin3_Desc4" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin3_Desc5" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin3_Desc6" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin3_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin3_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin3_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin3_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin3_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -1128,11 +1096,11 @@
                         </Border>
                         <StackPanel>
                             <RichTextBox x:Name="Skill_Coin4_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin4_Desc2" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin4_Desc3" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin4_Desc4" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin4_Desc5" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin4_Desc6" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin4_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin4_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin4_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin4_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin4_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -1146,11 +1114,11 @@
                         </Border>
                         <StackPanel>
                             <RichTextBox x:Name="Skill_Coin5_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin5_Desc2" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin5_Desc3" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin5_Desc4" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin5_Desc5" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin5_Desc6" Height="0" Margin="6, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin5_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin5_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin5_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin5_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin5_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                             <!--
                              Background="Red"      
                              Background="Green"    

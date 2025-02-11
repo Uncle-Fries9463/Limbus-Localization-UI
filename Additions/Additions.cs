@@ -10,10 +10,6 @@ namespace Limbus_Localization_UI.Additions
 {
     internal class РазноеДругое
     {
-        static Dictionary<string, dynamic> T;
-        public static void InitTDictionaryHere(Dictionary<string, dynamic> FromExternal) => T = FromExternal;
-
-
         public static void SetRO(string path)
         {
             var attr = File.GetAttributes(path);
@@ -41,8 +37,27 @@ namespace Limbus_Localization_UI.Additions
         }
 
         public static void SaveJson(JsonData JSON, string Path)
+        {                                                                                                              // Что бы не втыкало Name и Desc из ЭГО даров
+            File.WriteAllText(Path, JsonConvert.SerializeObject(JSON, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }).Replace("\r", ""));
+        }
+
+        public static Dictionary<string, string> GetSpriteNames()
         {
-            File.WriteAllText(Path, JsonConvert.SerializeObject(JSON, Formatting.Indented).Replace("\r", ""));
+            Dictionary<string, string> SpriteNames = new();
+
+            string[] Lines = File.ReadAllLines(@"Спрайты\$Другое\Bufs.json");
+
+            for (int i = 0; i <= Lines.Count() - 1; i++)
+            {
+                if (Lines[i].Trim().StartsWith("\"id\": "))
+                {
+                    string SpriteId = Lines[i].Split("\"id\": \"")[1].Split("\",")[0];
+                    string SpriteName = Lines[i+1].Split("\"name\": \"")[1].Split("\",")[0];
+                    SpriteNames[SpriteId] = SpriteName;
+                }
+            }
+            
+            return SpriteNames;
         }
 
 
@@ -59,7 +74,7 @@ namespace Limbus_Localization_UI.Additions
             }
         }
 
-        public static SolidColorBrush GetColorFromHEXA(string hexaColor)
+        public static SolidColorBrush GetColorFromAHEX(string hexaColor)
         {
             return new SolidColorBrush(
                 System.Windows.Media.Color.FromArgb(
