@@ -1041,7 +1041,7 @@
                             <Image x:Name="Skill_Coin1_Icon" Source="Images\Coins\Coin 1.png"/>
                         </Border>
                         <StackPanel>
-                            <RichTextBox x:Name="Skill_Coin1_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                            <RichTextBox x:Name="Skill_Coin1_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"                     />
                             <RichTextBox x:Name="Skill_Coin1_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                             <RichTextBox x:Name="Skill_Coin1_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                             <RichTextBox x:Name="Skill_Coin1_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
@@ -1051,7 +1051,11 @@
                     </StackPanel>
                 </StackPanel>
 
-
+                <!-- 
+                Background="#B2646464"
+                Background="#7F646464"
+                Background="#4C646464"
+                -->
 
                 <StackPanel x:Name="Skill_Coin2" MinHeight="48">
                     <StackPanel Orientation="Horizontal">

@@ -922,7 +922,7 @@ namespace Limbus_Localization_UI
                         РазноеДругое.SetRO(path);
                     }
 
-                    else if(Filename.StartsWith("Skills_"))
+                    else if(Filename.StartsWith("Skills_personality") | Filename.StartsWith("Skills_Ego_Personality"))
                     {
                         EditorMode = "Skills";
                         // Основной словарь с текстом из JsonData.dataList и Буфер не сохранённых изменений
@@ -941,7 +941,8 @@ namespace Limbus_Localization_UI
                         // Адаптировать интерфейс под навыки
                         Mode_Handlers.Mode_Skills.AdjustUI();
 
-                        T["Name EditBox [UnavalibleCover]"]    .Height = 0; // Разблокировать кнопку имени
+                        T["Name EditBox [UnavalibleCover]"]     .Height = 0; // Разблокировать кнопку имени
+                        T["Name SaveChanges [UnavalibleCover]"] .Height = 0;
                         T["EditorSwitch Desc [UnavalibleCover]"].Height = 0; // Разблокировать кнопку описания
 
                         ID_SwitchNext_Cover.Height = 0;
