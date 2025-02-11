@@ -1,6 +1,8 @@
-# Limbus Localization UI | Версия 1.2
+# Limbus Localization UI | Версия 1.3
 
 Утилита с интерфейсом для редактирования .json файлов локализации игры Limbus Company и просмотра изменений в реальном времени
+
+## Пояснение к режиму редактирования навыков [Тут](https://gist.github.com/x1bViolet/4a162b0e09a0a47c3dc66a1a0b1b9e16)
 
 ![1](https://github.com/user-attachments/assets/9560be02-fc88-4eb3-bacf-0eaf49d7beab)
 ![Снимок экрана (8320)](https://github.com/user-attachments/assets/5867b42a-146d-4c54-a754-1b4d89f4bacf)
