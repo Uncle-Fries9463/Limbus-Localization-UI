@@ -10,6 +10,9 @@ using System.Windows.Media.Imaging;
 using Limbus_Localization_UI.Json;
 using Limbus_Localization_UI.Additions;
 using Limbus_Localization_UI.Mode_Handlers;
+using static Limbus_Localization_UI.Additions.Consola;
+
+
 
 namespace Limbus_Localization_UI
 {
@@ -344,7 +347,7 @@ namespace Limbus_Localization_UI
                 document.Blocks.Add(lastParagraph);
             }
 
-            string[] TextParts = Regex.Split(text, @"<color=(#[0-9a-fA-F]{6})>(.*?)</color>");
+            string[] TextParts = Regex.Split(text, @"<color=(#[0-9a-fA-F]{6})>(.*?)</color>", RegexOptions.Singleline); // Алгоритм не настолько кривой-сложный
 
             for (int i = 0; i < TextParts.Length; i++)
             {
@@ -453,11 +456,6 @@ namespace Limbus_Localization_UI
         {
             Target.Document.Blocks.Clear();
 
-            if (EditorMode.Equals("Skills"))// Подсветка улучшения навыков работает криво
-            {
-                JsonDesc = JsonDesc.Replace("<style=\\\"highlight\\\">", "").Replace("</style>", "");
-            }
-
             // Заменить квадратные скобки на <sprite><color>...</color>, если текст из них есть в списке id из Bufs.json
             try
             {
@@ -473,6 +471,7 @@ namespace Limbus_Localization_UI
             catch{}
 
             JsonDesc = JsonDesc.Replace("color=#None", "color=#ffffff")
+                               .Replace("<style=\\\"highlight\\\">", "<style=\\\"upgradeHighlight\\\">") // Подсветка улучшения навыка
                                .Replace("<style=\\\"upgradeHighlight\\\">", "<color=#f8c200>") // Подсветка улучшения ЭГО дара
                                .Replace("</style>", "</color>")
 
@@ -483,46 +482,53 @@ namespace Limbus_Localization_UI
 
                                .Replace("<>", "<s>") // Пустые кавычки ломают весь текст
 
-                               .Replace("[WhenUse]", "<color=#27cefe>[При использовании]</color>")
+                               .Replace("[WhenUse]",             "<color=#27cefe>[При использовании]</color>")
                                .Replace("[OnSucceedAttackHead]", "<color=#c6fe94>[Выпал орёл]</color>")
 
-                               .Replace("[OnSucceedAttack]", "<color=#93f03f>[При ударе]</color>")
-                               .Replace("[CriticalOnSucceedAttack]", "<color=#93f03f>[Критическая атака]</color>")
-                               .Replace("[StartBattle]", "<color=#93f03f>[В начале хода]</color>")
-                               .Replace("[EndSkill]", "<color=#93f03f>[В конце атаки]</color>")
-                               .Replace("[EndBattle]", "<color=#93f03f>[В конце хода]</color>")
-                               .Replace("[BeforeAttack]", "<color=#93f03f>[Перед атакой]</color>")
-                               .Replace("[EnemyKill]", "<color=#93f03f>[При убийстве]</color>")
-                               .Replace("[OnSucceedEvade]", "<color=#93f03f>[Успешный уворот]</color>")
+                               .Replace("[OnSucceedAttack]",             "<color=#93f03f>[При ударе]</color>")
+                               .Replace("[CriticalOnSucceedAttack]",     "<color=#93f03f>[Критическая атака]</color>")
+                               .Replace("[StartBattle]",                 "<color=#93f03f>[В начале хода]</color>")
+                               .Replace("[EndSkill]",                    "<color=#93f03f>[В конце атаки]</color>")
+                               .Replace("[EndBattle]",                   "<color=#93f03f>[В конце хода]</color>")
+                               .Replace("[BeforeAttack]",                "<color=#93f03f>[Перед атакой]</color>")
+                               .Replace("[EnemyKill]",                   "<color=#93f03f>[При убийстве]</color>")
+                               .Replace("[OnSucceedEvade]",              "<color=#93f03f>[Успешный уворот]</color>")
                                .Replace("[UnBrokenCoinOnSucceedAttack]", "<color=#93f03f>[При попадании целой монетой]</color>") // Вечные монеты
-                               .Replace("[BeforeUse]", "<color=#93f03f>[Перед использованием]</color>")
-                               .Replace("[TargetKill]", "<color=#93f03f>[Перед убийстве цели]</color>")
-                               .Replace("[OnSucceedAttackTail]", "<color=#93f03f>[Выпала решка]</color>")
+                               .Replace("[BeforeUse]",                   "<color=#93f03f>[Перед использованием]</color>")
+                               .Replace("[TargetKill]",                  "<color=#93f03f>[Перед убийстве цели]</color>")
+                               .Replace("[OnSucceedAttackTail]",         "<color=#93f03f>[Выпала решка]</color>")
 
                                .Replace("[EndSkillTail]", "<color=#93f03f>[Конец атаки решкой]</color>")
 
                                .Replace("[CantIdentify]", "<color=#fe0000>[Неуправляемый]</color>")
-                               .Replace("[DefeatDuel]", "<color=#fe0000>[Поражение в столкновении]</color>")
+                               .Replace("[DefeatDuel]",   "<color=#fe0000>[Поражение в столкновении]</color>")
 
-                               .Replace("[DuelCounter]", "<color=#f95e00>[Контратака с поединком]</color>")
+                               .Replace("[DuelCounter]",  "<color=#f95e00>[Контратака с поединком]</color>")
                                .Replace("[CanDuelGuard]", "<sprite name=\\\"CanDuelGuard\\\"><color=#9f6a3a>[Блок с поединком]</color>")
-                               .Replace("[SuperCoin]", "<sprite name=\\\"SuperCoin\\\"><color=#f8c200>Вечная монета</color>")
+                               .Replace("[SuperCoin]",    "<sprite name=\\\"SuperCoin\\\"><color=#f8c200>Вечная монета</color>")
 
                                .Replace("[WinDuel]", "<color=#f95e00>[Победа в столкновении]</color>")
+                               
 
                                .Replace("><", ">\0<");
 
+
+
+
             JsonDesc = Regex.Replace(JsonDesc, @"(?<=<\/color>)([а-яА-Яa-zA-Z])", " $1");
             JsonDesc = Regex.Replace(JsonDesc, @"<link=\\\"".*?\\\"">", "");
+
             JsonDesc = JsonDesc.Replace("\">\0<color=#f8c200>", "\">\0<color=#fac400>");
 
             char[] splitby = { '<', '>' };
-            string[] parts = $"<s>\0{JsonDesc.Replace("\\n", "\n")}".Split(splitby, StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = $"<s>\0{JsonDesc.Replace("\\n", "\n")}".Split(splitby, StringSplitOptions.RemoveEmptyEntries); // Главное
 
             string[] Colors = {
                 "color=#e30000", // Красный текст, Негативные статусные эффекты, подчёркивается
                 "color=#fac400", // Жёлтый текст, Позитивные статусные эффекты (Спешка, Повышение уровня атаки, ..) + Заряд и Дыхание, подчёркивается
                 "color=#ffffff", // Белый текст (Или None) (У Дон Кихот в идентичности Менеджера Ла-Манчалаенда эффект Кровавая броня) 
+
+                "color=#f8c200", // Альтернативный жёлтый для неподчёркиваемой подсветки улучшения через highlight или upgradeHighlight
                 
                 "color=#93f03f", // [При ударе] и т.д.         \ Зелёный
                 "color=#27cefe", // [При использовании] и т.д. \ Синий
@@ -534,9 +540,6 @@ namespace Limbus_Localization_UI
                 "color=#fe0000", // [Неуправляемый]            \ Красный
 
                 "color=#c90080", // [Конец атаки решкой] (или Сода) \ Фиолетовый
-
-
-                "color=#f8c200", // Подсветка изменений в ЭГО Даре при улучшении (<style=\"upgradeHighlight\">XXX</style> в англ файле локализации (вполне работает), <color=#f8c200>XXX</color> в существующем переводе)
             };
 
             for (int i = 0; i < parts.Length; i++)
