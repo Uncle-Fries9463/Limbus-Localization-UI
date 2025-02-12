@@ -1,15 +1,18 @@
-﻿using Limbus_Localization_UI.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SixLabors.ImageSharp;
 using System.IO;
+using System.Text;
 using System.Windows.Media;
+using Limbus_Localization_UI.Json;
 using System.Windows.Media.Imaging;
 
 namespace Limbus_Localization_UI.Additions
 {
     internal class РазноеДругое
     {
+        public static Encoding UTF8_BOM = new UTF8Encoding(true);
+
         public static void SetRO(string path)
         {
             var attr = File.GetAttributes(path);
@@ -33,12 +36,12 @@ namespace Limbus_Localization_UI.Additions
             // Образцовое форматирование Json с LF переносом строк и адекватным количеством пробелов
             var ParsedJson = JToken.Parse(String.Join('\n', LineArray));
             var FormattedJson = ParsedJson.ToString(Formatting.Indented).Replace("\r", "");
-            File.WriteAllText(Filepath, FormattedJson);
+            File.WriteAllText(Filepath, FormattedJson, encoding: UTF8_BOM);
         }
 
         public static void SaveJson(JsonData JSON, string Path)
         {                                                                                                              // Что бы не втыкало Name и Desc из ЭГО даров
-            File.WriteAllText(Path, JsonConvert.SerializeObject(JSON, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }).Replace("\r", ""));
+            File.WriteAllText(Path, JsonConvert.SerializeObject(JSON, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }).Replace("\r", ""), encoding: UTF8_BOM);
         }
 
         public static Dictionary<string, string> GetSpriteNames()
