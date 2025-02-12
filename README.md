@@ -6,6 +6,7 @@
 
 ![1](https://github.com/user-attachments/assets/9560be02-fc88-4eb3-bacf-0eaf49d7beab)
 ![Снимок экрана (8320)](https://github.com/user-attachments/assets/5867b42a-146d-4c54-a754-1b4d89f4bacf)
+![image](https://github.com/user-attachments/assets/b941f302-0e3a-4b8e-9b96-e046b34cb016)
 ---
 # Интерфейс
 1. **Ввод пути к .json файлу**
