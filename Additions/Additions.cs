@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SixLabors.ImageSharp;
 using System.IO;
@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Media;
 using Limbus_Localization_UI.Json;
 using System.Windows.Media.Imaging;
+using static Limbus_Localization_UI.Additions.Consola;
 
 namespace Limbus_Localization_UI.Additions
 {
@@ -44,22 +45,28 @@ namespace Limbus_Localization_UI.Additions
             File.WriteAllText(Path, JsonConvert.SerializeObject(JSON, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }).Replace("\r", ""), encoding: UTF8_BOM);
         }
 
-        public static Dictionary<string, string> GetSpriteNames()
+        public static Dictionary<string, string> GetKeywords()
         {
             Dictionary<string, string> SpriteNames = new();
 
-            string[] Lines = File.ReadAllLines(@"Спрайты\$Другое\Bufs.json");
-
-            for (int i = 0; i <= Lines.Count() - 1; i++)
+            int counter = 1;
+            foreach (string KeywordFile in Directory.EnumerateFiles(@"Спрайты\$Другое\BattleKeywords", "*.*", SearchOption.AllDirectories))
             {
-                if (Lines[i].Trim().StartsWith("\"id\": "))
+                string[] Lines = File.ReadAllLines(KeywordFile);
+
+                for (int i = 0; i <= Lines.Count() - 1; i++)
                 {
-                    string SpriteId = Lines[i].Split("\"id\": \"")[1].Split("\",")[0];
-                    string SpriteName = Lines[i+1].Split("\"name\": \"")[1].Split("\",")[0];
-                    SpriteNames[SpriteId] = SpriteName;
+                    if (Lines[i].Trim().StartsWith("\"id\": "))
+                    {
+                        string SpriteId = Lines[i].Split("\"id\": \"")[1].Split("\",")[0];
+                        string SpriteName = Lines[i + 1].Split("\"name\": \"")[1].Split("\",")[0];
+                        SpriteNames[SpriteId] = SpriteName;
+                        counter++;
+                    }
                 }
             }
-            
+
+            rin($"Загружено ключевых слов: {counter}");
             return SpriteNames;
         }
 
@@ -102,7 +109,7 @@ namespace Limbus_Localization_UI.Additions
                     SpriteFiles[image[8..]] = File.ReadAllBytes(image);
                 }
             }
-            Console.WriteLine($"Загружено спрайтов: {SpriteFiles.Keys.Count} ");
+            rin($"Загружено спрайтов: {SpriteFiles.Keys.Count} ");
             return SpriteFiles;
         }
 

@@ -24,6 +24,8 @@ namespace Limbus_Localization_UI.Mode_Handlers
         {
             T["PreviewLayout Background"].Source = new BitmapImage(new Uri("pack://application:,,,/Images/Фон Навыков.png"));
 
+            T["Splitter"].Width = new GridLength(3);
+
             T["Window"].MinHeight = 421; // Минимальная высота и ширина под фон предпросмтора навыка
             T["Window"].MinWidth = 717;
 
@@ -32,8 +34,8 @@ namespace Limbus_Localization_UI.Mode_Handlers
             T["Window"].Width = 1005;    // Ширина и высота по умолчанию
             T["Window"].Height = 545;
 
-            T["JsonIO Column"].Width = new GridLength(702); // Ширина поля предпросмотра и редактора json элемента
-            T["Json EditBox"].Width = 692.2;
+            T["JsonIO Column"].Width = new GridLength(705); // Ширина поля предпросмотра и редактора json элемента
+            T["Json EditBox"].Width = 693.5;
 
             T["PreviewLayout @ EGO Gift"].Margin = new Thickness(5300, 0, 0, 60);  // Скрыть предпросмотр ЭГО дара
             T["PreviewLayout @ Skill"   ].Margin = new Thickness(11, 0, 0, 40);    // Показать предпросмотр Навыка
@@ -51,30 +53,13 @@ namespace Limbus_Localization_UI.Mode_Handlers
             T["EditorSwitch Desc"].Width = 265;
             T["EditorSwitch Desc [UnavalibleCover]"].Width = 265;
 
-            T["SaveChanges SubDesc 1"].Margin = new Thickness(4000, 0, 0, 0);
-            T["SaveChanges SubDesc 1 [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
-            T["EditorSwitch SubDesc 1"].Width = 265;
-            T["EditorSwitch SubDesc 1 [UnavalibleCover]"].Width = 265;
-
-            T["SaveChanges SubDesc 2"].Margin = new Thickness(4000, 0, 0, 0);
-            T["SaveChanges SubDesc 2 [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
-            T["EditorSwitch SubDesc 2"].Width = 265;
-            T["EditorSwitch SubDesc 2 [UnavalibleCover]"].Width = 265;
-
-            T["SaveChanges SubDesc 3"].Margin = new Thickness(4000, 0, 0, 0);
-            T["SaveChanges SubDesc 3 [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
-            T["EditorSwitch SubDesc 3"].Width = 265;
-            T["EditorSwitch SubDesc 3 [UnavalibleCover]"].Width = 265;
-
-            T["SaveChanges SubDesc 4"].Margin = new Thickness(4000, 0, 0, 0);
-            T["SaveChanges SubDesc 4 [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
-            T["EditorSwitch SubDesc 4"].Width = 265;
-            T["EditorSwitch SubDesc 4 [UnavalibleCover]"].Width = 265;
-
-            T["SaveChanges SubDesc 5"].Margin = new Thickness(4000, 0, 0, 0);
-            T["SaveChanges SubDesc 5 [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
-            T["EditorSwitch SubDesc 5"].Width = 265;
-            T["EditorSwitch SubDesc 5 [UnavalibleCover]"].Width = 265;
+            for (int i = 1; i <= 5; i++)
+            {
+                T[$"SaveChanges SubDesc {i}"].Margin = new Thickness(4000, 0, 0, 0);
+                T[$"SaveChanges SubDesc {i} [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
+                T[$"EditorSwitch SubDesc {i}"].Width = 265;
+                T[$"EditorSwitch SubDesc {i} [UnavalibleCover]"].Width = 265;
+            }
 
             T["Unsaved Changes Tooltip"].Width = 190;
 

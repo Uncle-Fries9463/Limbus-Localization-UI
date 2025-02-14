@@ -1,14 +1,18 @@
 <Window x:Name="Limbus_Localization_UI" x:Class="Limbus_Localization_UI.MainWindow"
-	    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	    xmlns:local="clr-namespace:Limbus_Localization_UI"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:local="clr-namespace:Limbus_Localization_UI"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        
+                
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen" 
+        
         
         PreviewKeyDown="Window_PreviewKeyDown"
         PreviewKeyUp="Window_PreviewKeyUp"
-        WindowStartupLocation="CenterScreen"
         Closing="Window_Closing"
         Topmost="True"
         ResizeMode="CanResize"
@@ -17,21 +21,131 @@
         MinHeight="320"
         MinWidth="600"
         MaxWidth="895"
-        Width="895" 
+        Width="895"
         Height="440"
         
-        Title="Limbus Localization UI"> <!--443 height-->
+        Opacity="1" AllowsTransparency="True"
+        
+        Title="Limbus Localization UI">
+    <!--Плавное появление окна и анти флешбенг при WindowStyle="None"-->
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard Name="FormFade">
+                    <DoubleAnimation  Name="FormFadeAnimation"
+                                      Storyboard.TargetProperty="(Window.Opacity)"
+                                      SpeedRatio="4.86"
+                                      From="0.0" To="1.0" Duration="0:0:0:01"
+                                      AutoReverse="False" RepeatBehavior="1x"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
     <Window.Resources>
-        <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">50</sys:Double>
-        <sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">50</sys:Double>
-
-
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Background" Value="#FF191919"/>
+            <Setter Property="BorderBrush" Value="#FF333333"/>
+            <Setter Property="Foreground" Value="#FFEECEA4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Grid.Resources>
+                                <Style x:Key="ToggleButtonStyle1" TargetType="{x:Type ToggleButton}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                <Border x:Name="border" Background="#FF191919" BorderBrush="#FF333333" BorderThickness="3" SnapsToDevicePixels="True">
+                                                    <ContentPresenter x:Name="contentPresenter" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="true">
+                                                        <Setter Property="BorderBrush" TargetName="border" Value="#eebe2d"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Grid.Resources>
+                            <ToggleButton x:Name="SelectedJsonEditorFont"
+                                            Grid.Column="2"
+                                            Focusable="False"
+                                            Foreground="#FFEECEA4"
+                                            Style="{StaticResource ToggleButtonStyle1}"
+                                            IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}"
+                                            BorderThickness="4"
+                                            BorderBrush="#FF333333"
+                                            Background="#FF191919"
+                                            ClickMode="Press">
+                                <ContentPresenter/>
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite"
+                                              IsHitTestVisible="False" 
+                                              Content="{TemplateBinding SelectionBoxItem}" 
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" 
+                                              Margin="9,3,23,3"
+                                              Width="63"
+                                              VerticalAlignment="Center" 
+                                              HorizontalAlignment="Left"
+                                              Panel.ZIndex="1000"/>
+                            <Popup Name="Popup"
+                                   Placement="Bottom" 
+                                   AllowsTransparency="True" 
+                                   Focusable="False" 
+                                   IsOpen="{TemplateBinding IsDropDownOpen}" 
+                                   PopupAnimation="Fade" Width="95.5">
+                                <Border BorderThickness="2" 
+                                        BorderBrush="#FF333333">
+                                    <Grid Name="DropDown" 
+                                          Background="#FF191919">
+                                        <ScrollViewer Margin="0,6,4,6" SnapsToDevicePixels="True" MaxHeight="160" HorizontalScrollBarVisibility="Disabled" FontSize="11">
+                                            <ItemsPresenter Margin="3, 0, 0, 0"/>
+                                            <ScrollViewer.Resources>
+                                                <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
+                                            </ScrollViewer.Resources>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#eecea4"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <Style TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#FF191919"/>
             <Setter Property="Foreground" Value="#EE2D2D"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="#FF333333"/>
-            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontFamily" Value="Bahnschrift Light"/>
             <Setter Property="FontSize" Value="19"/>
             <Setter Property="Foreground" Value="#A69885"/>
             <Setter Property="Template">
@@ -61,7 +175,7 @@
             <Setter Property="Foreground" Value="#EE2D2D"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="#FF333333"/>
-            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontFamily" Value="Bahnschrift Light"/>
             <Setter Property="FontSize" Value="19"/>
             <Setter Property="Foreground" Value="#A69885"/>
             <Setter Property="Template">
@@ -87,7 +201,7 @@
             </Setter>
         </Style>
         <Style x:Key="CascadiaText" TargetType="Paragraph">
-            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontFamily" Value="Bahnschrift Light"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Foreground" Value="#eecea4"/>
         </Style>
@@ -102,7 +216,6 @@
             <Setter Property="Focusable" Value="False"/>
             <Setter Property="Margin" Value="0, 15, 0, 0"/>
         </Style>
-
         <Style x:Key="Skill_CoinDescriptoin" TargetType="RichTextBox">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Background" Value="{x:Null}"/>
@@ -115,1026 +228,1234 @@
             <Setter Property="Margin" Value="7, 15, 0, 0"/>
             <Setter Property="Width" Value="578"/>
         </Style>
-
         <Style x:Key="Skill_CoinIcon" TargetType="Border">
             <Setter Property="Width" Value="45"/>
             <Setter Property="Height" Value="45"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
         </Style>
-
         <Style x:Key="Skill_CoinPanel" TargetType="Border">
             <Setter Property="Width" Value="45"/>
             <Setter Property="Height" Value="45"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
         </Style>
     </Window.Resources>
-    
-    
-    
-    
-    <Grid x:Name="Limbus_Json_Preview" Background="#0F0F0F">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="JsonIO_Column" Width="590"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="1" Grid.Column="1" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
-        <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="1" Grid.Column="0" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
-        <Border x:Name="ExitDialog"
-                Margin="1000"
-                
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Grid.Column="0"
-                Width="360"
-                Height="150"
-                BorderThickness="2"
-                BorderBrush="#FF333333"
-                Background="#FF191919"
-                Panel.ZIndex="1" >
-            <StackPanel>
-                <TextBlock x:Name="CloseEditor_Header"
-                           HorizontalAlignment="Center"
-                           Foreground="#eecea4"
-                           Margin="0, 15, 0, 0"
-                           FontSize="20"
-                           FontFamily="Consolas"
-                           Text="Закрыть редактор?">
-                    <TextBlock.RenderTransform>
-                        <TranslateTransform X="0" Y="0"/>
-                    </TextBlock.RenderTransform>
-                </TextBlock>
-                <StackPanel Height="30">
-                    <RichTextBox IsDocumentEnabled="True"
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+        CaptionHeight="1"
+        CornerRadius="10"
+        GlassFrameThickness="1"/>
+    </WindowChrome.WindowChrome>
+    <Window.Clip>
+        <RectangleGeometry x:Name="NewWindowSizes" Rect="0, 0, 890, 440" RadiusX="5" RadiusY="5"/>
+    </Window.Clip>
+    <Border BorderBrush="Gray" BorderThickness="0.5" Canvas.ZIndex="200">
+        <Grid x:Name="Overall" Background="Black">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Border x:Name="Title" >
+                <Grid Grid.Row="0" Background="#FF141414">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0.2*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 1, 1, 0">
+                        <Button x:Name="Settings" Click="Settings_Click" MouseEnter="Settings_MouseEnter" MouseLeave="Settings_MouseLeave" Width="30" Background="#FF191919" BorderThickness="0">
+                            <Image Width="13" Source="pack://application:,,,/Images/Interface/settings.png"/>
+                        </Button>
+                        <Button x:Name="Minimize" Click="Minimize_Click" MouseEnter="Minimize_MouseEnter" MouseLeave="Minimize_MouseLeave" Width="30" Background="#FF191919" BorderThickness="0">
+                            <TextBlock Margin="0, -8.4, 0, 0"> _</TextBlock>
+                        </Button>
+                        <Button x:Name="WindowMode" Click="WindowMode_Click" MouseEnter="WindowMode_MouseEnter" MouseLeave="WindowMode_MouseLeave" Width="30"  Background="#FF191919" BorderThickness="0" FontSize="18">
+                            <TextBlock Margin="0, 0, 0, 0"> ❏</TextBlock>
+                        </Button>
+                        <Button x:Name="Close" Click="Close_Click" MouseEnter="Close_MouseEnter" MouseLeave="Close_MouseLeave" Width="30" Background="#FF191919" BorderThickness="0" FontSize="25">
+                            <TextBlock Margin="0, -2, 0, 0"> ⤬</TextBlock>
+                        </Button>
+                    </StackPanel>
+                    <Border Grid.Row="0" HorizontalAlignment="Left" Width="30" CornerRadius="5.5" BorderBrush="#FF616161" BorderThickness="1" Margin="-1">
+                        <Border.Clip>
+                            <RectangleGeometry Rect="0, 0, 10, 10" RadiusX="5" RadiusY="5"/>
+                        </Border.Clip>
+                    </Border>
+                    <Border Grid.Column="1" HorizontalAlignment="Right" Width="30" CornerRadius="5.5" BorderBrush="#FF616161" BorderThickness="1" Margin="0, -1, -31, 0">
+                        <Border.Clip>
+                            <RectangleGeometry Rect="0, 0, 10, 10" RadiusX="5" RadiusY="5"/>
+                        </Border.Clip>
+                        <Border.RenderTransform>
+                            <ScaleTransform ScaleX="-1" />
+                        </Border.RenderTransform>
+                    </Border>
+                    <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#FF1D1D1D" FontSize="20" Width="30" HorizontalAlignment="Left" Margin="2, 5, 0, 0" TextAlignment="Center">
+                        ❐
+                    </TextBlock>
+                    <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#FF232323" FontSize="25" Width="385" HorizontalAlignment="Left" Margin="35, 0, 0, 0">
+                        Limbus Localization UI v1.4A
+                    </TextBlock>
+                    <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#4C161616" FontSize="25" Margin="425, 0, 0, 0">фывщхзьй2щвйцвсйцшывхцхххххх</TextBlock>
+                </Grid>
+            </Border>
+            <Border Grid.Row="1" CornerRadius="50">
+                <Grid x:Name="Limbus_Json_Preview" Background="#0F0F0F" Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="1"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="JsonIO_Column" Width="590"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="2" HorizontalAlignment="Right" Width="30" Height="30" VerticalAlignment="Bottom" CornerRadius="5.5" BorderBrush="#FF616161" BorderThickness="1" Margin="0, 0, -1, -2">
+                        <Border.Clip>
+                            <RectangleGeometry Rect="20, 20, 30, 30" RadiusX="5" RadiusY="5"/>
+                        </Border.Clip>
+                        <Border.RenderTransform>
+                            <ScaleTransform />
+                        </Border.RenderTransform>
+                    </Border>
+                    <Border Grid.Column="0" HorizontalAlignment="Left" Width="30" Height="30" VerticalAlignment="Bottom" CornerRadius="5.5" BorderBrush="#FF616161" BorderThickness="1" Margin="-1, 0, 0, -2">
+                        <Border.Clip>
+                            <RectangleGeometry Rect="0, 20, 10, 20" RadiusX="5" RadiusY="5"/>
+                        </Border.Clip>
+                        <Border.RenderTransform>
+                            <ScaleTransform />
+                        </Border.RenderTransform>
+                    </Border>
+                    <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="0" Grid.Column="1" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
+                    <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="0" Grid.Column="0" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
+                    <Border x:Name="SettingsDialog"
+                            Margin="1000"
+                            Background="#FF191919"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Grid.Column="0"
+                            Width="460"
+                            Height="355"
+                            BorderThickness="2"
+                            BorderBrush="#FF333333"
+                            Panel.ZIndex="1">
+                        <StackPanel>
+                            <TextBlock HorizontalAlignment="Center"
+                                       Foreground="#FFD1D1D1"
+                                       Margin="0, 8, 0, 0"
+                                       FontSize="30"
+                                       FontFamily="Bahnschrift Light"
+                                       Text="Настройки">
+                                <TextBlock.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                            <StackPanel Margin="10, -6, 0, 0">
+                                <StackPanel Margin="0, 10, 0, 0" Orientation="Horizontal">
+                                    <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
+                                        ※
+                                    </TextBlock>
+                                    <StackPanel>
+                                        <StackPanel Width="290">
+                                            <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
+                                                Подсвечивать улучшения
+                                            </TextBlock>
+                                            <TextBlock FontFamily="Bahnschrift Light" HorizontalAlignment="Left" FontSize="13" Width="290" Foreground="#FF6F6F6F" TextWrapping="Wrap">
+                                                <TextBlock.Text>
+                                                    Подсвечивать &lt;style&gt; как цвет (Обновите предпросмотр текстовыми данными)
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <Button x:Name="ToggleHighlight" Click="ToggleHighlight_Click" Margin="25, 0, 0, 0" Foreground="#FFB4B4B4" BorderThickness="3" FontSize="28" Height="40" Width="95">
+                                        <TextBlock x:Name="ToggleHighlight_Text" Margin="0, -1, 0, 0" Text="Да" FontFamily="Lucida Console"/>
+                                    </Button>
+                                </StackPanel>
+                                <StackPanel Margin="0, 10, 0, 0" Orientation="Horizontal">
+                                    <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
+                                        ※
+                                    </TextBlock>
+                                    <StackPanel>
+                                        <StackPanel Width="290">
+                                            <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
+                                                Шрифт json редактора
+                                            </TextBlock>
+                                            <TextBlock FontFamily="Bahnschrift Light" HorizontalAlignment="Left" FontSize="13" Width="290" Foreground="#FF6F6F6F" TextWrapping="Wrap">
+                                                <TextBlock.Text>
+                                                    Шрифт поля редактирования текущего Json элемента
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <ComboBox x:Name="FontSelector" SelectionChanged="FontSelector_SelectionChanged" Margin="25, 0, 0, 0" Height="40" Width="95">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Text}" FontFamily="{Binding FontFamily}" />
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Border Height="34" Width="89" Margin="-95, 0, 0, 0" IsHitTestVisible="False" Background="#FF191919">
+                                        <Label x:Name="FontLabel" Foreground="#FFB4B4B4" FontSize="14" VerticalAlignment="Center" FontFamily="Lucida Sans Unicode">Lucida Sans Unicode</Label>
+                                    </Border>
+                                </StackPanel>
+                                <StackPanel Margin="0, 10, 0, 0" Orientation="Horizontal">
+                                    <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
+        ※
+                                    </TextBlock>
+                                    <StackPanel>
+                                        <StackPanel Width="290">
+                                            <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
+                                                Цвет json редактора
+                                            </TextBlock>
+                                            <TextBlock FontFamily="Bahnschrift Light" HorizontalAlignment="Left" FontSize="13" Width="290" Foreground="#FF6F6F6F" TextWrapping="Wrap">
+                                                <TextBlock.Text>
+                                                    Цвет текста поля редактирования текущего Json элемента (В hex RGB формате)
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <Border Margin="25, 0, 0, 0" Height="40" Width="95" BorderThickness="3" BorderBrush="#FF333333">
+                                        <TextBox x:Name="JsonEditor_ColorSelector"
+                                                 Margin="0, -1, 0, 0"
+                                                 TextChanged="JsonEditor_ColorSelector_TextChanged"
+                                                 FontSize="22"
+                                                 Height="30"
+                                                 FontFamily="Consolas"
+                                                 MaxLength="7"
+                                                 HorizontalContentAlignment="Center"
+                                                 VerticalContentAlignment="Center"
+                                                 Background="#FF191919"
+                                                 BorderThickness="0"
+                                                 Foreground="#FFB4B4B4"
+                                                 SelectionBrush="#B2B4B4B4">
+                                            #A69885
+                                        </TextBox>
+                                    </Border>
+                                </StackPanel>
+                                <StackPanel Margin="0, 10, 0, 0" Orientation="Horizontal">
+                                    <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
+                                        ※
+                                    </TextBlock>
+                                    <StackPanel>
+                                        <StackPanel Width="290">
+                                            <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
+                                                Язык программы
+                                            </TextBlock>
+                                            <TextBlock FontFamily="Bahnschrift Light" HorizontalAlignment="Left" FontSize="13" Width="290" Foreground="#FF6F6F6F" TextWrapping="Wrap">
+                                                <TextBlock.Text>
+                                                    Таких обстоятельств на данный момент ещё не произошло
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <Button x:Name="Lang" Margin="25, 0, 0, 0" Foreground="#FFB4B4B4" BorderThickness="3" BorderBrush="#FF5E5E5E" FontSize="28" Height="40" Width="95">
+                                        <TextBlock Margin="0, 0, 0, 0" Text="RU"/>
+                                    </Button>
+                                    <Border  Margin="-95, 0, 0, 0" Height="40" Width="95" Background="#7F000000"/>
+                                </StackPanel>
+                                <Button Click="Settings_OK" Width="100" Height="35" Margin="0, 0, 0, 0" Content="OK"></Button>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border.RenderTransform>
+                            <TranslateTransform X="250" Y="-10" />
+                        </Border.RenderTransform>
+                    </Border>
+                    <Border x:Name="ExitDialog"
+                            Margin="1000"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Grid.Column="0"
+                            Width="360"
+                            Height="150"
+                            BorderThickness="2"
+                            BorderBrush="#FF333333"
+                            Background="#FF191919"
+                            Panel.ZIndex="1" >
+                        <StackPanel>
+                            <TextBlock x:Name="CloseEditor_Header"
+                                       HorizontalAlignment="Center"
+                                       Foreground="#eecea4"
+                                       Margin="0, 15, 0, 0"
+                                       FontSize="20"
+                                       FontFamily="Bahnschrift Light"
+                                       Text="Закрыть редактор?">
+                                <TextBlock.RenderTransform>
+                                    <TranslateTransform X="0" Y="0"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                            <StackPanel Height="30">
+                                <RichTextBox IsDocumentEnabled="True"
+                                             BorderThickness="0"
+                                             Background="{x:Null}"
+                                             HorizontalAlignment="Center"
+                                             Margin="0, 15, 0, 0"
+                                             ToolTipService.InitialShowDelay="0">
+                                    <FlowDocument>
+                                        <Paragraph TextAlignment="Center" Foreground="#eecea4" FontSize="14" FontFamily="Bahnschrift Light">
+                                            <Run>
+                                                Изменений не сохранено:
+                                            </Run>
+                                            <Run Foreground="AliceBlue" ToolTipService.InitialShowDelay="0" x:Name="UnsavedChangesCount">
+                                                <Run.ToolTip>
+                                                    <ToolTip x:Name="UnsavedChangesTooltip"
+                                                             Background="#895B5B5B"
+                                                             BorderThickness="2"
+                                                             HasDropShadow="False"
+                                                             Placement="MousePoint"
+                                                             Width="185"
+                                                             Height="Auto"
+                                                             HorizontalOffset="15"
+                                                             VerticalOffset="10">
+                                                        <RichTextBox Background="{x:Null}" BorderThickness="0">
+                                                            <FlowDocument>
+                                                                <Paragraph Style="{StaticResource CascadiaText}" FontSize="12" Foreground="#C3C3C3">
+                                                                    <Run x:Name="UnsavedChangesTooltip_Text" Text="newe\ns" BaselineAlignment="TextTop"/>
+                                                                </Paragraph>
+                                                            </FlowDocument>
+                                                        </RichTextBox>
+                                                    </ToolTip>
+                                                </Run.ToolTip>
+                                            </Run>
+                                        </Paragraph>
+                                    </FlowDocument>
+                                </RichTextBox>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0, 20, 0, 0" Height="40" Width="310">
+                                <StackPanel Width="155">
+                                    <Button Click="Exit_Yes"
+                                            HorizontalAlignment="Left" 
+                                            Style="{StaticResource ExitButtons}"
+                                            Margin="3"
+                                            Width="150"
+                                            Height="35"
+                                            BorderThickness="4"
+                                            Content="Да"/>
+                                </StackPanel>
+                                <StackPanel Width="155">
+                                    <Button Click="Exit_No"
+                                            HorizontalAlignment="Right" 
+                                            Style="{StaticResource ExitButtons}"
+                                            Margin="3"
+                                            Width="150"
+                                            Height="35"
+                                            BorderThickness="4"
+                                            Content="Нет"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border.RenderTransform>
+                            <TranslateTransform X="300" Y="0" />
+                        </Border.RenderTransform>
+                    </Border>
+                    <TextBox x:Name="JsonEditor"
+                             BorderThickness="0"
+                             TextChanged="Json_EditBox_TextChanged"
+                             TextWrapping="Wrap"
+                             Grid.Row="0"
+                             VerticalAlignment="Top"
+                             HorizontalAlignment="Left"
+                             Width="575"
+                             Height="133"
+                             Margin="5"
+                             FontFamily="Lucida Sans Unicode"
+                             FontWeight="Bold"
+                             FontSize="12.8"
+                             Foreground="#A69885"
+                             Background="#FF191919" UndoLimit="100500"/>
+                    <Image x:Name="PreviewLayout_BackgroundImage" Source="Images/Фон ЭГО даров.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="-1"/>
+                    <RichTextBox x:Name="PreviewLayout_EGOgift"
+                                 IsReadOnly="True"
+                                 Focusable="False"
                                  BorderThickness="0"
+                                 Foreground="#EACAA0"
+                                 FontFamily="Arial"
+                                 FontSize="21"
                                  Background="{x:Null}"
-                                 HorizontalAlignment="Center"
-                                 Margin="0, 15, 0, 0"
-                                 ToolTipService.InitialShowDelay="0">
-                        <FlowDocument>
-                            <Paragraph TextAlignment="Center" Foreground="#eecea4" FontSize="14" FontFamily="Consolas">
-                                <Run>
-                                    Изменений не сохранено:
-                                </Run>
-                                <Run Foreground="AliceBlue" ToolTipService.InitialShowDelay="0" x:Name="UnsavedChangesCount">
-                                    <Run.ToolTip>
-                                        <ToolTip x:Name="UnsavedChangesTooltip"
+                                 Grid.Row="0"
+                                 VerticalAlignment="Bottom"
+                                 HorizontalAlignment="Left"
+                                 Margin="53, 0, 0, 60"
+                                 Width="480" 
+                                 Height="180"
+                                 Cursor="Pen"/>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1" x:Name="Splitter"/>
+                            <ColumnDefinition          />
+                            <ColumnDefinition Width="5"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="140"/>
+                            <RowDefinition             />
+                            <RowDefinition Height="10" />
+                        </Grid.RowDefinitions>
+                        <Border Grid.Column="1"
+                                Grid.Row="1"
+                                Height="29"
+                                Width="241"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                BorderThickness="2"
+                                BorderBrush="#FF333333">
+                            <TextBox x:Name="JsonFilepath"
+                                     Grid.Column="1" 
+                                     Grid.Row="1" 
+                                     VerticalAlignment="Top"
+                                     HorizontalAlignment="Left"
+                                     TextChanged="JsonPath_TextChanged"
+                      
+                                     Width="237"
+                                     Height="25"
+                      
+                                     TextAlignment="Left"
+                     
+                                     BorderThickness="0"
+                     
+                                     Foreground="#A69885"
+                                     Background="#E9191919"
+                     
+                                     SelectionBrush="#FF939393"
+                                     SelectionTextBrush="#A69885"
+                                     CaretBrush="#A69885"
+                           
+                                     FontFamily="Bahnschrift Light"
+                                     FontSize="19"/>
+                        </Border>
+                        <Label x:Name="JsonFilepath_bgtext"
+                               FontStyle="Italic"
+                               Grid.Column="1" 
+                               Grid.Row="1" 
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Left"
+                               IsHitTestVisible="False"
+                               Background="{x:Null}"
+                               Margin="0, -2, 0, 0"
+                               Height="35" 
+                               Width="238"
+               
+                               Focusable="False"
+               
+                               FontFamily="Bahnschrift Light"
+                               FontSize="19"
+                               Foreground="#FF514C46"
+               
+                               Content="Путь к Json файлу"/>
+                        <Border Grid.Column="1"
+                                Grid.Row="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Height="29"
+                                Width="29"
+                                Background="#E9191919"
+                                Margin="246, 0, 0, 0"
+                                ToolTipService.InitialShowDelay="0">
+                            <Button x:Name="JsonFile_SelectFile_Button"
+                                    Click="JsonFile_SelectFile"
+                                    Width="29"
+                                    Foreground="#C3C3C3"
+                                    FontFamily="Wingdings"
+                                    FontWeight="Bold"
+                                    FontSize="18"
+                                    Height="29">
+                                <Button.Content>
+                                    <TextBlock Margin="-0.4, -2, 0, 0">
+                                        1
+                                        <TextBlock.RenderTransform>
+                                            <ScaleTransform ScaleX="1" ScaleY="1.2"/>
+                                        </TextBlock.RenderTransform>
+                                    </TextBlock>
+                                </Button.Content>
+                                <Button.ToolTip>
+                                    <ToolTip x:Name="LoadJson_Tooltip"
+                                             Background="#895B5B5B"
+                                             Foreground="White"
+                                             HasDropShadow="False"
+                                             Placement="MousePoint"
+                                             HorizontalOffset="15"
+                                             VerticalOffset="10">
+                                        <StackPanel>
+                                            <TextBlock>Выбрать файл в проводнике</TextBlock>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+                        </Border>
+                        <StackPanel Grid.Column="1"
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Margin="0, 60, 0, 0"
+                                    Width="275"
+                                    Height="82"
+                                    Focusable="False">
+                            <Border BorderThickness="1.8"
+                                    BorderBrush="#eebe2d"
+                                    CornerRadius="3"
+                                    Height="40">
+                                <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                              VerticalAlignment="Center">
+                                    <RichTextBox Background="{x:Null}"
+                                                 IsReadOnly="True"
+                                                 Focusable="False"
+                                                 BorderThickness="0">
+                                        <FlowDocument>
+                                            <Paragraph TextAlignment="Center">
+                                                <Run x:Name="Name_Label"
+                                                     Text="Название"
+                                                     FontFamily="pack://application:,,,/Fonts/Mikodacs/#Mikodacs"
+                                                     Foreground="#eecea4"
+                                                     FontSize="20.5"/>
+                                            </Paragraph>
+                                        </FlowDocument>
+                                    </RichTextBox>
+                                </ScrollViewer>
+                            </Border>
+                            <StackPanel Orientation="Horizontal" Height="42" Margin="0, 6, 0, 0">
+                                <Border Height="29"
+                                        Width="241"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        BorderThickness="2"
+                                        BorderBrush="#FF333333">
+                                    <TextBox x:Name="JumpToID_Input"
+                                             VerticalAlignment="Top"
+                                             HorizontalAlignment="Left"
+                                             TextChanged="JumpToID_Input_TextChanged"
+          
+                                             Width="239"
+                                             Height="27"
+          
+                                             TextAlignment="Left"
+         
+                                             BorderThickness="0"
+         
+                                             Foreground="#A69885"
+                                             Background="#E9191919"
+         
+                                             SelectionBrush="#FF939393"
+                                             SelectionTextBrush="#A69885"
+                                             CaretBrush="#A69885"
+               
+                                             FontFamily="Bahnschrift Light"
+                                             FontSize="19"/>
+                                </Border>
+                                <Label x:Name="JumpToID_bgtext"
+                                       FontStyle="Italic"
+                                       VerticalAlignment="Top"
+                                       HorizontalAlignment="Left"
+                                       IsHitTestVisible="False"
+                                       Background="{x:Null}"
+                                       Margin="-242, -2, 0, 0"
+                                       Height="35" 
+                                       Width="238"
+   
+                                       Focusable="False"
+   
+                                       FontFamily="Bahnschrift Light"
+                                       FontSize="19"
+                                       Foreground="#FF514C46"
+   
+                                       Content="Перейти к ID.."/>
+                                <Button x:Name="ID_JumpTo"
+                                        
+                                        Click="JumpToID_Button_Click"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        Margin="5, 0, 0, 0"
+                                        Width="29"
+                                        Height="29"
+                                        ToolTipService.InitialShowDelay="0">
+                                    <Button.Content>
+                                        <Image Width="27" Height="30" Source="pack://application:,,,/Images/Interface/free_icon_book_14095035.png" Margin="-3, -2.5, 0, 0"/>
+                                    </Button.Content>
+                                    <Button.ToolTip>
+                                        <ToolTip x:Name="s3"
                                                  Background="#895B5B5B"
-                                                 BorderThickness="2"
+                                                 Foreground="White"
                                                  HasDropShadow="False"
                                                  Placement="MousePoint"
-                                                 Width="185"
-                                                 Height="Auto"
                                                  HorizontalOffset="15"
-                                                 VerticalOffset="10">
-                                            <RichTextBox Background="{x:Null}" BorderThickness="0">
-                                                <FlowDocument>
-                                                    <Paragraph Style="{StaticResource CascadiaText}" FontSize="12" Foreground="#C3C3C3">
-                                                        <Run x:Name="UnsavedChangesTooltip_Text" Text="newe\ns" BaselineAlignment="TextTop"/>
-                                                    </Paragraph>
-                                                </FlowDocument>
-                                            </RichTextBox>
+                                                 VerticalOffset="10" >
+                                            <StackPanel>
+                                                <TextBlock x:Name="s2">Перейти к объекту через ID</TextBlock>
+                                            </StackPanel>
                                         </ToolTip>
-                                    </Run.ToolTip>
-                                </Run>
-                            </Paragraph>
-                        </FlowDocument>
-                    </RichTextBox>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0, 20, 0, 0" Height="40" Width="310">
-                    <StackPanel Width="155">
-                        <Button Click="Exit_Yes"
-                                HorizontalAlignment="Left" 
-                                Style="{StaticResource ExitButtons}"
-                                Margin="3"
-                                Width="150"
-                                Height="35"
-                                BorderThickness="4"
-                                Content="Да"></Button>
-                    </StackPanel>
-                    <StackPanel Width="155">
-                        <Button Click="Exit_No"
-                                HorizontalAlignment="Right" 
-                                Style="{StaticResource ExitButtons}"
-                                Margin="3"
-                                Width="150"
-                                Height="35"
-                                BorderThickness="4"
-                                Content="Нет"></Button>
-                    </StackPanel>
-                </StackPanel>
-            </StackPanel>
-            <Border.RenderTransform>
-                <TranslateTransform X="300" Y="0" />
-            </Border.RenderTransform>
-        </Border>
-        <TextBox x:Name="JsonEditor"
-                 BorderThickness="0"
-                 TextChanged="Json_EditBox_TextChanged"
-                 TextWrapping="Wrap"
-                 Grid.Row="0"
-                 VerticalAlignment="Top"
-                 HorizontalAlignment="Left"
-                 Width="580"
-                 Height="133"
-                 Margin="5"
-                 FontFamily="Lucida Sans Unicode"
-                 FontWeight="Bold"
-                 FontSize="12.8"
-                 Foreground="#A69885"
-                 Background="#FF191919" UndoLimit="100500"/>
-        <Image x:Name="PreviewLayout_BackgroundImage" Source="Images/Фон ЭГО даров.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-        <RichTextBox x:Name="PreviewLayout_EGOgift"
-                     IsReadOnly="True"
-                     Focusable="False"
-                     BorderThickness="0"
-                     Foreground="#EACAA0"
-                     FontFamily="Arial"
-                     FontSize="21"
-                     Background="{x:Null}"
-                     Grid.Row="1"
-                     VerticalAlignment="Bottom"
-                     HorizontalAlignment="Left"
-                     Margin="53, 0, 0, 60"
-                     Width="480" 
-                     Height="180"
-                     Cursor="Pen"/>
-        <Grid Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition          />
-                <ColumnDefinition Width="5"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="10" />
-                <RowDefinition Height="140"/>
-                <RowDefinition             />
-                <RowDefinition Height="10" />
-            </Grid.RowDefinitions>
-            <Border Grid.Column="1"
-                    Grid.Row="1"
-                    Height="29"
-                    Width="241"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    BorderThickness="2"
-                    BorderBrush="#FF333333">
-                <TextBox x:Name="JsonFilepath"
-                         Grid.Column="1" 
-                         Grid.Row="1" 
-                         VerticalAlignment="Top"
-                         HorizontalAlignment="Left"
-                         TextChanged="JsonPath_TextChanged"
-                          
-                         Width="237"
-                         Height="25"
-                          
-                         TextAlignment="Left"
-                         
-                         BorderThickness="0"
-                         
-                         Foreground="#A69885"
-                         Background="#E9191919"
-                         
-                         SelectionBrush="#FF939393"
-                         SelectionTextBrush="#A69885"
-                         CaretBrush="#A69885"
-                               
-                         FontFamily="Consolas"
-                         FontSize="19"></TextBox>
-            </Border>
-            
-            <Label x:Name="JsonFilepath_bgtext"
-                   FontStyle="Italic"
-                   Grid.Column="1" 
-                   Grid.Row="1" 
-                   VerticalAlignment="Top"
-                   HorizontalAlignment="Left"
-                   IsHitTestVisible="False"
-                   Background="{x:Null}"
-                   Margin="0, -2, 0, 0"
-                   Height="35" 
-                   Width="238"
-                   
-                   Focusable="False"
-                   
-                   FontFamily="Consolas"
-                   FontSize="19"
-                   Foreground="#FF514C46"
-                   
-                   Content="Путь к Json файлу"></Label>
-
-            <Border Grid.Column="1"
-                    Grid.Row="1"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Height="29"
-                    Width="29"
-                    Background="#E9191919"
-                    Margin="246, 0, 0, 0"
-                    ToolTipService.InitialShowDelay="0">
-                <Button x:Name="JsonFile_SelectFile_Button"
-                        Click="JsonFile_SelectFile"
-                        Width="29"
-                        Height="29">
-                    <Button.ToolTip>
-                        <ToolTip x:Name="LoadJson_Tooltip"
-                                 Background="#895B5B5B"
-                                 Foreground="White"
-                                 HasDropShadow="False"
-                                 Placement="MousePoint"
-                                 HorizontalOffset="15"
-                                 VerticalOffset="10">
-                            <StackPanel>
-                                <TextBlock>Выбрать файл в проводнике</TextBlock>
+                                    </Button.ToolTip>
+                                </Button>
                             </StackPanel>
-                        </ToolTip>
-                    </Button.ToolTip>
-                </Button>
-            </Border>
-            <StackPanel Grid.Column="1"
-                        Grid.Row="1"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Margin="0, 60, 0, 0"
-                        Width="275"
-                        Height="82"
-                        Focusable="False">
-                <Border BorderThickness="1.8"
-                        BorderBrush="#eebe2d"
-                        CornerRadius="3"
-                        Height="40">
-                    <ScrollViewer
-                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        VerticalAlignment="Center">
-                        <RichTextBox Background="{x:Null}"
-                                     IsReadOnly="True"
-                                     Focusable="False"
-                                     BorderThickness="0">
-                            <FlowDocument>
-                                <Paragraph TextAlignment="Center">
-                                    <Run x:Name="Name_Label"
-                                         Text="Название"
-                                         FontFamily="./#Mikodacs"
-                                         Foreground="#eecea4"
-                                         FontSize="20.5"></Run>
-                                </Paragraph>
-                            </FlowDocument>
-                        </RichTextBox>
-                    </ScrollViewer>
-                </Border>
-                <StackPanel Orientation="Horizontal" Height="42" Margin="0, 6, 0, 0">
-                    <Border Height="29"
-                            Width="241"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            BorderThickness="2"
-                            BorderBrush="#FF333333">
-                        <TextBox x:Name="JumpToID_Input"
-                                 VerticalAlignment="Top"
-                                 HorizontalAlignment="Left"
-                                 TextChanged="JumpToID_Input_TextChanged"
-              
-                                 Width="239"
-                                 Height="27"
-              
-                                 TextAlignment="Left"
-             
-                                 BorderThickness="0"
-             
-                                 Foreground="#A69885"
-                                 Background="#E9191919"
-             
-                                 SelectionBrush="#FF939393"
-                                 SelectionTextBrush="#A69885"
-                                 CaretBrush="#A69885"
-                   
-                                 FontFamily="Consolas"
-                                 FontSize="19"/>
-                    </Border>
-                    <Label x:Name="JumpToID_bgtext"
-                           FontStyle="Italic"
-                           VerticalAlignment="Top"
-                           HorizontalAlignment="Left"
-                           IsHitTestVisible="False"
-                           Background="{x:Null}"
-                           Margin="-242, -2, 0, 0"
-                           Height="35" 
-                           Width="238"
-       
-                           Focusable="False"
-       
-                           FontFamily="Consolas"
-                           FontSize="19"
-                           Foreground="#FF514C46"
-       
-                           Content="Перейти к ID.."></Label>
-                    <Button x:Name="ID_JumpTo"
-                            Click="JumpToID_Button_Click"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Margin="5, 0, 0, 0"
-                            Width="29"
-                            Height="29"
-                            ToolTipService.InitialShowDelay="0">
-                        <Button.ToolTip>
-                            <ToolTip x:Name="s3"
-                                     Background="#895B5B5B"
-                                     Foreground="White"
-                                     HasDropShadow="False"
-                                     Placement="MousePoint"
-                                     HorizontalOffset="15"
-                                     VerticalOffset="10" >
-                                <StackPanel>
-                                    <TextBlock x:Name="s2">Перейти к объекту через ID</TextBlock>
-                                </StackPanel>
-                            </ToolTip>
-                        </Button.ToolTip>
-                    </Button>
-                </StackPanel>
-                <Border Height="2" Margin="0, -1, 0, 0" Background="#eecea4"/>
-            </StackPanel>
-
-            <Border x:Name="Skill_UptieLevel_Selection_Box"
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    Width="276"
-                    Height="0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top">
-                <StackPanel>
-                    <Image x:Name="SkillTierBox_Background" Source="Images\UptieLevels\Фон уровней связи.png"/>
-                    
-                    <Button x:Name="UptieLevel1_Button"   Click="UptieLevel1_Button_Click" Background="#00191919" Margin="110.7, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel1_Button_MouseEnter" MouseLeave="UptieLevel1_Button_MouseLeave"/>
-                    <Border x:Name="UptieLevel1_Cover"    Margin="110.7, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
-                    <Border x:Name="UptieLevel1_SubCover" Margin="115, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
-
-                    <Button x:Name="UptieLevel2_Button"   Click="UptieLevel2_Button_Click" Background="#00191919" Margin="151, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel2_Button_MouseEnter" MouseLeave="UptieLevel2_Button_MouseLeave"/>
-                    <Border x:Name="UptieLevel2_Cover"    Margin="151, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
-                    <Border x:Name="UptieLevel2_SubCover" Margin="155, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
-
-
-                    <Button x:Name="UptieLevel3_Button"   Click="UptieLevel3_Button_Click" Background="#00191919" Margin="191, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel3_Button_MouseEnter" MouseLeave="UptieLevel3_Button_MouseLeave"/>
-                    <Border x:Name="UptieLevel3_Cover"    Margin="191, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
-                    <Border x:Name="UptieLevel3_SubCover" Margin="195.5, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
-
-
-                    <Button x:Name="UptieLevel4_Button"   Click="UptieLevel4_Button_Click" Background="#00191919" Margin="231.3, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel4_Button_MouseEnter" MouseLeave="UptieLevel4_Button_MouseLeave"/>
-                    <Border x:Name="UptieLevel4_Cover"    Margin="231.3, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
-                    <Border x:Name="UptieLevel4_SubCover" Margin="235.4, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
-                </StackPanel>
-            </Border>
-
-            <Border x:Name="ID_SwitchPrev_Cover"
-                    Background="#7F000000"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Width="70"
-                    Height="16"
-                    Margin="0, 39, 0, 0"
-                    HorizontalAlignment="Left"
-                    Panel.ZIndex="1"
-                    VerticalAlignment="Top"/>
-            <Border x:Name="ID_SwitchNext_Cover"
-                    Background="#7F000000"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Width="70"
-                    Height="16"
-                    Margin="204, 39, 0, 0"
-                    HorizontalAlignment="Left"
-                    Panel.ZIndex="1"
-                    VerticalAlignment="Top"/>
-            <Button x:Name="ID_SwitchPrev"
-                    Click="ID_SwitchPrev_Click"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Width="70"
-                    Height="16"
-                    Margin="0, 39, 0, 0"
-                    BorderThickness="1"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Stretch"/>
-            <Button x:Name="ID_SwitchNext"
-                    Click="ID_SwitchNext_Click"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Width="70"
-                    Height="16"
-                    Margin="204, 39, 0, 0"
-                    BorderThickness="1"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Stretch"/>
-            <Border Grid.Row="1"
-                    Grid.Column="1"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Width="115"
-                    Height="16"
-                    Background="#FF191919"
-                    BorderThickness="1"
-                    Margin="80, 39, 0, 0"
-                    BorderBrush="#FF333333">
-                <Button x:Name="ID_Copy_Button"
-                        Click="ID_Copy"
-                        Background="{x:Null}"
-                        Content="ID"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Width="113"
-                        Height="16"
-                        BorderThickness="0"
-                        Margin="0, -2, 0, 0"
-                        FontFamily="Consolas"
-                        FontSize="13"
-                        Foreground="#FF7C746B"
-                        Panel.ZIndex="1"
-                        HorizontalContentAlignment="Stretch"
-                        ToolTipService.InitialShowDelay="0">
-                    <Button.ToolTip>
-                        <ToolTip Background="#895B5B5B"
-                                 Foreground="White"
-                                 HasDropShadow="False"
-                                 Placement="MousePoint"
-                                 HorizontalOffset="15"
-                                 VerticalOffset="10">
-                            <StackPanel>
-                                <TextBlock>Копировать ID</TextBlock>
-                            </StackPanel>
-                        </ToolTip>
-                    </Button.ToolTip>
-                </Button>
-            </Border>
-            <Border x:Name="LeftMenu_Box"
-                    Grid.Column="1" 
-                    Grid.Row="2"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Width="276"
-                    BorderBrush="#FF4B4B4B" 
-                    BorderThickness="2" 
-                    CornerRadius="3">
-                <ScrollViewer x:Name="LeftMenuContent" Margin="3, 3, 0, 0" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-                        <Border x:Name="CurrentHighlight"
-                                Width="8"
-                                Height="26"
-                                Background="#FFD1CDC5"
-                                Panel.ZIndex="1"
-                                HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                                Margin="0, -40, 0, 0">
-                            <Border.RenderTransform>
-                                <TranslateTransform X="1000" Y="1000"/>
-                            </Border.RenderTransform>
-                        </Border>
-                        <StackPanel Margin="-2.5, 0, 0, 0"
-                                    HorizontalAlignment="Left">
-                            <Border BorderBrush="#FF414141"
-                                    BorderThickness="2"
-                                    Width="232.5"
-                                    Margin="2.5, 0, 0, 0"
-                                    Height="29">
-                                <TextBox x:Name="Name_EditBox"
-                                         HorizontalAlignment="Left"
-                                         TextChanged="Name_EditBox_TextChanged"
-         
-                                         Height="25" 
-                                         Width="228.5"
-                                         TextAlignment="Left"
-         
-                                         BorderThickness="0"
-         
-                                         Background="#E9191919"
-         
-                                         Foreground="#A69885"
-                                         SelectionBrush="#FF939393"
-                                         SelectionTextBrush="#A69885"
-                                         CaretBrush="#A69885"
-                   
-                                         FontFamily="Consolas"
-                                         FontSize="19"/>
-                            </Border>
-                            <Border x:Name="Name_ChangeNameInput_Cover"
-                                    Background="#7F000000"
-                                    Margin="2.5, -30, 0, 0"
-                                    Width="232.5"
-                                    Height="30"
-                                    Focusable="False"
-                                    HorizontalAlignment="Left"/>
-                            <Label x:Name="Name_Label_bgtext"
-                                   FontStyle="Italic"
-                                   VerticalAlignment="Top"
-                                   HorizontalAlignment="Left"
-                                   IsHitTestVisible="False"
-                                   Background="{x:Null}"
-                                   Margin="5, -31, 0, 0"
-                                   Height="35" 
-                                   Width="228"
-       
-                                   Focusable="False"
-       
-                                   FontFamily="Consolas"
-                                   FontSize="19"
-                                   Foreground="#FF514C46"
-       
-                                   Content="Название ЭГО Дара"/>
+                            <Border Height="2" Margin="0, -1, 0, 0" Background="#eecea4"/>
                         </StackPanel>
-                        
-                        <Button x:Name="SwitchEditorTo_Desc"
-                                Click="SwitchEditorTo_Desc_Button"
-                                Content="Описание"
-                                Margin="0, 0, 0, 0"
-                                Width="232.5"
-                                Height="30"
-                                HorizontalAlignment="Left"
-                                Background="#FF191919"
-                                BorderThickness="2"
-                                BorderBrush="#FF414141"
-                                FontFamily="Consolas"
-                                FontSize="19"
-                                Foreground="#A69885">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border x:Name="border"
-                                                        Background="{TemplateBinding Background}"
-                                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                                        BorderThickness="{TemplateBinding BorderThickness}">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Border x:Name="Desc_Cover"
-                                Background="#7F000000"
-                                Margin="0, -30, 0, 0"
-                                Width="232.5"
-                                Height="30"
-                                Focusable="False"
-                                HorizontalAlignment="Left"/>
-                        <Button x:Name="SwitchEditorTo_SubDesc1"
-                                Click="SwitchEditorTo_SubDesc1_Button"
-                                Width="232.5"
-                                Height="30"
-                                Margin="0, 4, 0, 0"
-                                HorizontalAlignment="Left"
-                                Content="Простое описание 1"
-                                Background="#FF191919"
-                                BorderThickness="2"
-                                BorderBrush="#FF414141"
-                                FontFamily="Consolas"
-                                FontSize="19"
-                                Foreground="#A69885">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border x:Name="border"
-                                                            Background="{TemplateBinding Background}"
-                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                            BorderThickness="{TemplateBinding BorderThickness}">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Border x:Name="SubDesc1_Cover"
-                                    Background="#7F000000"
-                                    Margin="0, -30, 0, 0"
-                                    Width="232.5"
-                                    Height="30"
-                                    Focusable="False"
-                                    HorizontalAlignment="Left"/>
-                        <Button x:Name="SwitchEditorTo_SubDesc2"
-                                    Click="SwitchEditorTo_SubDesc2_Button"
-                                    Width="232.5"
-                                    Height="30"
-                                    Margin="0, 4, 0, 0"
-                                    HorizontalAlignment="Left"
-                                    Content="Простое описание 2"
-                                    Background="#FF191919"
-                                    BorderThickness="2"
-                                    BorderBrush="#FF414141"
-                                    FontFamily="Consolas"
-                                    FontSize="19"
-                                    Foreground="#A69885">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border x:Name="border"
-                                                            Background="{TemplateBinding Background}"
-                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                            BorderThickness="{TemplateBinding BorderThickness}">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Border x:Name="SubDesc2_Cover"
-                                Background="#7F000000"
-                                Margin="0, -30, 0, 0"
-                                Width="232.5"
-                                Height="30"
-                                Focusable="False"
-                                HorizontalAlignment="Left"/>
-                        <Button x:Name="SwitchEditorTo_SubDesc3"
-                                Click="SwitchEditorTo_SubDesc3_Button"
-                                Width="232.5"
-                                Height="30"
-                                Margin="0, 4, 0, 0"
-                                HorizontalAlignment="Left"
-                                Content="Простое описание 3"
-                                Background="#FF191919"
-                                BorderThickness="2"
-                                BorderBrush="#FF414141"
-                                FontFamily="Consolas"
-                                FontSize="19"
-                                Foreground="#A69885">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border x:Name="border"
-                                                            Background="{TemplateBinding Background}"
-                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                            BorderThickness="{TemplateBinding BorderThickness}">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Border x:Name="SubDesc3_Cover"
-                                Background="#7F000000"
-                                Margin="0, -30, 0, 0"
-                                Width="232.5"
-                                Height="30"
-                                Focusable="False"
-                                HorizontalAlignment="Left"/>
-                        <Button x:Name="SwitchEditorTo_SubDesc4"
-                                Click="SwitchEditorTo_SubDesc4_Button"
-                                Width="232.5"
-                                Height="30"
-                                Margin="0, 4, 0, 0"
-                                HorizontalAlignment="Left"
-                                Content="Простое описание 4"
-                                Background="#FF191919"
-                                BorderThickness="2"
-                                BorderBrush="#FF414141"
-                                FontFamily="Consolas"
-                                FontSize="19"
-                                Foreground="#A69885">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border x:Name="border"
-                                                                Background="{TemplateBinding Background}"
-                                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                                BorderThickness="{TemplateBinding BorderThickness}">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Border x:Name="SubDesc4_Cover"
-                                Background="#7F000000"
-                                Margin="0, -30, 0, 0"
-                                Width="232.5"
-                                Height="30"
-                                Focusable="False"
-                                HorizontalAlignment="Left"/>
-                        <Button x:Name="SwitchEditorTo_SubDesc5"
-                                Click="SwitchEditorTo_SubDesc5_Button"
-                                Width="232.5"
-                                Height="30"
-                                Margin="0, 4, 0, 0"
-                                HorizontalAlignment="Left"
-                                Content="Простое описание 5"
-                                Background="#FF191919"
-                                BorderThickness="2"
-                                BorderBrush="#FF414141"
-                                FontFamily="Consolas"
-                                FontSize="19"
-                                Foreground="#A69885">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border x:Name="border"
-                                                                Background="{TemplateBinding Background}"
-                                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                                BorderThickness="{TemplateBinding BorderThickness}">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Border x:Name="SubDesc5_Cover"
-                                Grid.Column="1"
+                        <Border x:Name="Skill_UptieLevel_Selection_Box"
                                 Grid.Row="2"
-                                Background="#7F000000"
-                                Margin="0, -30, 0, 0"
+                                Grid.Column="1"
+                                Width="276"
+                                Height="0"
                                 HorizontalAlignment="Left"
-                                Width="232.5"
-                                Height="30"
-                                Focusable="False"/>
-                        <Border Margin="2"/>
-                        
-                        
-                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Width="29" Height="233" Margin="236, -237, 0, 0">
-                            
-                            
-                            <Button x:Name="Name_Change_Button"
-                                    Click="Name_ChangeName"
-                                    Width="29" Height="29"></Button>
-                            <Border x:Name="Name_ChangeName_Cover"
-                                    Background="#7F000000"
-                                    Margin="0, -29, 0, 0"
-                                    Width="29"
-                                    Height="29"
-                                    Focusable="False"/>
-                            
-                            
-                            <Button x:Name="Desc_Change_Button"
-                                    Click="Desc_ChangeDesc"
-                                    Width="29" Height="30" Margin="0, 4, 0, 0"></Button>
-                            <Border x:Name="Desc_Change_Cover"
-                                    Background="#7F000000"
-                                    Margin="0, -30, 0, 0"
-                                    Width="29"
-                                    Height="30"
-                                    Focusable="False"/>
-                            
-                            
-                            <Button x:Name="SubDesc1_Change_Button"
-                                    Click="Desc_ChangeSubDesc1"
-                                    Width="29" Height="30" Margin="0, 4, 0, 0"></Button>
-                            <Border x:Name="SubDesc1_Change_Cover"
-                                    Background="#7F000000"
-                                    Margin="0, -30, 0, 0"
-                                    Width="29"
-                                    Height="30"
-                                    Focusable="False"/>
-                            
-                            
-                            <Button x:Name="SubDesc2_Change_Button"
-                                    Click="Desc_ChangeSubDesc2"
-                                    Width="29" Height="30" Margin="0, 4, 0, 0"></Button>
-                            <Border x:Name="SubDesc2_Change_Cover"
-                                    Background="#7F000000"
-                                    Margin="0, -30, 0, 0"
-                                    Width="29"
-                                    Height="30"
-                                    Focusable="False"/>
-                            
-                            
-                            <Button x:Name="SubDesc3_Change_Button"
-                                    Click="Desc_ChangeSubDesc3"
-                                    Width="29" Height="30" Margin="0, 4, 0, 0"></Button>
-                            <Border x:Name="SubDesc3_Change_Cover"
-                                    Background="#7F000000"
-                                    Margin="0, -30, 0, 0"
-                                    Width="29"
-                                    Height="30"
-                                    Focusable="False"/>
-                            
-                            
-                            <Button x:Name="SubDesc4_Change_Button"
-                                    Click="Desc_ChangeSubDesc4"
-                                    Width="29" Height="30" Margin="0, 4, 0, 0"></Button>
-                            <Border x:Name="SubDesc4_Change_Cover"
-                                    Background="#7F000000"
-                                    Margin="0, -30, 0, 0"
-                                    Width="29"
-                                    Height="30"
-                                    Focusable="False"/>
-                            
-                            
-                            <Button x:Name="SubDesc5_Change_Button"
-                                    Click="Desc_ChangeSubDesc5"
-                                    Width="29" Height="30" Margin="0, 4, 0, 0"></Button>
-                            <Border x:Name="SubDesc5_Change_Cover"
-                                    Background="#7F000000"
-                                    Margin="0, -30, 0, 0"
-                                    Width="29"
-                                    Height="30"
-                                    Focusable="False"/>
-                            
-                            
-                        </StackPanel>
-
-                        <StackPanel x:Name="CoinDescsSelectionBox" Height="0" Margin="0, 1, 0, 0" Width="265" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-                            <TextBlock Foreground="#FF514C46" Height="15" FontFamily="Cascadia Code" HorizontalAlignment="Center">
-                                ————————Список описаний монеты————————
-                            </TextBlock>
-                            <StackPanel Height="27" Orientation="Horizontal">
-                                <Button x:Name="CoinDescs_1_Button" Click="CoinDescs_1" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№1"/>
-                                <Button x:Name="CoinDescs_2_Button" Click="CoinDescs_2" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№2"/>
-                                <Button x:Name="CoinDescs_3_Button" Click="CoinDescs_3" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№3"/>
-                                <Button x:Name="CoinDescs_4_Button" Click="CoinDescs_4" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№4"/>
-                                <Button x:Name="CoinDescs_5_Button" Click="CoinDescs_5" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№5"/>
-                                <Button x:Name="CoinDescs_6_Button" Click="CoinDescs_6" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Consolas" FontSize="18" Content="№6"/>
-                                
-                                <!--Эффект нижнего подсвета у кнопки вместо обводки-->
-                                <Border Background="#0F0F0F" Height="6"  Width="269" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-269,   -1, 0, 0"/>
-                                <Border Background="#0F0F0F" Height="29" Width="6"   VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-269,   -1, 0, 0"/>
-                                <Border Background="#0F0F0F" Height="29" Width="12"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-230.2, -1, 0, 0"/>
-                                <Border Background="#0F0F0F" Height="29" Width="12"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-185.2, -1, 0, 0"/>
-                                <Border Background="#0F0F0F" Height="29" Width="12"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-140.5, -1, 0, 0"/>
-                                <Border Background="#0F0F0F" Height="29" Width="12"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-95.65, -1, 0, 0"/>
-                                <Border Background="#0F0F0F" Height="29" Width="12"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-50.84, -1, 0, 0"/>
-                                <Border Background="#0F0F0F" Height="29" Width="6"   VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-6,     -1, 0, 0"/>
+                                VerticalAlignment="Top">
+                            <StackPanel>
+                                <Image x:Name="SkillTierBox_Background" Source="Images\UptieLevels\Фон уровней связи.png"/>
+                                <Button x:Name="UptieLevel1_Button"   Click="UptieLevel1_Button_Click" Background="#00191919" Margin="110.7, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel1_Button_MouseEnter" MouseLeave="UptieLevel1_Button_MouseLeave"/>
+                                <Border x:Name="UptieLevel1_Cover"    Margin="110.7, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
+                                <Border x:Name="UptieLevel1_SubCover" Margin="115, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
+                                <Button x:Name="UptieLevel2_Button"   Click="UptieLevel2_Button_Click" Background="#00191919" Margin="151, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel2_Button_MouseEnter" MouseLeave="UptieLevel2_Button_MouseLeave"/>
+                                <Border x:Name="UptieLevel2_Cover"    Margin="151, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
+                                <Border x:Name="UptieLevel2_SubCover" Margin="155, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
+                                <Button x:Name="UptieLevel3_Button"   Click="UptieLevel3_Button_Click" Background="#00191919" Margin="191, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel3_Button_MouseEnter" MouseLeave="UptieLevel3_Button_MouseLeave"/>
+                                <Border x:Name="UptieLevel3_Cover"    Margin="191, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
+                                <Border x:Name="UptieLevel3_SubCover" Margin="195.5, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
+                                <Button x:Name="UptieLevel4_Button"   Click="UptieLevel4_Button_Click" Background="#00191919" Margin="231.3, -55, 0, 0" Width="40" Height="40" HorizontalAlignment="Left" BorderThickness="0" MouseEnter="UptieLevel4_Button_MouseEnter" MouseLeave="UptieLevel4_Button_MouseLeave"/>
+                                <Border x:Name="UptieLevel4_Cover"    Margin="231.3, -55, 0, 0" Width="41" Height="41" HorizontalAlignment="Left" Background="#00191919"/>
+                                <Border x:Name="UptieLevel4_SubCover" Margin="235.4, -52, 0, 0" Width="34" Height="34" HorizontalAlignment="Left" Background="#7F000000"/>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="ID_SwitchPrev_Cover"
+                                Background="#7F000000"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="70"
+                                Height="16"
+                                Margin="0, 39, 0, 0"
+                                HorizontalAlignment="Left"
+                                Panel.ZIndex="1"
+                                VerticalAlignment="Top"/>
+                        <Border x:Name="ID_SwitchNext_Cover"
+                                Background="#7F000000"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="70"
+                                Height="16"
+                                Margin="204, 39, 0, 0"
+                                HorizontalAlignment="Left"
+                                Panel.ZIndex="1"
+                                VerticalAlignment="Top"/>
+                        <Button x:Name="ID_SwitchPrev"
+                                Click="ID_SwitchPrev_Click"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="70"
+                                Height="16"
+                                Margin="0, 39, 0, 0"
+                                BorderThickness="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                HorizontalContentAlignment="Stretch">
+                            <Button.Content>
+                                <Image Width="27" Height="30" Source="pack://application:,,,/Images/Interface/free-icon-growth-4534634_1.png" Margin="-1, -1, 0, 0"/>
+                            </Button.Content>
+                        </Button>
+                        <Button x:Name="ID_SwitchNext"
+                                Click="ID_SwitchNext_Click"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Width="70"
+                                Height="16"
+                                Margin="204, 39, 0, 0"
+                                BorderThickness="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                HorizontalContentAlignment="Stretch">
+                            <Button.Content>
+                                <Image Width="27" Height="30" Source="pack://application:,,,/Images/Interface/free-icon-growth-4534634_2.png" Margin="-1, -1, 0, 0"/>
+                            </Button.Content>
+                        </Button>
+                        <Border Grid.Row="1"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Width="115"
+                                Height="16"
+                                Background="#FF191919"
+                                BorderThickness="1"
+                                Margin="80, 39, 0, 0"
+                                BorderBrush="#FF333333">
+                            <Button x:Name="ID_Copy_Button"
+                                    Click="ID_Copy"
+                                    Background="{x:Null}"
+                                    Content="ID"
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Width="113"
+                                    Height="16"
+                                    BorderThickness="0"
+                                    Margin="0, -2, 0, 0"
+                                    FontFamily="Bahnschrift Light"
+                                    FontSize="13"
+                                    Foreground="#FF7C746B"
+                                    Panel.ZIndex="1"
+                                    HorizontalContentAlignment="Stretch"
+                                    ToolTipService.InitialShowDelay="0">
+                                <Button.ToolTip>
+                                    <ToolTip Background="#895B5B5B"
+                                             Foreground="White"
+                                             HasDropShadow="False"
+                                             Placement="MousePoint"
+                                             HorizontalOffset="15"
+                                             VerticalOffset="10">
+                                        <StackPanel>
+                                            <TextBlock>Копировать ID</TextBlock>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </Button.ToolTip>
+                            </Button>
+                        </Border>
+                        <Border x:Name="LeftMenu_Box"
+                                Grid.Column="1" 
+                                Grid.Row="2"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Width="276"
+                                BorderBrush="#FF4B4B4B" 
+                                BorderThickness="2" 
+                                CornerRadius="3">
+                            <ScrollViewer x:Name="LeftMenuContent" Margin="3, 3, 0, 0" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <StackPanel>
+                                    <Border x:Name="CurrentHighlight"
+                                            Width="8"
+                                            Height="26"
+                                            Background="#FFD1CDC5"
+                                            Panel.ZIndex="1"
+                                            HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                                            Margin="0, -40, 0, 0">
+                                        <Border.RenderTransform>
+                                            <TranslateTransform X="1000" Y="1000"/>
+                                        </Border.RenderTransform>
+                                    </Border>
+                                    <StackPanel Margin="-2.5, 0, 0, 0"
+                                                HorizontalAlignment="Left">
+                                        <Border BorderBrush="#FF414141"
+                                                BorderThickness="2"
+                                                Width="232.5"
+                                                Margin="2.5, 0, 0, 0"
+                                                Height="29">
+                                            <TextBox x:Name="Name_EditBox"
+                                                     HorizontalAlignment="Left"
+                                                     TextChanged="Name_EditBox_TextChanged"
+     
+                                                     Height="25" 
+                                                     Width="228.5"
+                                                     TextAlignment="Left"
+     
+                                                     BorderThickness="0"
+     
+                                                     Background="#E9191919"
+     
+                                                     Foreground="#A69885"
+                                                     SelectionBrush="#FF939393"
+                                                     SelectionTextBrush="#A69885"
+                                                     CaretBrush="#A69885"
+               
+                                                     FontFamily="Bahnschrift Light"
+                                                     FontSize="19"/>
+                                        </Border>
+                                        <Border x:Name="Name_ChangeNameInput_Cover"
+                                                Background="#7F000000"
+                                                Margin="2.5, -30, 0, 0"
+                                                Width="232.5"
+                                                Height="30"
+                                                Focusable="False"
+                                                HorizontalAlignment="Left"/>
+                                        <Label x:Name="Name_Label_bgtext"
+                                               FontStyle="Italic"
+                                               VerticalAlignment="Top"
+                                               HorizontalAlignment="Left"
+                                               IsHitTestVisible="False"
+                                               Background="{x:Null}"
+                                               Margin="5, -31, 0, 0"
+                                               Height="35" 
+                                               Width="228"
+   
+                                               Focusable="False"
+   
+                                               FontFamily="Bahnschrift Light"
+                                               FontSize="19"
+                                               Foreground="#FF514C46"
+   
+                                               Content="Название ЭГО Дара"/>
+                                    </StackPanel>
+                                    <Button x:Name="SwitchEditorTo_Desc"
+                                            Click="SwitchEditorTo_Desc_Button"
+                                            Content="Описание"
+                                            Margin="0, 0, 0, 0"
+                                            Width="232.5"
+                                            Height="30"
+                                            HorizontalAlignment="Left"
+                                            Background="#FF191919"
+                                            BorderThickness="2"
+                                            BorderBrush="#FF414141"
+                                            FontFamily="Bahnschrift Light"
+                                            FontSize="19"
+                                            Foreground="#A69885">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border x:Name="border"
+                                                                    Background="{TemplateBinding Background}"
+                                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Border x:Name="Desc_Cover"
+                                            Background="#7F000000"
+                                            Margin="0, -30, 0, 0"
+                                            Width="232.5"
+                                            Height="30"
+                                            Focusable="False"
+                                            HorizontalAlignment="Left"/>
+                                    <Button x:Name="SwitchEditorTo_SubDesc1"
+                                            Click="SwitchEditorTo_SubDesc1_Button"
+                                            Width="232.5"
+                                            Height="30"
+                                            Margin="0, 4, 0, 0"
+                                            HorizontalAlignment="Left"
+                                            Content="Простое описание 1"
+                                            Background="#FF191919"
+                                            BorderThickness="2"
+                                            BorderBrush="#FF414141"
+                                            FontFamily="Bahnschrift Light"
+                                            FontSize="19"
+                                            Foreground="#A69885">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border x:Name="border"
+                                                            Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Border x:Name="SubDesc1_Cover"
+                                            Background="#7F000000"
+                                            Margin="0, -30, 0, 0"
+                                            Width="232.5"
+                                            Height="30"
+                                            Focusable="False"
+                                            HorizontalAlignment="Left"/>
+                                    <Button x:Name="SwitchEditorTo_SubDesc2"
+                                            Click="SwitchEditorTo_SubDesc2_Button"
+                                            Width="232.5"
+                                            Height="30"
+                                            Margin="0, 4, 0, 0"
+                                            HorizontalAlignment="Left"
+                                            Content="Простое описание 2"
+                                            Background="#FF191919"
+                                            BorderThickness="2"
+                                            BorderBrush="#FF414141"
+                                            FontFamily="Bahnschrift Light"
+                                            FontSize="19"
+                                            Foreground="#A69885">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border x:Name="border"
+                                                            Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Border x:Name="SubDesc2_Cover"
+                                            Background="#7F000000"
+                                            Margin="0, -30, 0, 0"
+                                            Width="232.5"
+                                            Height="30"
+                                            Focusable="False"
+                                            HorizontalAlignment="Left"/>
+                                    <Button x:Name="SwitchEditorTo_SubDesc3"
+                                            Click="SwitchEditorTo_SubDesc3_Button"
+                                            Width="232.5"
+                                            Height="30"
+                                            Margin="0, 4, 0, 0"
+                                            HorizontalAlignment="Left"
+                                            Content="Простое описание 3"
+                                            Background="#FF191919"
+                                            BorderThickness="2"
+                                            BorderBrush="#FF414141"
+                                            FontFamily="Bahnschrift Light"
+                                            FontSize="19"
+                                            Foreground="#A69885">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border x:Name="border"
+                                                                    Background="{TemplateBinding Background}"
+                                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Border x:Name="SubDesc3_Cover"
+                                            Background="#7F000000"
+                                            Margin="0, -30, 0, 0"
+                                            Width="232.5"
+                                            Height="30"
+                                            Focusable="False"
+                                            HorizontalAlignment="Left"/>
+                                    <Button x:Name="SwitchEditorTo_SubDesc4"
+                                            Click="SwitchEditorTo_SubDesc4_Button"
+                                            Width="232.5"
+                                            Height="30"
+                                            Margin="0, 4, 0, 0"
+                                            HorizontalAlignment="Left"
+                                            Content="Простое описание 4"
+                                            Background="#FF191919"
+                                            BorderThickness="2"
+                                            BorderBrush="#FF414141"
+                                            FontFamily="Bahnschrift Light"
+                                            FontSize="19"
+                                            Foreground="#A69885">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border x:Name="border"
+                                                                Background="{TemplateBinding Background}"
+                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Border x:Name="SubDesc4_Cover"
+                                            Background="#7F000000"
+                                            Margin="0, -30, 0, 0"
+                                            Width="232.5"
+                                            Height="30"
+                                            Focusable="False"
+                                            HorizontalAlignment="Left"/>
+                                    <Button x:Name="SwitchEditorTo_SubDesc5"
+                                            Click="SwitchEditorTo_SubDesc5_Button"
+                                            Width="232.5"
+                                            Height="30"
+                                            Margin="0, 4, 0, 0"
+                                            HorizontalAlignment="Left"
+                                            Content="Простое описание 5"
+                                            Background="#FF191919"
+                                            BorderThickness="2"
+                                            BorderBrush="#FF414141"
+                                            FontFamily="Bahnschrift Light"
+                                            FontSize="19"
+                                            Foreground="#A69885">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border x:Name="border"
+                                                                Background="{TemplateBinding Background}"
+                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                BorderThickness="{TemplateBinding BorderThickness}">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="border" Property="BorderBrush" Value="#A69885"/>
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                    <Border x:Name="SubDesc5_Cover"
+                                            Grid.Column="1"
+                                            Grid.Row="2"
+                                            Background="#7F000000"
+                                            Margin="0, -30, 0, 0"
+                                            HorizontalAlignment="Left"
+                                            Width="232.5"
+                                            Height="30"
+                                            Focusable="False"/>
+                                    <Border Margin="2"/>
+                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Width="29" Height="233" Margin="236, -237, 0, 0">
+                                        <Button x:Name="Name_Change_Button"
+                                                Click="Name_ChangeName"
+                                                Width="29" Height="29">
+                                            <Button.Content>
+                                                <Image Source="pack://application:,,,/Images/Interface/free-icon-checked_4736822.png" Margin="-2, 0, 0, 0"/>
+                                            </Button.Content>
+                                        </Button>
+                                        <Border x:Name="Name_ChangeName_Cover"
+                                                Background="#7F000000"
+                                                Margin="0, -29, 0, 0"
+                                                Width="29"
+                                                Height="29"
+                                                Focusable="False"/>
+                                        <Button x:Name="Desc_Change_Button"
+                                                Click="Desc_ChangeDesc"
+                                                Width="29" Height="30" Margin="0, 4, 0, 0">
+                                            <Button.Content>
+                                                <Image Source="pack://application:,,,/Images/Interface/free-icon-checked_4736822.png" Margin="-2, 0, 0, 0"/>
+                                            </Button.Content>
+                                        </Button>
+                                        <Border x:Name="Desc_Change_Cover"
+                                                Background="#7F000000"
+                                                Margin="0, -30, 0, 0"
+                                                Width="29"
+                                                Height="30"
+                                                Focusable="False"/>
+                                        <Button x:Name="SubDesc1_Change_Button"
+                                                Click="Desc_ChangeSubDesc1"
+                                                Width="29" Height="30" Margin="0, 4, 0, 0">
+                                            <Button.Content>
+                                                <Image Source="pack://application:,,,/Images/Interface/free-icon-checked_4736822.png" Margin="-2, 0, 0, 0"/>
+                                            </Button.Content>
+                                        </Button>
+                                        <Border x:Name="SubDesc1_Change_Cover"
+                                                Background="#7F000000"
+                                                Margin="0, -30, 0, 0"
+                                                Width="29"
+                                                Height="30"
+                                                Focusable="False"/>
+                                        <Button x:Name="SubDesc2_Change_Button"
+                                                Click="Desc_ChangeSubDesc2"
+                                                Width="29" Height="30" Margin="0, 4, 0, 0">
+                                            <Button.Content>
+                                                <Image Source="pack://application:,,,/Images/Interface/free-icon-checked_4736822.png" Margin="-2, 0, 0, 0"/>
+                                            </Button.Content>
+                                        </Button>
+                                        <Border x:Name="SubDesc2_Change_Cover"
+                                                Background="#7F000000"
+                                                Margin="0, -30, 0, 0"
+                                                Width="29"
+                                                Height="30"
+                                                Focusable="False"/>
+                                        <Button x:Name="SubDesc3_Change_Button"
+                                                Click="Desc_ChangeSubDesc3"
+                                                Width="29" Height="30" Margin="0, 4, 0, 0">
+                                            <Button.Content>
+                                                <Image Source="pack://application:,,,/Images/Interface/free-icon-checked_4736822.png" Margin="-2, 0, 0, 0"/>
+                                            </Button.Content>
+                                        </Button>
+                                        <Border x:Name="SubDesc3_Change_Cover"
+                                                Background="#7F000000"
+                                                Margin="0, -30, 0, 0"
+                                                Width="29"
+                                                Height="30"
+                                                Focusable="False"/>
+                                        <Button x:Name="SubDesc4_Change_Button"
+                                                Click="Desc_ChangeSubDesc4"
+                                                Width="29" Height="30" Margin="0, 4, 0, 0">
+                                            <Button.Content>
+                                                <Image Source="pack://application:,,,/Images/Interface/free-icon-checked_4736822.png" Margin="-2, 0, 0, 0"/>
+                                            </Button.Content>
+                                        </Button>
+                                        <Border x:Name="SubDesc4_Change_Cover"
+                                                Background="#7F000000"
+                                                Margin="0, -30, 0, 0"
+                                                Width="29"
+                                                Height="30"
+                                                Focusable="False"/>
+                                        <Button x:Name="SubDesc5_Change_Button"
+                                                Click="Desc_ChangeSubDesc5"
+                                                Width="29" Height="30" Margin="0, 4, 0, 0">
+                                            <Button.Content>
+                                                <Image Source="pack://application:,,,/Images/Interface/free-icon-checked_4736822.png" Margin="-2, 0, 0, 0"/>
+                                            </Button.Content>
+                                        </Button>
+                                        <Border x:Name="SubDesc5_Change_Cover"
+                                                Background="#7F000000"
+                                                Margin="0, -30, 0, 0"
+                                                Width="29"
+                                                Height="30"
+                                                Focusable="False"/>
+                                    </StackPanel>
+                                    <StackPanel x:Name="CoinDescsSelectionBox" Height="0" Margin="0, 1, 0, 0" Width="265" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                                        <TextBlock Foreground="#FF514C46" Height="15" FontFamily="Cascadia Code" HorizontalAlignment="Center">
+                                            ————————Список описаний монеты————————
+                                        </TextBlock>
+                                        <StackPanel Height="27" Orientation="Horizontal">
+                                            <Button x:Name="CoinDescs_1_Button" Click="CoinDescs_1" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Bahnschrift Light" FontSize="18" Content="№1"/>
+                                            <Button x:Name="CoinDescs_2_Button" Click="CoinDescs_2" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Bahnschrift Light" FontSize="18" Content="№2"/>
+                                            <Button x:Name="CoinDescs_3_Button" Click="CoinDescs_3" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Bahnschrift Light" FontSize="18" Content="№3"/>
+                                            <Button x:Name="CoinDescs_4_Button" Click="CoinDescs_4" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Bahnschrift Light" FontSize="18" Content="№4"/>
+                                            <Button x:Name="CoinDescs_5_Button" Click="CoinDescs_5" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Bahnschrift Light" FontSize="18" Content="№5"/>
+                                            <Button x:Name="CoinDescs_6_Button" Click="CoinDescs_6" IsEnabled="False" Foreground="#FF333333" Background="#0F0F0F" BorderThickness="4" Width="44.83" FontFamily="Bahnschrift Light" FontSize="18" Content="№6"/>
+                                            <!--Эффект нижнего подсвета у кнопки вместо обводки-->
+                                            <Border Background="#0F0F0F" Height="6"  Width="269" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-269,   -1, 0, 0"/>
+                                            <Border Background="#0F0F0F" Height="29" Width="6"   VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-269,   -1, 0, 0"/>
+                                            <Border Background="#0F0F0F" Height="29" Width="12"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-230.2, -1, 0, 0"/>
+                                            <Border Background="#0F0F0F" Height="29" Width="12"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-185.2, -1, 0, 0"/>
+                                            <Border Background="#0F0F0F" Height="29" Width="12"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-140.5, -1, 0, 0"/>
+                                            <Border Background="#0F0F0F" Height="29" Width="12"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-95.65, -1, 0, 0"/>
+                                            <Border Background="#0F0F0F" Height="29" Width="12"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-50.84, -1, 0, 0"/>
+                                            <Border Background="#0F0F0F" Height="29" Width="6"   VerticalAlignment="Top" HorizontalAlignment="Left" Margin="-6,     -1, 0, 0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel x:Name="CoinDescsSelectionBox_Sub" Background="#0F0F0F" Height="0" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+                                <ScrollViewer.Resources>
+                                    <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
+                                </ScrollViewer.Resources>
+                            </ScrollViewer>
+                        </Border>
+                    </Grid>
+                    <ScrollViewer x:Name="PreviewLayout_Skills"
+                                  HorizontalAlignment="Left"
+                                  VerticalAlignment="Bottom"
+                                  Height="337" Width="668"
+                                  BorderThickness="5"
+                                  VerticalContentAlignment="Top"
+                                  Grid.Column="0"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Margin="2200, 0, 0, 40">
+                        <ScrollViewer.Resources>
+                            <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
+                        </ScrollViewer.Resources>
+                        <StackPanel x:Name="CurrentSkill_Panel" HorizontalAlignment="Center" VerticalAlignment="Top">
+                            <RichTextBox x:Name="MainSkillDesc" MinHeight="48" Style="{StaticResource Skill_MainDescriptoin}"/>
+                            <StackPanel x:Name="Skill_Coin1" MinHeight="48" Margin="0, 5, 0, 0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Style="{StaticResource Skill_CoinIcon}">
+                                        <Image x:Name="Skill_Coin1_Icon" Source="Images\Coins\Coin 1.png"/>
+                                    </Border>
+                                    <StackPanel>
+                                        <RichTextBox x:Name="Skill_Coin1_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"                     />
+                                        <RichTextBox x:Name="Skill_Coin1_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin1_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin1_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin1_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin1_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                            <!-- 
+                            Background="#B2646464"
+                            Background="#7F646464"
+                            Background="#4C646464"
+                            -->
+                            <StackPanel x:Name="Skill_Coin2" MinHeight="48">
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Style="{StaticResource Skill_CoinIcon}">
+                                        <Image x:Name="Skill_Coin2_Icon" Source="Images\Coins\Coin 2.png"/>
+                                    </Border>
+                                    <StackPanel>
+                                        <RichTextBox x:Name="Skill_Coin2_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin2_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin2_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin2_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin2_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin2_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel x:Name="Skill_Coin3" MinHeight="48">
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Style="{StaticResource Skill_CoinIcon}">
+                                        <Image x:Name="Skill_Coin3_Icon" Source="Images\Coins\Coin 3.png"/>
+                                    </Border>
+                                    <StackPanel>
+                                        <RichTextBox x:Name="Skill_Coin3_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin3_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin3_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin3_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin3_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin3_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel x:Name="Skill_Coin4" MinHeight="48">
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Style="{StaticResource Skill_CoinIcon}">
+                                        <Image x:Name="Skill_Coin4_Icon" Source="Images\Coins\Coin 4.png"/>
+                                    </Border>
+                                    <StackPanel>
+                                        <RichTextBox x:Name="Skill_Coin4_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin4_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin4_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin4_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin4_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin4_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel x:Name="Skill_Coin5"  MinHeight="48">
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Style="{StaticResource Skill_CoinIcon}">
+                                        <Image x:Name="Skill_Coin5_Icon" Source="Images\Coins\Coin 5.png"/>
+                                    </Border>
+                                    <StackPanel>
+                                        <RichTextBox x:Name="Skill_Coin5_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin5_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin5_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin5_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin5_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox x:Name="Skill_Coin5_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <!--
+                                         Background="Red"      
+                                         Background="Green"    
+                                         Background="Blue"     
+                                         Background="Yellow"   
+                                         Background="Orange"   
+                                         Background="AliceBlue"
+                                        -->
+                                    </StackPanel>
+                                </StackPanel>
                             </StackPanel>
                         </StackPanel>
-
-                        <StackPanel x:Name="CoinDescsSelectionBox_Sub" Background="#0F0F0F" Height="0" VerticalAlignment="Bottom"/>
-
-                    </StackPanel>
-                    <ScrollViewer.Resources>
-                        <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
-                    </ScrollViewer.Resources>
-                </ScrollViewer>
+                    </ScrollViewer>
+                </Grid>
             </Border>
         </Grid>
-
-        <ScrollViewer x:Name="PreviewLayout_Skills"
-                      HorizontalAlignment="Left"
-                      VerticalAlignment="Bottom"
-                      Height="337" Width="668"
-                      BorderThickness="5"
-                      VerticalContentAlignment="Top"
-                      Grid.Column="0"
-                      VerticalScrollBarVisibility="Auto"
-                      Margin="2200, 0, 0, 40">
-            
-            <ScrollViewer.Resources>
-                <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
-            </ScrollViewer.Resources>
-            
-            <StackPanel x:Name="CurrentSkill_Panel" HorizontalAlignment="Center" VerticalAlignment="Top">
-
-                <RichTextBox x:Name="MainSkillDesc" MinHeight="48" Style="{StaticResource Skill_MainDescriptoin}"/>
-
-                <StackPanel x:Name="Skill_Coin1" MinHeight="48" Margin="0, 5, 0, 0">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Style="{StaticResource Skill_CoinIcon}">
-                            <Image x:Name="Skill_Coin1_Icon" Source="Images\Coins\Coin 1.png"/>
-                        </Border>
-                        <StackPanel>
-                            <RichTextBox x:Name="Skill_Coin1_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"                     />
-                            <RichTextBox x:Name="Skill_Coin1_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin1_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin1_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin1_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin1_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
-
-                <!-- 
-                Background="#B2646464"
-                Background="#7F646464"
-                Background="#4C646464"
-                -->
-
-                <StackPanel x:Name="Skill_Coin2" MinHeight="48">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Style="{StaticResource Skill_CoinIcon}">
-                            <Image x:Name="Skill_Coin2_Icon" Source="Images\Coins\Coin 2.png"/>
-                        </Border>
-                        <StackPanel>
-                            <RichTextBox x:Name="Skill_Coin2_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin2_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin2_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin2_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin2_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin2_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
-
-
-
-                <StackPanel x:Name="Skill_Coin3" MinHeight="48">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Style="{StaticResource Skill_CoinIcon}">
-                            <Image x:Name="Skill_Coin3_Icon" Source="Images\Coins\Coin 3.png"/>
-                        </Border>
-                        <StackPanel>
-                            <RichTextBox x:Name="Skill_Coin3_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin3_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin3_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin3_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin3_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin3_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
-
-
-
-                <StackPanel x:Name="Skill_Coin4" MinHeight="48">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Style="{StaticResource Skill_CoinIcon}">
-                            <Image x:Name="Skill_Coin4_Icon" Source="Images\Coins\Coin 4.png"/>
-                        </Border>
-                        <StackPanel>
-                            <RichTextBox x:Name="Skill_Coin4_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin4_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin4_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin4_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin4_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin4_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
-
-
-
-                <StackPanel x:Name="Skill_Coin5"  MinHeight="48">
-                    <StackPanel Orientation="Horizontal">
-                        <Border Style="{StaticResource Skill_CoinIcon}">
-                            <Image x:Name="Skill_Coin5_Icon" Source="Images\Coins\Coin 5.png"/>
-                        </Border>
-                        <StackPanel>
-                            <RichTextBox x:Name="Skill_Coin5_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin5_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin5_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin5_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin5_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <RichTextBox x:Name="Skill_Coin5_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                            <!--
-                             Background="Red"      
-                             Background="Green"    
-                             Background="Blue"     
-                             Background="Yellow"   
-                             Background="Orange"   
-                             Background="AliceBlue"
-                            -->
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
-            </StackPanel>
-        </ScrollViewer>
-    </Grid>
+    </Border>
 </Window>

@@ -14,6 +14,8 @@ namespace Limbus_Localization_UI.Mode_Handlers
         {
             T["PreviewLayout Background"].Source = new BitmapImage(new Uri("pack://application:,,,/Images/Фон ЭГО даров.png"));
 
+            T["Splitter"].Width = new GridLength(1);
+
             T["Window"].MinHeight = 320;
             T["Window"].MinWidth = 600;
 
@@ -34,36 +36,18 @@ namespace Limbus_Localization_UI.Mode_Handlers
             T["Coin Desc Selection Box"].Height = 0;
             T["Coin Desc Selection Box sub"].Height = 0;
 
-
             T["SaveChanges Desc"].Margin = new Thickness(0, 4, 0, 0);
             T["SaveChanges Desc [UnavalibleCover]"].Margin = new Thickness(0, -30, 0, 0);
             T["EditorSwitch Desc"].Width = 232.5;
             T["EditorSwitch Desc [UnavalibleCover]"].Width = 232.5;
 
-            T["SaveChanges SubDesc 1"].Margin = new Thickness(0, 4, 0, 0);
-            T["SaveChanges SubDesc 1 [UnavalibleCover]"].Margin = new Thickness(0, -30, 0, 0);
-            T["EditorSwitch SubDesc 1"].Width = 232.5;
-            T["EditorSwitch SubDesc 1 [UnavalibleCover]"].Width = 232.5;
-
-            T["SaveChanges SubDesc 2"].Margin = new Thickness(0, 4, 0, 0);
-            T["SaveChanges SubDesc 2 [UnavalibleCover]"].Margin = new Thickness(0, -30, 0, 0);
-            T["EditorSwitch SubDesc 2"].Width = 232.5;
-            T["EditorSwitch SubDesc 2 [UnavalibleCover]"].Width = 232.5;
-
-            T["SaveChanges SubDesc 3"].Margin = new Thickness(0, 4, 0, 0);
-            T["SaveChanges SubDesc 3 [UnavalibleCover]"].Margin = new Thickness(0, -30, 0, 0);
-            T["EditorSwitch SubDesc 3"].Width = 232.5;
-            T["EditorSwitch SubDesc 3 [UnavalibleCover]"].Width = 232.5;
-
-            T["SaveChanges SubDesc 4"].Margin = new Thickness(0, 4, 0, 0);
-            T["SaveChanges SubDesc 4 [UnavalibleCover]"].Margin = new Thickness(0, -30, 0, 0);
-            T["EditorSwitch SubDesc 4"].Width = 232.5;
-            T["EditorSwitch SubDesc 4 [UnavalibleCover]"].Width = 232.5;
-
-            T["SaveChanges SubDesc 5"].Margin = new Thickness(0, 4, 0, 0);
-            T["SaveChanges SubDesc 5 [UnavalibleCover]"].Margin = new Thickness(0, -30, 0, 0);
-            T["EditorSwitch SubDesc 5"].Width = 232.5;
-            T["EditorSwitch SubDesc 5 [UnavalibleCover]"].Width = 232.5;
+            for (int i = 1; i <= 5; i++)
+            {
+                T[$"SaveChanges SubDesc {i}"].Margin = new Thickness(0, 4, 0, 0);
+                T[$"SaveChanges SubDesc {i} [UnavalibleCover]"].Margin = new Thickness(0, -30, 0, 0);
+                T[$"EditorSwitch SubDesc {i}"].Width = 232.5;
+                T[$"EditorSwitch SubDesc {i} [UnavalibleCover]"].Width = 232.5;
+            }
 
             T["Unsaved Changes Tooltip"].Width = 185;
 
