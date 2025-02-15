@@ -13,21 +13,27 @@ namespace Limbus_Localization_UI.Additions
         public static void LoadSettings()
         {
             string[] Settings = File.ReadAllLines(@"Спрайты\$Другое\Settings.txt");
-            
-            try{
+
+            try
+            {
                 MainWindow.JsonEditor_EnableHighlight = Settings[0].Split(" ¤ ")[^1].Trim().Equals("Yes") ? true : false;
                 T["Settings ToggleHighlight"].Text = MainWindow.JsonEditor_EnableHighlight ? "Да" : "Нет";
-            }catch{}
-            try{
+            }
+            catch { }
+            try
+            {
                 string font = Settings[1].Split(" ¤ ")[^1].Trim();
                 T["Json EditBox"].FontFamily = new FontFamily(font);
                 T["Settings EditorFont"].FontFamily = new FontFamily(font);
                 T["Settings EditorFont"].Content = font;
-            }catch{}
-            try{
+            }
+            catch { }
+            try
+            {
                 T["Json EditBox"].Foreground = РазноеДругое.GetColorFromAHEX("#FF" + Settings[2].Split(" ¤ ")[^1].Trim()[1..]);
                 T["Settings EditorColor"].Text = "#" + Settings[2].Split(" ¤ ")[^1].Trim()[1..].ToUpper();
-            }catch{}
+            }
+            catch { }
         }
 
         public static void SaveSetting(string SettingType, string Setting)

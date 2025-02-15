@@ -22,10 +22,10 @@ namespace Limbus_Localization_UI.Mode_Handlers
             T["Window"].MaxWidth = 895;
 
             T["Window"].Width = 895;
-            T["Window"].Height = 443;
+            T["Window"].Height = 440;
 
             T["JsonIO Column"].Width = new GridLength(590);
-            T["Json EditBox"].Width = 580;
+            T["Json EditBox"].Width = 574;
 
             T["PreviewLayout @ EGO Gift"].Margin = new Thickness(53, 0, 0, 60);
             T["PreviewLayout @ Skill"   ].Margin = new Thickness(2000, 0, 0, 40);

@@ -2,5 +2,5 @@ free_icon_book_14095035.png https://www.flaticon.com/ru/packs/books-readings-140
 free-icon-checked_4736822 https://www.flaticon.com/ru/free-icon/checked_4736822 @ iconixar
 free-icon-growth-4534634.png _1 _2 https://www.flaticon.com/ru/free-icon/growth_4534634 @ Freepik
 free-icon-text-document-32329.png https://www.flaticon.com/ru/free-icon/text-document_32329 @ Freepik
-
+replace.png https://www.flaticon.com/free-icon/replace_7929249 @ Freepik
 settings.png https://www.flaticon.com/ru/free-icon/screwdriver_272287 @ Freepik

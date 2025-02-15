@@ -11,14 +11,12 @@ using Limbus_Localization_UI.Json;
 using Limbus_Localization_UI.Additions;
 using Limbus_Localization_UI.Mode_Handlers;
 using static Limbus_Localization_UI.Additions.Consola;
+using System.Security.Policy;
 
 
 
 namespace Limbus_Localization_UI
 {
-    
-
-
     public partial class MainWindow : Window
     {
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -31,6 +29,7 @@ namespace Limbus_Localization_UI
 
         readonly static Dictionary<string, BitmapImage> SpriteBitmaps = РазноеДругое.GetSpritesBitmaps();
         readonly static Dictionary<string, string> SpriteNames = РазноеДругое.GetKeywords();
+        readonly static Dictionary<string, string> ColorPairs = РазноеДругое.GetColorPairs();
 
         public static bool JsonEditor_EnableHighlight = true;
         public static FontFamily JsonEditor_FontFamily = new FontFamily("Lucida Sans Unicode");
@@ -212,7 +211,6 @@ namespace Limbus_Localization_UI
                 for (int e = 1; e <= 6; e++)
                 {
                     T[$"Skill PreviewLayout Coin {i} Desc {e}"].SetValue(Paragraph.LineHeightProperty, 30.0);
-
                 }
             }
 
@@ -355,7 +353,7 @@ namespace Limbus_Localization_UI
 
         public static bool WordWrap_WithSprites = true;
 
-        private static void AddText(string text, RichTextBox Target)
+        private static void AddText(string text, RichTextBox Target, bool IsSub = false, bool IsSup = false)
         {
             var document = Target.Document;
             if (document.Blocks.LastBlock is not Paragraph lastParagraph)
@@ -370,7 +368,26 @@ namespace Limbus_Localization_UI
             {
                 if (i % 3 == 0 & TextParts[i] != "" & TextParts[i] != "\0") // Обычный текст
                 {
-                    lastParagraph.Inlines.Add(new Run(TextParts[i].Replace("\\\"", "\"")));
+                    if (!IsSub & !IsSup)
+                    {
+                        lastParagraph.Inlines.Add(new Run(TextParts[i].Replace("\\\"", "\"")));
+                    }
+                    else
+                    {
+                        if (IsSub | IsSup)
+                        {
+                            Run SubpTextRun = new Run(TextParts[i].Replace("\\\"", "\"")) { FontSize = 12 };
+                            StackPanel SubpStackPanel = new()
+                            {
+                                Height = 12,
+                                Margin = new Thickness(0, IsSub? 0 : -40, 0, 0),
+                            };
+                            SubpStackPanel.Children.Add(new TextBlock(SubpTextRun));
+                            SubpStackPanel.RenderTransform = new TranslateTransform(0, 5);
+                            InlineUIContainer SubpText = new(SubpStackPanel);
+                            lastParagraph.Inlines.Add(SubpText);
+                        }
+                    }
                 }
                 else if (i % 3 == 1) // Цветной текст
                 {
@@ -383,7 +400,28 @@ namespace Limbus_Localization_UI
 
                         // Если цвет соответствует статусному эффекту
                         if (TextParts[i] == "#e30000" | TextParts[i] == "#fac400" | TextParts[i] == "#ffffff" | TextParts[i] == "#9f6a3a") coloredRun.TextDecorations = TextDecorations.Underline;
-                        lastParagraph.Inlines.Add(coloredRun);
+
+                        if (!IsSub & !IsSup)
+                        {
+                            lastParagraph.Inlines.Add(coloredRun);
+                        }
+                        else
+                        {
+                            if (IsSub | IsSup)
+                            {
+                                Run SubpTextRun = coloredRun;
+                                SubpTextRun.FontSize = 12;
+                                StackPanel SubpStackPanel = new()
+                                {
+                                    Height = 12,
+                                    Margin = new Thickness(0, IsSub ? 0 : -40, 0, 0),
+                                };
+                                SubpStackPanel.Children.Add(new TextBlock(SubpTextRun));
+                                SubpStackPanel.RenderTransform = new TranslateTransform(0, 5);
+                                InlineUIContainer SubpText = new(SubpStackPanel);
+                                lastParagraph.Inlines.Add(SubpText);
+                            }
+                        }
                     }
                 }
             }
@@ -436,15 +474,16 @@ namespace Limbus_Localization_UI
 
                 // 24 line height = |4.5| 'y' value
                 // 30 line height = |10|  'y' value
+                // Выравнивание контейнера со спрайтом и его именем относительно строки
                 if (EditorMode.Equals("EGOgift"))
                 {
                     SpritePlusEffectname.Margin = new Thickness(0, -11, 0, 0);
-                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.6); // 'y' value- (~0.5), может быть, наверное
+                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.2); // 'y' value- (~0.5), может быть, наверное
                 }
                 else if (EditorMode.Equals("Skills"))
                 {
                     SpritePlusEffectname.Margin = new Thickness(0, -11.5, 0, 0);
-                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 11.6);
+                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.8);
                 }
 
                 SpritePlusEffectname.VerticalAlignment = VerticalAlignment.Bottom;
@@ -473,15 +512,20 @@ namespace Limbus_Localization_UI
         {
             Target.Document.Blocks.Clear();
 
-            
             // Заменить квадратные скобки на <sprite><color>...</color>, если текст из них есть в списке id из всех Keywords файлов
             try
             {
                 string ReplaceSquareLinks = Regex.Replace(JsonDesc, @"\[(.*?)\]", match =>
                 {
                     string sprite = match.Groups[1].Value;
-
-                    return SpriteNames.ContainsKey(sprite) ? $"<sprite name=\\\"{sprite}\\\"><color=#f8c200>{SpriteNames[sprite]}</color>" : $"[{sprite}]";
+                    try
+                    {
+                        return SpriteNames.ContainsKey(sprite) ? $"<sprite name=\\\"{sprite}\\\"><color={ColorPairs[sprite]}>{SpriteNames[sprite]}</color>" : $"[{sprite}]";
+                    }
+                    catch
+                    {
+                        return $"[{sprite}]";
+                    }
                 });
 
                 JsonDesc = ReplaceSquareLinks;
@@ -491,7 +535,7 @@ namespace Limbus_Localization_UI
             
             if (!JsonEditor_EnableHighlight)
             {
-                JsonDesc = JsonDesc.Replace("<style=\\\"highlight\\\">", "").Replace("<style=\\\"highlight\\\">", "");
+                JsonDesc = JsonDesc.Replace("<style=\\\"highlight\\\">", "").Replace("<style=\\\"upgradeHighlight\\\">", "").Replace("</style>", "");
             }
 
             JsonDesc = JsonDesc.Replace("color=#None", "color=#ffffff")
@@ -519,7 +563,7 @@ namespace Limbus_Localization_UI
                                .Replace("[OnSucceedEvade]",              "<color=#93f03f>[Успешный уворот]</color>")
                                .Replace("[UnBrokenCoinOnSucceedAttack]", "<color=#93f03f>[При попадании целой монетой]</color>") // Вечные монеты
                                .Replace("[BeforeUse]",                   "<color=#93f03f>[Перед использованием]</color>")
-                               .Replace("[TargetKill]",                  "<color=#93f03f>[Перед убийстве цели]</color>")
+                               .Replace("[TargetKill]",                  "<color=#93f03f>[При убийстве цели]</color>")
                                .Replace("[OnSucceedAttackTail]",         "<color=#93f03f>[Выпала решка]</color>")
 
                                .Replace("[EndSkillTail]", "<color=#93f03f>[Конец атаки решкой]</color>")
@@ -529,7 +573,7 @@ namespace Limbus_Localization_UI
 
                                .Replace("[DuelCounter]",  "<color=#f95e00>[Контратака с поединком]</color>")
                                .Replace("[CanDuelGuard]", "<sprite name=\\\"CanDuelGuard\\\"><color=#9f6a3a>[Блок с поединком]</color>")
-                               .Replace("[SuperCoin]",    "<sprite name=\\\"SuperCoin\\\"><color=#f8c200>Вечная монета</color>")
+                               .Replace("<sprite name=\\\"SuperCoin\\\"><color=#f8c200>Вечная монета</color>",    "<sprite name=\\\"SuperCoin\\\"><color=#9f6a3a>Вечная монета</color>")
 
                                .Replace("[WinDuel]", "<color=#f95e00>[Победа в столкновении]</color>")
                                
@@ -537,10 +581,10 @@ namespace Limbus_Localization_UI
                                .Replace("><", ">\0<");
             
 
-            //JsonDesc = Regex.Replace(JsonDesc, @"(?<=<\/color>)([а-яА-Яa-zA-Z])", " $1");
-            JsonDesc = Regex.Replace(JsonDesc, @"<link=\\\"".*?\\\"">", "");
+            //JsonDesc = Regex.Replace(JsonDesc, @"(?<=<\/color>)([а-яА-Яa-zA-Z])", " $1"); // Без понятия зачем
+            JsonDesc = Regex.Replace(JsonDesc, @"<link=\\\"".*?\\\"">", ""); // убрать все link (Тултип не рабоатет)
 
-            JsonDesc = JsonDesc.Replace("\">\0<color=#f8c200>", "\">\0<color=#fac400>");
+            JsonDesc = JsonDesc.Replace("\">\0<color=#f8c200>", "\">\0<color=#fac400>"); // Подчёркивание статусных эффектов длиной более 1 слова
 
             char[] splitby = { '<', '>' };
             string[] parts = $"<s>\0{JsonDesc.Replace("\\n", "\n")}".Split(splitby, StringSplitOptions.RemoveEmptyEntries); // Главное
@@ -564,16 +608,53 @@ namespace Limbus_Localization_UI
                 "color=#c90080", // [Конец атаки решкой] (или Сода) \ Фиолетовый
             };
 
+            List<string> PreviewDebug = new();
+
+            foreach(var i in parts)
+            {
+                PreviewDebug.Add(i.Replace("\n", "\\n"));
+            }
+            //Console.Clear(); rin("[\"" + String.Join("\", \"", PreviewDebug) + "\"]");
+            List<int> TakenSupSupColors = new();
             for (int i = 0; i < parts.Length; i++)
             {
                 if (i % 2 == 1)
                 {
                     try{
-                        if (!parts[i - 1].StartsWith("color=#"))
+                        if (!parts[i - 1].StartsWith("sub") & !parts[i - 1].StartsWith("sup"))
                         {
-                            AddText(parts[i], Target);
+                            if (!parts[i - 1].StartsWith("color=#"))
+                            {
+                                AddText(parts[i], Target);
+                            }
                         }
-                    }catch {}
+                        else if (parts[i - 1].StartsWith("sub") | parts[i - 1].StartsWith("sup"))
+                        {
+                            string supb_type = parts[i - 1];
+
+                            List<string> subp_parts = new()
+                            {
+                                parts[i]
+                            };
+
+                            int PartsIndex = i + 1;
+
+                            foreach (var SubpRange in parts[(i + 1)..])
+                            {
+                                if (SubpRange.Equals($"/{supb_type}")) break;
+
+                                if (SubpRange.StartsWith("color=#"))
+                                {
+                                    subp_parts.Add($"<{SubpRange}>");
+                                    TakenSupSupColors.Add(PartsIndex);
+                                }
+                                else if (SubpRange.Equals("/color")) subp_parts.Add($"<{SubpRange}>");
+                                else subp_parts.Add(SubpRange);
+                                PartsIndex++;
+                            }
+                            AddText(String.Join(string.Empty, subp_parts), Target, IsSub: parts[i - 1].Equals("sub"), IsSup: parts[i - 1].Equals("sup")); 
+                        }
+                    }catch{}
                 }
                 else
                 {
@@ -624,8 +705,7 @@ namespace Limbus_Localization_UI
                             catch{}
                         }
 
-
-                        else if (parts[i].StartsWith("color=#"))
+                        else if (parts[i].StartsWith("color=#") & !(TakenSupSupColors.Contains(i)))
                         {
                             if (!Is_OneWord_Queued)
                             {
@@ -710,6 +790,15 @@ namespace Limbus_Localization_UI
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            if (this.ActualWidth < 712)
+            {
+                Settings.Width = 0;
+                OverrideCover1.Margin = new Thickness(1000);
+                OverrideCover2.Margin = new Thickness(1000);
+                SettingsDialog.Margin = new Thickness(1000);
+            }
+            else Settings.Width = 30;
+
             // Сворачивание бокового меню при высоте окна равной окну предпросмотра (Чистый режим)
             if (EditorMode.Equals("EGOgift"))
             {
@@ -1395,6 +1484,7 @@ namespace Limbus_Localization_UI
             {
                 JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][0];
             }
+            ResetUndo();
         }
         private void CoinDescs_2(object sender, RoutedEventArgs e)
         {
@@ -1408,6 +1498,7 @@ namespace Limbus_Localization_UI
             {
                 JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][1];
             }
+            ResetUndo();
         }
         private void CoinDescs_3(object sender, RoutedEventArgs e)
         {
@@ -1421,6 +1512,7 @@ namespace Limbus_Localization_UI
             {
                 JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][2];
             }
+            ResetUndo();
         }
         private void CoinDescs_4(object sender, RoutedEventArgs e)
         {
@@ -1434,6 +1526,7 @@ namespace Limbus_Localization_UI
             {
                 JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][3];
             }
+            ResetUndo();
         }
         private void CoinDescs_5(object sender, RoutedEventArgs e)
         {
@@ -1447,6 +1540,7 @@ namespace Limbus_Localization_UI
             {
                 JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][4];
             }
+            ResetUndo();
         }
         private void CoinDescs_6(object sender, RoutedEventArgs e)
         {
@@ -1460,6 +1554,7 @@ namespace Limbus_Localization_UI
             {
                 JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][5];
             }
+            ResetUndo();
         }
 
 
@@ -1678,7 +1773,25 @@ namespace Limbus_Localization_UI
         }
 
 
+        private void Refractor_Click(object sender, RoutedEventArgs e)
+        {
+            if (Refractor1.Width == 0) Refractor1.Width = 110;
+            else Refractor1.Width = 0;
+        }
+        private void Refractor1_Click(object sender, RoutedEventArgs e)
+        {
+            string ReplaceSquareLinks = Regex.Replace(JsonEditor.Text, @"\[(.*?)\]", match =>
+            {
+                string sprite = match.Groups[1].Value;
 
+                return SpriteNames.ContainsKey(sprite) ? $"<sprite name={(EditorMode.Equals("Skills") ? $"\"{sprite}\"" : $"\\\"{sprite}\\\"")}><color={ColorPairs[sprite]}>{SpriteNames[sprite]}</color>" : $"[{sprite}]";
+            });
+
+            JsonEditor.Text = ReplaceSquareLinks;
+            Refractor1.Width = 0;
+        }
+        private void Refractor_MouseEnter(object sender, MouseEventArgs e) => Refractor.Background = РазноеДругое.GetColorFromAHEX("#FF282828");
+        private void Refractor_MouseLeave(object sender, MouseEventArgs e) => Refractor.Background = РазноеДругое.GetColorFromAHEX("#FF191919");
         private void Minimize_MouseEnter(object sender, MouseEventArgs e) => Minimize.Background = РазноеДругое.GetColorFromAHEX("#FF282828");
         private void Minimize_MouseLeave(object sender, MouseEventArgs e) => Minimize.Background = РазноеДругое.GetColorFromAHEX("#FF191919");
         private void WindowMode_MouseEnter(object sender, MouseEventArgs e) => WindowMode.Background = РазноеДругое.GetColorFromAHEX("#FF282828");
@@ -1747,5 +1860,7 @@ namespace Limbus_Localization_UI
             OverrideCover2.Margin = new Thickness(1000);
             SettingsDialog.Margin = new Thickness(1000);
         }
+
+        
     }
 }

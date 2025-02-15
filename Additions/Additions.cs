@@ -71,6 +71,21 @@ namespace Limbus_Localization_UI.Additions
         }
 
 
+        public static Dictionary<string, string> GetColorPairs()
+        {
+            Dictionary<string, string> ColorPairs = new();
+
+            foreach (var Line in File.ReadAllLines(@"Спрайты\$Другое\BattleKeywords\ColorPairs.txt"))
+            {
+                string ID = Line.Split(" ¤ ")[0];
+                string Color = Line.Split(" ¤ ")[1];
+                ColorPairs[ID] = Color;
+            }
+
+            return ColorPairs;
+        }
+
+
         private static byte[] ConvertWebPToPng(byte[] webpData)
         {
             using (var inputStream = new MemoryStream(webpData))
