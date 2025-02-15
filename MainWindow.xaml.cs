@@ -1784,7 +1784,7 @@ namespace Limbus_Localization_UI
             {
                 string sprite = match.Groups[1].Value;
 
-                return SpriteNames.ContainsKey(sprite) ? $"<sprite name={(EditorMode.Equals("Skills") ? $"\"{sprite}\"" : $"\\\"{sprite}\\\"")}><color={ColorPairs[sprite]}>{SpriteNames[sprite]}</color>" : $"[{sprite}]";
+                return SpriteNames.ContainsKey(sprite) ? $"<sprite name={(EditorMode.Equals("Skills") ? $"\"{sprite}\"" : $"\\\"{sprite}\\\"")}><color={ColorPairs[sprite]}><u><link={(EditorMode.Equals("Skills") ? $"\"{sprite}\"" : $"\\\"{sprite}\\\"")}>{SpriteNames[sprite]}</link></u></color>" : $"[{sprite}]";
             });
 
             JsonEditor.Text = ReplaceSquareLinks;
