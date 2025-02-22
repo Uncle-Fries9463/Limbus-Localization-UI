@@ -337,7 +337,7 @@
                         ❐
                     </TextBlock>
                     <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#FF232323" FontSize="25" Width="320" HorizontalAlignment="Left" Margin="35, 0, 0, 0">
-                        Limbus Localization UI v1.4B
+                        Limbus Localization UI v1.4С
                     </TextBlock>
                     <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#4C161616" FontSize="25" Width="388" Margin="355, 0, 0, 0">фывщхзьй2щвйцвсйцшывхцхххххх</TextBlock>
                 </Grid>
@@ -590,21 +590,27 @@
                         </Border.RenderTransform>
                     </Border>
                     <TextBox x:Name="JsonEditor"
-                             BorderThickness="0"
-                             TextChanged="Json_EditBox_TextChanged"
-                             TextWrapping="Wrap"
-                             Grid.Row="0"
                              VerticalAlignment="Top"
                              HorizontalAlignment="Left"
+                             Grid.Row="0"
+                             
                              Width="574"
                              Height="133"
                              Margin="5"
+                             
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             
+                             TextChanged="Json_EditBox_TextChanged"
                              FontFamily="Lucida Sans Unicode"
                              FontWeight="Bold"
                              FontSize="12.8"
+                             
+                             BorderThickness="0"
                              Foreground="#A69885"
                              SelectionBrush="#B2B4B4B4"
-                             Background="#FF191919" UndoLimit="100500"/>
+                             Background="#FF191919"/>
+                    
                     <Image x:Name="PreviewLayout_BackgroundImage" Source="Images/Фон ЭГО даров.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="-1">
                         
                     </Image>
@@ -875,6 +881,7 @@
                                 Panel.ZIndex="1"
                                 VerticalAlignment="Top"/>
                         <Button x:Name="ID_SwitchPrev"
+                                MouseRightButtonDown="ID_SwitchPrev_MouseRightButtonDown"
                                 Click="ID_SwitchPrev_Click"
                                 Grid.Row="1"
                                 Grid.Column="1"
@@ -890,6 +897,7 @@
                             </Button.Content>
                         </Button>
                         <Button x:Name="ID_SwitchNext"
+                                MouseRightButtonDown="ID_SwitchNext_MouseRightButtonDown"
                                 Click="ID_SwitchNext_Click"
                                 Grid.Row="1"
                                 Grid.Column="1"
@@ -914,38 +922,56 @@
                                 BorderThickness="1"
                                 Margin="80, 39, 0, 0"
                                 BorderBrush="#FF333333">
-                            <Button x:Name="ID_Copy_Button"
-                                    Click="ID_Copy"
-                                    Background="{x:Null}"
-                                    Content="ID"
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    Width="113"
-                                    Height="16"
-                                    BorderThickness="0"
-                                    Margin="0, -1, 0, 0"
-                                    FontFamily="Bahnschrift Light"
-                                    FontSize="13"
-                                    Foreground="#FF7C746B"
-                                    Panel.ZIndex="1"
-                                    HorizontalContentAlignment="Stretch"
-                                    ToolTipService.InitialShowDelay="0">
-                                <Button.ToolTip>
-                                    <ToolTip Background="#895B5B5B"
-                                             Foreground="White"
-                                             HasDropShadow="False"
-                                             Placement="MousePoint"
-                                             HorizontalOffset="15"
-                                             VerticalOffset="10">
-                                        <StackPanel>
-                                            <TextBlock>Копировать ID</TextBlock>
-                                        </StackPanel>
-                                    </ToolTip>
-                                </Button.ToolTip>
-                            </Button>
+                            <StackPanel>
+
+                                <Button x:Name="ID_Copy_Button"
+                                        Click="ID_Copy"
+                                        
+                                        Background="{x:Null}"
+                                        Content="ID"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        Width="113"
+                                        Height="16"
+                                        BorderThickness="0"
+                                        Margin="0, -1, 0, 0"
+                                        FontFamily="Bahnschrift Light"
+                                        FontSize="13"
+                                        Foreground="#FF7C746B"
+                                        Panel.ZIndex="1"
+                                        HorizontalContentAlignment="Stretch"
+                                        ToolTipService.InitialShowDelay="0">
+                                    <Button.ToolTip>
+                                        <ToolTip Background="#895B5B5B"
+                                                 Foreground="White"
+                                                 HasDropShadow="False"
+                                                 Placement="MousePoint"
+                                                 HorizontalOffset="15"
+                                                 VerticalOffset="10">
+                                            <StackPanel>
+                                                <TextBlock>Копировать ID</TextBlock>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </Button.ToolTip>
+                                    
+                                </Button>
+
+                                <TextBlock x:Name="IDCopiedNotify"
+                                       Margin="0, -16, 0, 0"
+                                       Width="113"
+                                       Height="16"
+                                       FontFamily="Bahnschrift Light"
+                                       FontSize="13"
+                                       TextAlignment="Center"
+                                       IsHitTestVisible="False"
+                                       Foreground="#00FFFFFF">
+                                    ID Скопирован
+                                </TextBlock>
+                            </StackPanel>
                         </Border>
+                        
                         <Border x:Name="LeftMenu_Box"
                                 Grid.Column="1" 
                                 Grid.Row="2"
@@ -956,7 +982,7 @@
                                 BorderThickness="2" 
                                 CornerRadius="3">
                             <ScrollViewer x:Name="LeftMenuContent" Margin="3, 3, 0, 0" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                                <StackPanel>
+                                <StackPanel x:Name="LefMenuSubBox">
                                     <Border x:Name="CurrentHighlight"
                                             Width="8"
                                             Height="26"
@@ -978,6 +1004,10 @@
                                             <TextBox x:Name="Name_EditBox"
                                                      HorizontalAlignment="Left"
                                                      TextChanged="Name_EditBox_TextChanged"
+                                                     
+                                                     AcceptsReturn="True"
+                                                     
+                                                     TextWrapping="NoWrap"
      
                                                      Height="25" 
                                                      Width="228.5"
@@ -1020,6 +1050,68 @@
    
                                                Content="Название ЭГО Дара"/>
                                     </StackPanel>
+                                    
+                                    
+                                    <StackPanel x:Name="ABName_Input_StackPanel"
+                                                Height="0"
+                                                Margin="-2.5, 0, 0, 0"
+                                                HorizontalAlignment="Left">
+                                        <Border BorderBrush="#FF414141"
+                                                BorderThickness="2"
+                                                Width="232.5"
+                                                Margin="2.5, 0, 0, 0"
+                                                Height="29">
+                                            <TextBox x:Name="ABName_EditBox"
+                                                     HorizontalAlignment="Left"
+                                                     TextChanged="ABName_EditBox_TextChanged"
+                                                     
+                                                     TextWrapping="NoWrap"
+                                                     
+                                                     AcceptsReturn="True"
+                                                     
+                                                     Height="25" 
+                                                     Width="228.5"
+                                                     TextAlignment="Left"
+     
+                                                     BorderThickness="0"
+     
+                                                     Background="#E9191919"
+     
+                                                     Foreground="#A69885"
+                                                     SelectionBrush="#FF939393"
+                                                     SelectionTextBrush="#A69885"
+                                                     CaretBrush="#A69885"
+               
+                                                     FontFamily="Bahnschrift Light"
+                                                     FontSize="19"/>
+                                        </Border>
+                                        <Border x:Name="ABName_ChangeNameInput_Cover"
+                                                Background="#7F000000"
+                                                Margin="2.5, -29, 0, 0"
+                                                Width="232.5"
+                                                Height="0"
+                                                Focusable="False"
+                                                HorizontalAlignment="Left"/>
+                                        <Label x:Name="ABName_Label_bgtext"
+                                               FontStyle="Italic"
+                                               VerticalAlignment="Top"
+                                               HorizontalAlignment="Left"
+                                               IsHitTestVisible="False"
+                                               Background="{x:Null}"
+                                               Margin="5, -31, 0, 0"
+                                               Height="35" 
+                                               Width="228"
+   
+                                               Focusable="False"
+   
+                                               FontFamily="Bahnschrift Light"
+                                               FontSize="19"
+                                               Foreground="#FF514C46"
+   
+                                               Content="Фоновое название ЭГО"/>
+                                    </StackPanel>
+                                    
+                                    
                                     <Button x:Name="SwitchEditorTo_Desc"
                                             Click="SwitchEditorTo_Desc_Button"
                                             Content="Описание"
@@ -1276,7 +1368,10 @@
                                             Height="30"
                                             Focusable="False"/>
                                     <Border Margin="2"/>
-                                    <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left" Width="29" Height="233" Margin="236, -237, 0, 0">
+                                    
+                                    
+                                    <StackPanel x:Name="SaveChangesButtons" VerticalAlignment="Top" HorizontalAlignment="Left" Width="29" Height="237" Margin="236, -237, 0, 0"> <!-- =270 with abname, =237 without  height/top_margin-->
+                                        
                                         <Button x:Name="Name_Change_Button"
                                                 Click="Name_ChangeName"
                                                 Width="29" Height="29">
@@ -1290,9 +1385,29 @@
                                                 Width="29"
                                                 Height="29"
                                                 Focusable="False"/>
+
+
+                                        <StackPanel x:Name="ABName_Change_StackPanel"
+                                                    Height="0" Margin="0, 4, 0, 0">
+                                            <Button x:Name="ABName_Change_Button"
+                                                    Click="ABName_ChangeName"
+                                                    Width="29" Height="29" >
+                                                <Button.Content>
+                                                    <Image Height="23" Source="pack://application:,,,/Images/Interface/free-icon-checked_4736822.png" Margin="-2, 0, 0, 0"/>
+                                                </Button.Content>
+                                            </Button>
+                                            <Border x:Name="ABName_ChangeName_Cover"
+                                                    Background="#7F000000"
+                                                    Margin="0, -29, 0, 0"
+                                                    Width="29"
+                                                    Height="0"
+                                                    Focusable="False"/>
+                                        </StackPanel>
+
+
                                         <Button x:Name="Desc_Change_Button"
                                                 Click="Desc_ChangeDesc"
-                                                Width="29" Height="30" Margin="0, 4, 0, 0">
+                                                Width="29" Height="30" Margin="0, 0, 0, 0">
                                             <Button.Content>
                                                 <Image Source="pack://application:,,,/Images/Interface/free-icon-checked_4736822.png" Margin="-2, 0, 0, 0"/>
                                             </Button.Content>
@@ -1303,6 +1418,7 @@
                                                 Width="29"
                                                 Height="30"
                                                 Focusable="False"/>
+                                        
                                         <Button x:Name="SubDesc1_Change_Button"
                                                 Click="Desc_ChangeSubDesc1"
                                                 Width="29" Height="30" Margin="0, 4, 0, 0">

@@ -7,6 +7,7 @@ using System.Windows.Media;
 using Limbus_Localization_UI.Json;
 using System.Windows.Media.Imaging;
 using static Limbus_Localization_UI.Additions.Consola;
+using System.Diagnostics.Metrics;
 
 namespace Limbus_Localization_UI.Additions
 {
@@ -35,6 +36,9 @@ namespace Limbus_Localization_UI.Additions
             LineArray[LineNumber - 1] = NewLineText;
 
             // Образцовое форматирование Json с LF переносом строк и адекватным количеством пробелов
+
+            //rin(String.Join('\n', LineArray));
+
             var ParsedJson = JToken.Parse(String.Join('\n', LineArray));
             var FormattedJson = ParsedJson.ToString(Formatting.Indented).Replace("\r", "");
             File.WriteAllText(Filepath, FormattedJson, encoding: UTF8_BOM);
@@ -42,7 +46,7 @@ namespace Limbus_Localization_UI.Additions
 
         public static void SaveJson(JsonData JSON, string Path)
         {                                                                                                              // Что бы не втыкало Name и Desc из ЭГО даров
-            File.WriteAllText(Path, JsonConvert.SerializeObject(JSON, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }).Replace("\r", ""), encoding: UTF8_BOM);
+            File.WriteAllText(Path, JsonConvert.SerializeObject(JSON, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }).Replace("\r", "").Replace("\\r", ""), encoding: UTF8_BOM);
         }
 
         public static Dictionary<string, string> GetKeywords()
@@ -75,13 +79,16 @@ namespace Limbus_Localization_UI.Additions
         {
             Dictionary<string, string> ColorPairs = new();
 
+            int counter = 0;
             foreach (var Line in File.ReadAllLines(@"Спрайты\$Другое\BattleKeywords\ColorPairs.txt"))
             {
                 string ID = Line.Split(" ¤ ")[0];
                 string Color = Line.Split(" ¤ ")[1];
                 ColorPairs[ID] = Color;
+                counter++;
             }
 
+            rin($"Загружено цветовых соответствий: {counter}");
             return ColorPairs;
         }
 

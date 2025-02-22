@@ -12,6 +12,20 @@ namespace Limbus_Localization_UI.Mode_Handlers
 
         public static void AdjustUI()
         {
+            for (int i = 1; i <= 5; i++)
+            {
+                T[$"EditorSwitch SubDesc {i} [UnavalibleCover]"].Height = 30;
+                T[$"EditorSwitch SubDesc {i}"].Height = 30;
+
+                T[$"SaveChanges SubDesc {i}"].Height = 30;
+                T[$"SaveChanges SubDesc {i} [UnavalibleCover]"].Height = 30;
+            }
+            T["EditorSwitch SubDesc 1"].Content = "Простое описание 1";
+            T["Save Changes Buttons"].Margin = new Thickness(236, -237, 0, 0);
+            T["Save Changes Buttons"].Height = 237;
+            T["Save Menu Buttons Box SubBox"].Height = Double.NaN;
+
+
             T["PreviewLayout Background"].Source = new BitmapImage(new Uri("pack://application:,,,/Images/Фон ЭГО даров.png"));
 
             T["Splitter"].Width = new GridLength(1);
@@ -36,7 +50,7 @@ namespace Limbus_Localization_UI.Mode_Handlers
             T["Coin Desc Selection Box"].Height = 0;
             T["Coin Desc Selection Box sub"].Height = 0;
 
-            T["SaveChanges Desc"].Margin = new Thickness(0, 4, 0, 0);
+            T["SaveChanges Desc"].Margin = new Thickness(0, 0, 0, 0);
             T["SaveChanges Desc [UnavalibleCover]"].Margin = new Thickness(0, -30, 0, 0);
             T["EditorSwitch Desc"].Width = 232.5;
             T["EditorSwitch Desc [UnavalibleCover]"].Width = 232.5;

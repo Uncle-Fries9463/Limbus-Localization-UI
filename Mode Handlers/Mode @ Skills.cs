@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using static Limbus_Localization_UI.Additions.Consola;
 
 using static Limbus_Localization_UI.MainWindow;
 
@@ -20,8 +21,14 @@ namespace Limbus_Localization_UI.Mode_Handlers
         /// Адаптировать интерфейс под режим работы с Skills_x.json файлами<br />
         /// (Изменить размер, фон предпросмотра, окно предпросмотра, текс на кнопках и добавить новые)<br />
         /// </summary>
-        public static void AdjustUI()
+        public static void AdjustUI(bool IsEGO = false, bool IsEnemies = false)
         {
+            
+            T["Save Changes Buttons"].Margin = new Thickness(236, IsEGO? -270 : - 237, 0, 0);
+            T["Save Changes Buttons"].Height = IsEGO ? 270 : 237;
+            T["Save Menu Buttons Box SubBox"].Height = Double.NaN;
+
+
             T["PreviewLayout Background"].Source = new BitmapImage(new Uri("pack://application:,,,/Images/Фон Навыков.png"));
 
             T["Splitter"].Width = new GridLength(3);
@@ -32,7 +39,7 @@ namespace Limbus_Localization_UI.Mode_Handlers
             T["Window"].MaxWidth = 1005; // Максимальная ширина с боковым меню
 
             T["Window"].Width = 1005;    // Ширина и высота по умолчанию
-            T["Window"].Height = 545;
+            T["Window"].Height = IsEGO ? 572 : 545;
 
             T["JsonIO Column"].Width = new GridLength(705); // Ширина поля предпросмотра и редактора json элемента
             T["Json EditBox"].Width = 693.5;
@@ -40,12 +47,15 @@ namespace Limbus_Localization_UI.Mode_Handlers
             T["PreviewLayout @ EGO Gift"].Margin = new Thickness(5300, 0, 0, 60);  // Скрыть предпросмотр ЭГО дара
             T["PreviewLayout @ Skill"   ].Margin = new Thickness(11, 0, 0, 40);    // Показать предпросмотр Навыка
 
-            T["Left Menu Buttons box"].Margin = new Thickness(0, 56, 0, 0);
-            T["Skill UptieLevel Selection Box"].Height = 52;
+            if (!IsEnemies)
+            {
+                T["Left Menu Buttons box"].Margin = new Thickness(0, 56, 0, 0);
+                T["Skill UptieLevel Selection Box"].Height = 52;
+            }
+
 
             T["Coin Desc Selection Box"].Height = 42;
             T["Coin Desc Selection Box sub"].Height = 3.5;
-
 
             // Отключить все боковые кнопки сохранения кроме имени, сохранение только на Ctrl + S
             T["SaveChanges Desc"].Margin = new Thickness(4000, 0, 0, 0);
@@ -58,7 +68,9 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 T[$"SaveChanges SubDesc {i}"].Margin = new Thickness(4000, 0, 0, 0);
                 T[$"SaveChanges SubDesc {i} [UnavalibleCover]"].Margin = new Thickness(4000, 0, 0, 0);
                 T[$"EditorSwitch SubDesc {i}"].Width = 265;
+                T[$"EditorSwitch SubDesc {i}"].Height = 30;
                 T[$"EditorSwitch SubDesc {i} [UnavalibleCover]"].Width = 265;
+                T[$"EditorSwitch SubDesc {i} [UnavalibleCover]"].Height = 30;
             }
 
             T["Unsaved Changes Tooltip"].Width = 190;
@@ -86,7 +98,7 @@ namespace Limbus_Localization_UI.Mode_Handlers
             Skills_Json_Dictionary_CurrentUptieLevel = UptieLevel; // Обновить значение текущего уровня связи для MainWindow
 
             Skills_CurrentEditingField = "Desc"; // Выбирать по умолчанию при любом переходе описание в качестве редактируемого объекта..
-            T["Current Highlight"].RenderTransform = new TranslateTransform(2, 61);
+            T["Current Highlight"].RenderTransform = new TranslateTransform(2, CurrentHighlight_YOffset + 61);
             ReEnableAvalibleCoinDescs(Disable: true);
 
             // По умолчанию сделать недоступными все кнопки монет и скрыть их на предпросмотре вместе с описанием навыка
@@ -160,11 +172,11 @@ namespace Limbus_Localization_UI.Mode_Handlers
             // При переходе между ID или уровнем связи обновить текст описания
             if (Skills_EditBuffer[SkillID][UptieLevel]["Desc"].Equals("{unedited}"))
             {
-                T["Json EditBox"].Text = Skills_Json_Dictionary[SkillID][UptieLevel]["Desc"].Replace("\n", "\\n");
+                T["Json EditBox"].Text = Skills_Json_Dictionary[SkillID][UptieLevel]["Desc"];
             }
             else // Иначе вставлять из буфера
             {
-                T["Json EditBox"].Text = Skills_EditBuffer[SkillID][UptieLevel]["Desc"].Replace("\n", "\\n");
+                T["Json EditBox"].Text = Skills_EditBuffer[SkillID][UptieLevel]["Desc"];
             }
 
 
@@ -174,6 +186,13 @@ namespace Limbus_Localization_UI.Mode_Handlers
             // Отобразить в боковом меню ID и имя навыка
             T["Name EditBox Shadow"].Content = "";
             T["Name EditBox"].Text = Skills_Json_Dictionary[SkillID][UptieLevel]["Name"]; // Имя в поле редактирования
+            // Фоновое имя ЭГО
+            if (Skills_Json_Dictionary[SkillID][UptieLevel]["ABName"] != "{none}")
+            {
+                T["ABName EditBox Shadow"].Content = "";
+                T["ABName EditBox"].Text = Skills_Json_Dictionary[SkillID][UptieLevel]["ABName"];
+            }
+            
             T["Name Label"].Text = Skills_Json_Dictionary[SkillID][UptieLevel]["Name"];   // Имя на заголовке
             T["ID Label"].Content = $"{SkillID}"; // ID на кнопке копирования ID
 

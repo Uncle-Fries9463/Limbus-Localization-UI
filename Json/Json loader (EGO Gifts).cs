@@ -26,19 +26,19 @@ namespace Limbus_Localization_UI.Json
             // Содержимое Json через десериализацию
             foreach (var data in JsonConvert.DeserializeObject<JsonData>(File.ReadAllText(Json_Файл)).dataList)
             {
-                ID_JSON = data.id;
-                Name_JSON = data.name.Replace("\"", "\\\"").Replace("\n", "\\n");
-                Desc_JSON = data.desc.Replace("\"", "\\\"").Replace("\n", "\\n");
+                ID_JSON = int.Parse($"{data.id}");
+                Name_JSON = data.name;
+                Desc_JSON = data.desc;
                 SimpleDesc1_JSON = "{none}";
                 SimpleDesc2_JSON = "{none}";
                 SimpleDesc3_JSON = "{none}";
                 SimpleDesc4_JSON = "{none}";
                 SimpleDesc5_JSON = "{none}";
                 List<string> SimpleDescs_JSON = new() { };
-                foreach (var i in data.SimpleDesc) SimpleDescs_JSON.Add(i.simpleDesc.Replace("\"", "\\\"").Replace("\n", "\\n"));
-                if(WriteInfo) Console.WriteLine(SimpleDescs_JSON.Count);
+                foreach (var i in data.SimpleDesc) SimpleDescs_JSON.Add(i.simpleDesc);
+                //if(WriteInfo) Console.WriteLine(SimpleDescs_JSON.Count);
                 for (int i = 0; i <= 10 - SimpleDescs_JSON.Count; i++) SimpleDescs_JSON.Add("{none}");
-                if (WriteInfo) Console.WriteLine(Name_JSON);
+                //if (WriteInfo) Console.WriteLine(Name_JSON);
 
                 SimpleDesc1_JSON = SimpleDescs_JSON[0];
                 SimpleDesc2_JSON = SimpleDescs_JSON[1];
@@ -104,7 +104,7 @@ namespace Limbus_Localization_UI.Json
 
                     try
                     {
-                        if (JsonLines[LineIndex + 21].Trim().StartsWith($"\"abilityID\":")) LineIndex_SimpleDesc5 = LineIndex + 22;
+                        if (JsonLines[LineIndex + 21].Trim().StartsWith($"\"abilityID\":")) LineIndex_SimpleDesc5 = LineIndex + 23;
                     }
                     catch { }
 
@@ -115,7 +115,7 @@ namespace Limbus_Localization_UI.Json
                     Json_Dictionary[ID]["LineIndex_SimpleDesc3"] = LineIndex_SimpleDesc3;
                     Json_Dictionary[ID]["LineIndex_SimpleDesc4"] = LineIndex_SimpleDesc4;
                     Json_Dictionary[ID]["LineIndex_SimpleDesc5"] = LineIndex_SimpleDesc5;
-                    if (WriteInfo) Console.WriteLine(Json_Dictionary[ID]["Name"]);
+                    if (WriteInfo) Console.WriteLine($"({ID})" + Json_Dictionary[ID]["Name"]);
                     if (WriteInfo) Console.WriteLine($"LineIndex_Name: {LineIndex_Name}\n" +
                                                      $"LineIndex_Desc: {LineIndex_Desc}\n" +
                                                      $"LineIndex_SimpleDesc1: {LineIndex_SimpleDesc1}\n" +

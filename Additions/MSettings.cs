@@ -27,7 +27,10 @@ namespace Limbus_Localization_UI.Additions
                 T["Settings EditorFont"].FontFamily = new FontFamily(font);
                 T["Settings EditorFont"].Content = font;
             }
-            catch { }
+            catch
+            {
+                T["Settings EditorFont"].Content = "Lucida Sans Unicode";
+            }
             try
             {
                 T["Json EditBox"].Foreground = РазноеДругое.GetColorFromAHEX("#FF" + Settings[2].Split(" ¤ ")[^1].Trim()[1..]);
