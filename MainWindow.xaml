@@ -337,7 +337,7 @@
                         ❐
                     </TextBlock>
                     <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#FF232323" FontSize="25" Width="320" HorizontalAlignment="Left" Margin="35, 0, 0, 0">
-                        Limbus Localization UI v1.4С
+                        Limbus Localization UI v1.5
                     </TextBlock>
                     <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#4C161616" FontSize="25" Width="388" Margin="355, 0, 0, 0">фывщхзьй2щвйцвсйцшывхцхххххх</TextBlock>
                 </Grid>
