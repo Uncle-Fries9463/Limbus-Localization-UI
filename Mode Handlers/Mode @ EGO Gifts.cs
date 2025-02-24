@@ -25,6 +25,8 @@ namespace Limbus_Localization_UI.Mode_Handlers
             T["Save Changes Buttons"].Height = 237;
             T["Save Menu Buttons Box SubBox"].Height = Double.NaN;
 
+            T["Left Menu Buttons box"].Margin = new Thickness(0, 0, 0, 0);
+            T["Skill UptieLevel Selection Box"].Height = 0;
 
             T["PreviewLayout Background"].Source = new BitmapImage(new Uri("pack://application:,,,/Images/Фон ЭГО даров.png"));
 

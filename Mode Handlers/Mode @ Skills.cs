@@ -52,6 +52,11 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 T["Left Menu Buttons box"].Margin = new Thickness(0, 56, 0, 0);
                 T["Skill UptieLevel Selection Box"].Height = 52;
             }
+            else
+            {
+                T["Left Menu Buttons box"].Margin = new Thickness(0, 0, 0, 0);
+                T["Skill UptieLevel Selection Box"].Height = 0;
+            }
 
 
             T["Coin Desc Selection Box"].Height = 42;
@@ -150,19 +155,25 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 int DescIndex = 0;
                 string CoinDescExportString;
                 List<string> CoinDescExport = new();
+
                 foreach (var CoinDesc in Skills_Json_Dictionary[SkillID][UptieLevel]["Coins"][CoinNumber])
                 {
-                    // Если это описание монеты не пустое в буфере редактирования
-                    if (Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Equals("{unedited}"))
+                    // Описаний монеты может быть 7 или даже 8.. Надо бы переделать этот момент
+                    try
                     {
-                        T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex + 1}"].Height = Double.NaN;
-                        MainWindow.UpdatePreview(CoinDesc.Replace("\"", "\\\""), T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
+                        // Если это описание монеты не пустое в буфере редактирования
+                        if (Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Equals("{unedited}"))
+                        {
+                            T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex + 1}"].Height = Double.NaN;
+                            MainWindow.UpdatePreview(CoinDesc.Replace("\"", "\\\""), T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
+                        }
+                        else
+                        {
+                            T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex + 1}"].Height = Double.NaN;
+                            MainWindow.UpdatePreview(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Replace("\"", "\\\""), T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
+                        }
                     }
-                    else
-                    {
-                        T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex + 1}"].Height = Double.NaN;
-                        MainWindow.UpdatePreview(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Replace("\"", "\\\""), T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
-                    }
+                    catch{}
 
                     DescIndex++;
                 }

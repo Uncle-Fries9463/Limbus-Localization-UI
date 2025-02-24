@@ -45,7 +45,7 @@
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="Background" Value="#FF191919"/>
             <Setter Property="BorderBrush" Value="#FF333333"/>
-            <Setter Property="Foreground" Value="#FFEECEA4"/>
+            <Setter Property="Foreground" Value="#ebcaa2"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
@@ -71,7 +71,7 @@
                             <ToggleButton x:Name="SelectedJsonEditorFont"
                                             Grid.Column="2"
                                             Focusable="False"
-                                            Foreground="#FFEECEA4"
+                                            Foreground="#ebcaa2"
                                             Style="{StaticResource ToggleButtonStyle1}"
                                             IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}"
                                             BorderThickness="4"
@@ -203,12 +203,12 @@
         <Style x:Key="CascadiaText" TargetType="Paragraph">
             <Setter Property="FontFamily" Value="Bahnschrift Light"/>
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Foreground" Value="#eecea4"/>
+            <Setter Property="Foreground" Value="#ebcaa2"/>
         </Style>
         <Style x:Key="Skill_MainDescriptoin" TargetType="RichTextBox">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Background" Value="{x:Null}"/>
-            <Setter Property="Foreground" Value="#EECEA4"/>
+            <Setter Property="Foreground" Value="#ebcaa2"/>
             <Setter Property="FontFamily" Value="Arial"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Cursor" Value="Pen"/>
@@ -219,7 +219,7 @@
         <Style x:Key="Skill_CoinDescriptoin" TargetType="RichTextBox">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Background" Value="{x:Null}"/>
-            <Setter Property="Foreground" Value="#EECEA4"/>
+            <Setter Property="Foreground" Value="#ebcaa2"/>
             <Setter Property="FontFamily" Value="Arial"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Cursor" Value="Pen"/>
@@ -516,7 +516,7 @@
                         <StackPanel>
                             <TextBlock x:Name="CloseEditor_Header"
                                        HorizontalAlignment="Center"
-                                       Foreground="#eecea4"
+                                       Foreground="#ebcaa2"
                                        Margin="0, 15, 0, 0"
                                        FontSize="20"
                                        FontFamily="Bahnschrift Light"
@@ -533,7 +533,7 @@
                                              Margin="0, 15, 0, 0"
                                              ToolTipService.InitialShowDelay="0">
                                     <FlowDocument>
-                                        <Paragraph TextAlignment="Center" Foreground="#eecea4" FontSize="14" FontFamily="Bahnschrift Light">
+                                        <Paragraph TextAlignment="Center" Foreground="#ebcaa2" FontSize="14" FontFamily="Bahnschrift Light">
                                             <Run>
                                                 Изменений не сохранено:
                                             </Run>
@@ -755,7 +755,7 @@
                                                 <Run x:Name="Name_Label"
                                                      Text="Название"
                                                      FontFamily="pack://application:,,,/Fonts/Mikodacs/#Mikodacs"
-                                                     Foreground="#eecea4"
+                                                     Foreground="#ebcaa2"
                                                      FontSize="20.5"/>
                                             </Paragraph>
                                         </FlowDocument>
@@ -835,7 +835,7 @@
                                     </Button.ToolTip>
                                 </Button>
                             </StackPanel>
-                            <Border Height="2" Margin="0, -1, 0, 0" Background="#eecea4"/>
+                            <Border Height="2" Margin="0, -1, 0, 0" Background="#ebcaa2"/>
                         </StackPanel>
                         <Border x:Name="Skill_UptieLevel_Selection_Box"
                                 Grid.Row="2"

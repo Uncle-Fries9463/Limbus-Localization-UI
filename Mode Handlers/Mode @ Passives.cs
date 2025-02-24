@@ -21,6 +21,9 @@ namespace Limbus_Localization_UI.Mode_Handlers
         {
             T["PreviewLayout Background"].Source = new BitmapImage(new Uri("pack://application:,,,/Images/Фон Навыков.png"));
 
+            T["Left Menu Buttons box"].Margin = new Thickness(0, 0, 0, 0);
+            T["Skill UptieLevel Selection Box"].Height = 0;
+
             T["Splitter"].Width = new GridLength(3);
 
             T["Window"].MinHeight = 421; // Минимальная высота и ширина под фон предпросмтора навыка

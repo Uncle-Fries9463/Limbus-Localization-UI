@@ -53,22 +53,26 @@ namespace Limbus_Localization_UI.Additions
         {
             Dictionary<string, string> SpriteNames = new();
 
-            int counter = 1;
-            foreach (string KeywordFile in Directory.EnumerateFiles(@"Спрайты\$Другое\BattleKeywords", "*.*", SearchOption.AllDirectories))
+            int counter = 0;
+            try
             {
-                string[] Lines = File.ReadAllLines(KeywordFile);
-
-                for (int i = 0; i <= Lines.Count() - 1; i++)
+                foreach (string KeywordFile in Directory.EnumerateFiles(@"Спрайты\$Другое\BattleKeywords", "*.*", SearchOption.AllDirectories))
                 {
-                    if (Lines[i].Trim().StartsWith("\"id\": "))
+                    string[] Lines = File.ReadAllLines(KeywordFile);
+
+                    for (int i = 0; i <= Lines.Count() - 1; i++)
                     {
-                        string SpriteId = Lines[i].Split("\"id\": \"")[1].Split("\",")[0];
-                        string SpriteName = Lines[i + 1].Split("\"name\": \"")[1].Split("\",")[0];
-                        SpriteNames[SpriteId] = SpriteName;
-                        counter++;
+                        if (Lines[i].Trim().StartsWith("\"id\": "))
+                        {
+                            string SpriteId = Lines[i].Split("\"id\": \"")[1].Split("\",")[0];
+                            string SpriteName = Lines[i + 1].Split("\"name\": \"")[1].Split("\",")[0];
+                            SpriteNames[SpriteId] = SpriteName;
+                            counter++;
+                        }
                     }
                 }
             }
+            catch{}
 
             rin($"Загружено ключевых слов: {counter}");
             return SpriteNames;
@@ -80,18 +84,53 @@ namespace Limbus_Localization_UI.Additions
             Dictionary<string, string> ColorPairs = new();
 
             int counter = 0;
-            foreach (var Line in File.ReadAllLines(@"Спрайты\$Другое\BattleKeywords\ColorPairs.txt"))
+            try
             {
-                string ID = Line.Split(" ¤ ")[0];
-                string Color = Line.Split(" ¤ ")[1];
-                ColorPairs[ID] = Color;
-                counter++;
-            }
+                foreach (var Line in File.ReadAllLines(@"Спрайты\$Другое\BattleKeywords\ColorPairs.txt"))
+                {
+                    string ID = Line.Split(" ¤ ")[0];
+                    string Color = Line.Split(" ¤ ")[1];
+                    ColorPairs[ID] = Color;
+                    counter++;
+                }
 
-            rin($"Загружено цветовых соответствий: {counter}");
+                rin($"Загружено цветовых соответствий: {counter}");
+            }
+            catch{}
             return ColorPairs;
         }
 
+
+        public static Dictionary<string, string> GetAddtReplacements()
+        {
+            Dictionary<string, string> Replacements = new();
+
+            int counter = 0;
+            try
+            {
+                foreach(var Line in File.ReadAllLines(@"Спрайты\$Другое\Доп замены.txt").ToList())
+                {
+                    if (Line.StartsWith("------------------------------------------------")) break;
+
+                    if (Line.StartsWith("\""))
+                    {
+                        try
+                        {
+                            string Keyword = Line.Split("\": \"")[0][1..];
+                            string Replace = Line.Split("\": \"")[1][0..^1];
+                            Replacements[Keyword] = Replace;
+                            //rin($"{Keyword}: {Replace}");
+                            counter++;
+                        }
+                        catch{}
+                    }
+                }
+                rin($"Загружено доп. замен: {counter}");
+            }
+            catch{}
+
+            return Replacements;
+        }
 
         private static byte[] ConvertWebPToPng(byte[] webpData)
         {

@@ -70,6 +70,7 @@ namespace Limbus_Localization_UI
         readonly static Dictionary<string, BitmapImage> SpriteBitmaps = РазноеДругое.GetSpritesBitmaps();
         readonly static Dictionary<string, string> Keywords = РазноеДругое.GetKeywords();
         readonly static Dictionary<string, string> ColorPairs = РазноеДругое.GetColorPairs();
+        readonly static Dictionary<string, string> Replacements = РазноеДругое.GetAddtReplacements();
 
         public static bool JsonEditor_EnableHighlight = true;
         public static FontFamily JsonEditor_FontFamily = new FontFamily("Lucida Sans Unicode");
@@ -225,7 +226,7 @@ namespace Limbus_Localization_UI
                 ["Uptie Level 3"] = UptieLevel3_Button, ["Uptie Level 3 [UnavalibleCover]"] = UptieLevel3_Cover, ["Uptie Level 3 [UnavalibleSubCover]"] = UptieLevel3_SubCover, 
                 ["Uptie Level 4"] = UptieLevel4_Button, ["Uptie Level 4 [UnavalibleCover]"] = UptieLevel4_Cover, ["Uptie Level 4 [UnavalibleSubCover]"] = UptieLevel4_SubCover, 
             };
-            Console.WriteLine("Ссылки на статические объекты интерфейса готовы");
+            Console.WriteLine("Ссылки на нестатические объекты интерфейса готовы");
         }
         private void LoadFonts()
         {
@@ -682,6 +683,15 @@ namespace Limbus_Localization_UI
             {
                 JsonDesc = JsonDesc.Replace("{", "<color=#f95e00>{").Replace("}", "}</color>");
             }
+
+            if (Replacements.Count > 0)
+            {
+                foreach(var Replacement in Replacements)
+                {
+                    JsonDesc = JsonDesc.Replace(Replacement.Key, Replacement.Value);
+                }
+            }
+
             JsonDesc = JsonDesc.Replace("color=#None", "color=#ffffff")
                                .Replace("<style=\\\"highlight\\\">", "<style=\\\"upgradeHighlight\\\">") // Подсветка улучшения
 
@@ -708,6 +718,7 @@ namespace Limbus_Localization_UI
                                .Replace("[BeforeUse]",                   "<color=#93f03f>[Перед использованием]</color>")
                                .Replace("[TargetKill]",                  "<color=#93f03f>[При убийстве цели]</color>")
                                .Replace("[OnSucceedAttackTail]",         "<color=#93f03f>[Выпала решка]</color>")
+                               .Replace("[CantChangeTarget]",            "<color=#93f03f>[Цель неизменна]</color>")
 
                                .Replace("[EndSkillTail]", "<color=#c90080>[Конец атаки решкой]</color>")
                                .Replace("[EndSkillHead]", "<color=#fe59c0>[Конец атаки орлом]</color>")
@@ -2091,6 +2102,7 @@ namespace Limbus_Localization_UI
                     //rin($"Rewriting line {LineToRewrite} with:\n{NewLine}\n");
                     РазноеДругое.SetRW(Json_Filepath);
                     РазноеДругое.RewriteFileLine(NewLine, Json_Filepath, LineToRewrite);
+                    Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Name"] = Name_EditBox.Text;
                     Name_Label.Text = Name_EditBox.Text;
                     РазноеДругое.SetRO(Json_Filepath);
                 }
