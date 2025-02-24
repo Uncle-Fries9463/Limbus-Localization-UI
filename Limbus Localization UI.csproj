@@ -1,0 +1,126 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>Limbus_Localization_UI</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Fonts\Mikodacs\Mikodacs-fMac.otf" />
+    <None Remove="Fonts\Pretendard\public\static\Pretendard-Light.otf" />
+    <None Remove="Images\Coins\Coin 1.png" />
+    <None Remove="Images\Coins\Coin 2.png" />
+    <None Remove="Images\Coins\Coin 3.png" />
+    <None Remove="Images\Coins\Coin 4.png" />
+    <None Remove="Images\Coins\Coin 5.png" />
+    <None Remove="Images\Interface\free-icon-checked_4736822.png" />
+    <None Remove="Images\Interface\free-icon-exchange-302378.png" />
+    <None Remove="Images\Interface\free-icon-growth-4534634_1.png" />
+    <None Remove="Images\Interface\free-icon-growth-4534634_2.png" />
+    <None Remove="Images\Interface\free-icon-replacement-9759886.png" />
+    <None Remove="Images\Interface\free_icon_book_14095035.png" />
+    <None Remove="Images\Interface\replace.png" />
+    <None Remove="Images\Interface\settings.png" />
+    <None Remove="Images\settings.png" />
+    <None Remove="Images\UptieLevels\1 Уровень связи.png" />
+    <None Remove="Images\UptieLevels\2 Уровень связи.png" />
+    <None Remove="Images\UptieLevels\3 Уровень связи.png" />
+    <None Remove="Images\UptieLevels\4 Уровень связи.png" />
+    <None Remove="Images\UptieLevels\Фон уровней связи.png" />
+    <None Remove="Images\Фон ЭГО даров новый.png" />
+    <None Remove="Images\Фон ЭГО даров.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\Mikodacs\Mikodacs-fMac.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Icon.ico" />
+    <Resource Include="Fonts\Pretendard\public\static\Pretendard-Light.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Interface\free-icon-checked_4736822.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Interface\free-icon-growth-4534634_1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Interface\free-icon-growth-4534634_2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Interface\free_icon_book_14095035.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Interface\replace.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Interface\settings.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Coins\Coin 1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Coins\Coin 2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Coins\Coin 3.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Coins\Coin 4.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Coins\Coin 5.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\UptieLevels\1 Уровень связи.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\UptieLevels\2 Уровень связи.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\UptieLevels\3 Уровень связи.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\UptieLevels\4 Уровень связи.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\UptieLevels\Фон уровней связи.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Фон Навыков.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Фон ЭГО даров.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="MainWindow.xaml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Page>
+  </ItemGroup>
+
+</Project>
