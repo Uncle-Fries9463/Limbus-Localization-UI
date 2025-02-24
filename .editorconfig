@@ -1,0 +1,22 @@
+﻿[*.cs]
+
+# CA1822: Пометьте члены как статические
+dotnet_diagnostic.CA1822.severity = silent
+
+# IDE0019: Используйте сопоставление шаблонов
+dotnet_diagnostic.IDE0019.severity = none
+
+# CA1829: Используйте свойство Length/Count вместо Count(), если оно доступно
+dotnet_diagnostic.CA1829.severity = none
+
+# CS8618: Поле, не допускающее значения NULL, должно содержать значение, отличное от NULL, при выходе из конструктора. Рассмотрите возможность добавления модификатора "required" или объявления значения, допускающего значение NULL.
+dotnet_diagnostic.CS8618.severity = none
+
+# CS8602: Разыменование вероятной пустой ссылки
+dotnet_diagnostic.CS8602.severity = none
+
+# IDE0044: Добавить модификатор только для чтения
+dotnet_diagnostic.IDE0044.severity = none
+
+# CS8601: Возможно, назначение-ссылка, допускающее значение NULL.
+dotnet_diagnostic.CS8601.severity = none
