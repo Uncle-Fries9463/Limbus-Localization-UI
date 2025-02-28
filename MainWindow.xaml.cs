@@ -285,158 +285,165 @@ namespace Limbus_Localization_UI
             // Обновить предпросмотр
             //JsonEditor.Text = JsonEditor.Text.Replace("\r", "");
 
-            if (EditorMode == "EGOgift")
+            try
             {
-                PreviewLayout_EGOgift.Document.Blocks.Clear();
-                UpdatePreview(JsonEditor.Text.Replace("\"", "\\\""), PreviewLayout_EGOgift);
-            }
-
-            else if (EditorMode == "Skills")
-            {
-                var UpdatePreview_Target = MainSkillDesc;
-                var UpdatePreview_Text = "";
-                switch (Skills_CurrentEditingField[0..4])
+                if (EditorMode == "EGOgift")
                 {
-                    case "Desc":
-                        if (!JsonEditor.Text.Equals(Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"]))
-                        {
-                            Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"] = JsonEditor.Text;
-                            T["EditorSwitch Desc"].Content = "Описание*";
-                        }
-                        else
-                        {
-                            Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"] = "{unedited}";
-                            T["EditorSwitch Desc"].Content = "Описание";
-                        }
-
-
-                        if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"].Equals("{unedited}"))
-                        {
-                            UpdatePreview_Text = JsonEditor.Text.Replace("\"", "\\\"");
-                        }
-                        else
-                        {
-                            UpdatePreview_Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"].Replace("\"", "\\\"");
-                        }
-
-                        if (!JsonEditor.Text.Equals(""))
-                        {
-                            T["Skill PreviewLayout Desc"].Height = Double.NaN; // Height="Auto"
-                            T["Skill PreviewLayout Desc"].MinHeight = 30;
-                        }
-                        else
-                        {
-                            T["Skill PreviewLayout Desc"].Height = 0; // Height="Auto"
-                            T["Skill PreviewLayout Desc"].MinHeight = 0;
-                        }
-
-                        UpdatePreview_Target = MainSkillDesc;
-                        break;
-
-
-                    default:
-                        // Обновить предпросмотр описания монеты
-                        int CoinDescIndex = int.Parse($"{Skills_CurrentEditingField[^1]}");
-                        if (!JsonEditor.Text.Equals(Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex]))
-                        {
-                            Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex] = JsonEditor.Text;
-                            T[$"Coin Descs {CoinDescIndex + 1} Button"].Content = $"№{CoinDescIndex + 1}*";
-                        }
-                        else
-                        {
-                            Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex] = "{unedited}";
-                            T[$"Coin Descs {CoinDescIndex + 1} Button"].Content = $"№{CoinDescIndex + 1}";
-                        }
-
-                        if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex].Equals("{unedited}"))
-                        {
-                            UpdatePreview_Text = JsonEditor.Text.Replace("\r", "").Replace("\"", "\\\"");
-                        }
-                        else
-                        {
-                            UpdatePreview_Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex].Replace("\"", "\\\"");
-                        }
-
-                        UpdatePreview_Target = T[$"Skill PreviewLayout Coin {Skills_CurrentCoinNumber} Desc {CoinDescIndex+1}"];
-
-                        break;
+                    PreviewLayout_EGOgift.Document.Blocks.Clear();
+                    UpdatePreview(JsonEditor.Text.Replace("\"", "\\\""), PreviewLayout_EGOgift);
                 }
-                UpdatePreview(UpdatePreview_Text, UpdatePreview_Target);
-            }
 
-            else if (EditorMode.Equals("Passives"))
-            {
-                UpdatePreview(JsonEditor.Text.Replace("\"", "\\\""), MainSkillDesc);
-
-                switch (Passives_CurrentEditingField)
+                else if (EditorMode == "Skills")
                 {
-                    case "Desc":
-                        if (!JsonEditor.Text.Equals(Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Desc"]))
-                        {
-                            T["EditorSwitch Desc"].Content = "Описание*";
-                            Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Desc"] = JsonEditor.Text.Replace("\r", "");
-                        }
-                        else
-                        {
-                            T["EditorSwitch Desc"].Content = "Описание";
-                            Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Desc"] = "{unedited}";
-                        }
-                        break;
+                    var UpdatePreview_Target = MainSkillDesc;
+                    var UpdatePreview_Text = "";
+                    switch (Skills_CurrentEditingField[0..4])
+                    {
+                        case "Desc":
+                            if (!JsonEditor.Text.Equals(Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"]))
+                            {
+                                Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"] = JsonEditor.Text;
+                                T["EditorSwitch Desc"].Content = "Описание*";
+                            }
+                            else
+                            {
+                                Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"] = "{unedited}";
+                                T["EditorSwitch Desc"].Content = "Описание";
+                            }
 
-                    case "Summary":
-                        if (!JsonEditor.Text.Equals(Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Summary"]))
-                        {
-                            T["EditorSwitch SubDesc 1"].Content = "Суммарно*";
-                            Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"] = JsonEditor.Text.Replace("\r", "");
-                        }
-                        else
-                        {
-                            T["EditorSwitch SubDesc 1"].Content = "Суммарно";
-                            Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"] = "{unedited}";
-                        }
-                        break;
+
+                            if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"].Equals("{unedited}"))
+                            {
+                                UpdatePreview_Text = JsonEditor.Text.Replace("\"", "\\\"");
+                            }
+                            else
+                            {
+                                UpdatePreview_Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"].Replace("\"", "\\\"");
+                            }
+
+                            if (!JsonEditor.Text.Equals(""))
+                            {
+                                T["Skill PreviewLayout Desc"].Height = Double.NaN; // Height="Auto"
+                                T["Skill PreviewLayout Desc"].MinHeight = 30;
+                            }
+                            else
+                            {
+                                T["Skill PreviewLayout Desc"].Height = 0; // Height="Auto"
+                                T["Skill PreviewLayout Desc"].MinHeight = 0;
+                            }
+
+                            UpdatePreview_Target = MainSkillDesc;
+                            break;
+
+
+                        default:
+                            // Обновить предпросмотр описания монеты
+                            int CoinDescIndex = int.Parse($"{Skills_CurrentEditingField[^1]}");
+                            if (!JsonEditor.Text.Equals(Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex]))
+                            {
+                                Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex] = JsonEditor.Text;
+                                T[$"Coin Descs {CoinDescIndex + 1} Button"].Content = $"№{CoinDescIndex + 1}*";
+                            }
+                            else
+                            {
+                                Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex] = "{unedited}";
+                                T[$"Coin Descs {CoinDescIndex + 1} Button"].Content = $"№{CoinDescIndex + 1}";
+                            }
+
+                            if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex].Equals("{unedited}"))
+                            {
+                                UpdatePreview_Text = JsonEditor.Text.Replace("\r", "").Replace("\"", "\\\"");
+                            }
+                            else
+                            {
+                                UpdatePreview_Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex].Replace("\"", "\\\"");
+                            }
+
+                            UpdatePreview_Target = T[$"Skill PreviewLayout Coin {Skills_CurrentCoinNumber} Desc {CoinDescIndex + 1}"];
+
+                            break;
+                    }
+                    UpdatePreview(UpdatePreview_Text, UpdatePreview_Target);
+                }
+
+                else if (EditorMode.Equals("Passives"))
+                {
+                    UpdatePreview(JsonEditor.Text.Replace("\"", "\\\""), MainSkillDesc);
+
+                    switch (Passives_CurrentEditingField)
+                    {
+                        case "Desc":
+                            if (!JsonEditor.Text.Equals(Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Desc"]))
+                            {
+                                T["EditorSwitch Desc"].Content = "Описание*";
+                                Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Desc"] = JsonEditor.Text.Replace("\r", "");
+                            }
+                            else
+                            {
+                                T["EditorSwitch Desc"].Content = "Описание";
+                                Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Desc"] = "{unedited}";
+                            }
+                            break;
+
+                        case "Summary":
+                            if (!JsonEditor.Text.Equals(Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Summary"]))
+                            {
+                                T["EditorSwitch SubDesc 1"].Content = "Суммарно*";
+                                Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"] = JsonEditor.Text.Replace("\r", "");
+                            }
+                            else
+                            {
+                                T["EditorSwitch SubDesc 1"].Content = "Суммарно";
+                                Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"] = "{unedited}";
+                            }
+                            break;
+                    }
+                }
+
+
+                // Проверить буфер не сохранённых изменений для обозначения соответсвующих кнопок звёздочкой
+                if (EGOgift_Json_Dictionary_CurrentID != -1 & EditorMode == "EGOgift")
+                {
+                    switch (EGOgift_CurrentEditingField)
+                    {
+                        case "Desc":
+
+                            if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID]["Desc"]))
+                            {
+                                SwitchEditorTo_Desc.Content = "Описание";
+                                EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"] = "{unedited}";
+                            }
+                            else
+                            {
+                                SwitchEditorTo_Desc.Content = "Описание*";
+                                EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"] = JsonEditor.Text.Replace("\r", "");
+                            }
+
+                            break;
+
+
+                        default:
+
+                            char DescNumber = EGOgift_CurrentEditingField[^1];
+
+                            if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"]))
+                            {
+                                T[$"EditorSwitch SubDesc {DescNumber}"].Content = $"Простое описание {DescNumber}";
+                                EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"] = "{unedited}";
+                            }
+                            else
+                            {
+                                T[$"EditorSwitch SubDesc {DescNumber}"].Content = $"Простое описание {DescNumber}*";
+                                EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"] = JsonEditor.Text.Replace("\r", "");
+                            }
+
+                            break;
+                    }
                 }
             }
-
-
-            // Проверить буфер не сохранённых изменений для обозначения соответсвующих кнопок звёздочкой
-            if (EGOgift_Json_Dictionary_CurrentID != -1 & EditorMode == "EGOgift")
+            catch (Exception ex)
             {
-                switch (EGOgift_CurrentEditingField)
-                {
-                    case "Desc":
-
-                        if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID]["Desc"]))
-                        {
-                            SwitchEditorTo_Desc.Content = "Описание";
-                            EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"] = "{unedited}";
-                        }
-                        else
-                        {
-                            SwitchEditorTo_Desc.Content = "Описание*";
-                            EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"] = JsonEditor.Text.Replace("\r", "");
-                        }
-
-                        break;
-
-
-                    default:
-
-                        char DescNumber = EGOgift_CurrentEditingField[^1];
-
-                        if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"]))
-                        {
-                            T[$"EditorSwitch SubDesc {DescNumber}"].Content = $"Простое описание {DescNumber}";
-                            EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"] = "{unedited}";
-                        }
-                        else
-                        {
-                            T[$"EditorSwitch SubDesc {DescNumber}"].Content = $"Простое описание {DescNumber}*";
-                            EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"] = JsonEditor.Text.Replace("\r", "");
-                        }
-
-                        break;
-                }
+                File.WriteAllText("ErrorLog.txt", $"{ex.Message}\n\n{ex.InnerException}\n\n{ex.Data}\n\n{ex.Source}\n\n{ex.StackTrace}");
             }
         }
 
@@ -466,12 +473,12 @@ namespace Limbus_Localization_UI
                         }
                         else
                         {
-                            lastParagraph.Inlines.Add(new Run(TextParts[i].Replace("\\\"", "\"")));
+                            lastParagraph.Inlines.Add(new Run(TextParts[i].Replace("{UPGRADE}", "").Replace("\\\"", "\"")));
                         }
                     }
                     else if (IsSub | IsSup)
                     {
-                        Run SubpTextRun = new Run(TextParts[i].Replace("\\\"", "\"")) { FontSize = 12 };
+                        Run SubpTextRun = new Run(TextParts[i].Replace("\\\"", "\"").Replace("{UPGRADE}", "")) { FontSize = 12 };
                         StackPanel SubpStackPanel = new()
                         {
                             Height = 12,
@@ -484,7 +491,7 @@ namespace Limbus_Localization_UI
                     }
                     else if (IsItalic)
                     {
-                        Run ItalicRun = new Run(TextParts[i].Replace("\\\"", "\"")) { FontFamily = new FontFamily("Arial"), FontStyle = FontStyles.Italic };
+                        Run ItalicRun = new Run(TextParts[i].Replace("\\\"", "\"").Replace("{UPGRADE}", "")) { FontFamily = new FontFamily("Arial"), FontStyle = FontStyles.Italic };
                         lastParagraph.Inlines.Add(ItalicRun);
                     }
                 }
@@ -502,7 +509,7 @@ namespace Limbus_Localization_UI
                         }
                         else
                         {
-                            coloredRun = new(TextParts[i + 1].Replace("\\\"", "\""))
+                            coloredRun = new(TextParts[i + 1].Replace("\\\"", "\"").Replace("{UPGRADE}", ""))
                             {
                                 Foreground = new SolidColorBrush(color),
                             };
@@ -581,7 +588,7 @@ namespace Limbus_Localization_UI
                 {
                     NextWord = NextWord[9..];
                 }
-                Run EffectName = new(NextWord.Replace("\\\"", "\"")) {TextDecorations = TextDecorations.Underline};
+                Run EffectName = new(NextWord.Replace("\\\"", "\"").Replace("{UPGRADE}", "")) {TextDecorations = TextDecorations.Underline};
 
                 if (ColorConverter.ConvertFromString(NextColor) is Color color)
                 {
@@ -798,7 +805,7 @@ namespace Limbus_Localization_UI
                         }
                         else if (parts[RangeIndex].Equals("/color")) parts[RangeIndex] = "";
 
-                        else if (!TagList.Contains(parts[RangeIndex]) & !parts[RangeIndex].StartsWith("sprite name=\\\""))
+                        else if (!TagList.Contains(parts[RangeIndex]) & !parts[RangeIndex].StartsWith("sprite name=\\\"") & !parts[RangeIndex].StartsWith("{UPGRADE}"))
                         {
                             parts[RangeIndex] = "{UPGRADE}" + parts[RangeIndex];
                         }
@@ -807,7 +814,7 @@ namespace Limbus_Localization_UI
             }
 
 
-            
+
 
             //List<string> PreviewDebug = new();
 
@@ -816,8 +823,8 @@ namespace Limbus_Localization_UI
             //    PreviewDebug.Add(i.Replace("\n", "\\n"));
             //}
             //Console.Clear(); rin("[\"" + String.Join("\", \"", PreviewDebug) + "\"]");
-            
-            
+
+
             List<int> TakenOtherColors = new();
             for (int i = 0; i < parts.Length; i++)
             {
