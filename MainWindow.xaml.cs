@@ -1268,6 +1268,7 @@ namespace Limbus_Localization_UI
             {
                 try
                 {
+                    CurrentHighlight_YOffset = 0;
                     Json_Filepath = path;
                     Filename = Json_Filepath.Split('\\')[^1];
 
@@ -1905,12 +1906,9 @@ namespace Limbus_Localization_UI
                 JumpToID_Input.Text = "";
                 ID_Switch_CheckButtons();
             }
-            catch (Exception ex)
+            catch
             {
                 TextBoxFlashWarning(JumpToID_Input, JumpToID_bgtext, "ID Не найден", "Перейти к ID..", "Check_JumpToID_bgtext");
-                //Console.WriteLine(ex.StackTrace);
-                //Console.WriteLine(ex.Source);
-                //Console.WriteLine(ex.Message);
             }
         }
 
@@ -1920,14 +1918,12 @@ namespace Limbus_Localization_UI
             {
                 string MemID = $"{ID_Copy_Button.Content}";
                 Clipboard.SetText(Convert.ToString(ID_Copy_Button.Content));
-                //ID_Copy_Button.Content = "ID Скопирован";
                 ID_Copy_Button.Foreground = РазноеДругое.GetColorFromAHEX("#00FFFFFF");
                 IDCopiedNotify.Foreground = РазноеДругое.GetColorFromAHEX("#FF7C746B");
 
                 await Task.Delay(810);
                 ID_Copy_Button.Foreground = РазноеДругое.GetColorFromAHEX("#FF7C746B");
                 IDCopiedNotify.Foreground = РазноеДругое.GetColorFromAHEX("#00FFFFFF");
-                //ID_Copy_Button.Content = MemID;
             }
         }
 
