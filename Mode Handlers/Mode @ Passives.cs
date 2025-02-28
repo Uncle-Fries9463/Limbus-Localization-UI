@@ -82,10 +82,12 @@ namespace Limbus_Localization_UI.Mode_Handlers
             {
                 T["Json EditBox"].Text = $"{Passives_EditBuffer[PassiveID]["Desc"]}";
             }
-            if (!Passives_EditBuffer[PassiveID]["Summary"].Equals("{unedited}")) T["EditorSwitch SubDesc 1"].Content = "Суммарно*";
+            if (!Passives_EditBuffer[PassiveID]["Summary"].Equals("{unedited}"))
+            {
+                T["EditorSwitch SubDesc 1"].Content = "Суммарно*";
+            }
             else T["EditorSwitch SubDesc 1"].Content = "Суммарно";
 
-            //Console.WriteLine(Passives_Json_Dictionary[PassiveID]["Summary"].Equals("{none}"));
             if (!Passives_Json_Dictionary[PassiveID]["Summary"].Equals("{none}"))
             {
                 T["SaveChanges SubDesc 1 [UnavalibleCover]"].Height = 0;

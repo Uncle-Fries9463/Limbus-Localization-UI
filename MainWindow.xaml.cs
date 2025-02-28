@@ -388,6 +388,7 @@ namespace Limbus_Localization_UI
                         case "Summary":
                             if (!JsonEditor.Text.Equals(Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Summary"]))
                             {
+                                rin($"Каким то образом для id {Passives_Json_Dictionary_CurrentID} заменяется на \"{JsonEditor.Text.Replace("\r", "")}\"");
                                 T["EditorSwitch SubDesc 1"].Content = "Суммарно*";
                                 Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"] = JsonEditor.Text.Replace("\r", "");
                             }
@@ -1495,6 +1496,7 @@ namespace Limbus_Localization_UI
                 }
                 else if (EditorMode == "Passives")
                 {
+                    Passives_CurrentEditingField = "Desc";
                     Passives_Json_Dictionary_CurrentID = Passives_JsonKeys[Passives_JsonKeys.IndexOf(Passives_Json_Dictionary_CurrentID) - 1];
                     //rin($"Switching to {Passives_Json_Dictionary_CurrentID}");
                     Mode_Handlers.Mode_Passives.UpdateMenuInfo(Passives_Json_Dictionary_CurrentID);
@@ -1524,6 +1526,7 @@ namespace Limbus_Localization_UI
                 }
                 else if (EditorMode == "Passives")
                 {
+                    Passives_CurrentEditingField = "Desc";
                     Passives_Json_Dictionary_CurrentID = Passives_JsonKeys[Passives_JsonKeys.IndexOf(Passives_Json_Dictionary_CurrentID) + 1];
                     Mode_Handlers.Mode_Passives.UpdateMenuInfo(Passives_Json_Dictionary_CurrentID);
                     ResetUndo();
@@ -1888,6 +1891,7 @@ namespace Limbus_Localization_UI
                 {                    
                     if (Passives_JsonKeys.Contains(JumpToID_Input.Text))
                     {
+                        Passives_CurrentEditingField = "Desc";
                         Passives_Json_Dictionary_CurrentID = JumpToID_Input.Text;
                         Mode_Handlers.Mode_Passives.UpdateMenuInfo(Passives_Json_Dictionary_CurrentID);
                         ResetUndo();
@@ -1896,6 +1900,7 @@ namespace Limbus_Localization_UI
                     {
                         try
                         {
+                            Passives_CurrentEditingField = "Desc";
                             Mode_Handlers.Mode_Passives.UpdateMenuInfo(Convert.ToInt32(JumpToID_Input.Text));
                             Passives_Json_Dictionary_CurrentID = Convert.ToInt32(JumpToID_Input.Text);
                             ResetUndo();
