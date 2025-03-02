@@ -70,6 +70,7 @@ namespace Limbus_Localization_UI.Mode_Handlers
         }
         public static void UpdateMenuInfo(dynamic PassiveID)
         {
+            Passives_CurrentEditingField = "Desc";
             T["SaveChanges SubDesc 1 [UnavalibleCover]"].Height = 30;
             T["EditorSwitch SubDesc 1 [UnavalibleCover]"].Height = 30;
             T["ID Label"].Content = $"{PassiveID}";

@@ -375,6 +375,7 @@ namespace Limbus_Localization_UI
                         case "Desc":
                             if (!JsonEditor.Text.Equals(Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Desc"]))
                             {
+                                rin($"\"{JsonEditor.Text}\"\n----------------------\n\"{Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Desc"]}\"");
                                 T["EditorSwitch Desc"].Content = "Описание*";
                                 Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Desc"] = JsonEditor.Text.Replace("\r", "");
                             }
@@ -388,7 +389,6 @@ namespace Limbus_Localization_UI
                         case "Summary":
                             if (!JsonEditor.Text.Equals(Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Summary"]))
                             {
-                                rin($"Каким то образом для id {Passives_Json_Dictionary_CurrentID} заменяется на \"{JsonEditor.Text.Replace("\r", "")}\"");
                                 T["EditorSwitch SubDesc 1"].Content = "Суммарно*";
                                 Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"] = JsonEditor.Text.Replace("\r", "");
                             }
@@ -1901,8 +1901,8 @@ namespace Limbus_Localization_UI
                         try
                         {
                             Passives_CurrentEditingField = "Desc";
-                            Mode_Handlers.Mode_Passives.UpdateMenuInfo(Convert.ToInt32(JumpToID_Input.Text));
                             Passives_Json_Dictionary_CurrentID = Convert.ToInt32(JumpToID_Input.Text);
+                            Mode_Handlers.Mode_Passives.UpdateMenuInfo(Passives_Json_Dictionary_CurrentID);
                             ResetUndo();
                         }
                         catch (Exception ex)
