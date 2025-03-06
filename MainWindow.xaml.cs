@@ -11,6 +11,7 @@ using Limbus_Localization_UI.Json;
 using Limbus_Localization_UI.Additions;
 using Limbus_Localization_UI.Mode_Handlers;
 using static Limbus_Localization_UI.Additions.Consola;
+using System.Windows.Threading;
 
 
 
@@ -66,7 +67,7 @@ namespace Limbus_Localization_UI
         };
 
         static string Filename = "";
-
+        
         readonly static Dictionary<string, BitmapImage> SpriteBitmaps = РазноеДругое.GetSpritesBitmaps();
         readonly static Dictionary<string, string> Keywords = РазноеДругое.GetKeywords();
         readonly static Dictionary<string, string> ColorPairs = РазноеДругое.GetColorPairs();
@@ -977,18 +978,6 @@ namespace Limbus_Localization_UI
             }
         }
 
-
-
-
-
-
-
-        public static void Window_NoSpritesFolder()
-        {
-            MessageBoxResult result = MessageBox.Show("Папка \"Спрайты\" потерялась, она должна быть прямо тут", "Что-то не так", MessageBoxButton.OK, MessageBoxImage.Information);
-            if (result == MessageBoxResult.OK) Environment.Exit(0);
-        }
-        
 
         private void Exit_Yes(object sender, RoutedEventArgs e)
         {

@@ -36,9 +36,6 @@ namespace Limbus_Localization_UI.Additions
             LineArray[LineNumber - 1] = NewLineText;
 
             // Образцовое форматирование Json с LF переносом строк и адекватным количеством пробелов
-
-            //rin(String.Join('\n', LineArray));
-
             var ParsedJson = JToken.Parse(String.Join('\n', LineArray));
             var FormattedJson = ParsedJson.ToString(Formatting.Indented).Replace("\r", "");
             File.WriteAllText(Filepath, FormattedJson, encoding: UTF8_BOM);
@@ -160,8 +157,6 @@ namespace Limbus_Localization_UI.Additions
 
         private static Dictionary<string, byte[]> GetSpriteFiles()
         {
-            if (!Directory.Exists("Спрайты")) MainWindow.Window_NoSpritesFolder();
-
             Dictionary<string, byte[]> SpriteFiles = new();
             foreach (string image in Directory.EnumerateFiles("Спрайты", "*.*", SearchOption.AllDirectories))
             {
