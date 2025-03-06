@@ -375,7 +375,6 @@ namespace Limbus_Localization_UI
                         case "Desc":
                             if (!JsonEditor.Text.Equals(Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Desc"]))
                             {
-                                rin($"\"{JsonEditor.Text}\"\n----------------------\n\"{Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Desc"]}\"");
                                 T["EditorSwitch Desc"].Content = "Описание*";
                                 Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Desc"] = JsonEditor.Text.Replace("\r", "");
                             }
@@ -1346,7 +1345,7 @@ namespace Limbus_Localization_UI
                         T["EditorSwitch Desc [UnavalibleCover]"].Height = 0; // Разблокировать кнопку описания
 
                         // Навыки грешников
-                        if (Filename.StartsWith("Skills_Ego_Personality"))
+                        if (Filename.StartsWith("Skills_Ego_Personality-"))
                         {
                             SaveChangesButtons.Height = 270;
                             SaveChangesButtons.Margin = new Thickness(236, -270, 0, 0);
@@ -1356,7 +1355,7 @@ namespace Limbus_Localization_UI
                             Mode_Handlers.Mode_Skills.AdjustUI(IsEGO: true);
                             Name_Label_bgtext.Content = "Название ЭГО";
                         }
-                        else if(Filename.StartsWith("Skills_personality_"))
+                        else if(Filename.StartsWith("Skills_personality-"))
                         {
                             SaveChangesButtons.Height = 237;
                             SaveChangesButtons.Margin = new Thickness(236, -237, 0, 0);
@@ -2292,9 +2291,39 @@ namespace Limbus_Localization_UI
                     else if (EditorMode.Equals("Passives"))
                     {
                         Desc_ChangeOver(Passives_CurrentEditingField);
+                        
+                    }
+                }
+
+            }
+            else if (e.Key == Key.Left | e.Key == Key.Right)
+            {
+                if (!ABName_EditBox.IsFocused & !Name_EditBox.IsFocused & !JsonEditor.IsFocused & !JumpToID_Input.IsFocused)
+                {
+                    if (e.Key == Key.Right)
+                    {
+                        ID_SwitchNext_Click(null, new RoutedEventArgs());
+                    }
+                    else if (e.Key == Key.Left)
+                    {
+                        ID_SwitchPrev_Click(null, new RoutedEventArgs());
                     }
                 }
             }
+            else if (e.Key == Key.Escape)
+            {
+                if (ABName_EditBox.IsFocused) UnfocusTB(ABName_EditBox);
+                if (Name_EditBox.IsFocused  ) UnfocusTB(ABName_EditBox);
+                if (JumpToID_Input.IsFocused) UnfocusTB(ABName_EditBox);
+                if (JsonEditor.IsFocused    ) UnfocusTB(ABName_EditBox);
+            }
+        }
+
+        private void UnfocusTB(TextBox tb)
+        {
+            FocusManager.SetFocusedElement(FocusManager.GetFocusScope(tb), null);
+            Keyboard.ClearFocus();
+            this.Focus();
         }
 
         private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
