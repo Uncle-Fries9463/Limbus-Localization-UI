@@ -26,5 +26,17 @@ namespace Limbus_Localization_UI
                 mainWindow.Show();
             }), System.Windows.Threading.DispatcherPriority.Background);
         }
+
+        public App() : base()
+        {
+            this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
+        }
+
+        void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show("Откуда эта ошибка вообще\n" + "Отправьте мне Ошибка.log из папки с программой", "Чё", MessageBoxButton.OK, MessageBoxImage.Error);
+            File.WriteAllText("Ошибка.log", $"{e.Exception.Message}\nОшибка: {e.Exception.StackTrace}\n\n{e.Exception.InnerException}\n\n{e.Exception.Data}\n\n{e.Exception.HelpLink}\n\n{e.Exception.HResult}\n\n{e.Exception.TargetSite}");
+            Environment.Exit(0);
+        }
     }
 }
