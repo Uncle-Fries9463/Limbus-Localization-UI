@@ -11,8 +11,6 @@ using Limbus_Localization_UI.Json;
 using Limbus_Localization_UI.Additions;
 using Limbus_Localization_UI.Mode_Handlers;
 using static Limbus_Localization_UI.Additions.Consola;
-using System.Windows.Threading;
-
 
 
 namespace Limbus_Localization_UI
@@ -642,7 +640,7 @@ namespace Limbus_Localization_UI
             // Заменить квадратные скобки на <sprite><color>...</color>, если текст из них есть в списке id из всех Keywords файлов
             try
             {
-                string ReplaceSquareLinks = Regex.Replace(JsonDesc, @"\[(.*?)\]", match =>
+                string ReplaceSquareLinks = Regex.Replace(JsonDesc, @"\[(\w+)\]", match =>
                 {
                     string MaybeKeyword = match.Groups[1].Value;
                     try
@@ -658,6 +656,22 @@ namespace Limbus_Localization_UI
                 JsonDesc = ReplaceSquareLinks;
             }
             catch{}
+
+            // Shorthand вставки по типу [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки в теги
+            JsonDesc = Regex.Replace(JsonDesc, @"\[(\w+)\:'(.*?)'\]", match =>
+            {
+                string MaybeKeyword = match.Groups[1].Value;
+                string MaybeName = match.Groups[2].Value;
+            
+                if (Keywords.ContainsKey(MaybeKeyword))
+                {
+                    return $"<sprite name=\\\"{MaybeKeyword}\\\"><color={ColorPairs[MaybeKeyword]}>{MaybeName}</color>";
+                }
+                else
+                {
+                    return match.Groups[0].Value;
+                }
+            });
 
             
             if (!JsonEditor_EnableHighlight)
