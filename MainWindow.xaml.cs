@@ -288,8 +288,12 @@ namespace Limbus_Localization_UI
             {
                 if (EditorMode == "EGOgift")
                 {
-                    PreviewLayout_EGOgift.Document.Blocks.Clear();
-                    UpdatePreview(JsonEditor.Text.Replace("\"", "\\\""), PreviewLayout_EGOgift);
+                    try
+                    {
+                        PreviewLayout_EGOgift.Document.Blocks.Clear();
+                        UpdatePreview(JsonEditor.Text.Replace("\"", "\\\""), PreviewLayout_EGOgift);
+                    }
+                    catch { }
                 }
 
                 else if (EditorMode == "Skills")
@@ -442,14 +446,14 @@ namespace Limbus_Localization_UI
             }
             catch (Exception ex)
             {
-                File.WriteAllText("ErrorLog.txt", $"{ex.Message}\n\n{ex.InnerException}\n\n{ex.Data}\n\n{ex.Source}\n\n{ex.StackTrace}");
+                Console.WriteLine(ex.ToString());
             }
         }
 
 
         public static bool WordWrap_WithSprites = true;
 
-        private static void AddText(string text, RichTextBox Target, bool IsSub = false, bool IsSup = false, bool IsItalic = false)
+        private static void AddText(string text, RichTextBox Target, bool IsSub = false, bool IsSup = false, bool IsItalic = false, bool IsEffectName = false)
         {
             var document = Target.Document;
             if (document.Blocks.LastBlock is not Paragraph lastParagraph)
@@ -515,7 +519,8 @@ namespace Limbus_Localization_UI
                         }
 
                         // Если цвет соответствует статусному эффекту
-                        if (TextParts[i] == "#e30000" | TextParts[i] == "#fac400" | TextParts[i] == "#ffffff" | TextParts[i] == "#9f6a3a") coloredRun.TextDecorations = TextDecorations.Underline;
+                        //if (TextParts[i] == "#e30000" | TextParts[i] == "#fac400" | TextParts[i] == "#9f6a3a") coloredRun.TextDecorations = TextDecorations.Underline;
+                        if (IsEffectName) coloredRun.TextDecorations = TextDecorations.Underline;
 
                         if (!IsSub & !IsSup & !IsItalic)
                         {
@@ -608,7 +613,7 @@ namespace Limbus_Localization_UI
                 else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
                 {
                     SpritePlusEffectname.Margin = new Thickness(0, -11.5, 0, 0);
-                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.85); // Всё ещё без понятия как они связаны
+                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 11.01); // Всё ещё без понятия как они связаны
                 }
 
                 SpritePlusEffectname.VerticalAlignment = VerticalAlignment.Bottom;
@@ -657,12 +662,13 @@ namespace Limbus_Localization_UI
             }
             catch{}
 
-            // Shorthand вставки по типу [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки в теги
+
+            // Обработка особых вставок эффектов [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки
             JsonDesc = Regex.Replace(JsonDesc, @"\[(\w+)\:'(.*?)'\]", match =>
             {
                 string MaybeKeyword = match.Groups[1].Value;
                 string MaybeName = match.Groups[2].Value;
-            
+
                 if (Keywords.ContainsKey(MaybeKeyword))
                 {
                     return $"<sprite name=\\\"{MaybeKeyword}\\\"><color={ColorPairs[MaybeKeyword]}>{MaybeName}</color>";
@@ -673,7 +679,7 @@ namespace Limbus_Localization_UI
                 }
             });
 
-            
+
             if (!JsonEditor_EnableHighlight)
             {
                 JsonDesc = JsonDesc.Replace("<style=\\\"highlight\\\">", "").Replace("<style=\\\"upgradeHighlight\\\">", "").Replace("</style>", "");
@@ -964,12 +970,14 @@ namespace Limbus_Localization_UI
                             if (!Is_OneWord_Queued)
                             {
                                 string AddT = parts[i + 1];
+                                bool IsEffectSubName = false;
                                 if (Is_MultWords_Queued)
                                 {
                                     AddT = " " + String.Join(' ', parts[i + 1].Split(' ')[1..]);
+                                    IsEffectSubName = true;
                                     Is_MultWords_Queued = false;
                                 }
-                                AddText($"<{parts[i]}>{AddT}</color>", Target);
+                                AddText($"<{parts[i]}>{AddT}</color>", Target, IsEffectName: IsEffectSubName);
                             }
                             else Is_OneWord_Queued = false;
                         }
@@ -1326,7 +1334,7 @@ namespace Limbus_Localization_UI
                         JsonFilepath.Text = path;
                     }
 
-                    else if(Filename.StartsWith("Skills_"))
+                    else if(Filename.StartsWith("Skills"))
                     {
                         EditorMode = "Skills";
                         // Основной словарь с текстом из JsonData.dataList и Буфер не сохранённых изменений
@@ -1886,8 +1894,8 @@ namespace Limbus_Localization_UI
                 }
                 else if (EditorMode == "Skills")
                 {
-                    Mode_Handlers.Mode_Skills.UpdateMenuInfo(Convert.ToInt32(JumpToID_Input.Text));
                     Skills_Json_Dictionary_CurrentID = Convert.ToInt32(JumpToID_Input.Text);
+                    Mode_Handlers.Mode_Skills.UpdateMenuInfo(Skills_Json_Dictionary_CurrentID);
                 }
                 else if (EditorMode == "Passives")
                 {                    
