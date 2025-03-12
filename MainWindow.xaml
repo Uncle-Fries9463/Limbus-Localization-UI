@@ -337,9 +337,8 @@
                         ❐
                     </TextBlock>
                     <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#FF232323" FontSize="25" Width="320" HorizontalAlignment="Left" Margin="35, 0, 0, 0">
-                        Limbus Localization UI v1.5
+                        Limbus Localization UI v1.5T
                     </TextBlock>
-                    <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#4C161616" FontSize="25" Width="388" Margin="355, 0, 0, 0">фывщхзьй2щвйцвсйцшывхцхххххх</TextBlock>
                 </Grid>
             </Border>
             <Border Grid.Row="1" CornerRadius="50">
@@ -495,7 +494,61 @@
                                     </Button>
                                     <Border  Margin="-95, 0, 0, 0" Height="40" Width="95" Background="#7F000000"/>
                                 </StackPanel>
-                                <Button Click="Settings_OK" Width="100" Height="35" Margin="0, 0, 0, 0" Content="OK"></Button>
+                                <Button Click="Settings_OK" Width="100" Height="35" Margin="0, 0, 0, 0" Content="OK"/>
+                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0, -35, 4, 0">
+                                    <Button Click="Reload_Sprites"  Width="35" Margin="3, 0, 0, 0" Height="35" ToolTipService.InitialShowDelay="10">
+                                        <Button.Content>
+                                            <TextBlock Text="α" Foreground="#b4b4b4"/>
+                                        </Button.Content>
+                                        <Button.ToolTip>
+                                            <ToolTip Background="#895B5B5B"
+                                                     Foreground="White"
+                                                     HasDropShadow="False"
+                                                     Placement="MousePoint"
+                                                     HorizontalOffset="15"
+                                                     VerticalOffset="10">
+                                                <StackPanel>
+                                                    <TextBlock>Обновить спрайты</TextBlock>
+                                                </StackPanel>
+                                            </ToolTip>
+                                        </Button.ToolTip>
+                                    </Button>
+                                    <Button Click="Reload_Keywords" Width="35" Margin="3, 0, 0, 0" Height="35" ToolTipService.InitialShowDelay="10">
+                                        <Button.Content>
+                                            <TextBlock Text="β" Foreground="#b4b4b4"/>
+                                        </Button.Content>
+                                        <Button.ToolTip>
+                                            <ToolTip Background="#895B5B5B"
+                                                     Foreground="White"
+                                                     HasDropShadow="False"
+                                                     Placement="MousePoint"
+                                                     HorizontalOffset="15"
+                                                     VerticalOffset="10">
+                                                <StackPanel>
+                                                    <TextBlock>Обновить ключевые слова и доп замены</TextBlock>
+                                                </StackPanel>
+                                            </ToolTip>
+                                        </Button.ToolTip>
+                                    </Button>
+                                    <Button Click="Reload_Colors"   Width="35" Margin="3, 0, 0, 0" Height="35" ToolTipService.InitialShowDelay="10">
+                                        <Button.Content>
+                                            <TextBlock Text="δ" Foreground="#b4b4b4"/>
+                                        </Button.Content>
+                                        <Button.ToolTip>
+                                            <ToolTip Background="#895B5B5B"
+                                                     Foreground="White"
+                                                     HasDropShadow="False"
+                                                     Placement="MousePoint"
+                                                     HorizontalOffset="15"
+                                                     VerticalOffset="10">
+                                                <StackPanel>
+                                                    <TextBlock>Обновить цвета</TextBlock>
+                                                </StackPanel>
+                                            </ToolTip>
+                                        </Button.ToolTip>
+                                    </Button>
+                                </StackPanel>
+
                             </StackPanel>
                         </StackPanel>
                         <Border.RenderTransform>

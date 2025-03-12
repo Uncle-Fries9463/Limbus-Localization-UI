@@ -66,10 +66,13 @@ namespace Limbus_Localization_UI
 
         static string Filename = "";
         
-        readonly static Dictionary<string, BitmapImage> SpriteBitmaps = РазноеДругое.GetSpritesBitmaps();
-        readonly static Dictionary<string, string> Keywords = РазноеДругое.GetKeywords();
-        readonly static Dictionary<string, string> ColorPairs = РазноеДругое.GetColorPairs();
-        readonly static Dictionary<string, string> Replacements = РазноеДругое.GetAddtReplacements();
+        static Dictionary<string, BitmapImage> SpriteBitmaps = РазноеДругое.GetSpritesBitmaps();
+        static Dictionary<string, string> Keywords = РазноеДругое.GetKeywords();
+        static Dictionary<string, string> Replacements = РазноеДругое.GetAddtReplacements();
+        static Dictionary<string, string> ColorPairs = РазноеДругое.GetColorPairs();
+
+        static string LastPreviewUpdateText = "";
+        static RichTextBox LastPreviewUpdateTarget = new();
 
         public static bool JsonEditor_EnableHighlight = true;
         public static FontFamily JsonEditor_FontFamily = new FontFamily("Lucida Sans Unicode");
@@ -641,6 +644,9 @@ namespace Limbus_Localization_UI
         public static void UpdatePreview(string JsonDesc, RichTextBox Target)
         {
             Target.Document.Blocks.Clear();
+
+            LastPreviewUpdateText = JsonDesc;
+            LastPreviewUpdateTarget = Target;
 
             // Заменить квадратные скобки на <sprite><color>...</color>, если текст из них есть в списке id из всех Keywords файлов
             try
@@ -2450,6 +2456,7 @@ namespace Limbus_Localization_UI
                 JsonEditor_EnableHighlight = true;
                 ToggleHighlight_Text.Text = "Да";
             }
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
 
             MSettings.SaveSetting("Enable <style> as color", ToggleHighlight_Text.Text.Equals("Да")? "Yes" : "No");
         }
@@ -2484,6 +2491,23 @@ namespace Limbus_Localization_UI
             SettingsDialog.Margin = new Thickness(1000);
         }
 
+        private void Reload_Sprites(object sender, RoutedEventArgs e)
+        {
+            SpriteBitmaps = РазноеДругое.GetSpritesBitmaps();
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
+
+        private void Reload_Keywords(object sender, RoutedEventArgs e)
+        {
+            Keywords = РазноеДругое.GetKeywords();
+            Replacements = РазноеДругое.GetAddtReplacements();
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
         
+        private void Reload_Colors(object sender, RoutedEventArgs e)
+        {
+            ColorPairs = РазноеДругое.GetColorPairs();
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
     }
 }
