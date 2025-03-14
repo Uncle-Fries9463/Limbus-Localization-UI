@@ -12,7 +12,7 @@ namespace Limbus_Localization_UI.Additions
 
         public static void LoadSettings()
         {
-            string[] Settings = File.ReadAllLines(@"Спрайты\$Другое\Settings.txt");
+            string[] Settings = File.ReadAllLines(@"[Ресурсы]\$Другое\Settings.txt");
 
             try
             {
@@ -41,7 +41,7 @@ namespace Limbus_Localization_UI.Additions
 
         public static void SaveSetting(string SettingType, string Setting)
         {
-            string[] Settings = File.ReadAllLines(@"Спрайты\$Другое\Settings.txt");
+            string[] Settings = File.ReadAllLines(@"[Ресурсы]\$Другое\Settings.txt");
 
             switch (SettingType)
             {
@@ -58,7 +58,7 @@ namespace Limbus_Localization_UI.Additions
                     break;
 
             }
-            File.WriteAllLines(@"Спрайты\$Другое\Settings.txt", Settings);
+            File.WriteAllLines(@"[Ресурсы]\$Другое\Settings.txt", Settings);
         }
     }
 }

@@ -258,13 +258,18 @@
                 <Grid Grid.Row="0" Background="#FF141414">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition x:Name="TitleBarIcons" Width="270"/>
+                        <ColumnDefinition x:Name="TitleBarIcons" Width="381"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 1, 1, 0">
                         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
                             <Button x:Name="Refractor1" Click="Refractor1_Click" Height="25" Width="0" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
                                 <TextBlock x:Name="LinksToStyle" Foreground="#FFD1D1D1" FontSize="13" Width="106" TextWrapping="Wrap" TextAlignment="Center" Margin="-1, 0, 0, 0" Text="">
                                     Ссылки ➤ sprite
+                                </TextBlock>
+                            </Button>
+                            <Button x:Name="Refractor2" PreviewMouseRightButtonDown="Refractor2_Click_RMB" PreviewMouseLeftButtonDown="Refractor2_Click_LMB" Height="25" Width="0" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
+                                <TextBlock x:Name="InsertStyle" Foreground="#FFD1D1D1" FontSize="13" Width="106" TextWrapping="Wrap" TextAlignment="Center" Margin="-1, 0, 0, 0" Text="">
+                                    Вставить style
                                 </TextBlock>
                             </Button>
                         </StackPanel>

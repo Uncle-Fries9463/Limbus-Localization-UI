@@ -2,6 +2,7 @@
 using System.Data;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.IO;
 using System.Windows.Interop;
 using System.Windows.Media;
 
@@ -14,6 +15,12 @@ namespace Limbus_Localization_UI
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            if (File.Exists(@"[Ресурсы]\Спрайты\Спрайты.zip"))
+            {
+                System.IO.Compression.ZipFile.ExtractToDirectory(@"[Ресурсы]\Спрайты\Спрайты.zip", @"[Ресурсы]\Спрайты");
+                File.Delete(@"[Ресурсы]\Спрайты\Спрайты.zip");
+            }
+
             base.OnStartup(e);
 
             SplashScreen splash = new SplashScreen("Images/Logo.ico");

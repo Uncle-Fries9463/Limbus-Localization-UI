@@ -7,7 +7,6 @@ using System.Windows.Media;
 using Limbus_Localization_UI.Json;
 using System.Windows.Media.Imaging;
 using static Limbus_Localization_UI.Additions.Consola;
-using System.Diagnostics.Metrics;
 
 namespace Limbus_Localization_UI.Additions
 {
@@ -46,14 +45,15 @@ namespace Limbus_Localization_UI.Additions
             File.WriteAllText(Path, JsonConvert.SerializeObject(JSON, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }).Replace("\r", "").Replace("\\r", ""), encoding: UTF8_BOM);
         }
 
-        public static Dictionary<string, string> GetKeywords()
+        public static (Dictionary<string, string>, Dictionary<string, string>) GetKeywords()
         {
             Dictionary<string, string> SpriteNames = new();
+            Dictionary<string, string> KeywordTexts = new();
 
             int counter = 0;
             try
             {
-                foreach (string KeywordFile in Directory.EnumerateFiles(@"Спрайты\$Другое\BattleKeywords", "*.*", SearchOption.AllDirectories))
+                foreach (string KeywordFile in Directory.EnumerateFiles(@"[Ресурсы]\$Другое\BattleKeywords", "*.*", SearchOption.AllDirectories))
                 {
                     string[] Lines = File.ReadAllLines(KeywordFile);
 
@@ -64,6 +64,7 @@ namespace Limbus_Localization_UI.Additions
                             string SpriteId = Lines[i].Split("\"id\": \"")[1].Split("\",")[0];
                             string SpriteName = Lines[i + 1].Split("\"name\": \"")[1].Split("\",")[0];
                             SpriteNames[SpriteId] = SpriteName;
+                            KeywordTexts[SpriteName] = SpriteId;
                             counter++;
                         }
                     }
@@ -72,7 +73,7 @@ namespace Limbus_Localization_UI.Additions
             catch{}
 
             rin($"Загружено ключевых слов: {counter}");
-            return SpriteNames;
+            return (SpriteNames, KeywordTexts);
         }
 
 
@@ -83,7 +84,7 @@ namespace Limbus_Localization_UI.Additions
             int counter = 0;
             try
             {
-                foreach (var Line in File.ReadAllLines(@"Спрайты\$Другое\BattleKeywords\ColorPairs.txt"))
+                foreach (var Line in File.ReadAllLines(@"[Ресурсы]\$Другое\BattleKeywords\ColorPairs.txt"))
                 {
                     string ID = Line.Split(" ¤ ")[0];
                     string Color = Line.Split(" ¤ ")[1];
@@ -105,7 +106,7 @@ namespace Limbus_Localization_UI.Additions
             int counter = 0;
             try
             {
-                foreach(var Line in File.ReadAllLines(@"Спрайты\$Другое\Доп замены.txt").ToList())
+                foreach(var Line in File.ReadAllLines(@"[Ресурсы]\$Другое\Доп замены.txt").ToList())
                 {
                     if (Line.StartsWith("------------------------------------------------")) break;
 
@@ -158,11 +159,11 @@ namespace Limbus_Localization_UI.Additions
         private static Dictionary<string, byte[]> GetSpriteFiles()
         {
             Dictionary<string, byte[]> SpriteFiles = new();
-            foreach (string image in Directory.EnumerateFiles("Спрайты", "*.*", SearchOption.AllDirectories))
+            foreach (string image in Directory.EnumerateFiles(@"[Ресурсы]\Спрайты", "*.*", SearchOption.TopDirectoryOnly))
             {
                 if (image.EndsWith(".png") | image.EndsWith(".webp"))
                 {
-                    SpriteFiles[image[8..]] = File.ReadAllBytes(image);
+                    SpriteFiles[image.Split("\\")[^1]] = File.ReadAllBytes(image);
                 }
             }
             rin($"Загружено спрайтов: {SpriteFiles.Keys.Count} ");

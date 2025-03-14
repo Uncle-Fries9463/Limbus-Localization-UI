@@ -67,7 +67,12 @@ namespace Limbus_Localization_UI
         static string Filename = "";
         
         static Dictionary<string, BitmapImage> SpriteBitmaps = РазноеДругое.GetSpritesBitmaps();
-        static Dictionary<string, string> Keywords = РазноеДругое.GetKeywords();
+
+
+        static Dictionary<string, string> Keywords = new();
+        static Dictionary<string, string> KeywordIDName = new();
+        
+
         static Dictionary<string, string> Replacements = РазноеДругое.GetAddtReplacements();
         static Dictionary<string, string> ColorPairs = РазноеДругое.GetColorPairs();
 
@@ -256,6 +261,7 @@ namespace Limbus_Localization_UI
 
         private void StartInits()
         {
+            (Keywords, KeywordIDName) = РазноеДругое.GetKeywords();
             PreviewLayout_Skills.PreviewMouseLeftButtonDown += SurfaceScroll_MouseLeftButtonDown;
             PreviewLayout_Skills.PreviewMouseMove += SurfaceScroll_MouseMove;
             PreviewLayout_Skills.PreviewMouseLeftButtonUp += SurfaceScroll_MouseLeftButtonUp;
@@ -575,11 +581,11 @@ namespace Limbus_Localization_UI
             {
                 BitmapImage source;
                 if (SpriteBitmaps.ContainsKey(SpriteName)) source = SpriteBitmaps[SpriteName];
-                else source = SpriteBitmaps[@"Unknown.png"];
+                else source = SpriteBitmaps[@"$Unknown.png"];
                 Image SpriteImage = new()
                 {
                     Source = source,
-                    Width = 23,
+                    Width = 21.6,
                     Height = 23,
                     Margin = new Thickness(-2, -1, -2, 0)
                 };
@@ -648,6 +654,11 @@ namespace Limbus_Localization_UI
             LastPreviewUpdateText = JsonDesc;
             LastPreviewUpdateTarget = Target;
 
+            //foreach (var KeywordName in KeywordIDName)
+            //{
+            //    JsonDesc = JsonDesc.Replace(KeywordName.Key, $"[{KeywordName.Value}]");
+            //}
+
             // Заменить квадратные скобки на <sprite><color>...</color>, если текст из них есть в списке id из всех Keywords файлов
             try
             {
@@ -677,7 +688,7 @@ namespace Limbus_Localization_UI
 
                 if (Keywords.ContainsKey(MaybeKeyword))
                 {
-                    return $"<sprite name=\\\"{MaybeKeyword}\\\"><color={ColorPairs[MaybeKeyword]}>{MaybeName}</color>";
+                    return $"<sprite name=\\\"{MaybeKeyword}\\\"><color={(ColorPairs.ContainsKey(MaybeKeyword) ? ColorPairs[MaybeKeyword] : "#f8c200")}>{MaybeName}</color>";
                 }
                 else
                 {
@@ -685,6 +696,15 @@ namespace Limbus_Localization_UI
                 }
             });
 
+
+            if (EditorMode.Equals("EGOgift"))
+            {
+                JsonDesc = JsonDesc.Replace("<style=\\\"highlight\\\">", "");
+            }
+            else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
+            {
+                JsonDesc = JsonDesc.Replace("<style=\\\"upgradeHighlight\\\">", "");
+            }
 
             if (!JsonEditor_EnableHighlight)
             {
@@ -726,6 +746,8 @@ namespace Limbus_Localization_UI
                 }
             }
 
+            
+
             JsonDesc = JsonDesc.Replace("color=#None", "color=#ffffff")
                                .Replace("<style=\\\"highlight\\\">", "<style=\\\"upgradeHighlight\\\">") // Подсветка улучшения
 
@@ -734,7 +756,7 @@ namespace Limbus_Localization_UI
                                .Replace("<u>", "")  // Подчёркивание ставится по цвету
                                .Replace("</u>", "")
 
-                               .Replace("<>", "<s>") // Пустые теги ломают весь текст
+                               .Replace("<>", "<\0>") // Пустые теги ломают весь текст
 
                                .Replace("[WhenUse]",             "<color=#27cefe>[При использовании]</color>")
                                .Replace("[OnSucceedAttackHead]", "<color=#c6fe94>[Выпал орёл]</color>")
@@ -786,13 +808,13 @@ namespace Limbus_Localization_UI
                 "style=\\\"upgradeHighlight\\\"",
                 "/style",
 
-                "s",
+                "EMPTY¤",
             };
 
             //JsonDesc = Regex.Replace(JsonDesc, @"(?<=<\/color>)([а-яА-Яa-zA-Z])", " $1"); // Без понятия зачем
             JsonDesc = Regex.Replace(JsonDesc, @"<link=\\\"".*?\\\"">", ""); // убрать все link (Тултип не рабоатет)
 
-            JsonDesc = JsonDesc.Replace("\">\0<color=#f8c200>", "\">\0<color=#fac400>"); // Подчёркивание статусных эффектов
+            //JsonDesc = JsonDesc.Replace("\">\0<color=#f8c200>", "\">\0<color=#fac400>"); // Подчёркивание статусных эффектов
             
 
             // Сепарированые обычных '<' '>' от тегов
@@ -809,9 +831,9 @@ namespace Limbus_Localization_UI
             JsonDesc = JsonDesc.Replace("<sup>", "⇱sup⇲");
             JsonDesc = JsonDesc.Replace("</sup>", "⇱/sup⇲");
             JsonDesc = JsonDesc.Replace("</sub>", "⇱/sub⇲");
-            JsonDesc = JsonDesc.Replace("<s>", "⇱s⇲");
+            JsonDesc = JsonDesc.Replace("<EMPTY¤>", "⇱EMPTY¤⇲");
 
-            string[] parts = $"⇱s⇲\0{JsonDesc.Replace("\\n", "\n")}".Split(new char[] { '⇱', '⇲' }, StringSplitOptions.RemoveEmptyEntries); // Главное разбивание текста на список с обычным текстом и тегами
+            string[] parts = $"⇱EMPTY¤⇲\0{JsonDesc.Replace("\\n", "\n")}".Split(new char[] { '⇱', '⇲' }, StringSplitOptions.RemoveEmptyEntries); // Главное разбивание текста на список с обычным текстом и тегами
 
             // Нормализация работы style
             for (int PartIndex = 0; PartIndex <= parts.Count() - 1; PartIndex++)
@@ -881,7 +903,7 @@ namespace Limbus_Localization_UI
 
                                 if (SubpRange.StartsWith("color=#"))
                                 {
-                                    subp_parts.Add($"⇱{SubpRange}⇲"); 
+                                    subp_parts.Add($"<{SubpRange}>"); 
                                     TakenOtherColors.Add(PartsIndex);
                                 }
                                 else if (SubpRange.Equals("/color")) subp_parts.Add($"<{SubpRange}>");
@@ -904,7 +926,7 @@ namespace Limbus_Localization_UI
 
                                 if (IRange.StartsWith("color=#"))
                                 {
-                                    i_parts.Add($"⇱{IRange}⇲"); //'⇱', '⇲'
+                                    i_parts.Add($"<{IRange}>"); //'⇱', '⇲'
                                     TakenOtherColors.Add(PartsIndex);
                                 }
                                 else if (IRange.Equals("/color")) i_parts.Add($"<{IRange}>");
@@ -2404,8 +2426,16 @@ namespace Limbus_Localization_UI
 
         private void Refractor_Click(object sender, RoutedEventArgs e)
         {
-            if (Refractor1.Width == 0) Refractor1.Width = 110;
-            else Refractor1.Width = 0;
+            if (Refractor1.Width == 0 & Refractor2.Width == 0)
+            {
+                Refractor1.Width = 110;
+                Refractor2.Width = 110;
+            }
+            else
+            {
+                Refractor1.Width = 0;
+                Refractor2.Width = 0;
+            }
         }
         private void Refractor1_Click(object sender, RoutedEventArgs e)
         {
@@ -2418,7 +2448,36 @@ namespace Limbus_Localization_UI
 
             JsonEditor.Text = ReplaceSquareLinks;
             Refractor1.Width = 0;
+            Refractor2.Width = 0;
         }
+
+        private void Refractor2_Click_RMB(object sender, RoutedEventArgs e)
+        {
+            if (!JsonEditor.SelectedText.Equals(""))
+            {
+                JsonEditor.SelectedText = $"<style=\"upgradeHighlight\">{JsonEditor.SelectedText}</style>";
+            }
+            else
+            {
+                JsonEditor.Text = JsonEditor.Text.Insert(JsonEditor.CaretIndex, "<style=\"upgradeHighlight\"></style>");
+            }
+            Refractor1.Width = 0;
+            Refractor2.Width = 0;
+        }
+        private void Refractor2_Click_LMB(object sender, RoutedEventArgs e)
+        {
+            if (!JsonEditor.SelectedText.Equals(""))
+            {
+                JsonEditor.SelectedText = $"<style=\"highlight\">{JsonEditor.SelectedText}</style>";
+            }
+            else
+            {
+                JsonEditor.Text = JsonEditor.Text.Insert(JsonEditor.CaretIndex, "<style=\"highlight\"></style>");
+            }
+            Refractor1.Width = 0;
+            Refractor2.Width = 0;
+        }
+
         private void Refractor_MouseEnter(object sender, MouseEventArgs e) => Refractor.Background = РазноеДругое.GetColorFromAHEX("#FF282828");
         private void Refractor_MouseLeave(object sender, MouseEventArgs e) => Refractor.Background = РазноеДругое.GetColorFromAHEX("#FF191919");
         private void Minimize_MouseEnter(object sender, MouseEventArgs e) => Minimize.Background = РазноеДругое.GetColorFromAHEX("#FF282828");
@@ -2499,7 +2558,7 @@ namespace Limbus_Localization_UI
 
         private void Reload_Keywords(object sender, RoutedEventArgs e)
         {
-            Keywords = РазноеДругое.GetKeywords();
+            (Keywords, KeywordIDName) = РазноеДругое.GetKeywords();
             Replacements = РазноеДругое.GetAddtReplacements();
             UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
         }
