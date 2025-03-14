@@ -1,0 +1,5 @@
+Enable <style> as color ¤ Yes
+JsonEditor Font         ¤ Unispace
+JsonEditor Font Color   ¤ #ABA193
+
+(Бэкап на всякий)
