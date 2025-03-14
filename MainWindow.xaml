@@ -262,12 +262,12 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 1, 1, 0">
                         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
-                            <Button x:Name="Refractor1"  PreviewMouseRightButtonDown="Refractor1_Click_RMB" PreviewMouseLeftButtonDown="Refractor1_Click_LMB" Height="25" Width="120" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
+                            <Button x:Name="Refractor1"  PreviewMouseRightButtonDown="Refractor1_Click_RMB" PreviewMouseLeftButtonDown="Refractor1_Click_LMB" Height="25" Width="0" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
                                 <TextBlock x:Name="LinksToStyle" Foreground="#FFD1D1D1" FontSize="13.4" Width="116" TextWrapping="Wrap" TextAlignment="Center" Margin="-1, 0, 0, 0" Text="">
                                     Развёртка ссылок
                                 </TextBlock>
                             </Button>
-                            <Button x:Name="Refractor2" PreviewMouseRightButtonDown="Refractor2_Click_RMB" PreviewMouseLeftButtonDown="Refractor2_Click_LMB" Height="25" Width="120" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
+                            <Button x:Name="Refractor2" PreviewMouseRightButtonDown="Refractor2_Click_RMB" PreviewMouseLeftButtonDown="Refractor2_Click_LMB" Height="25" Width="0" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
                                 <TextBlock x:Name="InsertStyle" Foreground="#FFD1D1D1" FontSize="13.4" Width="116" TextWrapping="Wrap" TextAlignment="Center" Margin="-1, 0, 0, 0" Text="">
                                     Вставить style
                                 </TextBlock>
