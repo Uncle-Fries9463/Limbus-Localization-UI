@@ -268,7 +268,7 @@
                                 </TextBlock>
                             </Button>
                             <Button x:Name="Refractor2" PreviewMouseRightButtonDown="Refractor2_Click_RMB" PreviewMouseLeftButtonDown="Refractor2_Click_LMB" Height="25" Width="120" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
-                                <TextBlock x:Name="InsertStyle" Foreground="#FFD1D1D1" FontSize="12.7" Width="116" TextWrapping="Wrap" TextAlignment="Center" Margin="-1, 0, 0, 0" Text="">
+                                <TextBlock x:Name="InsertStyle" Foreground="#FFD1D1D1" FontSize="13.4" Width="116" TextWrapping="Wrap" TextAlignment="Center" Margin="-1, 0, 0, 0" Text="">
                                     Вставить style
                                 </TextBlock>
                             </Button>
