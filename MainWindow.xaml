@@ -258,17 +258,17 @@
                 <Grid Grid.Row="0" Background="#FF141414">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition x:Name="TitleBarIcons" Width="381"/>
+                        <ColumnDefinition x:Name="TitleBarIcons"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 1, 1, 0">
                         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
-                            <Button x:Name="Refractor1" Click="Refractor1_Click" Height="25" Width="0" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
-                                <TextBlock x:Name="LinksToStyle" Foreground="#FFD1D1D1" FontSize="13" Width="106" TextWrapping="Wrap" TextAlignment="Center" Margin="-1, 0, 0, 0" Text="">
-                                    Ссылки ➤ sprite
+                            <Button x:Name="Refractor1"  PreviewMouseRightButtonDown="Refractor1_Click_RMB" PreviewMouseLeftButtonDown="Refractor1_Click_LMB" Height="25" Width="120" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
+                                <TextBlock x:Name="LinksToStyle" Foreground="#FFD1D1D1" FontSize="13.4" Width="116" TextWrapping="Wrap" TextAlignment="Center" Margin="-1, 0, 0, 0" Text="">
+                                    Развёртка ссылок
                                 </TextBlock>
                             </Button>
-                            <Button x:Name="Refractor2" PreviewMouseRightButtonDown="Refractor2_Click_RMB" PreviewMouseLeftButtonDown="Refractor2_Click_LMB" Height="25" Width="0" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
-                                <TextBlock x:Name="InsertStyle" Foreground="#FFD1D1D1" FontSize="13" Width="106" TextWrapping="Wrap" TextAlignment="Center" Margin="-1, 0, 0, 0" Text="">
+                            <Button x:Name="Refractor2" PreviewMouseRightButtonDown="Refractor2_Click_RMB" PreviewMouseLeftButtonDown="Refractor2_Click_LMB" Height="25" Width="120" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
+                                <TextBlock x:Name="InsertStyle" Foreground="#FFD1D1D1" FontSize="12.7" Width="116" TextWrapping="Wrap" TextAlignment="Center" Margin="-1, 0, 0, 0" Text="">
                                     Вставить style
                                 </TextBlock>
                             </Button>
@@ -341,7 +341,7 @@
                     <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#FF1D1D1D" FontSize="20" Width="30" HorizontalAlignment="Left" Margin="2, 5, 0, 0" TextAlignment="Center">
                         ❐
                     </TextBlock>
-                    <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#FF232323" FontSize="25" Width="320" HorizontalAlignment="Left" Margin="35, 0, 0, 0">
+                    <TextBlock Grid.Row="0" FontFamily="Bahnschrift Light" Foreground="#FF232323" FontSize="25" Width="299" HorizontalAlignment="Left" Margin="35,0,0,0">
                         Limbus Localization UI 1.6
                     </TextBlock>
                 </Grid>
@@ -668,9 +668,9 @@
                              Foreground="#A69885"
                              SelectionBrush="#B2B4B4B4"
                              Background="#FF191919"/>
-                    
+
                     <Image x:Name="PreviewLayout_BackgroundImage" Source="Images/Фон ЭГО даров.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="-1">
-                        
+
                     </Image>
                     <RichTextBox x:Name="PreviewLayout_EGOgift"
                                  IsReadOnly="True"
@@ -1013,7 +1013,7 @@
                                             </StackPanel>
                                         </ToolTip>
                                     </Button.ToolTip>
-                                    
+
                                 </Button>
 
                                 <TextBlock x:Name="IDCopiedNotify"
@@ -1029,7 +1029,7 @@
                                 </TextBlock>
                             </StackPanel>
                         </Border>
-                        
+
                         <Border x:Name="LeftMenu_Box"
                                 Grid.Column="1" 
                                 Grid.Row="2"
@@ -1108,8 +1108,8 @@
    
                                                Content="Название ЭГО Дара"/>
                                     </StackPanel>
-                                    
-                                    
+
+
                                     <StackPanel x:Name="ABName_Input_StackPanel"
                                                 Height="0"
                                                 Margin="-2.5, 0, 0, 0"
@@ -1168,8 +1168,8 @@
    
                                                Content="Фоновое название ЭГО"/>
                                     </StackPanel>
-                                    
-                                    
+
+
                                     <Button x:Name="SwitchEditorTo_Desc"
                                             Click="SwitchEditorTo_Desc_Button"
                                             Content="Описание"
@@ -1426,10 +1426,11 @@
                                             Height="30"
                                             Focusable="False"/>
                                     <Border Margin="2"/>
-                                    
-                                    
-                                    <StackPanel x:Name="SaveChangesButtons" VerticalAlignment="Top" HorizontalAlignment="Left" Width="29" Height="237" Margin="236, -237, 0, 0"> <!-- =270 with abname, =237 without  height/top_margin-->
-                                        
+
+
+                                    <StackPanel x:Name="SaveChangesButtons" VerticalAlignment="Top" HorizontalAlignment="Left" Width="29" Height="237" Margin="236, -237, 0, 0">
+                                        <!-- =270 with abname, =237 without  height/top_margin-->
+
                                         <Button x:Name="Name_Change_Button"
                                                 Click="Name_ChangeName"
                                                 Width="29" Height="29">
@@ -1476,7 +1477,7 @@
                                                 Width="29"
                                                 Height="30"
                                                 Focusable="False"/>
-                                        
+
                                         <Button x:Name="SubDesc1_Change_Button"
                                                 Click="Desc_ChangeSubDesc1"
                                                 Width="29" Height="30" Margin="0, 4, 0, 0">

@@ -2428,8 +2428,8 @@ namespace Limbus_Localization_UI
         {
             if (Refractor1.Width == 0 & Refractor2.Width == 0)
             {
-                Refractor1.Width = 110;
-                Refractor2.Width = 110;
+                Refractor1.Width = 120;
+                Refractor2.Width = 120;
             }
             else
             {
@@ -2437,13 +2437,26 @@ namespace Limbus_Localization_UI
                 Refractor2.Width = 0;
             }
         }
-        private void Refractor1_Click(object sender, RoutedEventArgs e)
+        private void Refractor1_Click_LMB(object sender, RoutedEventArgs e)
         {
             string ReplaceSquareLinks = Regex.Replace(JsonEditor.Text, @"\[(.*?)\]", match =>
             {
-                string sprite = match.Groups[1].Value;
+                string KeywordID = match.Groups[1].Value;
 
-                return Keywords.ContainsKey(sprite) ? $"<sprite name=\"{sprite}\"><color={ColorPairs[sprite]}><u><link=\"{sprite}\">{Keywords[sprite]}</link></u></color>" : $"[{sprite}]";
+                return Keywords.ContainsKey(KeywordID) ? $"<sprite name=\"{KeywordID}\"><color={ColorPairs[KeywordID]}><u><link=\"{KeywordID}\">{Keywords[KeywordID]}</link></u></color>" : $"[{KeywordID}]";
+            });
+
+            JsonEditor.Text = ReplaceSquareLinks;
+            Refractor1.Width = 0;
+            Refractor2.Width = 0;
+        }
+        private void Refractor1_Click_RMB(object sender, RoutedEventArgs e)
+        {
+            string ReplaceSquareLinks = Regex.Replace(JsonEditor.Text, @"\[(\w+)\]", match =>
+            {
+                string KeywordID = match.Groups[1].Value;
+
+                return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:'{Keywords[KeywordID]}']" : $"[{KeywordID}]";
             });
 
             JsonEditor.Text = ReplaceSquareLinks;
