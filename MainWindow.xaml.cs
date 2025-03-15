@@ -462,7 +462,7 @@ namespace Limbus_Localization_UI
 
         public static bool WordWrap_WithSprites = true;
 
-        private static void AddText(string text, RichTextBox Target, bool IsSub = false, bool IsSup = false, bool IsItalic = false, bool IsEffectName = false)
+        private static void AddText(string text, RichTextBox Target, bool IsSub = false, bool IsSup = false, bool IsItalic = false, bool IsEffectName = false, bool IsBold = false)
         {
             var document = Target.Document;
             if (document.Blocks.LastBlock is not Paragraph lastParagraph)
@@ -472,12 +472,11 @@ namespace Limbus_Localization_UI
             }
 
             string[] TextParts = Regex.Split(text, @"<color=(#[0-9a-fA-F]{6})>(.*?)</color>", RegexOptions.Singleline);
-
             for (int i = 0; i < TextParts.Length; i++)
             {
                 if (i % 3 == 0 & TextParts[i] != "" & TextParts[i] != "\0") // Обычный текст
                 {
-                    if (!IsSub & !IsSup & !IsItalic)
+                    if (!IsSub & !IsSup & !IsItalic & !IsBold)
                     {
                         if (TextParts[i].StartsWith("{UPGRADE}"))
                         {
@@ -494,7 +493,7 @@ namespace Limbus_Localization_UI
                         StackPanel SubpStackPanel = new()
                         {
                             Height = 12,
-                            Margin = new Thickness(0, IsSub? 0 : -40, 0, 0),
+                            Margin = new Thickness(0, IsSub ? 0 : -40, 0, 0),
                         };
                         SubpStackPanel.Children.Add(new TextBlock(SubpTextRun));
                         SubpStackPanel.RenderTransform = new TranslateTransform(0, 5);
@@ -505,6 +504,12 @@ namespace Limbus_Localization_UI
                     {
                         Run ItalicRun = new Run(TextParts[i].Replace("\\\"", "\"").Replace("{UPGRADE}", "")) { FontFamily = new FontFamily("Arial"), FontStyle = FontStyles.Italic };
                         lastParagraph.Inlines.Add(ItalicRun);
+                    }
+                    else if (IsBold)
+                    {
+                        Console.WriteLine("bold");
+                        Run BoldRun = new Run(TextParts[i].Replace("\\\"", "\"").Replace("{UPGRADE}", "")) { FontFamily = new FontFamily("Arial"), FontWeight = FontWeights.SemiBold };
+                        lastParagraph.Inlines.Add(BoldRun);
                     }
                 }
                 else if (i % 3 == 1) // Цветной текст
@@ -531,7 +536,7 @@ namespace Limbus_Localization_UI
                         //if (TextParts[i] == "#e30000" | TextParts[i] == "#fac400" | TextParts[i] == "#9f6a3a") coloredRun.TextDecorations = TextDecorations.Underline;
                         if (IsEffectName) coloredRun.TextDecorations = TextDecorations.Underline;
 
-                        if (!IsSub & !IsSup & !IsItalic)
+                        if (!IsSub & !IsSup & !IsItalic & !IsBold)
                         {
                             lastParagraph.Inlines.Add(coloredRun);
                         }
@@ -553,6 +558,13 @@ namespace Limbus_Localization_UI
                         {
                             coloredRun.FontFamily = new FontFamily("Arial");
                             coloredRun.FontStyle = FontStyles.Italic;
+
+                            lastParagraph.Inlines.Add(coloredRun);
+                        }
+                        else if (IsBold)
+                        {
+                            coloredRun.FontFamily = new FontFamily("Arial");
+                            coloredRun.FontWeight = FontWeights.SemiBold;
 
                             lastParagraph.Inlines.Add(coloredRun);
                         }
@@ -804,6 +816,8 @@ namespace Limbus_Localization_UI
                 "/sup",
                 "i",
                 "/i",
+                "b",
+                "/b",
                 "/",
                 "style=\\\"upgradeHighlight\\\"",
                 "/style",
@@ -827,6 +841,8 @@ namespace Limbus_Localization_UI
             JsonDesc = JsonDesc.Replace("</color>", "⇱/color⇲");
             JsonDesc = JsonDesc.Replace("<i>", "⇱i⇲");
             JsonDesc = JsonDesc.Replace("</i>", "⇱/i⇲");
+            JsonDesc = JsonDesc.Replace("<b>", "⇱b⇲");
+            JsonDesc = JsonDesc.Replace("</b>", "⇱/b⇲");
             JsonDesc = JsonDesc.Replace("<sub>", "⇱sub⇲");
             JsonDesc = JsonDesc.Replace("<sup>", "⇱sup⇲");
             JsonDesc = JsonDesc.Replace("</sup>", "⇱/sup⇲");
@@ -880,7 +896,7 @@ namespace Limbus_Localization_UI
                 if (i % 2 == 1)
                 {
                     try{
-                        if (!parts[i - 1].StartsWith("sub") & !parts[i - 1].StartsWith("sup") & !parts[i - 1].StartsWith("i"))
+                        if (!parts[i - 1].StartsWith("sub") & !parts[i - 1].StartsWith("sup") & !parts[i - 1].StartsWith("i") & !parts[i - 1].StartsWith("b"))
                         {
                             if (!parts[i - 1].StartsWith("color=#"))
                             {
@@ -935,7 +951,31 @@ namespace Limbus_Localization_UI
                             }
                             AddText(String.Join(string.Empty, i_parts), Target, IsItalic: true);
                         }
-                    }catch{}
+                        else if (parts[i - 1].Equals("b"))
+                        {
+                            List<string> b_parts = new()
+                            {
+                                parts[i]
+                            };
+                            int PartsIndex = i + 1;
+
+                            foreach (var BRange in parts[(i + 1)..])
+                            {
+                                if (BRange.Equals($"/b")) break;
+
+                                if (BRange.StartsWith("color=#"))
+                                {
+                                    b_parts.Add($"<{BRange}>"); //'⇱', '⇲'
+                                    TakenOtherColors.Add(PartsIndex);
+                                }
+                                else if (BRange.Equals("/color")) b_parts.Add($"<{BRange}>");
+                                else b_parts.Add(BRange);
+                                PartsIndex++;
+                            }
+                            AddText(String.Join(string.Empty, b_parts), Target, IsBold: true);
+                        }
+                    }
+                    catch{}
                 }
                 else
                 {
@@ -1394,7 +1434,7 @@ namespace Limbus_Localization_UI
                             Mode_Handlers.Mode_Skills.AdjustUI(IsEGO: true);
                             Name_Label_bgtext.Content = "Название ЭГО";
                         }
-                        else if(Filename.StartsWith("Skills_personality-"))
+                        else if(Filename.StartsWith("Skills_personality-") | Filename.Equals("Skills.json"))
                         {
                             SaveChangesButtons.Height = 237;
                             SaveChangesButtons.Margin = new Thickness(236, -237, 0, 0);
@@ -2474,8 +2514,6 @@ namespace Limbus_Localization_UI
             {
                 JsonEditor.Text = JsonEditor.Text.Insert(JsonEditor.CaretIndex, "<style=\"upgradeHighlight\"></style>");
             }
-            Refractor1.Width = 0;
-            Refractor2.Width = 0;
         }
         private void Refractor2_Click_LMB(object sender, RoutedEventArgs e)
         {
@@ -2487,8 +2525,6 @@ namespace Limbus_Localization_UI
             {
                 JsonEditor.Text = JsonEditor.Text.Insert(JsonEditor.CaretIndex, "<style=\"highlight\"></style>");
             }
-            Refractor1.Width = 0;
-            Refractor2.Width = 0;
         }
 
         private void Refractor_MouseEnter(object sender, MouseEventArgs e) => Refractor.Background = РазноеДругое.GetColorFromAHEX("#FF282828");
