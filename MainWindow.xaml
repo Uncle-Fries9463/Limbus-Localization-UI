@@ -26,6 +26,7 @@
         
         Opacity="1" AllowsTransparency="True"
         
+        
         Title="Limbus Localization UI">
     <!--Плавное появление окна и анти флешбенг при WindowStyle="None"-->
     <Window.Triggers>
@@ -375,7 +376,7 @@
                     <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="0" Grid.Column="1" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
                     <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="0" Grid.Column="0" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
                     <Border x:Name="SettingsDialog"
-                            Margin="1000"
+                            Margin="1110"
                             Background="#FF191919"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
@@ -495,11 +496,23 @@
                                         </StackPanel>
                                     </StackPanel>
                                     <Button x:Name="Lang" Margin="25, 0, 0, 0" Foreground="#FFB4B4B4" BorderThickness="3" BorderBrush="#FF5E5E5E" FontSize="28" Height="40" Width="95">
-                                        <TextBlock Margin="0, 0, 0, 0" Text="RU"/>
+                                        <TextBlock Text="RU"/>
                                     </Button>
                                     <Border  Margin="-95, 0, 0, 0" Height="40" Width="95" Background="#7F000000"/>
                                 </StackPanel>
-                                <Button Click="Settings_OK" Width="100" Height="35" Margin="0, 0, 0, 0" Content="OK"/>
+                                <Button Click="Settings_OK" Margin="56, 0, 0, 0" Width="100" Height="35" Content="OK"/>
+                                <Button Width="93" Height="35" HorizontalAlignment="Left" Margin="0, -35, 0, 0" Click="Refractor1_Shorthand_Changetype">
+                                    <StackPanel>
+                                        <TextBlock Text="Dynamic Keyw." Foreground="#b4b4b4" Margin="0, 0, 0, 0" FontSize="13"/>
+                                        <TextBlock Text="Отключено" x:Name="EnableDynamicKeywords_Display" TextDecorations="Underline" Foreground="#FFBAA7A7" Margin="0, 0, 0, 0" FontSize="11" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Width="93" Height="35" HorizontalAlignment="Left" Margin="100, -35, 0, 0" Click="BattleKeywords_Change_Type">
+                                    <StackPanel>
+                                        <TextBlock Text="Keywords" Foreground="#b4b4b4" Margin="0, 0, 0, 0" FontSize="13"/>
+                                        <TextBlock Text="RU" x:Name="BattleKeywords_TypeDisplay" TextDecorations="Underline" Foreground="#FFBAA7A7" Margin="0, 0, 0, 0" FontSize="11" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
                                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0, -35, 4, 0">
                                     <Button Click="Reload_Sprites"  Width="35" Margin="3, 0, 0, 0" Height="35" ToolTipService.InitialShowDelay="10">
                                         <Button.Content>

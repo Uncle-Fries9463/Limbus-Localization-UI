@@ -80,6 +80,8 @@ namespace Limbus_Localization_UI
         static RichTextBox LastPreviewUpdateTarget = new();
 
         public static bool JsonEditor_EnableHighlight = true;
+        public static bool EnableDynamicKeywords = false;
+        public static string BattleKeywords_Type = "RU";
         public static FontFamily JsonEditor_FontFamily = new FontFamily("Lucida Sans Unicode");
         public static SolidColorBrush JsonEditor_TextColor = РазноеДругое.GetColorFromAHEX("#FFA69885");
 
@@ -132,6 +134,7 @@ namespace Limbus_Localization_UI
                 ["PreviewLayout @ Skills [Panel]"] = CurrentSkill_Panel,
 
                 ["Unsaved Changes Tooltip"] = UnsavedChangesTooltip,
+                ["Enable Dynamic Keywords"] = EnableDynamicKeywords_Display,
 
                 ["ABName EditBox StackPanel"] = ABName_Input_StackPanel,     // 33
                 ["ABName SaveChanges StackPanel"] = ABName_Input_StackPanel, // 33
@@ -470,7 +473,7 @@ namespace Limbus_Localization_UI
                 lastParagraph = new Paragraph();
                 document.Blocks.Add(lastParagraph);
             }
-
+            text = text.Replace("SPRUPRO", "");
             string[] TextParts = Regex.Split(text, @"<color=(#[0-9a-fA-F]{6})>(.*?)</color>", RegexOptions.Singleline);
             for (int i = 0; i < TextParts.Length; i++)
             {
@@ -579,6 +582,7 @@ namespace Limbus_Localization_UI
 
         private static void AddSprite(string SpriteName, RichTextBox Target, bool IsOneWord = true, string NextWord = "Кто это?", string NextColor = "#fac400")
         {
+            NextWord = NextWord.Replace("SPRUPRO", "");
             if (IsOneWord & WordWrap_WithSprites) Is_OneWord_Queued = true;
 
             var document = Target.Document;
@@ -665,11 +669,17 @@ namespace Limbus_Localization_UI
 
             LastPreviewUpdateText = JsonDesc;
             LastPreviewUpdateTarget = Target;
-
-            //foreach (var KeywordName in KeywordIDName)
-            //{
-            //    JsonDesc = JsonDesc.Replace(KeywordName.Key, $"[{KeywordName.Value}]");
-            //}
+            // Замена обычных слов на ключевые слова, если они совпадают Rupture Protection
+            if (EnableDynamicKeywords)
+            {
+                foreach (var KeywordName in KeywordIDName.Reverse())
+                {
+                    JsonDesc = Regex.Replace(JsonDesc, @$"(?<![a-zA-Zа-яА-Я<>\[\]\'])({KeywordName.Key})(?![a-zA-Zа-яА-Я])", match =>
+                    {
+                        return $"<sprite name=\\\"{KeywordName.Value}\\\"><color={(ColorPairs.ContainsKey(KeywordName.Value) ? ColorPairs[KeywordName.Value] : "#f8c200")}>{KeywordName.Key}SPRUPRO</color>";
+                    });
+                }
+            }
 
             // Заменить квадратные скобки на <sprite><color>...</color>, если текст из них есть в списке id из всех Keywords файлов
             try
@@ -691,8 +701,7 @@ namespace Limbus_Localization_UI
             }
             catch{}
 
-
-            // Обработка особых вставок эффектов [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки
+            // Обработка особых вставок эффектов [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки в теги
             JsonDesc = Regex.Replace(JsonDesc, @"\[(\w+)\:'(.*?)'\]", match =>
             {
                 string MaybeKeyword = match.Groups[1].Value;
@@ -2496,7 +2505,14 @@ namespace Limbus_Localization_UI
             {
                 string KeywordID = match.Groups[1].Value;
 
-                return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:'{Keywords[KeywordID]}']" : $"[{KeywordID}]";
+                if (EnableDynamicKeywords.Equals("Knightey"))
+                {
+                    return Keywords.ContainsKey(KeywordID) ? $"{{{KeywordID}: *{Keywords[KeywordID]}*}}" : $"[{KeywordID}]";
+                }
+                else
+                {
+                    return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:'{Keywords[KeywordID]}']" : $"[{KeywordID}]";
+                }
             });
 
             JsonEditor.Text = ReplaceSquareLinks;
@@ -2525,6 +2541,39 @@ namespace Limbus_Localization_UI
             {
                 JsonEditor.Text = JsonEditor.Text.Insert(JsonEditor.CaretIndex, "<style=\"highlight\"></style>");
             }
+        }
+        private void Refractor1_Shorthand_Changetype(object sender, RoutedEventArgs e)
+        {
+            if (EnableDynamicKeywords)
+            {
+                EnableDynamicKeywords = false;
+                EnableDynamicKeywords_Display.Text = "Отключено";
+            }
+            else
+            {
+                EnableDynamicKeywords = true;
+                EnableDynamicKeywords_Display.Text = "Включено";
+            }
+            //MSettings.SaveSetting("Enable Dynamic Keywords", EnableDynamicKeywords ? "Yes" : "No");
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
+        private void BattleKeywords_Change_Type(object sender, RoutedEventArgs e)
+        {
+            if (BattleKeywords_Type.Equals("RU"))
+            {
+                (Keywords, KeywordIDName) = РазноеДругое.GetKeywords(IsEng: true);
+                Replacements = РазноеДругое.GetAddtReplacements();
+                BattleKeywords_Type = "EN";
+                BattleKeywords_TypeDisplay.Text = BattleKeywords_Type;
+            }
+            else
+            {
+                (Keywords, KeywordIDName) = РазноеДругое.GetKeywords(IsEng: false);
+                Replacements = РазноеДругое.GetAddtReplacements();
+                BattleKeywords_Type = "RU";
+                BattleKeywords_TypeDisplay.Text = BattleKeywords_Type;
+            }
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
         }
 
         private void Refractor_MouseEnter(object sender, MouseEventArgs e) => Refractor.Background = РазноеДругое.GetColorFromAHEX("#FF282828");
