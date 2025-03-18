@@ -1,0 +1,58 @@
+[WinDuel]                     ¤ <color=#f95e00>[Победа в столкновении]</color>
+[WhenUse]                     ¤ <color=#27cefe>[При использовании]</color>
+[EndCoin]                     ¤ <color=#93f03f>[После атаки монетой]</color>
+[EndSkill]                    ¤ <color=#93f03f>[В конце атаки]</color>
+[AllyKill]                    ¤ <color=#93f03f>[При убийстве союзника]</color>
+[CantDuel]                    ¤ <color=#fe0000>[Нельзя столкнуться]</color>
+[EndSkill]                    ¤ <color=#93f03f>[Конец атаки]</color>
+[EndBattle]                   ¤ <color=#93f03f>[В конце хода]</color>
+[BeforeHit]                   ¤ <color=#93f03f>[Перед получением удара]</color>
+[EnemyKill]                   ¤ <color=#93f03f>[При убийстве]</color>
+[DuelGuard]                   ¤ <color=#93f03f>[Защита с поединком]</color>
+[BeforeUse]                   ¤ <color=#93f03f>[Перед использованием]</color>
+[DefeatDuel]                  ¤ <color=#fe0000>[Поражение в столкновении]</color>
+[TargetKill]                  ¤ <color=#93f03f>[При убийстве цели]</color>
+[DuelCounter]                 ¤ <color=#f95e00>[Контратака с поединком]</color>
+[EndSkillAll]                 ¤ <color=#93f03f>[Окончание навыка]</color>
+[StartBattle]                 ¤ <color=#93f03f>[Начало боевой фазы]</color>
+[EndSkillTail]                ¤ <color=#c90080>[Конец атаки решкой]</color>
+[EndSkillHead]                ¤ <color=#fe59c0>[Конец атаки орлом]</color>
+[BeforeAttack]                ¤ <color=#93f03f>[Перед атакой]</color>
+[CanDuelGuard]                ¤ <sprite name=\\\"CanDuelGuard\\\"><color=#9f6a3a>[Блок с поединком]</color>
+[AllyKillFail]                ¤ <color=#93f03f>[При неудавшемся убийстве союзника]</color>
+[CantIdentify]                ¤ <color=#fe0000>[Неуправляемый]</color>
+[WhenUse_Force]               ¤ <color=#26cfff>[При использовании]</color>
+[WinDuelAttack]               ¤ <color=#93f03f>[После победы в столкновении]</color>
+[EnemyKillFail]               ¤ <color=#93f03f>[При неудачном убийстве]</color>
+[OnDefeatEvade]               ¤ <color=#93f03f>[Неудачный уворот]</color>
+[OnSucceedEvade]              ¤ <color=#93f03f>[Успешный уворот]</color>
+[OnSucceedAttack]             ¤ <color=#93f03f>[При ударе]</color>
+[TurnStartBattle]             ¤ <color=#93f03f>[Начало хода]</color>
+[CantChangeTarget]            ¤ <color=#93f03f>[Цель неизменна]</color>
+[DefeatDuelAttack]            ¤ <color=#93f03f>[Удар после проигрыша в столкновении]</color>
+[WinDuelAttackHead]           ¤ <color=#93f03f>[Орёл после победы в столкновении]</color>
+[CriticalActivated]           ¤ <color=#93f03f>[Начало критической атаки]</color>
+[StartBattle_Force]           ¤ <color=#93f03f>[Начало боевой фазы]</color>
+[OnSucceedAttackTail]         ¤ <color=#93f03f>[Выпала решка]</color>
+[OnSucceedAttackHead]         ¤ <color=#c6fe94>[Выпал орёл]</color>
+[CriticalOnSucceedAttack]     ¤ <color=#93f03f>[Критическая атака]</color>
+[CriticalEnemyTargetKill]     ¤ <color=#93f03f>[При убийстве критом]</color>
+[ReUseOnSucceedAttackHead]    ¤ <color=#93f03f>[Повтор, выпал орёл]</color>
+[CriticalEnemyTargetKillFail] ¤ <color=#93f03f>[При неудавшемся убийстве критом]</color>
+[UnBrokenCoinOnSucceedAttack] ¤ <color=#93f03f>[При попадании целой монетой]</color>
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+Подсказка по цветам
+
+"color=#e30000 // Красный, Негативные статусные эффекты
+"color=#f8c200 // Жёлтый, Позитивные статусные эффекты (Спешка, Повышение уровня атаки, ..) + Заряд и Дыхание
+"color=#9f6a3a // Коричневый, Нейтральные эффекты
+
+"color=#93f03f // [При ударе] и т.д.         \ Зелёный
+"color=#27cefe // [При использовании] и т.д. \ Синий
+"color=#c6fe94 // [Выпал орёл] и т.д.        \ Блеклый зелёный
+
+"color=#f95e00 // [Контратака с поедником]   \ Оранжевый
+
+"color=#fe0000 // [Неуправляемый]            \ Красный
