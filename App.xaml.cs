@@ -15,10 +15,10 @@ namespace Limbus_Localization_UI
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            if (File.Exists(@"[Ресурсы]\Спрайты\Спрайты.zip"))
+            if (File.Exists(@"[Ресурсы]\Sprites\Спрайты.zip"))
             {
-                System.IO.Compression.ZipFile.ExtractToDirectory(@"[Ресурсы]\Спрайты\Спрайты.zip", @"[Ресурсы]\Спрайты");
-                File.Delete(@"[Ресурсы]\Спрайты\Спрайты.zip");
+                System.IO.Compression.ZipFile.ExtractToDirectory(@"[Ресурсы]\Sprites\Спрайты.zip", @"[Ресурсы]\Sprites");
+                File.Delete(@"[Ресурсы]\Sprites\Спрайты.zip");
             }
 
             base.OnStartup(e);

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <None Remove="Fonts\Mikodacs\Mikodacs-fMac.otf" />
+    <None Remove="Fonts\Pretendard\public\static\Pretendard-Bold.otf" />
     <None Remove="Fonts\Pretendard\public\static\Pretendard-Light.otf" />
     <None Remove="Images\Coins\Coin 1.png" />
     <None Remove="Images\Coins\Coin 2.png" />
@@ -49,6 +50,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Content Include="Icon.ico" />
+    <Resource Include="Fonts\Pretendard\public\static\Pretendard-Bold.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Fonts\Pretendard\public\static\Pretendard-Light.otf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -75,7 +79,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
   </ItemGroup>
 
   <ItemGroup>

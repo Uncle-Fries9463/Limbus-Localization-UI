@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +12,7 @@ using Limbus_Localization_UI.Json;
 using Limbus_Localization_UI.Additions;
 using Limbus_Localization_UI.Mode_Handlers;
 using static Limbus_Localization_UI.Additions.Consola;
-
+using static Limbus_Localization_UI.TagDefier;
 
 namespace Limbus_Localization_UI
 {
@@ -64,13 +65,13 @@ namespace Limbus_Localization_UI
             "Skills_Ego-a1c5p2-nextupdate",
         };
 
-        static string Filename = "";
+        static string Mainfile_Filename = "";
         
         static Dictionary<string, BitmapImage> SpriteBitmaps = РазноеДругое.GetSpritesBitmaps();
 
 
-        static Dictionary<string, string> Keywords = new();
-        static Dictionary<string, string> KeywordIDName = new();
+        public static Dictionary<string, string> Keywords = new();
+        public static Dictionary<string, string> KeywordIDName = new();
         
 
         static Dictionary<string, string> Replacements = РазноеДругое.GetAddtReplacements();
@@ -82,6 +83,7 @@ namespace Limbus_Localization_UI
         public static bool JsonEditor_EnableHighlight = true;
         public static bool EnableDynamicKeywords = false;
         public static string BattleKeywords_Type = "RU";
+        public static string Shorthand_Type = "Knightey";
         public static FontFamily JsonEditor_FontFamily = new FontFamily("Lucida Sans Unicode");
         public static SolidColorBrush JsonEditor_TextColor = РазноеДругое.GetColorFromAHEX("#FFA69885");
 
@@ -135,6 +137,8 @@ namespace Limbus_Localization_UI
 
                 ["Unsaved Changes Tooltip"] = UnsavedChangesTooltip,
                 ["Enable Dynamic Keywords"] = EnableDynamicKeywords_Display,
+                ["Keywords Type Display"  ] = BattleKeywords_TypeDisplay,
+                ["Shorthand Type Display" ] = Shorthand_TypeDisplay,
 
                 ["ABName EditBox StackPanel"] = ABName_Input_StackPanel,     // 33
                 ["ABName SaveChanges StackPanel"] = ABName_Input_StackPanel, // 33
@@ -252,23 +256,28 @@ namespace Limbus_Localization_UI
             InitializeComponent();
             InitializeStaticLinks();
             LoadFonts();
-            StartInits();
             
             Mode_Handlers.Mode_Skills   .InitTDictionaryHere(T);
             Mode_Handlers.Mode_EGO_Gifts.InitTDictionaryHere(T);
             Mode_Handlers.Mode_Passives .InitTDictionaryHere(T);
 
-            MSettings.InitTDictionaryHere(T);
-            MSettings.LoadSettings();
+            StartInits();
         }
 
         private void StartInits()
         {
-            (Keywords, KeywordIDName) = РазноеДругое.GetKeywords();
+            //Console.OutputEncoding = Encoding.UTF8;
+            MSettings.InitTDictionaryHere(T);
+            MSettings.LoadSettings();
+            (Keywords, KeywordIDName) = РазноеДругое.GetKeywords(from: BattleKeywords_Type);
+            Replacements = РазноеДругое.GetAddtReplacements(from: BattleKeywords_Type);
+
             PreviewLayout_Skills.PreviewMouseLeftButtonDown += SurfaceScroll_MouseLeftButtonDown;
             PreviewLayout_Skills.PreviewMouseMove += SurfaceScroll_MouseMove;
             PreviewLayout_Skills.PreviewMouseLeftButtonUp += SurfaceScroll_MouseLeftButtonUp;
             string Def = "<style=\"highlight\">Посветка улучшения навыка/пассивки</style>\n<style=\"upgradeHighlight\">Подсветка улучшения ЭГО дара</style>\n\n[Breath]\n[Sinking]\n[BeforeUse]\n10 <sprite name=\"Vibration\"><color=#e30000><u><link=\"Vibration\">Тремора</link></u></color>\n\n<i>Курсивный текст</i>\n\n4m<sup>2</sup> H<sub>2</sub>O";
+
+            Def = "<sprite name=\"Breath\"><color=#f8c200><u>Повышения уровня атаки<u></color>";
 
             PreviewLayout_EGOgift.SetValue(Paragraph.LineHeightProperty, 30.0);
 
@@ -285,7 +294,7 @@ namespace Limbus_Localization_UI
             T["Json EditBox"].Text = Def;
         }
 
-
+        
 
 
         /// <summary>
@@ -463,9 +472,8 @@ namespace Limbus_Localization_UI
         }
 
 
-        public static bool WordWrap_WithSprites = true;
-
-        private static void AddText(string text, RichTextBox Target, bool IsSub = false, bool IsSup = false, bool IsItalic = false, bool IsEffectName = false, bool IsBold = false)
+        #region Методы добавления текста и спрайтов на предпросмотр
+        private static void PreviewLayout_AppendText(TextConstructor TextData, RichTextBox Target)
         {
             var document = Target.Document;
             if (document.Blocks.LastBlock is not Paragraph lastParagraph)
@@ -473,191 +481,56 @@ namespace Limbus_Localization_UI
                 lastParagraph = new Paragraph();
                 document.Blocks.Add(lastParagraph);
             }
-            text = text.Replace("SPRUPRO", "");
-            string[] TextParts = Regex.Split(text, @"<color=(#[0-9a-fA-F]{6})>(.*?)</color>", RegexOptions.Singleline);
-            for (int i = 0; i < TextParts.Length; i++)
-            {
-                if (i % 3 == 0 & TextParts[i] != "" & TextParts[i] != "\0") // Обычный текст
-                {
-                    if (!IsSub & !IsSup & !IsItalic & !IsBold)
-                    {
-                        if (TextParts[i].StartsWith("{UPGRADE}"))
-                        {
-                            lastParagraph.Inlines.Add(new Run(TextParts[i][9..].Replace("\\\"", "\"")) { Foreground = РазноеДругое.GetColorFromAHEX("#fff8c200") });
-                        }
-                        else
-                        {
-                            lastParagraph.Inlines.Add(new Run(TextParts[i].Replace("{UPGRADE}", "").Replace("\\\"", "\"")));
-                        }
-                    }
-                    else if (IsSub | IsSup)
-                    {
-                        Run SubpTextRun = new Run(TextParts[i].Replace("\\\"", "\"").Replace("{UPGRADE}", "")) { FontSize = 12 };
-                        StackPanel SubpStackPanel = new()
-                        {
-                            Height = 12,
-                            Margin = new Thickness(0, IsSub ? 0 : -40, 0, 0),
-                        };
-                        SubpStackPanel.Children.Add(new TextBlock(SubpTextRun));
-                        SubpStackPanel.RenderTransform = new TranslateTransform(0, 5);
-                        InlineUIContainer SubpText = new(SubpStackPanel);
-                        lastParagraph.Inlines.Add(SubpText);
-                    }
-                    else if (IsItalic)
-                    {
-                        Run ItalicRun = new Run(TextParts[i].Replace("\\\"", "\"").Replace("{UPGRADE}", "")) { FontFamily = new FontFamily("Arial"), FontStyle = FontStyles.Italic };
-                        lastParagraph.Inlines.Add(ItalicRun);
-                    }
-                    else if (IsBold)
-                    {
-                        Console.WriteLine("bold");
-                        Run BoldRun = new Run(TextParts[i].Replace("\\\"", "\"").Replace("{UPGRADE}", "")) { FontFamily = new FontFamily("Arial"), FontWeight = FontWeights.SemiBold };
-                        lastParagraph.Inlines.Add(BoldRun);
-                    }
-                }
-                else if (i % 3 == 1) // Цветной текст
-                {
-                    if (ColorConverter.ConvertFromString(TextParts[i]) is Color color)
-                    {
-                        Run coloredRun;
-                        if (TextParts[i + 1].StartsWith("{UPGRADE}"))
-                        {
-                            coloredRun = new(TextParts[i + 1][9..].Replace("\\\"", "\""))
-                            {
-                                Foreground = new SolidColorBrush(color),
-                            };
-                        }
-                        else
-                        {
-                            coloredRun = new(TextParts[i + 1].Replace("\\\"", "\"").Replace("{UPGRADE}", ""))
-                            {
-                                Foreground = new SolidColorBrush(color),
-                            };
-                        }
 
-                        // Если цвет соответствует статусному эффекту
-                        //if (TextParts[i] == "#e30000" | TextParts[i] == "#fac400" | TextParts[i] == "#9f6a3a") coloredRun.TextDecorations = TextDecorations.Underline;
-                        if (IsEffectName) coloredRun.TextDecorations = TextDecorations.Underline;
+            Run PreviewLayout_AppendRun = new Run(TextData.Text);
 
-                        if (!IsSub & !IsSup & !IsItalic & !IsBold)
-                        {
-                            lastParagraph.Inlines.Add(coloredRun);
-                        }
-                        else if (IsSub | IsSup)
-                        {
-                            Run SubpTextRun = coloredRun;
-                            SubpTextRun.FontSize = 12;
-                            StackPanel SubpStackPanel = new()
-                            {
-                                Height = 12,
-                                Margin = new Thickness(0, IsSub ? 0 : -40, 0, 0),
-                            };
-                            SubpStackPanel.Children.Add(new TextBlock(SubpTextRun));
-                            SubpStackPanel.RenderTransform = new TranslateTransform(0, 5);
-                            InlineUIContainer SubpText = new(SubpStackPanel);
-                            lastParagraph.Inlines.Add(SubpText);
-                        }
-                        else if (IsItalic)
-                        {
-                            coloredRun.FontFamily = new FontFamily("Arial");
-                            coloredRun.FontStyle = FontStyles.Italic;
+            ApplyTags(ref PreviewLayout_AppendRun, TextData.InnerTags);
 
-                            lastParagraph.Inlines.Add(coloredRun);
-                        }
-                        else if (IsBold)
-                        {
-                            coloredRun.FontFamily = new FontFamily("Arial");
-                            coloredRun.FontWeight = FontWeights.SemiBold;
-
-                            lastParagraph.Inlines.Add(coloredRun);
-                        }
-                    }
-                }
-            }
+            lastParagraph.Inlines.Add(PreviewLayout_AppendRun);
         }
 
 
-        public static bool Is_OneWord_Queued = false;
-        public static bool Is_MultWords_Queued = false;
-
-        private static void AddSprite(string SpriteName, RichTextBox Target, bool IsOneWord = true, string NextWord = "Кто это?", string NextColor = "#fac400")
+        private static void PreviewLayout_AppendSprite(SpriteConstructor SpriteData, RichTextBox Target)
         {
-            NextWord = NextWord.Replace("SPRUPRO", "");
-            if (IsOneWord & WordWrap_WithSprites) Is_OneWord_Queued = true;
-
             var document = Target.Document;
-            var lastParagraph = document.Blocks.LastBlock as Paragraph;
-            if (lastParagraph == null)
+            if (document.Blocks.LastBlock is not Paragraph lastParagraph)
             {
                 lastParagraph = new Paragraph();
                 document.Blocks.Add(lastParagraph);
             }
 
-            if (IsOneWord & WordWrap_WithSprites || (Is_MultWords_Queued & WordWrap_WithSprites))
+            BitmapImage source;
+            if (SpriteBitmaps.ContainsKey(SpriteData.SpriteLink)) source = SpriteBitmaps[SpriteData.SpriteLink];
+            else source = SpriteBitmaps[@"$Unknown.png"];
+            Image SpriteImage = new()
             {
-                BitmapImage source;
-                if (SpriteBitmaps.ContainsKey(SpriteName)) source = SpriteBitmaps[SpriteName];
-                else source = SpriteBitmaps[@"$Unknown.png"];
-                Image SpriteImage = new()
-                {
-                    Source = source,
-                    Width = 21.6,
-                    Height = 23,
-                    Margin = new Thickness(-2, -1, -2, 0)
-                };
+                Source = source,
+                Width = 21.6, Height = 23,
+                Margin = new Thickness(-2, -1, -2, 0)
+            };
 
-                StackPanel SpritePlusEffectname = new()
-                {
-                    Orientation = Orientation.Horizontal,
-                    //Background = new SolidColorBrush(Colors.Gray), // Граница контейнера спрайта и названия статусного эффекта (Для цельного переноса на новую строку)
-                };
-                SpritePlusEffectname.Children.Add(new TextBlock(new InlineUIContainer(SpriteImage)));
+            StackPanel SpritePlusEffectname = new() { Orientation = Orientation.Horizontal };
+            SpritePlusEffectname.Children.Add(new TextBlock(new InlineUIContainer(SpriteImage)));
 
-                if (NextWord.StartsWith("{UPGRADE}"))
-                {
-                    NextWord = NextWord[9..];
-                }
-                Run EffectName = new(NextWord.Replace("\\\"", "\"").Replace("{UPGRADE}", "")) {TextDecorations = TextDecorations.Underline};
+            Run KeywordName = new Run(SpriteData.StickedWord);
+            ApplyTags(ref KeywordName, SpriteData.StickedWordInnerTags);
 
-                if (ColorConverter.ConvertFromString(NextColor) is Color color)
-                {
-                    EffectName.Foreground = new SolidColorBrush(color);
-                }
-
-                SpritePlusEffectname.Children.Add(new TextBlock(EffectName));
-                InlineUIContainer SpritePlusEffectname_Container = new(SpritePlusEffectname);
-
-                // 24 line height = |4.5| 'y' value
-                // 30 line height = |10|  'y' value
-                // Выравнивание контейнера со спрайтом и его именем относительно строки
-                if (EditorMode.Equals("EGOgift"))
-                {
-                    SpritePlusEffectname.Margin = new Thickness(0, -11, 0, 0);
-                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.2); // 'y' value- (~0.5), может быть, наверное
-                }
-                else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
-                {
-                    SpritePlusEffectname.Margin = new Thickness(0, -11.5, 0, 0);
-                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 11.01); // Всё ещё без понятия как они связаны
-                }
-
-                SpritePlusEffectname.VerticalAlignment = VerticalAlignment.Bottom;
-
-                lastParagraph.Inlines.Add(SpritePlusEffectname_Container);
-            }
-            else
+            SpritePlusEffectname.Children.Add(new TextBlock(KeywordName));
+            if (EditorMode.Equals("EGOgift"))
             {
-                Image SpriteImage = new()
-                {
-                    Source = SpriteBitmaps[SpriteName],
-                    Width = 23,
-                    Height = 23,
-                    Margin = new Thickness(-2, -1, -2, 0),
-                };
-
-                lastParagraph.Inlines.Add(new InlineUIContainer(SpriteImage));
+                SpritePlusEffectname.Margin = new Thickness(0, -11, 0, 0);
+                SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.2); // 'y' value- (~0.5), может быть, наверное
             }
+            else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
+            {
+                SpritePlusEffectname.Margin = new Thickness(0, -11.5, 0, 0);
+                SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.998); // Всё ещё без понятия как они связаны
+            }
+
+            SpritePlusEffectname.VerticalAlignment = VerticalAlignment.Bottom;
+            lastParagraph.Inlines.Add(new InlineUIContainer(SpritePlusEffectname));
         }
+        #endregion
 
 
         /// <summary>
@@ -669,47 +542,58 @@ namespace Limbus_Localization_UI
 
             LastPreviewUpdateText = JsonDesc;
             LastPreviewUpdateTarget = Target;
-            // Замена обычных слов на ключевые слова, если они совпадают Rupture Protection
+            if (!JsonEditor_EnableHighlight)
+            {
+                JsonDesc = JsonDesc.Replace("<style=\\\"highlight\\\">", "").Replace("<style=\\\"upgradeHighlight\\\">", "").Replace("</style>", "");
+            }
+            else
+            {
+                if (EditorMode.Equals("EGOgift"))
+                {
+                    JsonDesc = JsonDesc.Replace("<style=\\\"highlight\\\">", "");
+                }
+                else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
+                {
+                    JsonDesc = JsonDesc.Replace("<style=\\\"upgradeHighlight\\\">", "");
+                }
+            }
+
+
+            // Замена обычных слов на вствку ключевых с цветом и спрайтом, если они совпадают (Свойства [TabExplain] сохраняются)
             if (EnableDynamicKeywords)
             {
                 foreach (var KeywordName in KeywordIDName.Reverse())
                 {
-                    JsonDesc = Regex.Replace(JsonDesc, @$"(?<![a-zA-Zа-яА-Я<>\[\]\'])({KeywordName.Key})(?![a-zA-Zа-яА-Я])", match =>
+                    JsonDesc = Regex.Replace(JsonDesc, @$"(?<![a-zA-Zа-яА-Я<>\[\]\'""*])({KeywordName.Key})(?![a-zA-Zа-яА-Я<[""*])", match =>
                     {
-                        return $"<sprite name=\\\"{KeywordName.Value}\\\"><color={(ColorPairs.ContainsKey(KeywordName.Value) ? ColorPairs[KeywordName.Value] : "#f8c200")}>{KeywordName.Key}SPRUPRO</color>";
+                        return $"<sprite name=\\\"{KeywordName.Value}\\\"><color={(ColorPairs.ContainsKey(KeywordName.Value) ? ColorPairs[KeywordName.Value] : "#f8c200")}><u>{KeywordName.Key}⟦InnerTag/LocalTabExplain⟧</u></color>";
                     });
                 }
             }
 
-            // Заменить квадратные скобки на <sprite><color>...</color>, если текст из них есть в списке id из всех Keywords файлов
-            try
+            // Заменить квадратные скобки ссылок на <sprite><color>...</color>, если текст из них есть в списке id из всех Keywords файлов
+            JsonDesc = Regex.Replace(JsonDesc, @"\[(\w+)\]", match =>
             {
-                string ReplaceSquareLinks = Regex.Replace(JsonDesc, @"\[(\w+)\]", match =>
+                string MaybeKeyword = match.Groups[1].Value;
+                try
                 {
-                    string MaybeKeyword = match.Groups[1].Value;
-                    try
-                    {
-                        return Keywords.ContainsKey(MaybeKeyword) ? $"<sprite name=\\\"{MaybeKeyword}\\\"><color={ColorPairs[MaybeKeyword]}>{Keywords[MaybeKeyword]}</color>" : $"[{MaybeKeyword}]";
-                    }
-                    catch
-                    {
-                        return $"[{MaybeKeyword}]";
-                    }
-                });
-
-                JsonDesc = ReplaceSquareLinks;
-            }
-            catch{}
-
+                    return Keywords.ContainsKey(MaybeKeyword) ? $"<sprite name=\\\"{MaybeKeyword}\\\"><color={ColorPairs[MaybeKeyword]}><u>{Keywords[MaybeKeyword]}</u></color>" : $"[{MaybeKeyword}]";
+                }
+                catch
+                {
+                    return $"[{MaybeKeyword}]";
+                }
+            });
+            
             // Обработка особых вставок эффектов [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки в теги
-            JsonDesc = Regex.Replace(JsonDesc, @"\[(\w+)\:'(.*?)'\]", match =>
+            JsonDesc = Regex.Replace(JsonDesc, Shorthand_Type.Equals("kimght") ? @"\[(\w+)\:'(.*?)'\]" : @"\{(\w+)\: \*(.*?)\*\}", match =>
             {
                 string MaybeKeyword = match.Groups[1].Value;
                 string MaybeName = match.Groups[2].Value;
 
                 if (Keywords.ContainsKey(MaybeKeyword))
                 {
-                    return $"<sprite name=\\\"{MaybeKeyword}\\\"><color={(ColorPairs.ContainsKey(MaybeKeyword) ? ColorPairs[MaybeKeyword] : "#f8c200")}>{MaybeName}</color>";
+                    return $"<sprite name=\\\"{MaybeKeyword}\\\"><color={(ColorPairs.ContainsKey(MaybeKeyword) ? ColorPairs[MaybeKeyword] : "#f8c200")}><u>{MaybeName}</u></color>";
                 }
                 else
                 {
@@ -717,48 +601,13 @@ namespace Limbus_Localization_UI
                 }
             });
 
-
-            if (EditorMode.Equals("EGOgift"))
-            {
-                JsonDesc = JsonDesc.Replace("<style=\\\"highlight\\\">", "");
-            }
-            else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
-            {
-                JsonDesc = JsonDesc.Replace("<style=\\\"upgradeHighlight\\\">", "");
-            }
-
-            if (!JsonEditor_EnableHighlight)
-            {
-                JsonDesc = JsonDesc.Replace("<style=\\\"highlight\\\">", "").Replace("<style=\\\"upgradeHighlight\\\">", "").Replace("</style>", "");
-            }
-
-
-            string[] ColorsAdvice = {
-                "color=#e30000", // Красный текст, Негативные статусные эффекты, подчёркивается
-                "color=#fac400", // Жёлтый текст, Позитивные статусные эффекты (Спешка, Повышение уровня атаки, ..) + Заряд и Дыхание, подчёркивается
-                "color=#ffffff", // Белый текст (Или None) (У Дон Кихот в идентичности Менеджера Ла-Манчалаенда эффект Кровавая броня) 
-
-                "color=#f8c200", // Альтернативный жёлтый для неподчёркиваемой подсветки улучшения через highlight или upgradeHighlight
-                
-                "color=#93f03f", // [При ударе] и т.д.         \ Зелёный
-                "color=#27cefe", // [При использовании] и т.д. \ Синий
-                "color=#c6fe94", // [Выпал орёл] и т.д.        \ Блеклый зелёный
-
-                "color=#f95e00", // Контратака с поедником     \ Оранжевый
-                "color=#9f6a3a", // Блок с поединком           \ Коричневый
-
-                "color=#fe0000", // [Неуправляемый]            \ Красный
-
-                "color=#c90080", // [Конец атаки решкой] (или Сода) \ Фиолетовый
-            };
-
-
-            // Выделение вставок через {0} в определённых файлах
-            if (Filename.StartsWith("Bufs") | Filename.StartsWith("BattleKeywords"))
+            // Выделение вставок через .Format в определённых файлах
+            if (Mainfile_Filename.StartsWith("Bufs") | Mainfile_Filename.StartsWith("BattleKeywords"))
             {
                 JsonDesc = JsonDesc.Replace("{", "<color=#f95e00>{").Replace("}", "}</color>");
             }
 
+            // Доп замены
             if (Replacements.Count > 0)
             {
                 foreach(var Replacement in Replacements)
@@ -768,51 +617,10 @@ namespace Limbus_Localization_UI
             }
 
             
-
             JsonDesc = JsonDesc.Replace("color=#None", "color=#ffffff")
-                               .Replace("<style=\\\"highlight\\\">", "<style=\\\"upgradeHighlight\\\">") // Подсветка улучшения
-
-                               .Replace("</link>", "") // Ссылки вырезать (тултипы не работают)
-                               
-                               .Replace("<u>", "")  // Подчёркивание ставится по цвету
-                               .Replace("</u>", "")
-
-                               .Replace("<>", "<\0>") // Пустые теги ломают весь текст
-
-                               .Replace("[WhenUse]",             "<color=#27cefe>[При использовании]</color>")
-                               .Replace("[OnSucceedAttackHead]", "<color=#c6fe94>[Выпал орёл]</color>")
-
-                               .Replace("[OnSucceedAttack]",             "<color=#93f03f>[При ударе]</color>")
-                               .Replace("[BeforeHit]",                   "<color=#93f03f>[Перед получением удара]</color>")
-                               .Replace("[CriticalOnSucceedAttack]",     "<color=#93f03f>[Критическая атака]</color>")
-                               .Replace("[StartBattle]",                 "<color=#93f03f>[В начале хода]</color>")
-                               .Replace("[EndSkill]",                    "<color=#93f03f>[В конце атаки]</color>")
-                               .Replace("[EndBattle]",                   "<color=#93f03f>[В конце хода]</color>")
-                               .Replace("[BeforeAttack]",                "<color=#93f03f>[Перед атакой]</color>")
-                               .Replace("[EnemyKill]",                   "<color=#93f03f>[При убийстве]</color>")
-                               .Replace("[OnSucceedEvade]",              "<color=#93f03f>[Успешный уворот]</color>")
-                               .Replace("[UnBrokenCoinOnSucceedAttack]", "<color=#93f03f>[При попадании целой монетой]</color>") // Вечные монеты
-                               .Replace("[BeforeUse]",                   "<color=#93f03f>[Перед использованием]</color>")
-                               .Replace("[TargetKill]",                  "<color=#93f03f>[При убийстве цели]</color>")
-                               .Replace("[OnSucceedAttackTail]",         "<color=#93f03f>[Выпала решка]</color>")
-                               .Replace("[CantChangeTarget]",            "<color=#93f03f>[Цель неизменна]</color>")
-
-                               .Replace("[EndSkillTail]", "<color=#c90080>[Конец атаки решкой]</color>")
-                               .Replace("[EndSkillHead]", "<color=#fe59c0>[Конец атаки орлом]</color>")
-                               .Replace("[EndSkill]", "<color=#93f03f>[Конец атаки]</color>")
-
-                               .Replace("[CantDuel]",     "<color=#fe0000>[Нельзя столкнуться]</color>")
-                               .Replace("[CantIdentify]", "<color=#fe0000>[Неуправляемый]</color>")
-                               .Replace("[DefeatDuel]",   "<color=#fe0000>[Поражение в столкновении]</color>")
-
-                               .Replace("[DuelCounter]",  "<color=#f95e00>[Контратака с поединком]</color>")
-                               .Replace("[CanDuelGuard]", "<sprite name=\\\"CanDuelGuard\\\"><color=#9f6a3a>[Блок с поединком]</color>")
-
-                               .Replace("[WinDuel]", "<color=#f95e00>[Победа в столкновении]</color>")
-
-                               .Replace("[TabExplain]", "") // Без понятия что это значит
-                               
-                               .Replace("><", ">\0<");
+                               .Replace("<style=\\\"highlight\\\">", "<style=\\\"upgradeHighlight\\\">") // Подсветка улучшения (Без разницы как)
+                               .Replace("</link>", "") // Ссылки вырезать (тултипы не работают (Возможно))
+                               .Replace("[TabExplain]", "");
 
 
             List<string> TagList = new()
@@ -825,256 +633,324 @@ namespace Limbus_Localization_UI
                 "/sup",
                 "i",
                 "/i",
+                "u",
+                "/u",
                 "b",
                 "/b",
                 "/",
                 "style=\\\"upgradeHighlight\\\"",
                 "/style",
 
+                "\0",
+
                 "EMPTY¤",
             };
-
+            bool ICm(string Range_TextItem)
+            {
+                return !TagList.Contains(Range_TextItem) & !Range_TextItem.StartsWith("color=#") & !Range_TextItem.StartsWith("sprite name=\\\"");
+            }
+            
             //JsonDesc = Regex.Replace(JsonDesc, @"(?<=<\/color>)([а-яА-Яa-zA-Z])", " $1"); // Без понятия зачем
             JsonDesc = Regex.Replace(JsonDesc, @"<link=\\\"".*?\\\"">", ""); // убрать все link (Тултип не рабоатет)
-
-            //JsonDesc = JsonDesc.Replace("\">\0<color=#f8c200>", "\">\0<color=#fac400>"); // Подчёркивание статусных эффектов
             
-
             // Сепарированые обычных '<' '>' от тегов
             JsonDesc = Regex.Replace(JsonDesc, @"<color=(#\w+?)>", @"⇱color=$1⇲");
             JsonDesc = Regex.Replace(JsonDesc, @"<sprite name=\\""(\w+?)\\"">", @"⇱sprite name=\""$1\""⇲");
             JsonDesc = Regex.Replace(JsonDesc, @"<style=\\""(\w+?)\\"">", @"⇱style=\""$1\""⇲");
+            JsonDesc = JsonDesc.Replace("</style>", "⇱/style⇲")
+                               .Replace("</color>", "⇱/color⇲")
+                               .Replace("<i>", "⇱i⇲")
+                               .Replace("</i>", "⇱/i⇲")
+                               .Replace("<u>", "⇱u⇲")
+                               .Replace("</u>", "⇱/u⇲")
+                               .Replace("<b>", "⇱b⇲")
+                               .Replace("</b>", "⇱/b⇲")
+                               .Replace("<sub>", "⇱sub⇲")
+                               .Replace("<sup>", "⇱sup⇲")
+                               .Replace("</sup>", "⇱/sup⇲")
+                               .Replace("</sub>", "⇱/sub⇲")
+                               .Replace("<EMPTY¤>", "⇱EMPTY¤⇲");
 
+            // Главное разбивание текста на список с обычным текстом и тегами
+            string[] TextSegmented = $"⇱EMPTY¤⇲\0⇱EMPTY¤⇲\0{JsonDesc.Replace("\\n", "\n")}\0⇱EMPTY¤⇲\0⇱EMPTY¤⇲\0⇱EMPTY¤⇲".Split(new char[] { '⇱', '⇲' }, StringSplitOptions.RemoveEmptyEntries);
 
-            JsonDesc = JsonDesc.Replace("</style>", "⇱/style⇲");
-            JsonDesc = JsonDesc.Replace("</color>", "⇱/color⇲");
-            JsonDesc = JsonDesc.Replace("<i>", "⇱i⇲");
-            JsonDesc = JsonDesc.Replace("</i>", "⇱/i⇲");
-            JsonDesc = JsonDesc.Replace("<b>", "⇱b⇲");
-            JsonDesc = JsonDesc.Replace("</b>", "⇱/b⇲");
-            JsonDesc = JsonDesc.Replace("<sub>", "⇱sub⇲");
-            JsonDesc = JsonDesc.Replace("<sup>", "⇱sup⇲");
-            JsonDesc = JsonDesc.Replace("</sup>", "⇱/sup⇲");
-            JsonDesc = JsonDesc.Replace("</sub>", "⇱/sub⇲");
-            JsonDesc = JsonDesc.Replace("<EMPTY¤>", "⇱EMPTY¤⇲");
+          #region Новая хрень
+            List<string> __TextSegmented__ = TextSegmented.ToList();
+            __TextSegmented__.RemoveAll(r => r.Equals("\0"));
 
-            string[] parts = $"⇱EMPTY¤⇲\0{JsonDesc.Replace("\\n", "\n")}".Split(new char[] { '⇱', '⇲' }, StringSplitOptions.RemoveEmptyEntries); // Главное разбивание текста на список с обычным текстом и тегами
+          #region Форматирование тегов
+            int TextSegmented_Count = __TextSegmented__.Count();
 
-            // Нормализация работы style
-            for (int PartIndex = 0; PartIndex <= parts.Count() - 1; PartIndex++)
+          #region Первичная обработка текста
+            for (int TextItem_Index = 0; TextItem_Index < __TextSegmented__.Count; TextItem_Index++)
             {
-                if (parts[PartIndex].Equals("style=\\\"upgradeHighlight\\\""))
+                string TextItem = __TextSegmented__[TextItem_Index];
+
+                #region ⟦InnerTag/UptieHighlight⟧
+                if (TextItem.Equals("style=\\\"upgradeHighlight\\\""))
                 {
-                    for (int RangeIndex = PartIndex + 1; RangeIndex <= parts.Count() - 1; RangeIndex++)
+                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
                     {
-                        if (parts[RangeIndex].Equals("/style")) break;
+                        string Range_TextItem = __TextSegmented__[RangeIndex];
 
-                        else if (parts[RangeIndex].StartsWith("color=#"))
+                        if (Range_TextItem.Equals("/style")) break;
+                        else if (!TagList.Contains(Range_TextItem))
                         {
-                            // Сохранять цвета для статусных эффектов
-                            if (!parts[RangeIndex - 1].StartsWith("sprite name=\\\"") & !parts[RangeIndex - 2].StartsWith("sprite name=\\\""))
+                            if (Range_TextItem.Equals("/color"))
                             {
-                                parts[RangeIndex] = "color=#f8c200";
+                                __TextSegmented__[RangeIndex] = "";
                             }
+                            try
+                            {
+                                if (!__TextSegmented__[RangeIndex - 1].StartsWith("sprite name=\\\"") &
+                                    !__TextSegmented__[RangeIndex - 2].StartsWith("sprite name=\\\"") &
+                                    !__TextSegmented__[RangeIndex - 3].StartsWith("sprite name=\\\"") &
+                                    !__TextSegmented__[RangeIndex].StartsWith("sprite name=\\\"")) // Сохранять цвета для статусных эффектов
+                                {
+                                    if (__TextSegmented__[RangeIndex].StartsWith("color=#"))
+                                    {
+                                        __TextSegmented__[RangeIndex] = "color=#f8c200";
+                                    }
+                                    else if (!Range_TextItem.Contains("⟦InnerTag/UptieHighlight⟧"))
+                                    {
+                                        __TextSegmented__[RangeIndex] += "⟦InnerTag/UptieHighlight⟧";
+                                    }
+                                }
+                            }
+                            catch { }
                         }
-                        else if (parts[RangeIndex].Equals("/color")) parts[RangeIndex] = "";
 
-                        else if (!TagList.Contains(parts[RangeIndex]) & !parts[RangeIndex].StartsWith("sprite name=\\\"") & !parts[RangeIndex].StartsWith("{UPGRADE}"))
-                        {
-                            parts[RangeIndex] = "{UPGRADE}" + parts[RangeIndex];
-                        }
                     }
                 }
-            }
+                #endregion
 
-
-
-
-            //List<string> PreviewDebug = new();
-
-            //foreach (var i in parts)
-            //{
-            //    PreviewDebug.Add(i.Replace("\n", "\\n"));
-            //}
-            //Console.Clear(); rin("[\"" + String.Join("\", \"", PreviewDebug) + "\"]");
-
-
-            List<int> TakenOtherColors = new();
-            for (int i = 0; i < parts.Length; i++)
-            {
-                if (i % 2 == 1)
+                #region ⟦InnerTag/TextColor@HexRGB⟧
+                if (TextItem.StartsWith("color=#"))
                 {
-                    try{
-                        if (!parts[i - 1].StartsWith("sub") & !parts[i - 1].StartsWith("sup") & !parts[i - 1].StartsWith("i") & !parts[i - 1].StartsWith("b"))
-                        {
-                            if (!parts[i - 1].StartsWith("color=#"))
-                            {
-                                AddText(parts[i], Target);
-                            }
-                        }
-                        else if (parts[i - 1].StartsWith("sub") | parts[i - 1].StartsWith("sup"))
-                        {
-                            string supb_type = parts[i - 1];
-
-                            List<string> subp_parts = new()
-                            {
-                                parts[i]
-                            };
-                            int PartsIndex = i + 1;
-
-                            foreach (var SubpRange in parts[(i + 1)..])
-                            {
-                                if (SubpRange.Equals($"/{supb_type}")) break;
-
-                                if (SubpRange.StartsWith("color=#"))
-                                {
-                                    subp_parts.Add($"<{SubpRange}>"); 
-                                    TakenOtherColors.Add(PartsIndex);
-                                }
-                                else if (SubpRange.Equals("/color")) subp_parts.Add($"<{SubpRange}>");
-                                else subp_parts.Add(SubpRange);
-                                PartsIndex++;
-                            }
-                            AddText(String.Join(string.Empty, subp_parts), Target, IsSub: parts[i - 1].Equals("sub"), IsSup: parts[i - 1].Equals("sup"));
-                        }
-                        else if (parts[i - 1].Equals("i"))
-                        {
-                            List<string> i_parts = new()
-                            {
-                                parts[i]
-                            };
-                            int PartsIndex = i + 1;
-
-                            foreach (var IRange in parts[(i + 1)..])
-                            {
-                                if (IRange.Equals($"/i")) break;
-
-                                if (IRange.StartsWith("color=#"))
-                                {
-                                    i_parts.Add($"<{IRange}>"); //'⇱', '⇲'
-                                    TakenOtherColors.Add(PartsIndex);
-                                }
-                                else if (IRange.Equals("/color")) i_parts.Add($"<{IRange}>");
-                                else i_parts.Add(IRange);
-                                PartsIndex++;
-                            }
-                            AddText(String.Join(string.Empty, i_parts), Target, IsItalic: true);
-                        }
-                        else if (parts[i - 1].Equals("b"))
-                        {
-                            List<string> b_parts = new()
-                            {
-                                parts[i]
-                            };
-                            int PartsIndex = i + 1;
-
-                            foreach (var BRange in parts[(i + 1)..])
-                            {
-                                if (BRange.Equals($"/b")) break;
-
-                                if (BRange.StartsWith("color=#"))
-                                {
-                                    b_parts.Add($"<{BRange}>"); //'⇱', '⇲'
-                                    TakenOtherColors.Add(PartsIndex);
-                                }
-                                else if (BRange.Equals("/color")) b_parts.Add($"<{BRange}>");
-                                else b_parts.Add(BRange);
-                                PartsIndex++;
-                            }
-                            AddText(String.Join(string.Empty, b_parts), Target, IsBold: true);
-                        }
-                    }
-                    catch{}
-                }
-                else
-                {
-                    try
+                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
                     {
-                        string NextWord  = "";
-                        string NextColor = "#f8c200";
+                        string Range_TextItem = __TextSegmented__[RangeIndex];
 
-                        string[] NextWordCheck;
-                        int NextWordCheck_Count;
-
-                        bool IsOneWord = false;
-
-                        if (WordWrap_WithSprites)
-                        {
-                            try{
-                                NextWord = parts[i + 3];
-                            }catch {}
-
-                            try{
-                                if (parts[i + 2].StartsWith("color=#")) NextColor = parts[i + 2].Split("=")[^1];
-                            }catch{}
-                        }
-
-
-                        if (parts[i].StartsWith("sprite name=\\\"") & parts[i].EndsWith("\\\""))
-                        {
-                            NextWordCheck = NextWord.Split(' ');
-                            NextWordCheck_Count = NextWordCheck.Count();
-                            if (NextWordCheck_Count == 1)
-                            {
-                                IsOneWord = true;
-                            }
-                            else
-                            {
-                                Is_MultWords_Queued = true;
-                                if (parts[i + 2].StartsWith("color=#")) NextWord = NextWordCheck[0];
-                                else NextWord = "";
-                            }
-
-                            string spritename = parts[i].Split("\\\"")[1];
-
-                            if      (SpriteBitmaps.ContainsKey($"{spritename}.png" )) spritename = $"{spritename}.png";
-                            else if (SpriteBitmaps.ContainsKey($"{spritename}.webp")) spritename = $"{spritename}.webp";
-                            
-                            try{
-                                AddSprite(spritename, Target, NextWord: NextWord, NextColor: NextColor, IsOneWord: IsOneWord);
-                            }
-                            catch (Exception ex)
-                            {
-                                rin($"¤ Tried: \"{NextWord}\" with color \"{NextColor}\"\n\n");
-                                Console.WriteLine(ex.StackTrace);
-                                Console.WriteLine(ex.Source);
-                                Console.WriteLine(ex.Message);
-                            }
-                        }
-
-                        else if (parts[i].StartsWith("color=#") & !TakenOtherColors.Contains(i))
-                        {
-                            if (!Is_OneWord_Queued)
-                            {
-                                string AddT = parts[i + 1];
-                                bool IsEffectSubName = false;
-                                if (Is_MultWords_Queued)
-                                {
-                                    AddT = " " + String.Join(' ', parts[i + 1].Split(' ')[1..]);
-                                    IsEffectSubName = true;
-                                    Is_MultWords_Queued = false;
-                                }
-                                AddText($"<{parts[i]}>{AddT}</color>", Target, IsEffectName: IsEffectSubName);
-                            }
-                            else Is_OneWord_Queued = false;
-                        }
+                        if (Range_TextItem.Equals("/color")) break;
 
                         else
                         {
-                            if (!TagList.Contains(parts[i]) & !parts[i].Equals(""))
+                            if (ICm(Range_TextItem))
                             {
-                                AddText($"<{parts[i]}>", Target);
+                                    __TextSegmented__[RangeIndex] += $"⟦InnerTag/TextColor@{TextItem.Split("color=#")[^1]}⟧";
                             }
                         }
                     }
-                    catch (Exception ex)
+                }
+                #endregion
+
+                #region ⟦InnerTag/TextStyle@Underline⟧
+                if (TextItem.Equals("u"))
+                {
+                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
                     {
-                        Console.WriteLine(ex.StackTrace);
-                        Console.WriteLine(ex.Source);
-                        Console.WriteLine(ex.Message);
+                        string Range_TextItem = __TextSegmented__[RangeIndex];
+
+                        if (Range_TextItem.Equals("/u")) break;
+                        if (ICm(Range_TextItem) & !Range_TextItem.Contains("⟦InnerTag/TextStyle@Underline⟧"))
+                        {
+                            __TextSegmented__[RangeIndex] += "⟦InnerTag/TextStyle@Underline⟧";
+                        }
                     }
                 }
+                #endregion
+
+                #region ⟦InnerTag/TextStyle@Italic⟧
+                if (TextItem.Equals("i"))
+                {
+                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
+                    {
+                        string Range_TextItem = __TextSegmented__[RangeIndex];
+
+                        if (Range_TextItem.Equals("/i")) break;
+                        if (ICm(Range_TextItem) & !Range_TextItem.Contains("⟦InnerTag/TextStyle@Italic⟧"))
+                        {
+                            __TextSegmented__[RangeIndex] += $"⟦InnerTag/TextStyle@Italic⟧";
+                        }
+                    }
+                }
+                #endregion
+
+                #region ⟦InnerTag/TextStyle@Bold⟧
+                if (TextItem.Equals("b"))
+                {
+                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
+                    {
+                        string Range_TextItem = __TextSegmented__[RangeIndex];
+
+                        if (Range_TextItem.Equals("/b")) break;
+                        if (ICm(Range_TextItem) & !Range_TextItem.Contains("⟦InnerTag/TextStyle@Bold⟧"))
+                        {
+                            __TextSegmented__[RangeIndex] += $"⟦InnerTag/TextStyle@Bold⟧";
+                        }
+                    }
+                }
+                #endregion
+
+                #region ⟦InnerTag/TextStyle@Subscript⟧
+                if (TextItem.Equals("sub"))
+                {
+                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
+                    {
+                        string Range_TextItem = __TextSegmented__[RangeIndex];
+
+                        if (Range_TextItem.Equals("/sub")) break;
+                        if (ICm(Range_TextItem) & !Range_TextItem.Contains("⟦InnerTag/TextStyle@Subscript⟧"))
+                        {
+                            __TextSegmented__[RangeIndex] += $"⟦InnerTag/TextStyle@Subscript⟧";
+                        }
+                    }
+                }
+                #endregion
+
+                #region ⟦InnerTag/TextStyle@Superscript⟧
+                if (TextItem.Equals("sup"))
+                {
+                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
+                    {
+                        string Range_TextItem = __TextSegmented__[RangeIndex];
+
+                        if (Range_TextItem.Equals("/sup")) break;
+                        if (ICm(Range_TextItem) & !Range_TextItem.Contains("⟦InnerTag/TextStyle@Superscript⟧"))
+                        {
+                            __TextSegmented__[RangeIndex] += $"⟦InnerTag/TextStyle@Superscript⟧";
+                        }
+                    }
+                }
+                #endregion
             }
+          #endregion
+
+            __TextSegmented__.RemoveAll(TextItem => (TagList.Contains(TextItem) | TextItem.StartsWith("color=#")) );
+
+          #region Вторичная обработка вставок спрайтов
+            for (int TextItem_Index = 0; TextItem_Index < __TextSegmented__.Count; TextItem_Index++)
+            {
+                string TextItem = __TextSegmented__[TextItem_Index];
+
+                #region ⟦LevelTag/SpriteLink⟧
+                if (TextItem.StartsWith("sprite name=\\\""))
+                {
+                    string SpriteLink = TextItem.Split("sprite name=\\\"")[^1][0..^2];
+                    if (Keywords.ContainsKey(SpriteLink))
+                    {
+                        string SpriteKeyword = "";
+                        try
+                        {
+                            SpriteKeyword = __TextSegmented__[TextItem_Index + 1].Split(' ')[0];
+
+
+                            if (!__TextSegmented__[TextItem_Index + 1].StartsWith("sprite name=\\\""))
+                            {
+                                rin($"¤ \"{__TextSegmented__[TextItem_Index + 1]}\"");
+                                if (!__TextSegmented__[TextItem_Index + 1][0].Equals(" "))
+                                {
+                                    bool SpaceAdd = false;
+                                    if (__TextSegmented__[TextItem_Index + 1].Split(' ').Count() > 1) SpaceAdd = true;
+                                    __TextSegmented__[TextItem_Index + 1] = (SpaceAdd? " ": "") + String.Join(' ', __TextSegmented__[TextItem_Index + 1].Split(' ')[1..]);
+
+                                    string NextTextItem_InnerTags = "";
+                                    Regex InnerTags = new Regex(@"⟦InnerTag/(.*?)⟧");
+
+                                    foreach(Match InnerTagMatch in InnerTags.Matches(__TextSegmented__[TextItem_Index + 1]))
+                                    {
+                                        NextTextItem_InnerTags += InnerTagMatch;
+                                    }
+
+                                    SpriteKeyword = $"+„{SpriteKeyword + NextTextItem_InnerTags}“";
+                                }
+                            }
+                            else
+                            {
+                                SpriteKeyword = "";
+                            }
+                        }
+                        catch { }
+                        __TextSegmented__[TextItem_Index] = $"⟦LevelTag/SpriteLink@{SpriteLink}{SpriteKeyword}⟧";
+                    }
+                }
+                #endregion
+            }
+            #endregion
+
+            #endregion
+            
+            {
+              //#region Debug Preview
+              //  List<string> PreviewDebug = new();
+              //  foreach (var DebugTextItem in __TextSegmented__) PreviewDebug.Add(DebugTextItem.Replace("\n", "\\n"));
+              //  string s = "[\"" + String.Join("\", \"", PreviewDebug) + "\"]";
+              //  s = s.Replace("⟦", "\x1b[38;5;62m⟦\x1b[0m");
+              //  s = s.Replace("⟧", "\x1b[38;5;62m⟧\x1b[0m");
+              //  s = s.Replace("@", "\x1b[38;5;62m@\x1b[0m");
+              //  s = s.Replace("„", "\x1b[38;5;72m„");
+              //  s = s.Replace("“", "\x1b[38;5;72m“\x1b[0m");
+              //  s = s.Replace("InnerTag", "\x1b[38;5;203mInnerTag\x1b[0m");
+              //  s = s.Replace("LevelTag", "\x1b[38;5;204mLevelTag\x1b[0m");
+              //  s = s.Replace("TextColor", "\x1b[38;5;202mTextColor\x1b[0m");
+              //  s = s.Replace("TextStyle", "\x1b[38;5;202mTextStyle\x1b[0m");
+              //  s = s.Replace("SpriteLink", "\x1b[38;5;202mSpriteLink\x1b[0m");
+              //  //Console.Clear();
+              //  rin(s);
+              //#endregion
+            }
+
+          #region Вывод на предпросмотр
+            foreach (string TextItem in __TextSegmented__)
+            {
+                #region Спрайты
+                if (TextItem.StartsWith("⟦LevelTag/SpriteLink@") & TextItem.EndsWith('⟧'))
+                {
+                    var SpriteSet = TextItem.Split("+„");
+                    string This_SpriteKeyword = SpriteSet[0].Split("@")[^1];
+
+                    string This_StickedWord = "";
+                    if (SpriteSet.Count() == 2) This_StickedWord = SpriteSet[1][0..^2];
+
+                    if (Keywords.ContainsKey(This_SpriteKeyword))
+                    {
+                        if (SpriteBitmaps.ContainsKey(This_SpriteKeyword + ".png"))
+                        {
+                            This_SpriteKeyword += ".png";
+                        }
+                        else
+                        {
+                            This_SpriteKeyword += ".webp";
+                        }
+                        SpriteConstructor Current_SpriteConstructor = new SpriteConstructor
+                        {
+                            StickedWordInnerTags = InnerTags(This_StickedWord),
+                            StickedWord = ClearText(This_StickedWord),
+                            SpriteLink = This_SpriteKeyword
+                        };
+
+                        PreviewLayout_AppendSprite(Current_SpriteConstructor, Target);
+                        rin($"¤ Add sprite: \x1b[38;5;245m\"{This_SpriteKeyword} + {This_StickedWord}\"\x1b[0m");
+                    }
+                }
+                #endregion
+                #region Обычный текст
+                else
+                {
+                    TextConstructor Current_TextConstructor = new TextConstructor
+                    {
+                        InnerTags = InnerTags(TextItem),
+                        Text = ClearText(TextItem)
+                    };
+
+                    PreviewLayout_AppendText(Current_TextConstructor, Target);
+                    rin($"¤ Add text: \x1b[38;5;245m\"{TextItem.Replace("\n", "\\n")}\x1b[0m");
+                }
+                #endregion
+            }
+          #endregion
+
+          #endregion
         }
 
 
@@ -1192,7 +1068,7 @@ namespace Limbus_Localization_UI
         }
 
         private void Check_JsonFilepath_bgtext() => BackgroundShadowTextCheck(JsonFilepath,   JsonFilepath_bgtext, "Путь к Json файлу");
-        private void Check_JumpToID_bgtext() => BackgroundShadowTextCheck(JumpToID_Input, JumpToID_bgtext, "Перейти к ID..");
+        private void Check_JumpToID_bgtext()     => BackgroundShadowTextCheck(JumpToID_Input, JumpToID_bgtext,     "Перейти к ID.."   );
 
         private void JsonPath_TextChanged(object sender, TextChangedEventArgs e) => BackgroundShadowTextCheck(JsonFilepath, JsonFilepath_bgtext, "Путь к Json файлу");
         private void Name_EditBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -1365,15 +1241,15 @@ namespace Limbus_Localization_UI
                 {
                     CurrentHighlight_YOffset = 0;
                     Json_Filepath = path;
-                    Filename = Json_Filepath.Split('\\')[^1];
+                    Mainfile_Filename = Json_Filepath.Split('\\')[^1];
 
                     bool IsSupportedFileType = true;
                     foreach(var type in NotSupportedFileTypes)
                     {
-                        if (Filename.StartsWith(type)) IsSupportedFileType = false;
+                        if (Mainfile_Filename.StartsWith(type)) IsSupportedFileType = false;
                     }
 
-                    if (Filename.StartsWith("EGOgift_"))
+                    if (Mainfile_Filename.StartsWith("EGOgift_"))
                     {
                         EditorMode = "EGOgift";
                         Mode_Handlers.Mode_EGO_Gifts.AdjustUI();
@@ -1411,7 +1287,7 @@ namespace Limbus_Localization_UI
                         JsonFilepath.Text = path;
                     }
 
-                    else if(Filename.StartsWith("Skills"))
+                    else if(Mainfile_Filename.StartsWith("Skills"))
                     {
                         EditorMode = "Skills";
                         // Основной словарь с текстом из JsonData.dataList и Буфер не сохранённых изменений
@@ -1433,7 +1309,7 @@ namespace Limbus_Localization_UI
                         T["EditorSwitch Desc [UnavalibleCover]"].Height = 0; // Разблокировать кнопку описания
 
                         // Навыки грешников
-                        if (Filename.StartsWith("Skills_Ego_Personality-"))
+                        if (Mainfile_Filename.StartsWith("Skills_Ego_Personality-"))
                         {
                             SaveChangesButtons.Height = 270;
                             SaveChangesButtons.Margin = new Thickness(236, -270, 0, 0);
@@ -1443,7 +1319,7 @@ namespace Limbus_Localization_UI
                             Mode_Handlers.Mode_Skills.AdjustUI(IsEGO: true);
                             Name_Label_bgtext.Content = "Название ЭГО";
                         }
-                        else if(Filename.StartsWith("Skills_personality-") | Filename.Equals("Skills.json"))
+                        else if(Mainfile_Filename.StartsWith("Skills_personality-") | Mainfile_Filename.Equals("Skills.json"))
                         {
                             SaveChangesButtons.Height = 237;
                             SaveChangesButtons.Margin = new Thickness(236, -237, 0, 0);
@@ -1474,7 +1350,7 @@ namespace Limbus_Localization_UI
                         JsonFilepath.Text = path;
                     }
 
-                    else if (Filename.StartsWith("Passive") | Filename.StartsWith("Bufs") | Filename.StartsWith("BattleKeywords"))
+                    else if (Mainfile_Filename.StartsWith("Passive") | Mainfile_Filename.StartsWith("Bufs") | Mainfile_Filename.StartsWith("BattleKeywords"))
                     {
 
                         EditorMode = "Passives";
@@ -2404,6 +2280,13 @@ namespace Limbus_Localization_UI
                 if (Name_EditBox.IsFocused  ) UnfocusTB(ABName_EditBox);
                 if (JumpToID_Input.IsFocused) UnfocusTB(ABName_EditBox);
                 if (JsonEditor.IsFocused    ) UnfocusTB(ABName_EditBox);
+
+                if (SettingsDialog.Margin == new Thickness(0))
+                {
+                    OverrideCover1.Margin = new Thickness(1000);
+                    OverrideCover2.Margin = new Thickness(1000);
+                    SettingsDialog.Margin = new Thickness(1000);
+                }
             }
         }
 
@@ -2505,13 +2388,13 @@ namespace Limbus_Localization_UI
             {
                 string KeywordID = match.Groups[1].Value;
 
-                if (EnableDynamicKeywords.Equals("Knightey"))
+                if (Shorthand_Type.Equals("Knightey"))
                 {
                     return Keywords.ContainsKey(KeywordID) ? $"{{{KeywordID}: *{Keywords[KeywordID]}*}}" : $"[{KeywordID}]";
                 }
                 else
                 {
-                    return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:'{Keywords[KeywordID]}']" : $"[{KeywordID}]";
+                return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:'{Keywords[KeywordID]}']" : $"[{KeywordID}]";
                 }
             });
 
@@ -2535,11 +2418,30 @@ namespace Limbus_Localization_UI
         {
             if (!JsonEditor.SelectedText.Equals(""))
             {
-                JsonEditor.SelectedText = $"<style=\"highlight\">{JsonEditor.SelectedText}</style>";
+                if (EditorMode.Equals("EGOgift"))
+                {
+                    JsonEditor.SelectedText = $"<style=\"upgradeHighlight\">{JsonEditor.SelectedText}</style>";
+                }
+                else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
+                {
+                    JsonEditor.SelectedText = $"<style=\"highlight\">{JsonEditor.SelectedText}</style>";
+                }
             }
             else
             {
-                JsonEditor.Text = JsonEditor.Text.Insert(JsonEditor.CaretIndex, "<style=\"highlight\"></style>");
+                if (EditorMode.Equals("EGOgift"))
+                {
+                    //JsonEditor.SelectedText = $"<style=\"upgradeHighlight\">{JsonEditor.SelectedText}</style>";
+                    JsonEditor.Text = JsonEditor.Text.Insert(JsonEditor.CaretIndex, "<style=\"upgradeHighlight\"></style>");
+                }
+                else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
+                {
+                    //JsonEditor.SelectedText = $"<style=\"highlight\">{JsonEditor.SelectedText}</style>";
+                    JsonEditor.Text = JsonEditor.Text.Insert(JsonEditor.CaretIndex, "<style=\"highlight\"></style>");
+                }
+
+
+                
             }
         }
         private void Refractor1_Shorthand_Changetype(object sender, RoutedEventArgs e)
@@ -2554,25 +2456,33 @@ namespace Limbus_Localization_UI
                 EnableDynamicKeywords = true;
                 EnableDynamicKeywords_Display.Text = "Включено";
             }
-            //MSettings.SaveSetting("Enable Dynamic Keywords", EnableDynamicKeywords ? "Yes" : "No");
+            MSettings.SaveSetting("Enable Dynamic Keywords", EnableDynamicKeywords ? "Yes" : "No");
             UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
         }
         private void BattleKeywords_Change_Type(object sender, RoutedEventArgs e)
         {
             if (BattleKeywords_Type.Equals("RU"))
             {
-                (Keywords, KeywordIDName) = РазноеДругое.GetKeywords(IsEng: true);
-                Replacements = РазноеДругое.GetAddtReplacements();
+                (Keywords, KeywordIDName) = РазноеДругое.GetKeywords(from: "EN");
+                Replacements = РазноеДругое.GetAddtReplacements(from: "EN");
                 BattleKeywords_Type = "EN";
                 BattleKeywords_TypeDisplay.Text = BattleKeywords_Type;
             }
-            else
+            else if (BattleKeywords_Type.Equals("EN"))
             {
-                (Keywords, KeywordIDName) = РазноеДругое.GetKeywords(IsEng: false);
-                Replacements = РазноеДругое.GetAddtReplacements();
+                (Keywords, KeywordIDName) = РазноеДругое.GetKeywords(from: "CN");
+                Replacements = РазноеДругое.GetAddtReplacements(from: "CN");
+                BattleKeywords_Type = "CN";
+                BattleKeywords_TypeDisplay.Text = BattleKeywords_Type;
+            }
+            else if (BattleKeywords_Type.Equals("CN"))
+            {
+                (Keywords, KeywordIDName) = РазноеДругое.GetKeywords(from: "RU");
+                Replacements = РазноеДругое.GetAddtReplacements(from: "RU");
                 BattleKeywords_Type = "RU";
                 BattleKeywords_TypeDisplay.Text = BattleKeywords_Type;
             }
+            MSettings.SaveSetting("Keywords Type", BattleKeywords_Type);
             UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
         }
 
@@ -2596,9 +2506,18 @@ namespace Limbus_Localization_UI
         }
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            OverrideCover1.Margin = new Thickness(0);
-            OverrideCover2.Margin = new Thickness(0);
-            SettingsDialog.Margin = new Thickness(0);
+            if (SettingsDialog.Margin == new Thickness(0))
+            {
+                OverrideCover1.Margin = new Thickness(1000);
+                OverrideCover2.Margin = new Thickness(1000);
+                SettingsDialog.Margin = new Thickness(1000);
+            }
+            else
+            {
+                OverrideCover1.Margin = new Thickness(0);
+                OverrideCover2.Margin = new Thickness(0);
+                SettingsDialog.Margin = new Thickness(0);
+            }
         }
 
         private void ToggleHighlight_Click(object sender, RoutedEventArgs e)
@@ -2665,6 +2584,86 @@ namespace Limbus_Localization_UI
         {
             ColorPairs = РазноеДругое.GetColorPairs();
             UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
+
+        private void OverrideCover2_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            OverrideCover1.Margin = new Thickness(1000);
+            OverrideCover2.Margin = new Thickness(1000);
+            SettingsDialog.Margin = new Thickness(1000);
+        }
+
+        private void OverrideCover1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            OverrideCover1.Margin = new Thickness(1000);
+            OverrideCover2.Margin = new Thickness(1000);
+            SettingsDialog.Margin = new Thickness(1000);
+        }
+
+        private void Shorthand_TypeChange(object sender, RoutedEventArgs e)
+        {
+            if (Shorthand_Type == "Knightey")
+            {
+                Shorthand_Type = "kimght";
+            }
+            else
+            {
+                Shorthand_Type = "Knightey";
+            }
+            MSettings.SaveSetting("Shorthand Type", Shorthand_Type);
+            Shorthand_TypeDisplay.Text = Shorthand_Type;
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
+
+
+
+
+
+        private void DiffFile_SelectFile_Input_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (DiffFile_SelectFile_Input.Text.Equals(""))
+            {
+                DiffFile_SelectFile_Input_bgtext.Content = "Файл сравнения";
+            }
+            else
+            {
+                DiffFile_SelectFile_Input_bgtext.Content = "";
+            }
+        }
+
+        private void DiffFile_SelectFile_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var dialog = new Microsoft.Win32.OpenFileDialog();
+
+                try { dialog.InitialDirectory = $@"{Directory.GetDirectories(@"C:\Program Files (x86)\Steam\steamapps\common\Limbus Company\BepInEx\plugins")[0]}\Localize\RU"; }
+                catch { dialog.InitialDirectory = ""; }
+                dialog.DefaultExt = ".json";
+                dialog.Filter = "Text documents (.json)|*.json";
+
+                bool? result = dialog.ShowDialog();
+
+                if (result == true)
+                {
+                    string DiffFile_Filename = dialog.FileName;
+                    if (DiffFile_Filename.Split("\\")[^1].Equals(Mainfile_Filename))
+                    {
+                        DiffFile_SelectFile_Input.Text = DiffFile_Filename;
+                    }
+                    else
+                    {
+                        TextBoxFlashWarning(DiffFile_SelectFile_Input, DiffFile_SelectFile_Input_bgtext, "Файл не идентичен", "Файл сравнения", "Check_JsonFilepath_bgtext");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Ошибка при чтении файла", "Путь к Json файлу", "Check_JsonFilepath_bgtext");
+                Console.WriteLine(ex.StackTrace);
+                Console.WriteLine(ex.Source);
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

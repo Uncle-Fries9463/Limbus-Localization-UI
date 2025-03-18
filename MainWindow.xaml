@@ -247,7 +247,7 @@
         GlassFrameThickness="1"/>
     </WindowChrome.WindowChrome>
     <Window.Clip>
-        <RectangleGeometry x:Name="NewWindowSizes" Rect="0, 0, 890, 440" RadiusX="5" RadiusY="5"/>
+        <RectangleGeometry x:Name="NewWindowSizes" Rect="0, 0, 890, 575" RadiusX="5" RadiusY="5"/>
     </Window.Clip>
     <Border BorderBrush="Gray" BorderThickness="0.5" Canvas.ZIndex="200">
         <Grid x:Name="Overall" Background="Black">
@@ -268,7 +268,7 @@
                                     Развёртка ссылок
                                 </TextBlock>
                             </Button>
-                            <Button x:Name="Refractor2" PreviewMouseRightButtonDown="Refractor2_Click_RMB" PreviewMouseLeftButtonDown="Refractor2_Click_LMB" Height="25" Width="0" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
+                            <Button x:Name="Refractor2" PreviewMouseLeftButtonDown="Refractor2_Click_LMB" Height="25" Width="0" Margin="5, 0, 0, 0" Foreground="#FFD1D1D1">
                                 <TextBlock x:Name="InsertStyle" Foreground="#FFD1D1D1" FontSize="13.4" Width="116" TextWrapping="Wrap" TextAlignment="Center" Margin="-1, 0, 0, 0" Text="">
                                     Вставить style
                                 </TextBlock>
@@ -373,8 +373,8 @@
                             <ScaleTransform />
                         </Border.RenderTransform>
                     </Border>
-                    <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="0" Grid.Column="1" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
-                    <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="0" Grid.Column="0" Panel.ZIndex="1" Focusable="False" Margin="1000"/>
+                    <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="0" Grid.Column="1" Panel.ZIndex="1" Focusable="False" Margin="1000" PreviewMouseLeftButtonDown="OverrideCover1_MouseLeftButtonUp"/>
+                    <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="0" Grid.Column="0" Panel.ZIndex="1" Focusable="False" Margin="1000" PreviewMouseLeftButtonDown="OverrideCover2_MouseLeftButtonUp"/>
                     <Border x:Name="SettingsDialog"
                             Margin="1110"
                             Background="#FF191919"
@@ -389,7 +389,7 @@
                         <StackPanel>
                             <TextBlock HorizontalAlignment="Center"
                                        Foreground="#FFD1D1D1"
-                                       Margin="0, 8, 0, 0"
+                                       Margin="0, 4, 0, 0"
                                        FontSize="30"
                                        FontFamily="Bahnschrift Light"
                                        Text="Настройки">
@@ -500,8 +500,8 @@
                                     </Button>
                                     <Border  Margin="-95, 0, 0, 0" Height="40" Width="95" Background="#7F000000"/>
                                 </StackPanel>
-                                <Button Click="Settings_OK" Margin="56, 0, 0, 0" Width="100" Height="35" Content="OK"/>
-                                <Button Width="93" Height="35" HorizontalAlignment="Left" Margin="0, -35, 0, 0" Click="Refractor1_Shorthand_Changetype">
+                                <Button Click="Settings_OK" Margin="56, 0, 0, 0" Width="0" Height="35" Content="OK"/>
+                                <Button Width="93" Height="35" HorizontalAlignment="Left" Margin="0, -31, 0, 0" Click="Refractor1_Shorthand_Changetype">
                                     <StackPanel>
                                         <TextBlock Text="Dynamic Keyw." Foreground="#b4b4b4" Margin="0, 0, 0, 0" FontSize="13"/>
                                         <TextBlock Text="Отключено" x:Name="EnableDynamicKeywords_Display" TextDecorations="Underline" Foreground="#FFBAA7A7" Margin="0, 0, 0, 0" FontSize="11" HorizontalAlignment="Center"/>
@@ -511,6 +511,12 @@
                                     <StackPanel>
                                         <TextBlock Text="Keywords" Foreground="#b4b4b4" Margin="0, 0, 0, 0" FontSize="13"/>
                                         <TextBlock Text="RU" x:Name="BattleKeywords_TypeDisplay" TextDecorations="Underline" Foreground="#FFBAA7A7" Margin="0, 0, 0, 0" FontSize="11" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Width="93" Height="35" HorizontalAlignment="Left" Margin="201, -35, 0, 0" Click="Shorthand_TypeChange">
+                                    <StackPanel>
+                                        <TextBlock Text="Тип развёртки" Foreground="#b4b4b4" Margin="0, 0, 0, 0" FontSize="13"/>
+                                        <TextBlock Text="Knightey" x:Name="Shorthand_TypeDisplay" TextDecorations="Underline" Foreground="#FFBAA7A7" Margin="0, 0, 0, 0" FontSize="11" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0, -35, 4, 0">
@@ -712,6 +718,9 @@
                             <RowDefinition             />
                             <RowDefinition Height="10" />
                         </Grid.RowDefinitions>
+                        
+                        
+                        
                         <Border Grid.Column="1"
                                 Grid.Row="1"
                                 Height="29"
@@ -721,6 +730,7 @@
                                 BorderThickness="2"
                                 BorderBrush="#FF333333">
                             <TextBox x:Name="JsonFilepath"
+                                     IsReadOnly="True"
                                      Grid.Column="1" 
                                      Grid.Row="1" 
                                      VerticalAlignment="Top"
@@ -802,6 +812,10 @@
                                 </Button.ToolTip>
                             </Button>
                         </Border>
+                        
+                        
+                        
+                        
                         <StackPanel Grid.Column="1"
                                     Grid.Row="1"
                                     HorizontalAlignment="Left"
@@ -1586,6 +1600,60 @@
                                 </ScrollViewer.Resources>
                             </ScrollViewer>
                         </Border>
+                        <Border x:Name="DiffFile_SelectFile" Height="29" Width="275"
+                                Margin="0, 295, 0, 0"
+                                Background="{x:Null}"
+                                Grid.Column="1" 
+                                Grid.Row="2"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top">
+                            <StackPanel Orientation="Horizontal" Height="0">
+                                <Border Height="29" Width="241" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                        BorderThickness="2" BorderBrush="#FF333333">
+                                    <TextBox x:Name="DiffFile_SelectFile_Input"
+                                             IsReadOnly="True"
+                                             TextChanged="DiffFile_SelectFile_Input_TextChanged"
+                                             Width="237" Height="25"
+                                             VerticalAlignment="Top" HorizontalAlignment="Left" TextAlignment="Left" BorderThickness="0"
+                                             Foreground="#A69885" Background="#E9191919" SelectionBrush="#FF939393" SelectionTextBrush="#A69885" CaretBrush="#A69885" FontFamily="Bahnschrift Light" FontSize="20"/>
+                                </Border>
+                                <Label x:Name="DiffFile_SelectFile_Input_bgtext"
+                                       Focusable="False"
+                                       VerticalAlignment="Top" HorizontalAlignment="Left"
+                                       IsHitTestVisible="False" Background="{x:Null}"
+                                       Margin="-241, -2, 0, 0" Height="35" Width="238"   
+                                       FontStyle="Italic" FontFamily="Bahnschrift Light" FontSize="19" Foreground="#FF514C46"
+                                       Content="Файл сравнения"/>
+                                <Border HorizontalAlignment="Left" VerticalAlignment="Top"
+                                        Height="29" Width="29"
+                                        Background="#E9191919" Margin="5, 0, 0, 0"
+                                        ToolTipService.InitialShowDelay="0">
+                                    <Button Width="29" Foreground="#C3C3C3" FontFamily="Wingdings" FontWeight="Bold" FontSize="18" Height="29" Click="DiffFile_SelectFile_Click">
+                                        <Button.Content>
+                                            <TextBlock Margin="-0.4, -2, 0, 0">
+                                                    1
+                                                <TextBlock.RenderTransform>
+                                                    <ScaleTransform ScaleX="1" ScaleY="1.2"/>
+                                                </TextBlock.RenderTransform>
+                                            </TextBlock>
+                                        </Button.Content>
+                                        <Button.ToolTip>
+                                            <ToolTip Background="#895B5B5B"
+                                                     Foreground="White"
+                                                     HasDropShadow="False"
+                                                     Placement="MousePoint"
+                                                     HorizontalOffset="15"
+                                                     VerticalOffset="10">
+                                                <StackPanel>
+                                                    <TextBlock>Выбрать файл в проводнике</TextBlock>
+                                                </StackPanel>
+                                            </ToolTip>
+                                        </Button.ToolTip>
+                                    </Button>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
                     </Grid>
                     <ScrollViewer x:Name="PreviewLayout_Skills"
                                   

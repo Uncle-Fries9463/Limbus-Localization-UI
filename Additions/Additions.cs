@@ -45,33 +45,41 @@ namespace Limbus_Localization_UI.Additions
             File.WriteAllText(Path, JsonConvert.SerializeObject(JSON, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }).Replace("\r", "").Replace("\\r", ""), encoding: UTF8_BOM);
         }
 
-        public static (Dictionary<string, string>, Dictionary<string, string>) GetKeywords()
+        public static (Dictionary<string, string>, Dictionary<string, string>) GetKeywords(string from = "RU")
         {
             Dictionary<string, string> SpriteNames = new();
             Dictionary<string, string> KeywordTexts = new();
+            List<string> KeywordTexts_Text = new();
+            List<string> KeywordTexts_ID = new();
 
             int counter = 0;
             try
             {
-                foreach (string KeywordFile in Directory.EnumerateFiles(@"[Ресурсы]\$Другое\BattleKeywords", "*.*", SearchOption.AllDirectories))
+                foreach (string KeywordFile in Directory.EnumerateFiles(@$"[Ресурсы]\& Stringtypes\BattleKeywords\{from}", "*.*", SearchOption.TopDirectoryOnly))
                 {
                     string[] Lines = File.ReadAllLines(KeywordFile);
 
                     for (int i = 0; i <= Lines.Count() - 1; i++)
                     {
-                        if (Lines[i].Trim().StartsWith("\"id\": "))
+                        try
                         {
-                            string SpriteId = Lines[i].Split("\"id\": \"")[1].Split("\",")[0];
-                            string SpriteName = Lines[i + 1].Split("\"name\": \"")[1].Split("\",")[0];
-                            SpriteNames[SpriteId] = SpriteName;
-                            KeywordTexts[SpriteName] = SpriteId;
-                            counter++;
+                            if (Lines[i].Trim().StartsWith("\"id\": "))
+                            {
+                                string SpriteId = Lines[i].Split("\"id\": \"")[1].Split("\",")[0];
+                                string SpriteName = Lines[i + 1].Split("\"name\": \"")[1].Split("\",")[0];
+                                SpriteNames[SpriteId] = SpriteName;
+                                KeywordTexts[SpriteName] = SpriteId;
+                                counter++;
+                            }
                         }
+                        catch { }
                     }
                 }
             }
             catch{}
 
+            KeywordTexts = KeywordTexts.OrderBy(obj => obj.Key.Length).ToDictionary(obj => obj.Key, obj => obj.Value);
+           
             rin($"Загружено ключевых слов: {counter}");
             return (SpriteNames, KeywordTexts);
         }
@@ -84,7 +92,7 @@ namespace Limbus_Localization_UI.Additions
             int counter = 0;
             try
             {
-                foreach (var Line in File.ReadAllLines(@"[Ресурсы]\$Другое\BattleKeywords\ColorPairs.txt"))
+                foreach (var Line in File.ReadAllLines(@"[Ресурсы]\& Stringtypes\BattleKeywords\ColorPairs.txt"))
                 {
                     string ID = Line.Split(" ¤ ")[0];
                     string Color = Line.Split(" ¤ ")[1];
@@ -92,40 +100,37 @@ namespace Limbus_Localization_UI.Additions
                     counter++;
                 }
 
-                rin($"Загружено цветовых соответствий: {counter}");
             }
             catch{}
+            rin($"Загружено цветовых соответствий: {counter}");
             return ColorPairs;
         }
 
 
-        public static Dictionary<string, string> GetAddtReplacements()
+        public static Dictionary<string, string> GetAddtReplacements(string from = "RU")
         {
             Dictionary<string, string> Replacements = new();
 
             int counter = 0;
             try
             {
-                foreach(var Line in File.ReadAllLines(@"[Ресурсы]\$Другое\Доп замены.txt").ToList())
+                foreach(var Line in File.ReadAllLines(@$"[Ресурсы]\& Stringtypes\BattleKeywords\{from}\Replacements+.txt").ToList())
                 {
                     if (Line.StartsWith("------------------------------------------------")) break;
-
-                    if (Line.StartsWith("\""))
+                    
+                    try
                     {
-                        try
-                        {
-                            string Keyword = Line.Split("\": \"")[0][1..];
-                            string Replace = Line.Split("\": \"")[1][0..^1];
-                            Replacements[Keyword] = Replace;
-                            //rin($"{Keyword}: {Replace}");
-                            counter++;
-                        }
-                        catch{}
+                        string Keyword = Line.Split("¤")[0].Trim();
+                        string Replace = Line.Split("¤")[1].Trim();
+                        Replacements[Keyword] = Replace;
+                        //rin($"{Keyword}: {Replace}");
+                        counter++;
                     }
+                    catch{}
                 }
-                rin($"Загружено доп. замен: {counter}");
             }
             catch{}
+            rin($"Загружено доп. замен: {counter}");
 
             return Replacements;
         }
@@ -159,7 +164,7 @@ namespace Limbus_Localization_UI.Additions
         private static Dictionary<string, byte[]> GetSpriteFiles()
         {
             Dictionary<string, byte[]> SpriteFiles = new();
-            foreach (string image in Directory.EnumerateFiles(@"[Ресурсы]\Спрайты", "*.*", SearchOption.TopDirectoryOnly))
+            foreach (string image in Directory.EnumerateFiles(@"[Ресурсы]\Sprites", "*.*", SearchOption.TopDirectoryOnly))
             {
                 if (image.EndsWith(".png") | image.EndsWith(".webp"))
                 {
