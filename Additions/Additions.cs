@@ -7,6 +7,9 @@ using System.Windows.Media;
 using Limbus_Localization_UI.Json;
 using System.Windows.Media.Imaging;
 using static Limbus_Localization_UI.Additions.Consola;
+using System.Windows;
+using System.Diagnostics;
+
 
 namespace Limbus_Localization_UI.Additions
 {
@@ -84,7 +87,6 @@ namespace Limbus_Localization_UI.Additions
             return (SpriteNames, KeywordTexts);
         }
 
-
         public static Dictionary<string, string> GetColorPairs()
         {
             Dictionary<string, string> ColorPairs = new();
@@ -158,6 +160,20 @@ namespace Limbus_Localization_UI.Additions
                     Convert.ToByte(hexaColor.Substring(7, 2), 16)
                 )
             );
+        }
+
+
+        public static bool IsColor(string color)
+        {
+            try
+            {
+                GetColorFromAHEX("#ff" + color);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
 

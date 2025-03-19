@@ -18,6 +18,9 @@ namespace Limbus_Localization_UI
 {
     public partial class MainWindow : Window
     {
+        #region Системные штуки
+
+        #region Переменные
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
@@ -113,8 +116,8 @@ namespace Limbus_Localization_UI
 
         static string EditorMode = "EGOgift";
         public static int CurrentHighlight_YOffset = 0;
+        #endregion
 
-        // Список ссылок на все объекты интерфейса с понятным именем для обращения к ним в других классах без мороки с MVVM и { get; set; }, так и не пошло с ними
         public Dictionary<string, dynamic> T = new();
         public void InitializeStaticLinks()
         {
@@ -172,8 +175,6 @@ namespace Limbus_Localization_UI
                 ["SaveChanges SubDesc 3" ] = SubDesc3_Change_Button ,  ["SaveChanges SubDesc 3 [UnavalibleCover]" ] = SubDesc3_Change_Cover,
                 ["SaveChanges SubDesc 4" ] = SubDesc4_Change_Button ,  ["SaveChanges SubDesc 4 [UnavalibleCover]" ] = SubDesc4_Change_Cover,
                 ["SaveChanges SubDesc 5" ] = SubDesc5_Change_Button ,  ["SaveChanges SubDesc 5 [UnavalibleCover]" ] = SubDesc5_Change_Cover,
-
-
 
 
                 ["Skill PreviewLayout Coin 1 Panel"] = Skill_Coin1,
@@ -240,7 +241,6 @@ namespace Limbus_Localization_UI
                 ["Uptie Level 3"] = UptieLevel3_Button, ["Uptie Level 3 [UnavalibleCover]"] = UptieLevel3_Cover, ["Uptie Level 3 [UnavalibleSubCover]"] = UptieLevel3_SubCover, 
                 ["Uptie Level 4"] = UptieLevel4_Button, ["Uptie Level 4 [UnavalibleCover]"] = UptieLevel4_Cover, ["Uptie Level 4 [UnavalibleSubCover]"] = UptieLevel4_SubCover, 
             };
-            Console.WriteLine("Ссылки на нестатические объекты интерфейса готовы");
         }
         private void LoadFonts()
         {
@@ -266,18 +266,25 @@ namespace Limbus_Localization_UI
 
         private void StartInits()
         {
-            //Console.OutputEncoding = Encoding.UTF8;
+            try { Console.OutputEncoding = Encoding.UTF8; }
+            catch { }
             MSettings.InitTDictionaryHere(T);
             MSettings.LoadSettings();
-            (Keywords, KeywordIDName) = РазноеДругое.GetKeywords(from: BattleKeywords_Type);
-            Replacements = РазноеДругое.GetAddtReplacements(from: BattleKeywords_Type);
 
             PreviewLayout_Skills.PreviewMouseLeftButtonDown += SurfaceScroll_MouseLeftButtonDown;
             PreviewLayout_Skills.PreviewMouseMove += SurfaceScroll_MouseMove;
             PreviewLayout_Skills.PreviewMouseLeftButtonUp += SurfaceScroll_MouseLeftButtonUp;
-            string Def = "<style=\"highlight\">Посветка улучшения навыка/пассивки</style>\n<style=\"upgradeHighlight\">Подсветка улучшения ЭГО дара</style>\n\n[Breath]\n[Sinking]\n[BeforeUse]\n10 <sprite name=\"Vibration\"><color=#e30000><u><link=\"Vibration\">Тремора</link></u></color>\n\n<i>Курсивный текст</i>\n\n4m<sup>2</sup> H<sub>2</sub>O";
+            string Def = "";
+            try
+            {
+                Def = File.ReadAllText(@"[Ресурсы]\& Stringtypes\DefaultText.txt");
+            }
+            catch
+            {
+                Def = "<font=\"Consolas\">「Limbus Company <sprite name=\"KnowledgeExplored\"><u><color=#ffab57>TextMeshPro WPF-Mimicry</u></color> ⇄ 2.0」</font>\n\n[ <sprite name=\"Breath\"> <sprite name=\"Charge\"> <sprite name=\"ParryingResultUp\"> ] Вставка спрайтов через тег <color=#ed5558><sprite name=\"...\"></color> (Перенос строки вместе с ними целостный)\n\n[ <color=#c57609>[KeywordID]</color> ]\n- [AaCePcBb]\n- [TimeKillerWatch]\n- [VibrationNesting]\n\n[ Все теги вместе (Развёртка ссылок) ]\n- <sprite name=\"AaCePcBc\"><color=#e30000><u><link=\"AaCePcBc\">Слепая одержимость</link></u></color>\n- <sprite name=\"ParryingResultUp\"><color=#f8c200><u><link=\"ParryingResultUp\">Повышение силы в столкновении</link></u></color>\n\n[ <color=#abcdef>Цвет</color> ] Цветной текст через тег <color=#hexrgb>\n[ <i>Крусив</i> ] <i>Курсивный текст через тег</i> i\n[ <u>Подчёркивание</u> ] <u>Нижнее подчёркивание текста через тег</u> u\n[ <b>Толстый текст</b> ] <b>Утолщённый текст через тег</b> b\n[ - ] <b>И <i>их <u>комби<color=#d24020>ниров</color>ание</i></u></b>\n\n\n<font=\"Consolas\">(i)</color> Этот текст можно изменить в файле <font=\"Consolas\">\"[Ресурсы]\\& Stringtypes\\DefaultText.txt\"</font>";
+            }
 
-            Def = "<sprite name=\"Breath\"><color=#f8c200><u>Повышения уровня атаки<u></color>";
+
 
             PreviewLayout_EGOgift.SetValue(Paragraph.LineHeightProperty, 30.0);
 
@@ -291,20 +298,19 @@ namespace Limbus_Localization_UI
                 }
             }
 
+            EditorMode = "Passives";
+            Mode_Passives.AdjustUI();
             T["Json EditBox"].Text = Def;
         }
+        #endregion
 
-        
 
-
+        #region Предпросмотр
         /// <summary>
         /// При редактировании Json элемента обновлять предпросмотр и добавлять к кнопкам звёздочку при наличии несохранённых изменений
         /// </summary>
         private void Json_EditBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Обновить предпросмотр
-            //JsonEditor.Text = JsonEditor.Text.Replace("\r", "");
-
             try
             {
                 if (EditorMode == "EGOgift")
@@ -312,7 +318,7 @@ namespace Limbus_Localization_UI
                     try
                     {
                         PreviewLayout_EGOgift.Document.Blocks.Clear();
-                        UpdatePreview(JsonEditor.Text.Replace("\"", "\\\""), PreviewLayout_EGOgift);
+                        UpdatePreview(JsonEditor.Text, PreviewLayout_EGOgift);
                     }
                     catch { }
                 }
@@ -338,11 +344,11 @@ namespace Limbus_Localization_UI
 
                             if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"].Equals("{unedited}"))
                             {
-                                UpdatePreview_Text = JsonEditor.Text.Replace("\"", "\\\"");
+                                UpdatePreview_Text = JsonEditor.Text;
                             }
                             else
                             {
-                                UpdatePreview_Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"].Replace("\"", "\\\"");
+                                UpdatePreview_Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"];
                             }
 
                             if (!JsonEditor.Text.Equals(""))
@@ -376,11 +382,11 @@ namespace Limbus_Localization_UI
 
                             if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex].Equals("{unedited}"))
                             {
-                                UpdatePreview_Text = JsonEditor.Text.Replace("\r", "").Replace("\"", "\\\"");
+                                UpdatePreview_Text = JsonEditor.Text.Replace("\r", "");
                             }
                             else
                             {
-                                UpdatePreview_Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex].Replace("\"", "\\\"");
+                                UpdatePreview_Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex];
                             }
 
                             UpdatePreview_Target = T[$"Skill PreviewLayout Coin {Skills_CurrentCoinNumber} Desc {CoinDescIndex + 1}"];
@@ -392,8 +398,9 @@ namespace Limbus_Localization_UI
 
                 else if (EditorMode.Equals("Passives"))
                 {
-                    UpdatePreview(JsonEditor.Text.Replace("\"", "\\\""), MainSkillDesc);
-
+                    UpdatePreview(JsonEditor.Text, MainSkillDesc);
+                    MainSkillDesc.Height = double.NaN;
+                    //rin(MainSkillDesc.Height);
                     switch (Passives_CurrentEditingField)
                     {
                         case "Desc":
@@ -465,9 +472,9 @@ namespace Limbus_Localization_UI
                     }
                 }
             }
-            catch (Exception ex)
+            catch //(Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                //Console.WriteLine(ex.ToString());
             }
         }
 
@@ -475,60 +482,95 @@ namespace Limbus_Localization_UI
         #region Методы добавления текста и спрайтов на предпросмотр
         private static void PreviewLayout_AppendText(TextConstructor TextData, RichTextBox Target)
         {
-            var document = Target.Document;
-            if (document.Blocks.LastBlock is not Paragraph lastParagraph)
+            try
             {
-                lastParagraph = new Paragraph();
-                document.Blocks.Add(lastParagraph);
+                var document = Target.Document;
+                if (document.Blocks.LastBlock is not Paragraph lastParagraph)
+                {
+                    lastParagraph = new Paragraph();
+                    document.Blocks.Add(lastParagraph);
+                }
+
+                Run PreviewLayout_AppendRun = new Run(TextData.Text);
+
+                ApplyTags(ref PreviewLayout_AppendRun, TextData.InnerTags);
+
+                #region Sub/Sup
+                if (TextData.InnerTags.Contains("TextStyle@Subscript") | TextData.InnerTags.Contains("TextStyle@Superscript"))
+                {
+                    PreviewLayout_AppendRun.FontSize = 12;
+                    StackPanel AlterHeight = new()
+                    {
+                        Height = 16,
+                        Children = { new TextBlock(PreviewLayout_AppendRun) }
+                    };
+
+                    if (TextData.InnerTags.Contains("TextStyle@Subscript"))
+                    {
+                        AlterHeight.Margin = new Thickness(0, 0, 0, 0);
+                    }
+                    else if(TextData.InnerTags.Contains("TextStyle@Superscript"))
+                    {
+                        AlterHeight.Margin = new Thickness(0, -40, 0, 0);
+                    }
+                    AlterHeight.RenderTransform = new TranslateTransform(0, 5);
+
+                    lastParagraph.Inlines.Add(new InlineUIContainer(AlterHeight));
+                }
+                #endregion
+                
+                else
+                {
+                    lastParagraph.Inlines.Add(PreviewLayout_AppendRun);
+                }
             }
-
-            Run PreviewLayout_AppendRun = new Run(TextData.Text);
-
-            ApplyTags(ref PreviewLayout_AppendRun, TextData.InnerTags);
-
-            lastParagraph.Inlines.Add(PreviewLayout_AppendRun);
+            catch { }
         }
 
 
         private static void PreviewLayout_AppendSprite(SpriteConstructor SpriteData, RichTextBox Target)
         {
-            var document = Target.Document;
-            if (document.Blocks.LastBlock is not Paragraph lastParagraph)
+            try
             {
-                lastParagraph = new Paragraph();
-                document.Blocks.Add(lastParagraph);
+                var document = Target.Document;
+                if (document.Blocks.LastBlock is not Paragraph lastParagraph)
+                {
+                    lastParagraph = new Paragraph();
+                    document.Blocks.Add(lastParagraph);
+                }
+                BitmapImage source;
+                if (SpriteBitmaps.ContainsKey(SpriteData.SpriteLink)) source = SpriteBitmaps[SpriteData.SpriteLink];
+                else source = SpriteBitmaps[@"$Unknown.png"];
+                Image SpriteImage = new()
+                {
+                    Source = source,
+                    Width = 21.6, Height = 21,
+                    Margin = new Thickness(-2, -0.5, 0, 0)
+                };
+
+                StackPanel SpritePlusEffectname = new() { Orientation = Orientation.Horizontal };
+                SpritePlusEffectname.Children.Add(new TextBlock(new InlineUIContainer(SpriteImage)));
+
+                Run KeywordName = new Run(SpriteData.TextBase.Text);
+                ApplyTags(ref KeywordName, SpriteData.TextBase.InnerTags);
+
+                SpritePlusEffectname.Children.Add(new TextBlock(KeywordName));
+
+                if (EditorMode.Equals("EGOgift"))
+                {
+                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10);
+                    SpritePlusEffectname.Margin = new Thickness(0, -10, 0, 0);
+                }
+                else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
+                {
+                    SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 11);
+                    SpritePlusEffectname.Margin = new Thickness(0, -11, 0, 0);
+                }
+
+                SpritePlusEffectname.VerticalAlignment = VerticalAlignment.Bottom;
+                lastParagraph.Inlines.Add(new InlineUIContainer(SpritePlusEffectname));
             }
-
-            BitmapImage source;
-            if (SpriteBitmaps.ContainsKey(SpriteData.SpriteLink)) source = SpriteBitmaps[SpriteData.SpriteLink];
-            else source = SpriteBitmaps[@"$Unknown.png"];
-            Image SpriteImage = new()
-            {
-                Source = source,
-                Width = 21.6, Height = 23,
-                Margin = new Thickness(-2, -1, -2, 0)
-            };
-
-            StackPanel SpritePlusEffectname = new() { Orientation = Orientation.Horizontal };
-            SpritePlusEffectname.Children.Add(new TextBlock(new InlineUIContainer(SpriteImage)));
-
-            Run KeywordName = new Run(SpriteData.StickedWord);
-            ApplyTags(ref KeywordName, SpriteData.StickedWordInnerTags);
-
-            SpritePlusEffectname.Children.Add(new TextBlock(KeywordName));
-            if (EditorMode.Equals("EGOgift"))
-            {
-                SpritePlusEffectname.Margin = new Thickness(0, -11, 0, 0);
-                SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.2); // 'y' value- (~0.5), может быть, наверное
-            }
-            else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
-            {
-                SpritePlusEffectname.Margin = new Thickness(0, -11.5, 0, 0);
-                SpritePlusEffectname.RenderTransform = new TranslateTransform(0, 10.998); // Всё ещё без понятия как они связаны
-            }
-
-            SpritePlusEffectname.VerticalAlignment = VerticalAlignment.Bottom;
-            lastParagraph.Inlines.Add(new InlineUIContainer(SpritePlusEffectname));
+            catch {}
         }
         #endregion
 
@@ -544,68 +586,70 @@ namespace Limbus_Localization_UI
             LastPreviewUpdateTarget = Target;
             if (!JsonEditor_EnableHighlight)
             {
-                JsonDesc = JsonDesc.Replace("<style=\\\"highlight\\\">", "").Replace("<style=\\\"upgradeHighlight\\\">", "").Replace("</style>", "");
+                JsonDesc = JsonDesc.Replace("<style=\"highlight\">", "").Replace("<style=\"upgradeHighlight\">", "").Replace("</style>", "");
             }
             else
             {
                 if (EditorMode.Equals("EGOgift"))
                 {
-                    JsonDesc = JsonDesc.Replace("<style=\\\"highlight\\\">", "");
+                    JsonDesc = JsonDesc.Replace("<style=\"highlight\">", "");
                 }
                 else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
                 {
-                    JsonDesc = JsonDesc.Replace("<style=\\\"upgradeHighlight\\\">", "");
+                    JsonDesc = JsonDesc.Replace("<style=\"upgradeHighlight\">", "");
                 }
             }
 
-
-            // Замена обычных слов на вствку ключевых с цветом и спрайтом, если они совпадают (Свойства [TabExplain] сохраняются)
-            if (EnableDynamicKeywords)
-            {
-                foreach (var KeywordName in KeywordIDName.Reverse())
-                {
-                    JsonDesc = Regex.Replace(JsonDesc, @$"(?<![a-zA-Zа-яА-Я<>\[\]\'""*])({KeywordName.Key})(?![a-zA-Zа-яА-Я<[""*])", match =>
-                    {
-                        return $"<sprite name=\\\"{KeywordName.Value}\\\"><color={(ColorPairs.ContainsKey(KeywordName.Value) ? ColorPairs[KeywordName.Value] : "#f8c200")}><u>{KeywordName.Key}⟦InnerTag/LocalTabExplain⟧</u></color>";
-                    });
-                }
-            }
-
-            // Заменить квадратные скобки ссылок на <sprite><color>...</color>, если текст из них есть в списке id из всех Keywords файлов
-            JsonDesc = Regex.Replace(JsonDesc, @"\[(\w+)\]", match =>
-            {
-                string MaybeKeyword = match.Groups[1].Value;
-                try
-                {
-                    return Keywords.ContainsKey(MaybeKeyword) ? $"<sprite name=\\\"{MaybeKeyword}\\\"><color={ColorPairs[MaybeKeyword]}><u>{Keywords[MaybeKeyword]}</u></color>" : $"[{MaybeKeyword}]";
-                }
-                catch
-                {
-                    return $"[{MaybeKeyword}]";
-                }
-            });
-            
-            // Обработка особых вставок эффектов [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки в теги
-            JsonDesc = Regex.Replace(JsonDesc, Shorthand_Type.Equals("kimght") ? @"\[(\w+)\:'(.*?)'\]" : @"\{(\w+)\: \*(.*?)\*\}", match =>
-            {
-                string MaybeKeyword = match.Groups[1].Value;
-                string MaybeName = match.Groups[2].Value;
-
-                if (Keywords.ContainsKey(MaybeKeyword))
-                {
-                    return $"<sprite name=\\\"{MaybeKeyword}\\\"><color={(ColorPairs.ContainsKey(MaybeKeyword) ? ColorPairs[MaybeKeyword] : "#f8c200")}><u>{MaybeName}</u></color>";
-                }
-                else
-                {
-                    return match.Groups[0].Value;
-                }
-            });
-
-            // Выделение вставок через .Format в определённых файлах
+            // Выделение вставок через .Format в определённых файлах // Форматирование для других файлов
             if (Mainfile_Filename.StartsWith("Bufs") | Mainfile_Filename.StartsWith("BattleKeywords"))
             {
                 JsonDesc = JsonDesc.Replace("{", "<color=#f95e00>{").Replace("}", "}</color>");
             }
+            else
+            {
+                // Замена обычных слов на вствку ключевых с цветом и спрайтом, если они совпадают (Свойства [TabExplain] сохраняются)
+                if (EnableDynamicKeywords)
+                {
+                    foreach (var KeywordName in KeywordIDName.Reverse())
+                    {
+                        JsonDesc = Regex.Replace(JsonDesc, @$"(?<![a-zA-Zа-яА-Я<>\[\]\'""*])({KeywordName.Key})(?![a-zA-Zа-яА-Я<[""*])", match =>
+                        {
+                            return $"<sprite name=\"{KeywordName.Value}\"><color={(ColorPairs.ContainsKey(KeywordName.Value) ? ColorPairs[KeywordName.Value] : "#f8c200")}><u>{KeywordName.Key}⟦InnerTag/LocalTabExplain⟧</u></color>";
+                        });
+                    }
+                }
+
+                // Заменить квадратные скобки ссылок на <sprite><color>...</color>, если текст из них есть в списке id из всех Keywords файлов
+                JsonDesc = Regex.Replace(JsonDesc, @"\[(\w+)\]", match =>
+                {
+                    string MaybeKeyword = match.Groups[1].Value;
+                    try
+                    {
+                        return Keywords.ContainsKey(MaybeKeyword) ? $"<sprite name=\"{MaybeKeyword}\"><color={ColorPairs[MaybeKeyword]}><u>{Keywords[MaybeKeyword]}</u></color>" : $"[{MaybeKeyword}]";
+                    }
+                    catch
+                    {
+                        return $"[{MaybeKeyword}]";
+                    }
+                });
+            
+                // Обработка особых вставок эффектов [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки в теги
+                JsonDesc = Regex.Replace(JsonDesc, Shorthand_Type.Equals("kimght") ? @"\[(\w+)\:'(.*?)'\]" : @"\{(\w+)\: \*(.*?)\*\}", match =>
+                {
+                    string MaybeKeyword = match.Groups[1].Value;
+                    string MaybeName = match.Groups[2].Value;
+
+                    if (Keywords.ContainsKey(MaybeKeyword))
+                    {
+                        return $"<sprite name=\"{MaybeKeyword}\"><color={(ColorPairs.ContainsKey(MaybeKeyword) ? ColorPairs[MaybeKeyword] : "#f8c200")}><u>{MaybeName}</u></color>";
+                    }
+                    else
+                    {
+                        return match.Groups[0].Value;
+                    }
+                });
+            }
+
 
             // Доп замены
             if (Replacements.Count > 0)
@@ -615,13 +659,6 @@ namespace Limbus_Localization_UI
                     JsonDesc = JsonDesc.Replace(Replacement.Key, Replacement.Value);
                 }
             }
-
-            
-            JsonDesc = JsonDesc.Replace("color=#None", "color=#ffffff")
-                               .Replace("<style=\\\"highlight\\\">", "<style=\\\"upgradeHighlight\\\">") // Подсветка улучшения (Без разницы как)
-                               .Replace("</link>", "") // Ссылки вырезать (тултипы не работают (Возможно))
-                               .Replace("[TabExplain]", "");
-
 
             List<string> TagList = new()
             {
@@ -638,56 +675,62 @@ namespace Limbus_Localization_UI
                 "b",
                 "/b",
                 "/",
-                "style=\\\"upgradeHighlight\\\"",
+                "style=\"upgradeHighlight\"",
                 "/style",
+                "lowercase",
+                "/lowercase",
+                "uppercase",
+                "/uppercase",
+                "strikethrough",
+                "/strikethrough",
+                "/font",
 
                 "\0",
 
                 "EMPTY¤",
             };
+            foreach(var Tag in TagList)
+            {
+                JsonDesc = JsonDesc.Replace($">{Tag}<", $">\0{Tag}<");
+            }
+
             bool ICm(string Range_TextItem)
             {
-                return !TagList.Contains(Range_TextItem) & !Range_TextItem.StartsWith("color=#") & !Range_TextItem.StartsWith("sprite name=\\\"");
+                return !TagList.Contains(Range_TextItem) & !Range_TextItem.StartsWith("color=#") & !Range_TextItem.StartsWith("sprite name=\"");
             }
+
+            #region Базовое форматирование текста
+            JsonDesc = JsonDesc.Replace("color=#None", "color=#ffffff")
+                               .Replace("<style=\"highlight\">", "<style=\"upgradeHighlight\">") // Подсветка улучшения (Без разницы как)
+                               .Replace("</link>", "") // Ссылки вырезать (тултипы не работают (Возможно))
+                               .Replace("[TabExplain]", "");
             
-            //JsonDesc = Regex.Replace(JsonDesc, @"(?<=<\/color>)([а-яА-Яa-zA-Z])", " $1"); // Без понятия зачем
-            JsonDesc = Regex.Replace(JsonDesc, @"<link=\\\"".*?\\\"">", ""); // убрать все link (Тултип не рабоатет)
+            JsonDesc = Regex.Replace(JsonDesc, @"<link=""\w+"">", ""); // убрать все link (Тултип не рабоатет)
             
             // Сепарированые обычных '<' '>' от тегов
-            JsonDesc = Regex.Replace(JsonDesc, @"<color=(#\w+?)>", @"⇱color=$1⇲");
-            JsonDesc = Regex.Replace(JsonDesc, @"<sprite name=\\""(\w+?)\\"">", @"⇱sprite name=\""$1\""⇲");
-            JsonDesc = Regex.Replace(JsonDesc, @"<style=\\""(\w+?)\\"">", @"⇱style=\""$1\""⇲");
-            JsonDesc = JsonDesc.Replace("</style>", "⇱/style⇲")
-                               .Replace("</color>", "⇱/color⇲")
-                               .Replace("<i>", "⇱i⇲")
-                               .Replace("</i>", "⇱/i⇲")
-                               .Replace("<u>", "⇱u⇲")
-                               .Replace("</u>", "⇱/u⇲")
-                               .Replace("<b>", "⇱b⇲")
-                               .Replace("</b>", "⇱/b⇲")
-                               .Replace("<sub>", "⇱sub⇲")
-                               .Replace("<sup>", "⇱sup⇲")
-                               .Replace("</sup>", "⇱/sup⇲")
-                               .Replace("</sub>", "⇱/sub⇲")
-                               .Replace("<EMPTY¤>", "⇱EMPTY¤⇲");
+            JsonDesc = Regex.Replace(JsonDesc, @"<color=#([0-9a-fA-F]{6})>", @"⇱color=#$1⇲");
+            JsonDesc = Regex.Replace(JsonDesc, @"<sprite name=""(\w+?)"">", @"⇱sprite name=""$1""⇲");
+            JsonDesc = Regex.Replace(JsonDesc, @"<style=""(\w+?)"">", @"⇱style=""$1""⇲");
+            JsonDesc = Regex.Replace(JsonDesc, @"<font=""(.*?)"">", @"⇱font=""$1""⇲");
+            foreach (var Tag in TagList) JsonDesc = JsonDesc.Replace($"<{Tag}>", $"⇱{Tag}⇲");
+            #endregion
 
             // Главное разбивание текста на список с обычным текстом и тегами
-            string[] TextSegmented = $"⇱EMPTY¤⇲\0⇱EMPTY¤⇲\0{JsonDesc.Replace("\\n", "\n")}\0⇱EMPTY¤⇲\0⇱EMPTY¤⇲\0⇱EMPTY¤⇲".Split(new char[] { '⇱', '⇲' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] TextSegmented = $"⇱EMPTY¤⇲\0⇱EMPTY¤⇲\0⇱EMPTY¤⇲\0⇱EMPTY¤⇲\0{JsonDesc.Replace("\\n", "\n")}\0⇱EMPTY¤⇲\0⇱EMPTY¤⇲\0⇱EMPTY¤⇲\0⇱EMPTY¤⇲\0".Split(new char[] { '⇱', '⇲' }, StringSplitOptions.RemoveEmptyEntries);
 
-          #region Новая хрень
             List<string> __TextSegmented__ = TextSegmented.ToList();
-            __TextSegmented__.RemoveAll(r => r.Equals("\0"));
+            __TextSegmented__.RemoveAll(TextItem => TextItem.Equals("\0"));
 
-          #region Форматирование тегов
+          #region ¤ Форматирование тегов ¤
             int TextSegmented_Count = __TextSegmented__.Count();
 
-          #region Первичная обработка текста
+            #region Обычный текст
             for (int TextItem_Index = 0; TextItem_Index < __TextSegmented__.Count; TextItem_Index++)
             {
                 string TextItem = __TextSegmented__[TextItem_Index];
 
                 #region ⟦InnerTag/UptieHighlight⟧
-                if (TextItem.Equals("style=\\\"upgradeHighlight\\\""))
+                if (TextItem.Equals("style=\"upgradeHighlight\""))
                 {
                     for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
                     {
@@ -702,10 +745,10 @@ namespace Limbus_Localization_UI
                             }
                             try
                             {
-                                if (!__TextSegmented__[RangeIndex - 1].StartsWith("sprite name=\\\"") &
-                                    !__TextSegmented__[RangeIndex - 2].StartsWith("sprite name=\\\"") &
-                                    !__TextSegmented__[RangeIndex - 3].StartsWith("sprite name=\\\"") &
-                                    !__TextSegmented__[RangeIndex].StartsWith("sprite name=\\\"")) // Сохранять цвета для статусных эффектов
+                                if (!__TextSegmented__[RangeIndex - 1].StartsWith("sprite name=\"") &
+                                    !__TextSegmented__[RangeIndex - 2].StartsWith("sprite name=\"") &
+                                    !__TextSegmented__[RangeIndex - 3].StartsWith("sprite name=\"") &
+                                    !__TextSegmented__[RangeIndex].StartsWith("sprite name=\"")) // Сохранять цвета для статусных эффектов
                                 {
                                     if (__TextSegmented__[RangeIndex].StartsWith("color=#"))
                                     {
@@ -724,20 +767,42 @@ namespace Limbus_Localization_UI
                 }
                 #endregion
 
-                #region ⟦InnerTag/TextColor@HexRGB⟧
-                if (TextItem.StartsWith("color=#"))
+                #region ⟦InnerTag/FontFamily@FontFamilyName⟧
+                if (TextItem.StartsWith("font=\""))
                 {
+                    string FontFamily = Regex.Match(TextItem, @"font=""(.*)""").Groups[1].ToString();
+
                     for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
                     {
                         string Range_TextItem = __TextSegmented__[RangeIndex];
 
-                        if (Range_TextItem.Equals("/color")) break;
-
-                        else
+                        if (Range_TextItem.Equals("/font") | Range_TextItem.StartsWith("font=\"")) break;
+                        if (ICm(Range_TextItem) & !Range_TextItem.Contains("⟦InnerTag/FontFamily@"))
                         {
-                            if (ICm(Range_TextItem))
+                            __TextSegmented__[RangeIndex] += $"⟦InnerTag/FontFamily@{FontFamily}⟧";
+                        }
+                    }
+                }
+                #endregion
+
+                #region ⟦InnerTag/TextColor@HexRGB⟧
+                if (TextItem.StartsWith("color=#") & TextItem.Length == 13)
+                {
+                    string ColorCode = Regex.Match(TextItem, @"([0-9a-fA-F]{6})").Groups[1].ToString();
+                    if (РазноеДругое.IsColor(ColorCode))
+                    {
+                        for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
+                        {
+                            string Range_TextItem = __TextSegmented__[RangeIndex];
+
+                            if (Range_TextItem.Equals("/color") | Range_TextItem.StartsWith("color=#")) break;
+
+                            else
                             {
-                                    __TextSegmented__[RangeIndex] += $"⟦InnerTag/TextColor@{TextItem.Split("color=#")[^1]}⟧";
+                                if (ICm(Range_TextItem))
+                                {
+                                    __TextSegmented__[RangeIndex] += $"⟦InnerTag/TextColor@{ColorCode}⟧";
+                                }
                             }
                         }
                     }
@@ -792,6 +857,22 @@ namespace Limbus_Localization_UI
                 }
                 #endregion
 
+                #region ⟦InnerTag/TextStyle@Strikethrough⟧
+                if (TextItem.Equals("strikethrough"))
+                {
+                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
+                    {
+                        string Range_TextItem = __TextSegmented__[RangeIndex];
+
+                        if (Range_TextItem.Equals("/strikethrough")) break;
+                        if (ICm(Range_TextItem) & !Range_TextItem.Contains("⟦InnerTag/TextStyle@Strikethrough⟧"))
+                        {
+                            __TextSegmented__[RangeIndex] += $"⟦InnerTag/TextStyle@Strikethrough⟧";
+                        }
+                    }
+                }
+                #endregion
+
                 #region ⟦InnerTag/TextStyle@Subscript⟧
                 if (TextItem.Equals("sub"))
                 {
@@ -799,7 +880,7 @@ namespace Limbus_Localization_UI
                     {
                         string Range_TextItem = __TextSegmented__[RangeIndex];
 
-                        if (Range_TextItem.Equals("/sub")) break;
+                        if (Range_TextItem.Equals("/sub") | Range_TextItem.Equals("sup")) break;
                         if (ICm(Range_TextItem) & !Range_TextItem.Contains("⟦InnerTag/TextStyle@Subscript⟧"))
                         {
                             __TextSegmented__[RangeIndex] += $"⟦InnerTag/TextStyle@Subscript⟧";
@@ -815,7 +896,7 @@ namespace Limbus_Localization_UI
                     {
                         string Range_TextItem = __TextSegmented__[RangeIndex];
 
-                        if (Range_TextItem.Equals("/sup")) break;
+                        if (Range_TextItem.Equals("/sup") | Range_TextItem.Equals("sub")) break;
                         if (ICm(Range_TextItem) & !Range_TextItem.Contains("⟦InnerTag/TextStyle@Superscript⟧"))
                         {
                             __TextSegmented__[RangeIndex] += $"⟦InnerTag/TextStyle@Superscript⟧";
@@ -823,31 +904,63 @@ namespace Limbus_Localization_UI
                     }
                 }
                 #endregion
+
+
+                #region ⟦OuterFormat/TextStyle@LowerCase⟧
+                if (TextItem.Equals("lowercase"))
+                {
+                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
+                    {
+                        string Range_TextItem = __TextSegmented__[RangeIndex];
+
+                        if (Range_TextItem.Equals("/lowercase")) break;
+                        if (ICm(Range_TextItem))
+                        {
+                            __TextSegmented__[RangeIndex] = __TextSegmented__[RangeIndex].ToLower();
+                        }
+                    }
+                }
+                #endregion
+
+                #region ⟦OuterFormat/TextStyle@UpperCase⟧
+                if (TextItem.Equals("uppercase"))
+                {
+                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
+                    {
+                        string Range_TextItem = __TextSegmented__[RangeIndex];
+
+                        if (Range_TextItem.Equals("/uppercase")) break;
+                        if (ICm(Range_TextItem))
+                        {
+                            __TextSegmented__[RangeIndex] = __TextSegmented__[RangeIndex].ToUpper();
+                        }
+                    }
+                }
+                #endregion
             }
-          #endregion
+            #endregion
 
-            __TextSegmented__.RemoveAll(TextItem => (TagList.Contains(TextItem) | TextItem.StartsWith("color=#")) );
+            // Очистить сегментированный список текстовых фрагметов от тегов
+            __TextSegmented__.RemoveAll(TextItem => (TagList.Contains(TextItem) | TextItem.StartsWith("color=#") | TextItem.StartsWith("font=\"")) );
 
-          #region Вторичная обработка вставок спрайтов
+            #region Спрайты
             for (int TextItem_Index = 0; TextItem_Index < __TextSegmented__.Count; TextItem_Index++)
             {
                 string TextItem = __TextSegmented__[TextItem_Index];
 
                 #region ⟦LevelTag/SpriteLink⟧
-                if (TextItem.StartsWith("sprite name=\\\""))
+                if (TextItem.StartsWith("sprite name=\""))
                 {
-                    string SpriteLink = TextItem.Split("sprite name=\\\"")[^1][0..^2];
-                    if (Keywords.ContainsKey(SpriteLink))
+                    string SpriteLink = TextItem.Split("sprite name=\"")[^1][0..^1];
+                    
+                    string SpriteKeyword = ":«»";
+                    try
                     {
-                        string SpriteKeyword = "";
-                        try
+                        if (TextItem_Index + 1 != __TextSegmented__.Count)
                         {
-                            SpriteKeyword = __TextSegmented__[TextItem_Index + 1].Split(' ')[0];
-
-
-                            if (!__TextSegmented__[TextItem_Index + 1].StartsWith("sprite name=\\\""))
+                            string SpriteKeywordAppend = __TextSegmented__[TextItem_Index + 1].Split(' ')[0];
+                            if (!__TextSegmented__[TextItem_Index + 1].StartsWith("sprite name=\""))
                             {
-                                rin($"¤ \"{__TextSegmented__[TextItem_Index + 1]}\"");
                                 if (!__TextSegmented__[TextItem_Index + 1][0].Equals(" "))
                                 {
                                     bool SpaceAdd = false;
@@ -862,76 +975,90 @@ namespace Limbus_Localization_UI
                                         NextTextItem_InnerTags += InnerTagMatch;
                                     }
 
-                                    SpriteKeyword = $"+„{SpriteKeyword + NextTextItem_InnerTags}“";
+                                    SpriteKeyword = $":«{SpriteKeywordAppend + NextTextItem_InnerTags}»";
                                 }
                             }
-                            else
-                            {
-                                SpriteKeyword = "";
-                            }
                         }
-                        catch { }
-                        __TextSegmented__[TextItem_Index] = $"⟦LevelTag/SpriteLink@{SpriteLink}{SpriteKeyword}⟧";
                     }
+                    catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                    __TextSegmented__[TextItem_Index] = $"⟦LevelTag/SpriteLink@{SpriteLink}{SpriteKeyword}⟧";
+                    
                 }
                 #endregion
             }
             #endregion
 
             #endregion
-            
-            {
-              //#region Debug Preview
-              //  List<string> PreviewDebug = new();
-              //  foreach (var DebugTextItem in __TextSegmented__) PreviewDebug.Add(DebugTextItem.Replace("\n", "\\n"));
-              //  string s = "[\"" + String.Join("\", \"", PreviewDebug) + "\"]";
-              //  s = s.Replace("⟦", "\x1b[38;5;62m⟦\x1b[0m");
-              //  s = s.Replace("⟧", "\x1b[38;5;62m⟧\x1b[0m");
-              //  s = s.Replace("@", "\x1b[38;5;62m@\x1b[0m");
-              //  s = s.Replace("„", "\x1b[38;5;72m„");
-              //  s = s.Replace("“", "\x1b[38;5;72m“\x1b[0m");
-              //  s = s.Replace("InnerTag", "\x1b[38;5;203mInnerTag\x1b[0m");
-              //  s = s.Replace("LevelTag", "\x1b[38;5;204mLevelTag\x1b[0m");
-              //  s = s.Replace("TextColor", "\x1b[38;5;202mTextColor\x1b[0m");
-              //  s = s.Replace("TextStyle", "\x1b[38;5;202mTextStyle\x1b[0m");
-              //  s = s.Replace("SpriteLink", "\x1b[38;5;202mSpriteLink\x1b[0m");
-              //  //Console.Clear();
-              //  rin(s);
-              //#endregion
-            }
 
-          #region Вывод на предпросмотр
+            #region Debug Preview
+            {
+                //string ApplySyntax(string s)
+                //{
+                //    s = s.Replace("⟦", "\x1b[38;5;62m⟦\x1b[0m");
+                //    s = s.Replace("⟧", "\x1b[38;5;62m⟧\x1b[0m");
+                //    s = s.Replace("@", "\x1b[38;5;62m@\x1b[0m");
+                //    s = s.Replace("«", "\x1b[38;5;72m«");
+                //    s = s.Replace("»", "\x1b[38;5;72m»\x1b[0m");
+                //    s = s.Replace("InnerTag", "\x1b[38;5;203mInnerTag\x1b[0m");
+                //    s = s.Replace("LevelTag", "\x1b[38;5;204mLevelTag\x1b[0m");
+                //    s = s.Replace("FontFamily", "\x1b[38;5;202mFontFamily\x1b[0m");
+                //    s = s.Replace("TextColor", "\x1b[38;5;202mTextColor\x1b[0m");
+                //    s = s.Replace("TextStyle", "\x1b[38;5;202mTextStyle\x1b[0m");
+                //    s = s.Replace("SpriteLink", "\x1b[38;5;202mSpriteLink\x1b[0m");
+                //    return s;
+                //}
+
+                //Console.Clear();
+                //Console.WriteLine($"Limbus Company TextMeshPro WPF-Mimicry  (\x1b[38;5;62m{Target.Name}\x1b[0m):");
+                //int index = 0;
+                //List<string> PreviewDebug = new();
+                //foreach (var TextItem in __TextSegmented__)
+                //{
+                //    if (TextItem.StartsWith("⟦LevelTag/SpriteLink"))
+                //    {
+                //        string Content = Regex.Match(TextItem, @"«(.*?)»").Groups[1].Value;
+                //        rin(ApplySyntax($"\n({index}) LevelTag ^\n - Link: «{TextItem.Split("⟦LevelTag/SpriteLink@")[1].Split(":«")[0]}»\n - Content: «`{ClearText(TextItem)}`»\n - Properties: {String.Join("\n               ", InnerTags(TextItem))}").Replace("»", "").Replace("«", ""));
+                //    }
+                //    else
+                //    {
+                //        rin(ApplySyntax($"\n({index}) InnerTag ^\n - Content: «`{ClearText(TextItem)}`»\n - Properties: {String.Join("\n               ", InnerTags(TextItem))}").Replace("«", "").Replace("»", ""));
+                //    }
+                //    index++;
+                //}
+            }
+            #endregion
+
+            #region Вывод на предпросмотр
             foreach (string TextItem in __TextSegmented__)
             {
                 #region Спрайты
                 if (TextItem.StartsWith("⟦LevelTag/SpriteLink@") & TextItem.EndsWith('⟧'))
                 {
-                    var SpriteSet = TextItem.Split("+„");
-                    string This_SpriteKeyword = SpriteSet[0].Split("@")[^1];
+                    var SpriteSet = TextItem.Split(":«");
+                    string This_SpriteKeyword = SpriteSet[0].Split("@")[^1].Replace("⟧", "");
 
                     string This_StickedWord = "";
                     if (SpriteSet.Count() == 2) This_StickedWord = SpriteSet[1][0..^2];
 
                     if (Keywords.ContainsKey(This_SpriteKeyword))
                     {
-                        if (SpriteBitmaps.ContainsKey(This_SpriteKeyword + ".png"))
-                        {
-                            This_SpriteKeyword += ".png";
-                        }
-                        else
-                        {
-                            This_SpriteKeyword += ".webp";
-                        }
-                        SpriteConstructor Current_SpriteConstructor = new SpriteConstructor
-                        {
-                            StickedWordInnerTags = InnerTags(This_StickedWord),
-                            StickedWord = ClearText(This_StickedWord),
-                            SpriteLink = This_SpriteKeyword
-                        };
-
-                        PreviewLayout_AppendSprite(Current_SpriteConstructor, Target);
-                        rin($"¤ Add sprite: \x1b[38;5;245m\"{This_SpriteKeyword} + {This_StickedWord}\"\x1b[0m");
+                       This_SpriteKeyword += SpriteBitmaps.ContainsKey(This_SpriteKeyword + ".png")? ".png" : ".webp";
                     }
+                    else
+                    {
+                        This_SpriteKeyword = "Unknown.png";
+                    }
+
+                    SpriteConstructor Current_SpriteConstructor = new SpriteConstructor
+                    {
+                        SpriteLink = This_SpriteKeyword,
+                        TextBase = new TextConstructor
+                        {
+                            InnerTags = InnerTags(This_StickedWord),
+                            Text = ClearText(This_StickedWord),
+                        }
+                    };
+                    PreviewLayout_AppendSprite(Current_SpriteConstructor, Target);
                 }
                 #endregion
                 #region Обычный текст
@@ -944,16 +1071,15 @@ namespace Limbus_Localization_UI
                     };
 
                     PreviewLayout_AppendText(Current_TextConstructor, Target);
-                    rin($"¤ Add text: \x1b[38;5;245m\"{TextItem.Replace("\n", "\\n")}\x1b[0m");
                 }
                 #endregion
             }
           #endregion
-
-          #endregion
         }
+        #endregion
 
 
+        #region Интерфейс
         private void Exit_Yes(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
@@ -1025,7 +1151,7 @@ namespace Limbus_Localization_UI
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (this.ActualWidth < 712)
+            if (this.ActualWidth < 728)
             {
                 Settings.Width = 0;
                 OverrideCover1.Margin = new Thickness(1000);
@@ -1373,6 +1499,7 @@ namespace Limbus_Localization_UI
                             T["SaveChanges SubDesc 1 [UnavalibleCover]"].Height = 0;
                             T["EditorSwitch SubDesc 1 [UnavalibleCover]"].Height = 0;
                         }
+                        T["Skill PreviewLayout Desc"].Height = Double.NaN;
                         ID_SwitchNext_Cover.Height = 0;
 
                         JsonFilepath.Text = path;
@@ -2665,5 +2792,6 @@ namespace Limbus_Localization_UI
                 Console.WriteLine(ex.Message);
             }
         }
+        #endregion
     }
 }

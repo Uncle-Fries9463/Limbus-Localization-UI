@@ -15,8 +15,7 @@ namespace Limbus_Localization_UI
     public class SpriteConstructor
     {
         public string SpriteLink;
-        public string StickedWord;
-        public List<string> StickedWordInnerTags;
+        public TextConstructor TextBase;
     };
 
     public static class TagDefier
@@ -36,7 +35,14 @@ namespace Limbus_Localization_UI
 
         public static string ClearText(string Source)
         {
-            Source = Regex.Replace(Source, @"⟦InnerTag/(.*?)⟧", Match => { return ""; });
+            if (!Source.Contains("⟦LevelTag/"))
+            {
+                Source = Regex.Replace(Source, @"⟦InnerTag/(.*)⟧", Match => { return ""; });
+            }
+            else
+            {
+                Source = Regex.Replace(Source, @"⟦LevelTag/SpriteLink@(\w+):«(.*)»⟧", Match => { return ClearText(Match.Groups[2].Value); });
+            }
 
             return Source;
         }
@@ -52,6 +58,11 @@ namespace Limbus_Localization_UI
                         TargetRun.Foreground = РазноеДругое.GetColorFromAHEX($"#ff{TagBody[1]}");
                         break;
 
+                    case "FontFamily":
+                        try   { TargetRun.FontFamily = new FontFamily(TagBody[1]); }
+                        catch { }
+                        break;
+
                     case "UptieHighlight":
                         TargetRun.Foreground = РазноеДругое.GetColorFromAHEX($"#fff8c200");
                         break;
@@ -64,15 +75,20 @@ namespace Limbus_Localization_UI
                                 TargetRun.TextDecorations = TextDecorations.Underline;
                                 break;
 
+                            case "Strikethrough":
+                                TargetRun.TextDecorations = TextDecorations.Strikethrough;
+                                break;
+
                             case "Italic":
                                 TargetRun.FontFamily = new FontFamily("Arial");
                                 TargetRun.FontStyle = FontStyles.Italic;
                                 break;
 
                             case "Bold":
-                                TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/Fonts/Pretendard/public/static"), "./#Pretendard-Bold");
+                                //TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/Fonts/Pretendard/public/static"), "./#Pretendard-Bold");
                                 TargetRun.FontWeight = FontWeights.SemiBold;
                                 break;
+
                         }
 
                         break;

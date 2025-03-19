@@ -16,5 +16,7 @@ namespace Limbus_Localization_UI.Additions
         };
 
         public static void rin(params object[] s) => Console.WriteLine(String.Join(' ', s));
+
+        public static void rinx(IEnumerable<object> c) => Console.WriteLine($"[{String.Join("], [", c)}]");
     }
 }

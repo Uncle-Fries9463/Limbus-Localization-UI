@@ -165,12 +165,12 @@ namespace Limbus_Localization_UI.Mode_Handlers
                         if (Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Equals("{unedited}"))
                         {
                             T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex + 1}"].Height = Double.NaN;
-                            MainWindow.UpdatePreview(CoinDesc.Replace("\"", "\\\""), T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
+                            MainWindow.UpdatePreview(CoinDesc, T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
                         }
                         else
                         {
                             T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex + 1}"].Height = Double.NaN;
-                            MainWindow.UpdatePreview(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Replace("\"", "\\\""), T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
+                            MainWindow.UpdatePreview(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex], T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
                         }
                     }
                     catch{}
