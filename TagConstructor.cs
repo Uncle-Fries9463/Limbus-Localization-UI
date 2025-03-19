@@ -49,6 +49,12 @@ namespace Limbus_Localization_UI
 
         public static void ApplyTags(ref Run TargetRun, List<string> Tags)
         {
+            bool IsContainsFontFamily = false;
+            foreach(var i in Tags)
+            {
+                if (i.StartsWith("FontFamily@")) IsContainsFontFamily = true; break;
+            }
+
             foreach (var Tag in Tags)
             {
                 string[] TagBody = Tag.Split('@');
@@ -68,7 +74,6 @@ namespace Limbus_Localization_UI
                         break;
 
                     case "TextStyle":
-
                         switch (TagBody[1])
                         {
                             case "Underline":
@@ -80,12 +85,12 @@ namespace Limbus_Localization_UI
                                 break;
 
                             case "Italic":
-                                TargetRun.FontFamily = new FontFamily("Arial");
+                                if (!IsContainsFontFamily) TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/Fonts/Pretendard/public/static"), "./#Pretendard-Regular");
                                 TargetRun.FontStyle = FontStyles.Italic;
                                 break;
 
                             case "Bold":
-                                //TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/Fonts/Pretendard/public/static"), "./#Pretendard-Bold");
+                                if (!IsContainsFontFamily) TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/Fonts/Pretendard/public/static"), "./#Pretendard-Regular");
                                 TargetRun.FontWeight = FontWeights.SemiBold;
                                 break;
 

@@ -712,7 +712,7 @@
                                  Margin="53, 0, 0, 60"
                                  Width="480" 
                                  Height="180"
-                                 FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light"
+                                 FontFamily="Fonts\Pretendard\public\static\#Pretendard Light"
                                  Cursor="Pen"/>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
@@ -1677,19 +1677,19 @@
                             <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
                         </ScrollViewer.Resources>
                         <StackPanel x:Name="CurrentSkill_Panel" HorizontalAlignment="Center" VerticalAlignment="Top">
-                            <RichTextBox x:Name="MainSkillDesc" MinHeight="48" Style="{StaticResource Skill_MainDescriptoin}" FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light"/>
+                            <RichTextBox x:Name="MainSkillDesc" MinHeight="48" Style="{StaticResource Skill_MainDescriptoin}" FontFamily="Fonts\Pretendard\public\static\#Pretendard Light"/>
                             <StackPanel x:Name="Skill_Coin1" MinHeight="48" Margin="0, 5, 0, 0">
                                 <StackPanel Orientation="Horizontal">
                                     <Border Style="{StaticResource Skill_CoinIcon}">
                                         <Image x:Name="Skill_Coin1_Icon" Source="Images\Coins\Coin 1.png"/>
                                     </Border>
                                     <StackPanel>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin1_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"                     />
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin1_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin1_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin1_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin1_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin1_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin1_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"                     />
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin1_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin1_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin1_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin1_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin1_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -1704,12 +1704,12 @@
                                         <Image x:Name="Skill_Coin2_Icon" Source="Images\Coins\Coin 2.png"/>
                                     </Border>
                                     <StackPanel>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin2_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin2_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin2_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin2_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin2_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin2_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin2_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin2_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin2_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin2_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin2_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin2_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -1719,12 +1719,12 @@
                                         <Image x:Name="Skill_Coin3_Icon" Source="Images\Coins\Coin 3.png"/>
                                     </Border>
                                     <StackPanel>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin3_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin3_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin3_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin3_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin3_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin3_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin3_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin3_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin3_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin3_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin3_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin3_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -1734,12 +1734,12 @@
                                         <Image x:Name="Skill_Coin4_Icon" Source="Images\Coins\Coin 4.png"/>
                                     </Border>
                                     <StackPanel>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin4_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin4_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin4_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin4_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin4_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin4_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin4_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin4_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin4_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin4_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin4_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin4_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -1749,12 +1749,12 @@
                                         <Image x:Name="Skill_Coin5_Icon" Source="Images\Coins\Coin 5.png"/>
                                     </Border>
                                     <StackPanel>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin5_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin5_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin5_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin5_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin5_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
-                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard" FontWeight="Light" x:Name="Skill_Coin5_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin5_Desc1" Height="0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin5_Desc2" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin5_Desc3" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin5_Desc4" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin5_Desc5" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
+                                        <RichTextBox FontFamily="Fonts\Pretendard\public\static\#Pretendard Light" x:Name="Skill_Coin5_Desc6" Height="0" Margin="7, -2, 0, 0" Style="{StaticResource Skill_CoinDescriptoin}"/>
                                         <!--
                                          Background="Red"      
                                          Background="Green"    

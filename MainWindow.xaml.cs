@@ -281,7 +281,7 @@ namespace Limbus_Localization_UI
             }
             catch
             {
-                Def = "<font=\"Consolas\">「Limbus Company <sprite name=\"KnowledgeExplored\"><u><color=#ffab57>TextMeshPro WPF-Mimicry</u></color> ⇄ 2.0」</font>\r\n\r\n[ <sprite name=\"Breath\"> <sprite name=\"Charge\"> <sprite name=\"ParryingResultUp\"> ] Вставка спрайтов через тег <color=#ed5558><sprite name=\"...\"></color> (Перенос строки вместе с ними целостный)\r\n\r\n[ <color=#c57609>[KeywordID]</color> ]\r\n- [AaCePcBb]\r\n- [TimeKillerWatch]\r\n- [VibrationNesting]\r\n\r\n[ Все теги вместе (Развёртка ссылок) ]\r\n- <sprite name=\"AaCePcBc\"><color=#e30000><u><link=\"AaCePcBc\">Слепая одержимость</link></u></color>\r\n- <sprite name=\"ParryingResultUp\"><color=#f8c200><u><link=\"ParryingResultUp\">Повышение силы в столкновении</link></u></color>\r\n\r\n[ <color=#abcdef>Цвет</color> ] Цветной текст через тег <color=#hexrgb>\r\n[ <i>Крусив</i> ] <i>Курсивный текст через тег</i> i\r\n[ <u>Подчёркивание</u> ] <u>Нижнее подчёркивание текста через тег</u> u\r\n[ <strikethrough>Зачёркнутый</strikethrough> ] <strikethrough>Зачёркнутый</strikethrough> текст через тег strikethrough\r\n[ <uppercase>верхний</uppercase> и <lowercase>нижний</lowercase> регистры ]\r\n[ <b>Толстый текст</b> ] <b>Утолщённый текст через тег</b> b\r\n[ - ] <b>И <i>их <u>комби<color=#d24020>ниров</color>ание</i></u></b>\r\n\r\n\r\n<font=\"Consolas\">(i)</color> Этот текст можно изменить в файле <font=\"Consolas\">\"[Ресурсы]\\& Stringtypes\\DefaultText.txt\"</font>";
+                Def = "<font=\"Consolas\">「Limbus Company <sprite name=\"KnowledgeExplored\"><u><color=#ffab57>TextMeshPro WPF-Mimicry</u></color> ⇄ 2.0」</font>\n\n[ <sprite name=\"Breath\"> <sprite name=\"Charge\"> <sprite name=\"ParryingResultUp\"> ] Вставка спрайтов через тег <color=#ed5558><sprite name=\"...\"></color> (Перенос строки вместе с ними целостный)\n\n[ <color=#c57609>[KeywordID]</color> ]\n- [AaCePcBb]\n- [TimeKillerWatch]\n- [VibrationNesting]\n\n[ Все теги вместе (Развёртка ссылок) ]\n- <sprite name=\"AaCePcBc\"><color=#e30000><u><link=\"AaCePcBc\">Слепая одержимость</link></u></color>\n- <sprite name=\"ParryingResultUp\"><color=#f8c200><u><link=\"ParryingResultUp\">Повышение силы в столкновении</link></u></color>\n\n[ <color=#abcdef>Цвет</color> ] Цветной текст через тег <color=#hexrgb>\n[ <i>Крусив</i> ] <i>Курсивный текст через тег</i> i\n[ <u>Подчёркивание</u> ] <u>Нижнее подчёркивание текста через тег</u> u\n[ <strikethrough>Зачёркнутый</strikethrough> ] <strikethrough>Зачёркнутый</strikethrough> текст через тег strikethrough\n[ <b>Толстый текст</b> ] <b>Утолщённый текст через тег</b> b\n[ - ] <b>И <i>их <u>комби<color=#d24020>ниров</color>ание</i></u></b>\n\n\n<font=\"Consolas\">(i)</color> Этот текст можно изменить в файле <font=\"Consolas\">\"[Ресурсы]\\& Stringtypes\\DefaultText.txt\"</font>";
             }
 
 
@@ -677,10 +677,6 @@ namespace Limbus_Localization_UI
                 "/",
                 "style=\"upgradeHighlight\"",
                 "/style",
-                "lowercase",
-                "/lowercase",
-                "uppercase",
-                "/uppercase",
                 "strikethrough",
                 "/strikethrough",
                 "/font",
@@ -900,39 +896,6 @@ namespace Limbus_Localization_UI
                         if (ICm(Range_TextItem) & !Range_TextItem.Contains("⟦InnerTag/TextStyle@Superscript⟧"))
                         {
                             __TextSegmented__[RangeIndex] += $"⟦InnerTag/TextStyle@Superscript⟧";
-                        }
-                    }
-                }
-                #endregion
-
-
-                #region ⟦OuterFormat/TextStyle@LowerCase⟧
-                if (TextItem.Equals("lowercase"))
-                {
-                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
-                    {
-                        string Range_TextItem = __TextSegmented__[RangeIndex];
-
-                        if (Range_TextItem.Equals("/lowercase")) break;
-                        if (ICm(Range_TextItem))
-                        {
-                            __TextSegmented__[RangeIndex] = __TextSegmented__[RangeIndex].ToLower();
-                        }
-                    }
-                }
-                #endregion
-
-                #region ⟦OuterFormat/TextStyle@UpperCase⟧
-                if (TextItem.Equals("uppercase"))
-                {
-                    for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
-                    {
-                        string Range_TextItem = __TextSegmented__[RangeIndex];
-
-                        if (Range_TextItem.Equals("/uppercase")) break;
-                        if (ICm(Range_TextItem))
-                        {
-                            __TextSegmented__[RangeIndex] = __TextSegmented__[RangeIndex].ToUpper();
                         }
                     }
                 }
