@@ -14,6 +14,8 @@
 [ <color=#abcdef>Цвет</color> ] Цветной текст через тег <color=#hexrgb>
 [ <i>Крусив</i> ] <i>Курсивный текст через тег</i> i
 [ <u>Подчёркивание</u> ] <u>Нижнее подчёркивание текста через тег</u> u
+[ <strikethrough>Зачёркнутый</strikethrough> ] <strikethrough>Зачёркнутый</strikethrough> текст через тег strikethrough
+[ <uppercase>верхний</uppercase> и <lowercase>нижний</lowercase> регистры ]
 [ <b>Толстый текст</b> ] <b>Утолщённый текст через тег</b> b
 [ - ] <b>И <i>их <u>комби<color=#d24020>ниров</color>ание</i></u></b>
 
