@@ -5,6 +5,7 @@ using System.Windows;
 using System.IO;
 using System.Windows.Interop;
 using System.Windows.Media;
+using NLog;
 
 namespace Limbus_Localization_UI
 {
@@ -13,15 +14,22 @@ namespace Limbus_Localization_UI
     /// </summary>
     public partial class App : Application
     {
+        private static Logger _logger = LogManager.GetCurrentClassLogger();
         protected override void OnStartup(StartupEventArgs e)
         {
             if (File.Exists(@"[Ресурсы]\Sprites\Sprites.zip"))
             {
-                System.IO.Compression.ZipFile.ExtractToDirectory(@"[Ресурсы]\Sprites\Sprites.zip", @"[Ресурсы]\Sprites");
+                try
+                {
+                    System.IO.Compression.ZipFile.ExtractToDirectory(@"[Ресурсы]\Sprites\Sprites.zip", @"[Ресурсы]\Sprites");
+                }
+                catch { }
                 File.Delete(@"[Ресурсы]\Sprites\Sprites.zip");
             }
 
             base.OnStartup(e);
+
+            SetupExceptionHandling();
 
             SplashScreen splash = new SplashScreen("Images/Logo.ico");
             splash.Show(true);
@@ -34,16 +42,47 @@ namespace Limbus_Localization_UI
             }), System.Windows.Threading.DispatcherPriority.Background);
         }
 
-        public App() : base()
-        {
-            this.Dispatcher.UnhandledException += OnDispatcherUnhandledException;
-        }
 
-        void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        // Я ХОЧУ ВЕРИТЬ, ЧТО ОНО РАБОТАЕТ
+        private void SetupExceptionHandling()
         {
-            MessageBox.Show("Откуда эта ошибка вообще\n" + "Отправьте мне Ошибка.log из папки с программой", "Чё", MessageBoxButton.OK, MessageBoxImage.Error);
-            File.WriteAllText("Ошибка.log", $"{e.Exception.Message}\nОшибка: {e.Exception.StackTrace}\n\n{e.Exception.InnerException}\n\n{e.Exception.Data}\n\n{e.Exception.HelpLink}\n\n{e.Exception.HResult}\n\n{e.Exception.TargetSite}");
-            Environment.Exit(0);
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+                LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+
+            DispatcherUnhandledException += (s, e) =>
+            {
+                LogUnhandledException(e.Exception, "Application.Current.DispatcherUnhandledException");
+                e.Handled = true;
+            };
+
+            TaskScheduler.UnobservedTaskException += (s, e) =>
+            {
+                LogUnhandledException(e.Exception, "TaskScheduler.UnobservedTaskException");
+                e.SetObserved();
+            };
+        }
+        private void LogUnhandledException(Exception exception, string source)
+        {
+            string message = $"Unhandled exception ({source})";
+            try
+            {
+                System.Reflection.AssemblyName assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
+                message = string.Format("Unhandled exception in {0} v{1}", assemblyName.Name, assemblyName.Version);
+                
+                try
+                {
+                    File.AppendAllText(@"[Ресурсы]\& Stringtypes\Error Log.txt", $"[{DateTime.Now.ToString("HH:mm:ss")}] Exception:\n{exception.ToString()}\n---------------------------------------------------------------------------------\n\n\n");
+                }
+                catch { }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Exception in LogUnhandledException");
+            }
+            finally
+            {
+                _logger.Error(exception, message);
+            }
         }
     }
 }

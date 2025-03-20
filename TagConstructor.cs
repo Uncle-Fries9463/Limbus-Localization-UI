@@ -23,82 +23,93 @@ namespace Limbus_Localization_UI
         public static List<string> InnerTags(string Source)
         {
             List<string> OutputTags = new();
-
-            Regex InnerTags = new Regex(@"⟦InnerTag/(.*?)⟧");
-            foreach (Match InnerTagMatch in InnerTags.Matches(Source))
+            try
             {
-                OutputTags.Add(InnerTagMatch.Groups[1].Value.Replace("InnerTag/", ""));
-            }
 
+                Regex InnerTags = new Regex(@"⟦InnerTag/(.*?)⟧");
+                foreach (Match InnerTagMatch in InnerTags.Matches(Source))
+                {
+                    OutputTags.Add(InnerTagMatch.Groups[1].Value.Replace("InnerTag/", ""));
+                }
+            }
+            catch { }
             return OutputTags;
         }
 
         public static string ClearText(string Source)
         {
-            if (!Source.Contains("⟦LevelTag/"))
+            try
             {
-                Source = Regex.Replace(Source, @"⟦InnerTag/(.*)⟧", Match => { return ""; });
+                if (!Source.Contains("⟦LevelTag/"))
+                {
+                    Source = Regex.Replace(Source, @"⟦InnerTag/(.*)⟧", Match => { return ""; });
+                }
+                else
+                {
+                    Source = Regex.Replace(Source, @"⟦LevelTag/SpriteLink@(\w+):«(.*)»⟧", Match => { return ClearText(Match.Groups[2].Value); });
+                }
             }
-            else
-            {
-                Source = Regex.Replace(Source, @"⟦LevelTag/SpriteLink@(\w+):«(.*)»⟧", Match => { return ClearText(Match.Groups[2].Value); });
-            }
+            catch { }
 
             return Source;
         }
 
         public static void ApplyTags(ref Run TargetRun, List<string> Tags)
         {
-            bool IsContainsFontFamily = false;
-            foreach(var i in Tags)
+            try
             {
-                if (i.StartsWith("FontFamily@")) IsContainsFontFamily = true; break;
-            }
-
-            foreach (var Tag in Tags)
-            {
-                string[] TagBody = Tag.Split('@');
-                switch (TagBody[0])
+                bool IsContainsFontFamily = false;
+                foreach(var i in Tags)
                 {
-                    case "TextColor":
-                        TargetRun.Foreground = РазноеДругое.GetColorFromAHEX($"#ff{TagBody[1]}");
-                        break;
+                    if (i.StartsWith("FontFamily@")) IsContainsFontFamily = true; break;
+                }
 
-                    case "FontFamily":
-                        try   { TargetRun.FontFamily = new FontFamily(TagBody[1]); }
-                        catch { }
-                        break;
+                foreach (var Tag in Tags)
+                {
+                    string[] TagBody = Tag.Split('@');
+                    switch (TagBody[0])
+                    {
+                        case "TextColor":
+                            TargetRun.Foreground = РазноеДругое.GetColorFromAHEX($"#ff{TagBody[1]}");
+                            break;
 
-                    case "UptieHighlight":
-                        TargetRun.Foreground = РазноеДругое.GetColorFromAHEX($"#fff8c200");
-                        break;
+                        case "FontFamily":
+                            try   { TargetRun.FontFamily = new FontFamily(TagBody[1]); }
+                            catch { }
+                            break;
 
-                    case "TextStyle":
-                        switch (TagBody[1])
-                        {
-                            case "Underline":
-                                TargetRun.TextDecorations = TextDecorations.Underline;
-                                break;
+                        case "UptieHighlight":
+                            TargetRun.Foreground = РазноеДругое.GetColorFromAHEX($"#fff8c200");
+                            break;
 
-                            case "Strikethrough":
-                                TargetRun.TextDecorations = TextDecorations.Strikethrough;
-                                break;
+                        case "TextStyle":
+                            switch (TagBody[1])
+                            {
+                                case "Underline":
+                                    TargetRun.TextDecorations = TextDecorations.Underline;
+                                    break;
 
-                            case "Italic":
-                                if (!IsContainsFontFamily) TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/Fonts/Pretendard/public/static"), "./#Pretendard-Regular");
-                                TargetRun.FontStyle = FontStyles.Italic;
-                                break;
+                                case "Strikethrough":
+                                    TargetRun.TextDecorations = TextDecorations.Strikethrough;
+                                    break;
 
-                            case "Bold":
-                                if (!IsContainsFontFamily) TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/Fonts/Pretendard/public/static"), "./#Pretendard-Regular");
-                                TargetRun.FontWeight = FontWeights.SemiBold;
-                                break;
+                                case "Italic":
+                                    if (!IsContainsFontFamily) TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/Fonts/Pretendard/public/static"), "./#Pretendard-Regular");
+                                    TargetRun.FontStyle = FontStyles.Italic;
+                                    break;
 
-                        }
+                                case "Bold":
+                                    if (!IsContainsFontFamily) TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/Fonts/Pretendard/public/static"), "./#Pretendard-Regular");
+                                    TargetRun.FontWeight = FontWeights.SemiBold;
+                                    break;
 
-                        break;
+                            }
+
+                            break;
+                    }
                 }
             }
+            catch { }
         }
     }
 }

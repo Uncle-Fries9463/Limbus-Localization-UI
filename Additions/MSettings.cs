@@ -60,36 +60,40 @@ namespace Limbus_Localization_UI.Additions
 
         public static void SaveSetting(string SettingType, string Setting)
         {
-            string[] Settings = File.ReadAllLines(@"[Ресурсы]\& Stringtypes\Settings.txt");
-
-            switch (SettingType)
+            try
             {
-                case "Enable <style> as color":
-                    Settings[0] = $"Enable <style> as color ¤ {Setting}";
-                    break;
+                string[] Settings = File.ReadAllLines(@"[Ресурсы]\& Stringtypes\Settings.txt");
 
-                case "JsonEditor Font":
-                    Settings[1] = $"JsonEditor Font         ¤ {Setting}";
-                    break;
+                switch (SettingType)
+                {
+                    case "Enable <style> as color":
+                        Settings[0] = $"Enable <style> as color ¤ {Setting}";
+                        break;
 
-                case "JsonEditor Font Color":
-                    Settings[2] = $"JsonEditor Font Color   ¤ {Setting}";
-                    break;
+                    case "JsonEditor Font":
+                        Settings[1] = $"JsonEditor Font         ¤ {Setting}";
+                        break;
 
-                case "Enable Dynamic Keywords":
-                    Settings[3] = $"Dynamic Keywords        ¤ {Setting}";
-                    break;
+                    case "JsonEditor Font Color":
+                        Settings[2] = $"JsonEditor Font Color   ¤ {Setting}";
+                        break;
 
-                case "Keywords Type":
-                    Settings[4] = $"Keywords Type           ¤ {Setting}";
-                    break;
+                    case "Enable Dynamic Keywords":
+                        Settings[3] = $"Dynamic Keywords        ¤ {Setting}";
+                        break;
 
-                case "Shorthand Type":
-                    Settings[5] = $"Shorthand Type          ¤ {Setting}";
-                    break;
+                    case "Keywords Type":
+                        Settings[4] = $"Keywords Type           ¤ {Setting}";
+                        break;
+
+                    case "Shorthand Type":
+                        Settings[5] = $"Shorthand Type          ¤ {Setting}";
+                        break;
+                }
+
+                File.WriteAllLines(@"[Ресурсы]\& Stringtypes\Settings.txt", Settings);
             }
-
-            File.WriteAllLines(@"[Ресурсы]\& Stringtypes\Settings.txt", Settings);
+            catch { }
         }
     }
 }
