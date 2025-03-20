@@ -1766,7 +1766,6 @@ namespace Limbus_Localization_UI
 
         private void SwitchEditorTo_Desc_Button(object sender, RoutedEventArgs e)       
         {
-            rin(T["asd"]);
             try
             {
                 CurrentHighlight.RenderTransform = new TranslateTransform(2, CurrentHighlight_YOffset + 61);
