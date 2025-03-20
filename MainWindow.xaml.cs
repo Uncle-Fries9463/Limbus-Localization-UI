@@ -625,50 +625,49 @@ namespace Limbus_Localization_UI
             {
                 JsonDesc = JsonDesc.Replace("{", "<color=#f95e00>{").Replace("}", "}</color>");
             }
-            else
-            {
-                // Замена обычных слов на вствку ключевых с цветом и спрайтом, если они совпадают (Свойства [TabExplain] сохраняются)
-                if (EnableDynamicKeywords)
-                {
-                    foreach (var KeywordName in KeywordIDName.Reverse())
-                    {
-                        JsonDesc = Regex.Replace(JsonDesc, @$"(?<![a-zA-Zа-яА-Я<>\[\]\'""*])({KeywordName.Key})(?![a-zA-Zа-яА-Я<[""*])", match =>
-                        {
-                            return $"<sprite name=\"{KeywordName.Value}\"><color={(ColorPairs.ContainsKey(KeywordName.Value) ? ColorPairs[KeywordName.Value] : "#f8c200")}><u>{KeywordName.Key}⟦InnerTag/LocalTabExplain⟧</u></color>";
-                        });
-                    }
-                }
-
-                // Заменить квадратные скобки ссылок на <sprite><color>...</color>, если текст из них есть в списке id из всех Keywords файлов
-                JsonDesc = Regex.Replace(JsonDesc, @"\[(\w+)\]", match =>
-                {
-                    string MaybeKeyword = match.Groups[1].Value;
-                    try
-                    {
-                        return Keywords.ContainsKey(MaybeKeyword) ? $"<sprite name=\"{MaybeKeyword}\"><color={ColorPairs[MaybeKeyword]}><u>{Keywords[MaybeKeyword]}</u></color>" : $"[{MaybeKeyword}]";
-                    }
-                    catch
-                    {
-                        return $"[{MaybeKeyword}]";
-                    }
-                });
             
-                // Обработка особых вставок эффектов [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки в теги
-                JsonDesc = Regex.Replace(JsonDesc, Shorthand_Type.Equals("kimght") ? @"\[(\w+)\:'(.*?)'\]" : @"\{(\w+)\: \*(.*?)\*\}", match =>
+            // Замена обычных слов на вствку ключевых с цветом и спрайтом, если они совпадают (Свойства [TabExplain] сохраняются)
+            if (EnableDynamicKeywords)
+            {
+                foreach (var KeywordName in KeywordIDName.Reverse())
                 {
-                    string MaybeKeyword = match.Groups[1].Value;
-                    string MaybeName = match.Groups[2].Value;
-
-                    if (Keywords.ContainsKey(MaybeKeyword))
+                    JsonDesc = Regex.Replace(JsonDesc, @$"(?<![a-zA-Zа-яА-Я<>\[\]\'""*])({KeywordName.Key})(?![a-zA-Zа-яА-Я<[""*])", match =>
                     {
-                        return $"<sprite name=\"{MaybeKeyword}\"><color={(ColorPairs.ContainsKey(MaybeKeyword) ? ColorPairs[MaybeKeyword] : "#f8c200")}><u>{MaybeName}</u></color>";
-                    }
-                    else
-                    {
-                        return match.Groups[0].Value;
-                    }
-                });
+                        return $"<sprite name=\"{KeywordName.Value}\"><color={(ColorPairs.ContainsKey(KeywordName.Value) ? ColorPairs[KeywordName.Value] : "#f8c200")}><u>{KeywordName.Key}⟦InnerTag/LocalTabExplain⟧</u></color>";
+                    });
+                }
             }
+
+            // Заменить квадратные скобки ссылок на <sprite><color>...</color>, если текст из них есть в списке id из всех Keywords файлов
+            JsonDesc = Regex.Replace(JsonDesc, @"\[(\w+)\]", match =>
+            {
+                string MaybeKeyword = match.Groups[1].Value;
+                try
+                {
+                    return Keywords.ContainsKey(MaybeKeyword) ? $"<sprite name=\"{MaybeKeyword}\"><color={ColorPairs[MaybeKeyword]}><u>{Keywords[MaybeKeyword]}</u></color>" : $"[{MaybeKeyword}]";
+                }
+                catch
+                {
+                    return $"[{MaybeKeyword}]";
+                }
+            });
+            
+            // Обработка особых вставок эффектов [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки в теги
+            JsonDesc = Regex.Replace(JsonDesc, Shorthand_Type.Equals("kimght") ? @"\[(\w+)\:'(.*?)'\]" : @"\{(\w+)\: \*(.*?)\*\}", match =>
+            {
+                string MaybeKeyword = match.Groups[1].Value;
+                string MaybeName = match.Groups[2].Value;
+
+                if (Keywords.ContainsKey(MaybeKeyword))
+                {
+                    return $"<sprite name=\"{MaybeKeyword}\"><color={(ColorPairs.ContainsKey(MaybeKeyword) ? ColorPairs[MaybeKeyword] : "#f8c200")}><u>{MaybeName}</u></color>";
+                }
+                else
+                {
+                    return match.Groups[0].Value;
+                }
+            });
+            
 
 
             // Доп замены
@@ -746,7 +745,7 @@ namespace Limbus_Localization_UI
                 string TextItem = __TextSegmented__[TextItem_Index];
 
                 #region ⟦InnerTag/UptieHighlight⟧
-                if (TextItem.Equals("style=\"upgradeHighlight\""))
+                if (TextItem.Equals("style=\"upgradeHighlight\"") & JsonEditor_EnableHighlight)
                 {
                     for (int RangeIndex = TextItem_Index + 1; RangeIndex < TextSegmented_Count; RangeIndex++)
                     {
