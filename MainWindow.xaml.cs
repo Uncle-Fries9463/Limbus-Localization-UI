@@ -307,18 +307,24 @@ namespace Limbus_Localization_UI
 
 
         #region Предпросмотр
-
+        static bool IsPendingUpdate = false;
         public static void Call_UpdatePreview(string JsonDesc, RichTextBox Target)
         {
-            if (false)
+            if (false) // Задержка вывода на предпросмотр и анти-лаг, но почему-то работает плохо на эго дарах
             {
-                var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(0.01) };
-                timer.Start();
-                timer.Tick += (sender, args) =>
+                if (!IsPendingUpdate)
                 {
-                    timer.Stop();
-                    UpdatePreview(JsonDesc, Target);
-                };
+                    IsPendingUpdate = true;
+                    var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(0.12) };
+                    timer.Start();
+
+                    timer.Tick += (sender, args) =>
+                    {
+                        timer.Stop();
+                        UpdatePreview(JsonDesc, Target);
+                        IsPendingUpdate = false;
+                    };
+                }
             }
             else
             {
@@ -600,7 +606,7 @@ namespace Limbus_Localization_UI
         /// </summary>
         public static void UpdatePreview(string JsonDesc, RichTextBox Target)
         {
-            Target.Document.Blocks.Clear();
+            
 
             LastPreviewUpdateText = JsonDesc;
             LastPreviewUpdateTarget = Target;
@@ -644,7 +650,7 @@ namespace Limbus_Localization_UI
                 string MaybeKeyword = match.Groups[1].Value;
                 try
                 {
-                    return Keywords.ContainsKey(MaybeKeyword) ? $"<sprite name=\"{MaybeKeyword}\"><color={ColorPairs[MaybeKeyword]}><u>{Keywords[MaybeKeyword]}</u></color>" : $"[{MaybeKeyword}]";
+                    return Keywords.ContainsKey(MaybeKeyword) ? $"<sprite name=\"{MaybeKeyword}\"><color={(ColorPairs.ContainsKey(MaybeKeyword) ? ColorPairs[MaybeKeyword] : "#f8c200")}><u>{Keywords[MaybeKeyword]}</u></color>" : $"[{MaybeKeyword}]";
                 }
                 catch
                 {
@@ -1009,7 +1015,7 @@ namespace Limbus_Localization_UI
                 //}
             }
             #endregion
-
+            Target.Document.Blocks.Clear();
             #region Вывод на предпросмотр
             foreach (string TextItem in __TextSegmented__)
             {
