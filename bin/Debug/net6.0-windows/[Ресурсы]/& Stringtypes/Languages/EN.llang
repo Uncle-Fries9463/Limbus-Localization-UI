@@ -1,0 +1,294 @@
+{ <--¤--> }
+  Descriptor: 'Program Title'
+  Comment: ''
+  Content: 'Limbus Localization UI 1.7 CN'
+
+{ <--¤--> }
+  Descriptor: '(Refractor Button at Title) Open links'
+  Comment: ''
+  Content: 'Open links'
+
+{ <--¤--> }
+  Descriptor: '(Refractor Button at Title) Insert <style>'
+  Comment: ''
+  Content: 'Insert style'
+
+{ <--¤--> }
+  Descriptor: '(Refractor Button at Title) Tooltip'
+  Comment: ''
+  Content: 'Refractor'
+
+{ <--¤--> }
+  Descriptor: '(Settings Button at Title) Tooltip'
+  Comment: ''
+  Content: 'Settings'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Title'
+  Comment: ''
+  Content: 'Settings'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Enable <style> highlight (Header)'
+  Comment: ''
+  Content: 'Highlight Upgrades'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Enable <style> highlight (Description)'
+  Comment: ''
+  Content: 'Highlight <style> as color (Update text field to apply changes)'
+
+{ <--l--> }
+  Descriptor: '[Settings] Enable <style> highlight (Display text - Yes)'
+  Comment: ''
+  Content: 'Yes'
+
+{ <--l--> }
+  Descriptor: '[Settings] Enable <style> highlight (Display text - No)'
+  Comment: ''
+  Content: 'No'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Json Editor Font (Header)'
+  Comment: ''
+  Content: 'Json Editor font'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Json Editor Font (Description)'
+  Comment: ''
+  Content: 'Font of element json editor\n'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Json Editor Foreground (Title)'
+  Comment: ''
+  Content: 'Json Editor foreground'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Json Editor Foreground (Description)'
+  Comment: ''
+  Content: 'Text color in json editor (In Hex RGB format)\n'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Enable Dynamic Keywords'
+  Comment: ''
+  Content: 'Dynamic Keyw.'
+
+{ <--l--> }
+  Descriptor: '[Settings] Enable Dynamic Keywords (Display text - Enabled)'
+  Comment: ''
+  Content: 'Enabled'
+
+{ <--l--> }
+  Descriptor: '[Settings] Enable Dynamic Keywords (Display text - Disabled)'
+  Comment: ''
+  Content: 'Disabled'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Keywords Type'
+  Comment: 'Text above RU/EN/KR/CN'
+  Content: 'Keywords'
+
+{ <--¤--> }
+  Descriptor: '[Settings] [Sub Buttons] Reload Sprites'
+  Comment: ''
+  Content: 'Reload sprites'
+
+{ <--¤--> }
+  Descriptor: '[Settings] [Sub Buttons] Reload Keywords and Replacements+'
+  Comment: ''
+  Content: 'Reload Keywords and Replacements+'
+
+{ <--¤--> }
+  Descriptor: '[Settings] [Sub Buttons] Reload Color Pairs'
+  Comment: ''
+  Content: 'Reload ColorPairs'
+
+{ <--¤--> }
+  Descriptor: '[Exit Dialog] Title'
+  Comment: ''
+  Content: 'Exit program?'
+
+{ <--¤--> }
+  Descriptor: '[Exit Dialog] Unsaved Changes Count'
+  Comment: 
+  Content: 'Unsaved changes count:'
+
+{ <--¤--> }
+  Descriptor: '[Exit Dialog] Yes'
+  Comment: ''
+  Content: 'Yes'
+
+{ <--¤--> }
+  Descriptor: '[Exit Dialog] No'
+  Comment: ''
+  Content: 'No'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Use <style>'
+  Comment: ''
+  Content: 'Use <style>'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Open Links to Tags'
+  Comment: ''
+  Content: 'Open keyword [Links] (Tags)'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Open Links to Shorthands'
+  Comment: ''
+  Content: 'Open keyword [Links] (Shorthand)'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Collapse Tags to Links'
+  Comment: ''
+  Content: 'Collapse keyowrd Tags to links'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Use Italic'
+  Comment: ''
+  Content: 'Italic'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Use Bold'
+  Comment: ''
+  Content: 'Bold'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Use Underline'
+  Comment: ''
+  Content: 'Underline'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Use Strikethrough'
+  Comment: ''
+  Content: 'Strikethrough'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Select line'
+  Comment: ''
+  Content: 'Select line'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Clear Text'
+  Comment: ''
+  Content: 'Clear all text'
+
+{ <--l--> }
+  Descriptor: '[Json Editor - Context Menu] Enable Translation Tips - Enabled'
+  Comment: 'Insert hints from [Ресурсы]\& Stringtypes\Translation hints.txt'
+  Content: 'Translation hints: Enabled'
+
+{ <--l--> }
+  Descriptor: '[Json Editor - Context Menu] Enable Translation Tips - Disabled'
+  Comment: ''
+  Content: 'Translation hints: Disabled'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Json Filepath (Background text)'
+  Comment: ''
+  Content: 'Path to json file'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Select File tooltip'
+  Comment: ''
+  Content: 'Selеct file in Explorer'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] ID Item Name'
+  Comment: 'Default text in ID element name'
+  Content: 'Name'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Jump to ID (Background text)'
+  Comment: 'Background text (disappears when typing something in textbox)'
+  Content: 'Jump to ID..'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Jump to ID Button (Tooltip)'
+  Comment: 'Tooltip for button above'
+  Content: 'Move to object in json by ID'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Copy ID (Tooltip)'
+  Comment: ''
+  Content: 'Copy ID'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] ID Copied Notify'
+  Comment: ''
+  Content: 'ID copied to clipboard'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] ID Item Name (Background text)'
+  Comment: 'Background text (disappears when typing something in textbox)'
+  Content: 'Name'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Background Name of EGO'
+  Comment: '"abName" element in json, name of EGO abnormality'
+  Content: 'EGO Skill background name'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Main Description Button'
+  Comment: '"desc" element in json'
+  Content: 'Description'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Passive Summary Description'
+  Comment: 'Description 1 Button text when switched to Passives/BattleKeywords/Bufs file, "summary" element in json'
+  Content: 'Summary'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] EGO Gift Description 1 Button'
+  Comment: 'EGO gifts "simpleDesc" json elements'
+  Content: 'Simple desc 1'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] EGO Gift Description 2 Button'
+  Comment: ''
+  Content: 'Simple desc 2'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] EGO Gift Description 3 Button'
+  Comment: ''
+  Content: 'Simple desc 3'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] EGO Gift Description 4 Button'
+  Comment: ''
+  Content: 'Simple desc 4'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] EGO Gift Description 5 Button'
+  Comment: ''
+  Content: 'Simple desc 5'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Skill Coin 1 Button'
+  Comment: 'Simple desc buttons text when switched to Skills file'
+  Content: 'Coin 1'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Skill Coin 2 Button'
+  Comment: ''
+  Content: 'Coin 2'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Skill Coin 3 Button'
+  Comment: ''
+  Content: 'Coin 3'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Skill Coin 4 Button'
+  Comment: ''
+  Content: 'Coin 4'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Skill Coin 5 Button'
+  Comment: ''
+  Content: 'Coin 5'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Coin Descriptions'
+  Comment: 'Selected coin descs buttons header'
+  Content: '————————Coin descs————————'

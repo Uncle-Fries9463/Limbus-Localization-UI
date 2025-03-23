@@ -24,7 +24,8 @@
 [WhenUse_Force]               ¤ <color=#26cfff>[При использовании]</color>
 [WinDuelAttack]               ¤ <color=#93f03f>[После победы в столкновении]</color>
 [EnemyKillFail]               ¤ <color=#93f03f>[При неудачном убийстве]</color>
-[OnDefeatEvade]               ¤ <color=#93f03f>[Неудачный уворот]</color>
+[OnDefeatEvade]               ¤ <color=#fe0000>[Неудачный уворот]</color>
+[OnDirectAttack]              ¤ <color=#93f03f>[Односторонняя атака]</color>
 [OnSucceedEvade]              ¤ <color=#93f03f>[Успешный уворот]</color>
 [OnSucceedAttack]             ¤ <color=#93f03f>[При ударе]</color>
 [TurnStartBattle]             ¤ <color=#93f03f>[Начало хода]</color>
@@ -35,6 +36,7 @@
 [StartBattle_Force]           ¤ <color=#93f03f>[Начало боевой фазы]</color>
 [OnSucceedAttackTail]         ¤ <color=#93f03f>[Выпала решка]</color>
 [OnSucceedAttackHead]         ¤ <color=#c6fe94>[Выпал орёл]</color>
+[ReUseOnSucceedAttack]        ¤ <color=#93f03f>[Повтор, при попадании]</color>
 [CriticalOnSucceedAttack]     ¤ <color=#93f03f>[Критическая атака]</color>
 [CriticalEnemyTargetKill]     ¤ <color=#93f03f>[При убийстве критом]</color>
 [ReUseOnSucceedAttackHead]    ¤ <color=#93f03f>[Повтор, выпал орёл]</color>

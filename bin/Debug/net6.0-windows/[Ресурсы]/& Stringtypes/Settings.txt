@@ -3,4 +3,5 @@ JsonEditor Font         ¤ Unispace
 JsonEditor Font Color   ¤ #ABA193
 Dynamic Keywords        ¤ No
 Keywords Type           ¤ RU
-Shorthand Type          ¤ kimght
+Shorthand Type          ¤ Crescent Corp.
+UI Language             ¤ RU

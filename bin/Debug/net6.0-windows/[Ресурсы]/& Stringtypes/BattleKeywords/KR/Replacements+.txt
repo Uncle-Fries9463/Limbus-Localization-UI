@@ -1,0 +1,53 @@
+[WinDuel]                     ¤ <color=#f95e00>[합 승리시]</color>
+[WhenUse]                     ¤ <color=#27cefe>[사용시]</color>
+[EndCoin]                     ¤ <color=#93f03f>[이 코인 공격 종료 시]</color>
+[EndSkill]                    ¤ <color=#93f03f>[공격 종료시]</color>
+[AllyKill]                    ¤ <color=#93f03f>[아군 처치 시]</color>
+[CantDuel]                    ¤ <color=#fe0000>[합 불가능]</color>
+[EndBattle]                   ¤ <color=#93f03f>[턴 종료 시]</color>
+[BeforeHit]                   ¤ <color=#93f03f>[피격 직전]</color>
+[EnemyKill]                   ¤ <color=#93f03f>[적 처치 시]</color>
+[DuelGuard]                   ¤ <color=#93f03f>[합 가능 가드]</color>
+[BeforeUse]                   ¤ <color=#93f03f>[사용전]</color>
+[DefeatDuel]                  ¤ <color=#fe0000>[합 패배]</color>
+[TargetKill]                  ¤ <color=#93f03f>[대상 처치 시]</color>
+[DuelCounter]                 ¤ <color=#f95e00>[합 가능 반격]</color>
+[StartBattle]                 ¤ <color=#93f03f>[전투 시작시]</color>
+[EndSkillTail]                ¤ <color=#c90080>[뒷면 공격 종료 시]</color>
+[EndSkillHead]                ¤ <color=#fe59c0>[앞면 공격 종료 시]</color>
+[BeforeAttack]                ¤ <color=#93f03f>[공격 시작 전]</color>
+[CanDuelGuard]                ¤ <sprite name=\\\"CanDuelGuard\\\"><color=#9f6a3a>[합 가능 가드]</color>
+[AllyKillFail]                ¤ <color=#93f03f>[아군 처치 실패시]</color>
+[CantIdentify]                ¤ <color=#fe0000>[피아식별불가]</color>
+[WinDuelAttack]               ¤ <color=#93f03f>[합 승리 후 적중]</color>
+[EnemyKillFail]               ¤ <color=#93f03f>[적 처치 실패 시]</color>
+[OnDefeatEvade]               ¤ <color=#fe0000>[회피 실패시]</color>
+[OnSucceedEvade]              ¤ <color=#93f03f>[회피 성공시]</color>
+[OnSucceedAttack]             ¤ <color=#93f03f>[적중시]</color>
+[TurnStartBattle]             ¤ <color=#93f03f>[턴 시작 시]</color>
+[CantChangeTarget]            ¤ <color=#93f03f>[대상 변경 불가]</color>
+[DefeatDuelAttack]            ¤ <color=#93f03f>[합 패배 후 적중]</color>
+[WinDuelAttackHead]           ¤ <color=#93f03f>[합 승리 후 앞면 적중]</color>
+[CriticalActivated]           ¤ <color=#93f03f>[크리티컬 발동 시]</color>
+[StartBattle_Force]           ¤ <color=#93f13e>[전투 시작시]</color>
+[OnSucceedAttackTail]         ¤ <color=#93f03f>[뒷면 적중시]</color>
+[OnSucceedAttackHead]         ¤ <color=#c6fe94>[앞면 적중시]</color>
+[CriticalOnSucceedAttack]     ¤ <color=#93f03f>[크리티컬 적중 시]</color>
+[CriticalEnemyTargetKill]     ¤ <color=#93f03f>[크리티컬 적 처치 시]</color>
+[ReUseOnSucceedAttackHead]    ¤ <color=#93f03f>[재사용 앞면 적중 시]</color>
+[CriticalEnemyTargetKillFail] ¤ <color=#93f03f>[크리티컬 적 처치 실패 시]</color>
+[UnBrokenCoinOnSucceedAttack] ¤ <color=#93f03f>[파괴되지 않고 적중시]</color>
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+Colors hint
+
+#e30000 // Red, Negative status effects
+#f8c200 // Yellow, Positive status effecs (Haste, Charge, ..)
+#9f6a3a // Brown, Neutral status effects
+
+#93f03f // [On Hit] и т.д.       \ Green
+#27cefe // [On Use] и т.д.       \ Blue
+#c6fe94 // [Heads Hit] и т.д.    \ Faded green
+#f95e00 // [Clashable Counter]   \ Orange
+#fe0000 // [Indiscriminate]      \ Red

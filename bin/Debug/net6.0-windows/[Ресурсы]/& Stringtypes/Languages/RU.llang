@@ -1,0 +1,294 @@
+{ <--¤--> }
+  Descriptor: 'Program Title'
+  Comment: ''
+  Content: 'Limbus Localization UI 1.7 RU'
+
+{ <--¤--> }
+  Descriptor: '(Refractor Button at Title) Open links'
+  Comment: ''
+  Content: 'Развёртка ссылок'
+
+{ <--¤--> }
+  Descriptor: '(Refractor Button at Title) Insert <style>'
+  Comment: ''
+  Content: 'Вставить style'
+
+{ <--¤--> }
+  Descriptor: '(Refractor Button at Title) Tooltip'
+  Comment: ''
+  Content: 'Рефракторинг'
+
+{ <--¤--> }
+  Descriptor: '(Settings Button at Title) Tooltip'
+  Comment: ''
+  Content: 'Настройки'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Title'
+  Comment: ''
+  Content: 'Настройки'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Enable <style> highlight (Header)'
+  Comment: ''
+  Content: 'Подсвечивать улучшения'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Enable <style> highlight (Description)'
+  Comment: ''
+  Content: 'Подсвечивать <style> как цвет (Для применения изменений измените текст в поле)'
+
+{ <--l--> }
+  Descriptor: '[Settings] Enable <style> highlight (Display text - Yes)'
+  Comment: ''
+  Content: 'Да'
+
+{ <--l--> }
+  Descriptor: '[Settings] Enable <style> highlight (Display text - No)'
+  Comment: ''
+  Content: 'Нет'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Json Editor Font (Header)'
+  Comment: ''
+  Content: 'Шрифт json редактора'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Json Editor Font (Description)'
+  Comment: ''
+  Content: 'Шрифт поля редактирования текущего Json элемента'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Json Editor Foreground (Title)'
+  Comment: ''
+  Content: 'Цвет json редактора'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Json Editor Foreground (Description)'
+  Comment: ''
+  Content: 'Цвет текста поля редактирования текущего Json элемента (В hex RGB формате)'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Enable Dynamic Keywords'
+  Comment: ''
+  Content: 'Dynamic Keyw.'
+
+{ <--l--> }
+  Descriptor: '[Settings] Enable Dynamic Keywords (Display text - Enabled)'
+  Comment: ''
+  Content: 'Включено'
+
+{ <--l--> }
+  Descriptor: '[Settings] Enable Dynamic Keywords (Display text - Disabled)'
+  Comment: ''
+  Content: 'Отключено'
+
+{ <--¤--> }
+  Descriptor: '[Settings] Keywords Type'
+  Comment: 'Text above RU/EN/KR/CN'
+  Content: 'Keywords'
+
+{ <--¤--> }
+  Descriptor: '[Settings] [Sub Buttons] Reload Sprites'
+  Comment: ''
+  Content: 'Обновить спрайты'
+
+{ <--¤--> }
+  Descriptor: '[Settings] [Sub Buttons] Reload Keywords and Replacements+'
+  Comment: ''
+  Content: 'Обновить ключевые слова и доп замены'
+
+{ <--¤--> }
+  Descriptor: '[Settings] [Sub Buttons] Reload Color Pairs'
+  Comment: ''
+  Content: 'Обновить цвета'
+
+{ <--¤--> }
+  Descriptor: '[Exit Dialog] Title'
+  Comment: ''
+  Content: 'Закрыть редактор?'
+
+{ <--¤--> }
+  Descriptor: '[Exit Dialog] Unsaved Changes Count'
+  Comment: 
+  Content: 'Изменений не сохранено:'
+
+{ <--¤--> }
+  Descriptor: '[Exit Dialog] Yes'
+  Comment: ''
+  Content: 'Да'
+
+{ <--¤--> }
+  Descriptor: '[Exit Dialog] No'
+  Comment: ''
+  Content: 'Нет'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Use <style>'
+  Comment: ''
+  Content: 'Использовать <style>'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Open Links to Tags'
+  Comment: ''
+  Content: 'Развернуть ссылки (Теги)'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Open Links to Shorthands'
+  Comment: ''
+  Content: 'Развернуть ссылки (Shorthand)'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Collapse Tags to Links'
+  Comment: ''
+  Content: 'Свернуть теги в ссылки'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Use Italic'
+  Comment: ''
+  Content: 'Курсив'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Use Bold'
+  Comment: ''
+  Content: 'Жирный'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Use Underline'
+  Comment: ''
+  Content: 'Подчёркнутый'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Use Strikethrough'
+  Comment: ''
+  Content: 'Зачёркнутый'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Select line'
+  Comment: ''
+  Content: 'Выбрать линию'
+
+{ <--¤--> }
+  Descriptor: '[Json Editor - Context Menu] Clear Text'
+  Comment: ''
+  Content: 'Очистить весь текст'
+
+{ <--l--> }
+  Descriptor: '[Json Editor - Context Menu] Enable Translation Tips - Enabled'
+  Comment: ''
+  Content: 'Подсказки перевода: Вкл'
+
+{ <--l--> }
+  Descriptor: '[Json Editor - Context Menu] Enable Translation Tips - Disabled'
+  Comment: ''
+  Content: 'Подсказки перевода: Выкл'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Json Filepath (Background text)'
+  Comment: ''
+  Content: 'Путь к Json файлу'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Select File tooltip'
+  Comment: ''
+  Content: 'Выбрать файл в проводнике'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] ID Item Name'
+  Comment: ''
+  Content: 'Название'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Jump to ID (Background text)'
+  Comment: 'Jump to ID in json background text (disappears when typing something in textbox)'
+  Content: 'Перейти к ID..'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Jump to ID Button (Tooltip)'
+  Comment: 'Tooltip for button above'
+  Content: 'Перейти к объекту через ID'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Copy ID (Tooltip)'
+  Comment: ''
+  Content: 'Копировать ID'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] ID Copied Notify'
+  Comment: ''
+  Content: 'ID Скопирован'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Name of ID Item'
+  Comment: ''
+  Content: 'Название'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Background Name of EGO'
+  Comment: ''
+  Content: 'Фоновое имя ЭГО'
+
+{ <--¤--> }
+  Descriptor: '[Left Menu] Main Description Button'
+  Comment: ''
+  Content: 'Описание'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Passive Summary Description'
+  Comment: 'Description 1 Button text when switched to Passives/BattleKeywords/Bufs file, "summary" element in json'
+  Content: 'Суммарно'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] EGO Gift Description 1 Button'
+  Comment: 'EGO gifts "simpleDesc" json elements'
+  Content: 'Простое описание 1'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] EGO Gift Description 2 Button'
+  Comment: ''
+  Content: 'Простое описание 2'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] EGO Gift Description 3 Button'
+  Comment: ''
+  Content: 'Простое описание 3'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] EGO Gift Description 4 Button'
+  Comment: ''
+  Content: 'Простое описание 4'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] EGO Gift Description 5 Button'
+  Comment: ''
+  Content: 'Простое описание 5'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Skill Coin 1 Button'
+  Comment: 'Skills switch to coin number button'
+  Content: 'Монета 1'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Skill Coin 2 Button'
+  Comment: ''
+  Content: 'Монета 2'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Skill Coin 3 Button'
+  Comment: ''
+  Content: 'Монета 3'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Skill Coin 4 Button'
+  Comment: ''
+  Content: 'Монета 4'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Skill Coin 5 Button'
+  Comment: ''
+  Content: 'Монета 5'
+
+{ <--l--> }
+  Descriptor: '[Left Menu] Coin Descriptions'
+  Comment: 'Selected coin descs buttons header'
+  Content: '————————Список описаний монеты————————'
