@@ -14,9 +14,9 @@ namespace Limbus_Localization_UI.Json
         public string content { get; set; }
         public string description { get; set; }
         public string desc { get; set; }
-        public string summary { get; set; } // Суммарное описание пассивки персонажа (Вроде бы появляется около навыка при ударе в списке активных усилений)
+        public string summary { get; set; } // Суммарное описание пассивки, появляется при ударе под навыком
         public string undefined { get; set; } // Что-то в Bufs файлах
-        public List<SimpleDesc> SimpleDesc { get; set; } // Для ЭГО даров
+        public List<SimpleDesc> simpleDesc { get; set; } // Для ЭГО даров
         public List<levelList> levelList { get; set; } // Для навыков
     }
 

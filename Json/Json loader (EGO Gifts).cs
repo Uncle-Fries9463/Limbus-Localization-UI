@@ -35,7 +35,7 @@ namespace Limbus_Localization_UI.Json
                 SimpleDesc4_JSON = "{none}";
                 SimpleDesc5_JSON = "{none}";
                 List<string> SimpleDescs_JSON = new() { };
-                foreach (var i in data.SimpleDesc) SimpleDescs_JSON.Add(i.simpleDesc);
+                foreach (var i in data.simpleDesc) SimpleDescs_JSON.Add(i.simpleDesc);
                 //if(WriteInfo) Console.WriteLine(SimpleDescs_JSON.Count);
                 for (int i = 0; i <= 10 - SimpleDescs_JSON.Count; i++) SimpleDescs_JSON.Add("{none}");
                 //if (WriteInfo) Console.WriteLine(Name_JSON);

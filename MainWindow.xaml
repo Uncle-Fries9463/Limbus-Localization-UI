@@ -42,7 +42,117 @@
             </BeginStoryboard>
         </EventTrigger>
     </Window.Triggers>
+    <!--MenuItem-->
     <Window.Resources>
+        <SolidColorBrush x:Key="SubMenuBackgroundBrush" Color="#FFF5F5F5"/>
+        <Style x:Key="{x:Type ContextMenu}" TargetType="{x:Type ContextMenu}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <Border Background="#EF222120" CornerRadius="5" BorderBrush="DarkGray" BorderThickness="2" Opacity="0.96">
+                            <StackPanel ClipToBounds="True" Orientation="Vertical" IsItemsHost="True" Margin="5,4,5,4"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <LinearGradientBrush x:Key="DarkBrush" StartPoint="0.5,0" EndPoint="0.5,1">
+            <GradientBrush.GradientStops>
+                <GradientStopCollection>
+                    <GradientStop Color="#939393" Offset="0.0" />
+                    <GradientStop Color="#717171" Offset="0.05"/>
+                    <GradientStop Color="#606060" Offset="1.0" />
+                </GradientStopCollection>
+            </GradientBrush.GradientStops>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="Clicked" StartPoint="0.5,0" EndPoint="0.5,1">
+            <GradientBrush.GradientStops>
+                <GradientStopCollection>
+                    <GradientStop Color="#363636" Offset="0.0"/>
+                    <GradientStop Color="#393939" Offset="1.0"/>
+                </GradientStopCollection>
+            </GradientBrush.GradientStops>
+        </LinearGradientBrush>
+
+        <Style TargetType="MenuItem">
+            <Setter Property="Template" Value="{DynamicResource MenuItemControlTemplate1}"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Light"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style x:Key="MouseOverUnderline" TargetType="TextBlock">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="TextDecorations" Value="Underline"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <ControlTemplate x:Key="MenuItemControlTemplate1" TargetType="{x:Type MenuItem}">
+            <Border x:Name="templateRoot" 
+                    BorderBrush="#535353" 
+                    BorderThickness="0" 
+                    Background="{TemplateBinding Background}" 
+                    SnapsToDevicePixels="True">
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <ContentPresenter ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Grid.Column="1" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Margin="3, 5, 5, 3" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    <Popup x:Name="PART_Popup"  AllowsTransparency="True" Focusable="False" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" Placement="Bottom">
+                        <Border x:Name="SubMenuBorder" BorderBrush="#595959" BorderThickness="1" Background="#3A3A3A" Padding="0">
+                            <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+                                <Grid RenderOptions.ClearTypeHint="Enabled">
+                                    <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                        <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=SubMenuBorder}" Height="{Binding ActualHeight, ElementName=SubMenuBorder}" Width="{Binding ActualWidth, ElementName=SubMenuBorder}"/>
+                                    </Canvas>
+                                    <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Cycle" Grid.IsSharedSizeScope="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
+                                </Grid>
+                            </ScrollViewer>
+                        </Border>
+                    </Popup>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsSuspendingPopupAnimation" Value="True">
+                    <Setter Property="PopupAnimation" TargetName="PART_Popup" Value="None"/>
+                </Trigger>
+
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" TargetName="templateRoot" Value="#2C2C2C"/>
+                    <Setter Property="BorderThickness" TargetName="templateRoot" Value="0"></Setter>
+                </Trigger>
+
+                <Trigger Property="CanContentScroll" SourceName="SubMenuScrollViewer" Value="False">
+                    <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}"/>
+                    <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=SubMenuScrollViewer}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+
+
+        <ControlTemplate x:Key="{x:Static MenuItem.TopLevelItemTemplateKey}" TargetType="{x:Type MenuItem}">
+            <Border Name="Border">
+                <Grid>
+                    <ContentPresenter Margin="6,3,6,3" ContentSource="Header" RecognizesAccessKey="True" />
+                </Grid>
+            </Border>
+        </ControlTemplate>
+
         <Style TargetType="{x:Type ComboBox}">
             <Setter Property="Background" Value="#FF191919"/>
             <Setter Property="BorderBrush" Value="#FF333333"/>
@@ -291,7 +401,7 @@
                                     <RichTextBox Background="{x:Null}" BorderThickness="0">
                                         <FlowDocument>
                                             <Paragraph Style="{StaticResource CascadiaText}" FontSize="12" Foreground="#C3C3C3">
-                                                <Run Text="Рефракторинг" BaselineAlignment="TextTop"/>
+                                                <Run x:Name="TitleRefractor_Tooltip" Text="Рефракторинг" BaselineAlignment="TextTop"/>
                                             </Paragraph>
                                         </FlowDocument>
                                     </RichTextBox>
@@ -312,7 +422,7 @@
                                     <RichTextBox Background="{x:Null}" BorderThickness="0">
                                         <FlowDocument>
                                             <Paragraph Style="{StaticResource CascadiaText}" FontSize="12" Foreground="#C3C3C3">
-                                                <Run Text="Настройки" BaselineAlignment="TextTop"/>
+                                                <Run x:Name="TitleSettings_Tooltip" Text="Настройки" BaselineAlignment="TextTop"/>
                                             </Paragraph>
                                         </FlowDocument>
                                     </RichTextBox>
@@ -346,7 +456,7 @@
                         ❐
                     </TextBlock>
                     <StackPanel Grid.Row="0" HorizontalAlignment="Left" Margin="35,0,0,0" Orientation="Horizontal">
-                        <TextBlock FontFamily="Bahnschrift Light" Foreground="#FF232323" FontSize="25">
+                        <TextBlock x:Name="ProgramTitleName"  FontFamily="Bahnschrift Light" Foreground="#FF232323" FontSize="25">
                             Limbus Localization UI 1.7
                         </TextBlock>
                         <TextBlock FontFamily="Bahnschrift Light" Foreground="#FF232323" FontSize="15" Margin="-2, 9, 0, 0"   Width="0">
@@ -381,10 +491,10 @@
                             <ScaleTransform />
                         </Border.RenderTransform>
                     </Border>
-                    <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="0" Grid.Column="1" Panel.ZIndex="1" Focusable="False" Margin="1000" PreviewMouseLeftButtonDown="OverrideCover1_MouseLeftButtonUp"/>
-                    <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="0" Grid.Column="0" Panel.ZIndex="1" Focusable="False" Margin="1000" PreviewMouseLeftButtonDown="OverrideCover2_MouseLeftButtonUp"/>
+                    <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="0" Grid.Column="1" Panel.ZIndex="1" Focusable="False" Margin="10000" PreviewMouseLeftButtonDown="OverrideCover1_MouseLeftButtonUp"/>
+                    <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="0" Grid.Column="0" Panel.ZIndex="1" Focusable="False" Margin="10000" PreviewMouseLeftButtonDown="OverrideCover2_MouseLeftButtonUp"/>
                     <Border x:Name="SettingsDialog"
-                            Margin="1110"
+                            Margin="10000"
                             Background="#FF191919"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
@@ -395,7 +505,8 @@
                             BorderBrush="#FF333333"
                             Panel.ZIndex="1">
                         <StackPanel>
-                            <TextBlock HorizontalAlignment="Center"
+                            <TextBlock x:Name="Settings_Title"
+                                       HorizontalAlignment="Center"
                                        Foreground="#FFD1D1D1"
                                        Margin="0, 4, 0, 0"
                                        FontSize="30"
@@ -412,10 +523,10 @@
                                     </TextBlock>
                                     <StackPanel>
                                         <StackPanel Width="290">
-                                            <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
+                                            <TextBlock x:Name="Settings_EnableStyleHighlight_Title" Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
                                                 Подсвечивать улучшения
                                             </TextBlock>
-                                            <TextBlock FontFamily="Bahnschrift Light" HorizontalAlignment="Left" FontSize="13" Width="290" Foreground="#FF6F6F6F" TextWrapping="Wrap">
+                                            <TextBlock x:Name="Settings_EnableStyleHighlight_Desc" FontFamily="Bahnschrift Light" HorizontalAlignment="Left" FontSize="13" Width="290" Foreground="#FF6F6F6F" TextWrapping="Wrap">
                                                 <TextBlock.Text>
                                                     Подсвечивать &lt;style&gt; как цвет (Обновите предпросмотр текстовыми данными)
                                                 </TextBlock.Text>
@@ -432,10 +543,10 @@
                                     </TextBlock>
                                     <StackPanel>
                                         <StackPanel Width="290">
-                                            <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
+                                            <TextBlock x:Name="Settings_SelectedFont_Title" Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
                                                 Шрифт json редактора
                                             </TextBlock>
-                                            <TextBlock FontFamily="Bahnschrift Light" HorizontalAlignment="Left" FontSize="13" Width="290" Foreground="#FF6F6F6F" TextWrapping="Wrap">
+                                            <TextBlock x:Name="Settings_SelectedFont_Desc" FontFamily="Bahnschrift Light" HorizontalAlignment="Left" FontSize="13" Width="290" Foreground="#FF6F6F6F" TextWrapping="Wrap">
                                                 <TextBlock.Text>
                                                     Шрифт поля редактирования текущего Json элемента
                                                 </TextBlock.Text>
@@ -455,14 +566,14 @@
                                 </StackPanel>
                                 <StackPanel Margin="0, 10, 0, 0" Orientation="Horizontal">
                                     <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
-        ※
+                                        ※
                                     </TextBlock>
                                     <StackPanel>
                                         <StackPanel Width="290">
-                                            <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
+                                            <TextBlock x:Name="Settings_EditorTextColor_Title" Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
                                                 Цвет json редактора
                                             </TextBlock>
-                                            <TextBlock FontFamily="Bahnschrift Light" HorizontalAlignment="Left" FontSize="13" Width="290" Foreground="#FF6F6F6F" TextWrapping="Wrap">
+                                            <TextBlock x:Name="Settings_EditorTextColor_Desc" FontFamily="Bahnschrift Light" HorizontalAlignment="Left" FontSize="13" Width="290" Foreground="#FF6F6F6F" TextWrapping="Wrap">
                                                 <TextBlock.Text>
                                                     Цвет текста поля редактирования текущего Json элемента (В hex RGB формате)
                                                 </TextBlock.Text>
@@ -494,37 +605,35 @@
                                     <StackPanel>
                                         <StackPanel Width="290">
                                             <TextBlock Foreground="#FFB4B4B4" FontSize="22" FontFamily="Bahnschrift Light">
-                                                Язык программы
+                                                Program Language
                                             </TextBlock>
                                             <TextBlock FontFamily="Bahnschrift Light" HorizontalAlignment="Left" FontSize="13" Width="290" Foreground="#FF6F6F6F" TextWrapping="Wrap">
-                                                <TextBlock.Text>
-                                                    Таких обстоятельств на данный момент ещё не произошло
-                                                </TextBlock.Text>
+                                                Switch Editor Language (Files from "[Ресурсы]\&amp; Stringtypes\Languages")
                                             </TextBlock>
                                         </StackPanel>
                                     </StackPanel>
-                                    <Button x:Name="Lang" Margin="25, 0, 0, 0" Foreground="#FFB4B4B4" BorderThickness="3" BorderBrush="#FF5E5E5E" FontSize="28" Height="40" Width="95">
-                                        <TextBlock Text="RU"/>
+                                    <Button x:Name="SelectedLanguage_Button" Click="SelectedLanguage_Button_Click" Margin="25, 0, 0, 0" Foreground="#FFB4B4B4" BorderThickness="3" BorderBrush="#FF333333" FontSize="28" Height="40" Width="95">
+                                        <TextBlock x:Name="SelectedLanguage_Display" Text="RU"/>
                                     </Button>
-                                    <Border  Margin="-95, 0, 0, 0" Height="40" Width="95" Background="#7F000000"/>
+                                    <Border Margin="-95, 0, 0, 0" Height="0" Width="95" Background="#7F000000"/>
                                 </StackPanel>
                                 <Button Click="Settings_OK" Margin="56, 0, 0, 0" Width="0" Height="35" Content="OK"/>
                                 <Button Width="93" Height="35" HorizontalAlignment="Left" Margin="0, -31, 0, 0" Click="Refractor1_Shorthand_Changetype">
                                     <StackPanel>
-                                        <TextBlock Text="Dynamic Keyw." Foreground="#b4b4b4" Margin="0, 0, 0, 0" FontSize="13"/>
-                                        <TextBlock Text="Отключено" x:Name="EnableDynamicKeywords_Display" TextDecorations="Underline" Foreground="#FFBAA7A7" Margin="0, 0, 0, 0" FontSize="11" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="Settings_EnableDynamicKeywords" Text="Dynamic Keyw." Foreground="#b4b4b4" Margin="0, 0, 0, 0" FontSize="13"/>
+                                        <TextBlock x:Name="EnableDynamicKeywords_Display" Text="Отключено" TextDecorations="Underline" Foreground="#FFBAA7A7" Margin="0, 0, 0, 0" FontSize="11" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                                 <Button Width="93" Height="35" HorizontalAlignment="Left" Margin="100, -35, 0, 0" Click="BattleKeywords_Change_Type">
                                     <StackPanel>
-                                        <TextBlock Text="Keywords" Foreground="#b4b4b4" Margin="0, 0, 0, 0" FontSize="13"/>
+                                        <TextBlock x:Name="Settings_KeywordsType" Text="Keywords" Foreground="#b4b4b4" Margin="0, 0, 0, 0" FontSize="13"/>
                                         <TextBlock Text="RU" x:Name="BattleKeywords_TypeDisplay" TextDecorations="Underline" Foreground="#FFBAA7A7" Margin="0, 0, 0, 0" FontSize="11" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                                 <Button Width="93" Height="35" HorizontalAlignment="Left" Margin="201, -35, 0, 0" Click="Shorthand_TypeChange">
                                     <StackPanel>
                                         <TextBlock Text="Тип развёртки" Foreground="#b4b4b4" Margin="0, 0, 0, 0" FontSize="13"/>
-                                        <TextBlock Text="Knightey" x:Name="Shorthand_TypeDisplay" TextDecorations="Underline" Foreground="#FFBAA7A7" Margin="0, 0, 0, 0" FontSize="11" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Crescent Corp." x:Name="Shorthand_TypeDisplay" TextDecorations="Underline" Foreground="#FFBAA7A7" Margin="0, 0, 0, 0" FontSize="11" HorizontalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0, -35, 4, 0">
@@ -540,7 +649,7 @@
                                                      HorizontalOffset="15"
                                                      VerticalOffset="10">
                                                 <StackPanel>
-                                                    <TextBlock>Обновить спрайты</TextBlock>
+                                                    <TextBlock x:Name="SubButtons_ReloadSprites">Обновить спрайты</TextBlock>
                                                 </StackPanel>
                                             </ToolTip>
                                         </Button.ToolTip>
@@ -557,7 +666,7 @@
                                                      HorizontalOffset="15"
                                                      VerticalOffset="10">
                                                 <StackPanel>
-                                                    <TextBlock>Обновить ключевые слова и доп замены</TextBlock>
+                                                    <TextBlock x:Name="SubButtons_ReloadKeywordsAndReplacements">Обновить ключевые слова и доп замены</TextBlock>
                                                 </StackPanel>
                                             </ToolTip>
                                         </Button.ToolTip>
@@ -574,7 +683,7 @@
                                                      HorizontalOffset="15"
                                                      VerticalOffset="10">
                                                 <StackPanel>
-                                                    <TextBlock>Обновить цвета</TextBlock>
+                                                    <TextBlock x:Name="SubButtons_ReloadColorPairs">Обновить цвета</TextBlock>
                                                 </StackPanel>
                                             </ToolTip>
                                         </Button.ToolTip>
@@ -588,7 +697,7 @@
                         </Border.RenderTransform>
                     </Border>
                     <Border x:Name="ExitDialog"
-                            Margin="1000"
+                            Margin="10000"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             Grid.Column="0"
@@ -619,7 +728,7 @@
                                              ToolTipService.InitialShowDelay="0">
                                     <FlowDocument>
                                         <Paragraph TextAlignment="Center" Foreground="#ebcaa2" FontSize="14" FontFamily="Bahnschrift Light">
-                                            <Run>
+                                            <Run x:Name="CloseEditor_UnsavedChangesCount">
                                                 Изменений не сохранено:
                                             </Run>
                                             <Run Foreground="AliceBlue" ToolTipService.InitialShowDelay="0" x:Name="UnsavedChangesCount">
@@ -656,6 +765,7 @@
                                             Width="150"
                                             Height="35"
                                             BorderThickness="4"
+                                            x:Name="CloseEditor_Yes"
                                             Content="Да"/>
                                 </StackPanel>
                                 <StackPanel Width="155">
@@ -666,6 +776,7 @@
                                             Width="150"
                                             Height="35"
                                             BorderThickness="4"
+                                            x:Name="CloseEditor_No"
                                             Content="Нет"/>
                                 </StackPanel>
                             </StackPanel>
@@ -678,7 +789,7 @@
                              VerticalAlignment="Top"
                              HorizontalAlignment="Left"
                              Grid.Row="0"
-                             
+                                                          
                              Width="574"
                              Height="133"
                              Margin="5"
@@ -690,11 +801,113 @@
                              FontFamily="Lucida Sans Unicode"
                              FontWeight="Bold"
                              FontSize="12.8"
-                             
+                                                          
                              BorderThickness="0"
                              Foreground="#A69885"
                              SelectionBrush="#B2B4B4B4"
-                             Background="#FF191919"/>
+                             Background="#FF191919">
+                        <TextBox.ContextMenu>
+                            <ContextMenu Name="cxm">
+                                <MenuItem Click="InsertStyle_ContextMenu">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Использовать &lt;style&gt;" x:Name="ContextMenu_UseStyle"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0"
+                                          Click="SelectedText_TagUnlesh">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Развернуть ссылки (Теги)" x:Name="ContextMenu_LinkOpenTags"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0"
+                                          Click="SelectedText_TagUnlesh_Shorthand">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Развернуть ссылки (Shorthand)" x:Name="ContextMenu_LinkOpenShorthand"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0"
+                                         Click="SelectedText_CollapseShorthand">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Свернуть теги в ссылки" x:Name="ContextMenu_TagsCollapse"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+
+                                <Separator Margin="-29, 2, 0, 0" Height="1.2"/>
+
+                                <MenuItem Margin="0, 2, 0, 0" Click="InsertItalic">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Курсив" x:Name="ContextMenu_UseItalic"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0" Click="InsertBold">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Жирный" x:Name="ContextMenu_UseBold"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0" Click="InsertUnderline">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Подчёркнутый" x:Name="ContextMenu_UseUnderline"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0" Click="InsertStrikethrough">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Зачёркнутый" x:Name="ContextMenu_UseStrikethrough"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0" Click="InsertSize">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Размер" x:Name="ContextMenu_UseSize"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0" Click="InsertFont">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Шрифт" x:Name="ContextMenu_UseFont"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0" Click="InsertColor">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Цвет" x:Name="ContextMenu_UseColor"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0" Click="InsertSub">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Subscript" x:Name="ContextMenu_UseSubscript"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0" Click="InsertSup">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Superscript" x:Name="ContextMenu_UseSuperscript"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+
+                                <Separator Margin="-29, 2, 0, 0" Height="1.2"/>
+
+                                <MenuItem Margin="0, 2, 0, 0"
+                                          Name="cxmItemSelectLine"
+                                          Click="ClickSelectLine">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Выбрать линию" x:Name="ContextMenu_SelectLine"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                                <MenuItem Margin="0, 2, 0, 0"
+                                          Name="cxmItemClear"
+                                          Click="ClickClear">
+                                    <MenuItem.Header>
+                                        <TextBlock Style="{StaticResource MouseOverUnderline}" Text="Очистить весь текст" x:Name="ContextMenu_ClearAllText"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+
+                                <Separator Margin="-29, 2, 0, 0" Height="1.2"/>
+
+                                <MenuItem Margin="0, 2, 0, 0"
+                                          Click="ToggleTranslationHints">
+                                    <MenuItem.Header>
+                                        <TextBlock x:Name="ContextMenu_EnableTranslationTips_Display" Style="{StaticResource MouseOverUnderline}" Text="Подсказки перевода: Выкл"/>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                            </ContextMenu>
+                        </TextBox.ContextMenu>
+                    </TextBox>
 
                     <Image x:Name="PreviewLayout_BackgroundImage" Source="Images/Фон ЭГО даров.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Left" Panel.ZIndex="-1">
 
@@ -762,7 +975,6 @@
                                      FontSize="20"/>
                         </Border>
                         <Label x:Name="JsonFilepath_bgtext"
-                               FontStyle="Italic"
                                Grid.Column="1" 
                                Grid.Row="1" 
                                VerticalAlignment="Top"
@@ -814,7 +1026,7 @@
                                              HorizontalOffset="15"
                                              VerticalOffset="10">
                                         <StackPanel>
-                                            <TextBlock>Выбрать файл в проводнике</TextBlock>
+                                            <TextBlock x:Name="SelectFile_Tooltip">Выбрать файл в проводнике</TextBlock>
                                         </StackPanel>
                                     </ToolTip>
                                 </Button.ToolTip>
@@ -885,7 +1097,6 @@
                                              FontSize="19"/>
                                 </Border>
                                 <Label x:Name="JumpToID_bgtext"
-                                       FontStyle="Italic"
                                        VerticalAlignment="Top"
                                        HorizontalAlignment="Left"
                                        IsHitTestVisible="False"
@@ -922,7 +1133,7 @@
                                                  HorizontalOffset="15"
                                                  VerticalOffset="10" >
                                             <StackPanel>
-                                                <TextBlock x:Name="s2">Перейти к объекту через ID</TextBlock>
+                                                <TextBlock x:Name="lng001">Перейти к объекту через ID</TextBlock>
                                             </StackPanel>
                                         </ToolTip>
                                     </Button.ToolTip>
@@ -1044,7 +1255,7 @@
                                                  HorizontalOffset="15"
                                                  VerticalOffset="10">
                                             <StackPanel>
-                                                <TextBlock>Копировать ID</TextBlock>
+                                                <TextBlock x:Name="lng002">Копировать ID</TextBlock>
                                             </StackPanel>
                                         </ToolTip>
                                     </Button.ToolTip>
@@ -1126,7 +1337,6 @@
                                                 Focusable="False"
                                                 HorizontalAlignment="Left"/>
                                         <Label x:Name="Name_Label_bgtext"
-                                               FontStyle="Italic"
                                                VerticalAlignment="Top"
                                                HorizontalAlignment="Left"
                                                IsHitTestVisible="False"
@@ -1580,7 +1790,7 @@
                                                 Focusable="False"/>
                                     </StackPanel>
                                     <StackPanel x:Name="CoinDescsSelectionBox" Height="0" Margin="0, 1, 0, 0" Width="265" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-                                        <TextBlock Foreground="#FF514C46" Height="15" FontFamily="Cascadia Code" HorizontalAlignment="Center">
+                                        <TextBlock x:Name="CoinDescsList" Foreground="#FF514C46" Height="15" FontFamily="Cascadia Code" HorizontalAlignment="Center">
                                             ————————Список описаний монеты————————
                                         </TextBlock>
                                         <StackPanel Height="27" Orientation="Horizontal">
@@ -1663,8 +1873,7 @@
                         </Border>
 
                     </Grid>
-                    <ScrollViewer x:Name="PreviewLayout_Skills"
-                                  
+                    <ScrollViewer x:Name="PreviewLayout_Skills" 
                                   HorizontalAlignment="Left"
                                   VerticalAlignment="Bottom"
                                   Height="337" Width="668"

@@ -71,7 +71,9 @@ namespace Limbus_Localization_UI
                 
                 try
                 {
-                    File.AppendAllText(@"[Ресурсы]\& Stringtypes\Error Log.txt", $"[{DateTime.Now.ToString("HH:mm:ss")}] Exception:\n{exception.ToString()}\n---------------------------------------------------------------------------------\n\n\n");
+                    Console.WriteLine(exception.ToString());
+
+                    File.AppendAllText(@"[Ресурсы]\& Stringtypes\Error Log.txt", $"[{DateTime.Now.ToString("HH:mm:ss")}] Ещё один на доске позора для злодеев:\n{exception.ToString()}\n---------------------------------------------------------------------------------\n\n\n");
                 }
                 catch { }
             }

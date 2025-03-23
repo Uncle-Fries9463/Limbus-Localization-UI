@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using static Limbus_Localization_UI.Additions.Consola;
 
 namespace Limbus_Localization_UI
 {
@@ -18,14 +19,14 @@ namespace Limbus_Localization_UI
         public TextConstructor TextBase;
     };
 
-    public static class TagDefier
+
+    public static class TagManager
     {
         public static List<string> InnerTags(string Source)
         {
             List<string> OutputTags = new();
             try
             {
-
                 Regex InnerTags = new Regex(@"⟦InnerTag/(.*?)⟧");
                 foreach (Match InnerTagMatch in InnerTags.Matches(Source))
                 {
@@ -40,7 +41,7 @@ namespace Limbus_Localization_UI
         {
             try
             {
-                if (!Source.Contains("⟦LevelTag/"))
+                if (!Source.StartsWith("⟦LevelTag/"))
                 {
                     Source = Regex.Replace(Source, @"⟦InnerTag/(.*)⟧", Match => { return ""; });
                 }
@@ -54,6 +55,8 @@ namespace Limbus_Localization_UI
             return Source;
         }
 
+
+
         public static void ApplyTags(ref Run TargetRun, List<string> Tags)
         {
             try
@@ -63,6 +66,7 @@ namespace Limbus_Localization_UI
                 {
                     if (i.StartsWith("FontFamily@")) IsContainsFontFamily = true; break;
                 }
+                
 
                 foreach (var Tag in Tags)
                 {
@@ -76,6 +80,11 @@ namespace Limbus_Localization_UI
                         case "FontFamily":
                             try   { TargetRun.FontFamily = new FontFamily(TagBody[1]); }
                             catch { }
+                            break;
+
+                        case "FontSize":
+                            try { TargetRun.FontSize = 20 * (0.01 * Convert.ToInt32(TagBody[1][..^1])); }
+                            catch (Exception EX) { Console.WriteLine(EX.ToString()); }
                             break;
 
                         case "UptieHighlight":
@@ -94,12 +103,18 @@ namespace Limbus_Localization_UI
                                     break;
 
                                 case "Italic":
-                                    if (!IsContainsFontFamily) TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/Fonts/Pretendard/public/static"), "./#Pretendard-Regular");
+                                    if (!IsContainsFontFamily & !MainWindow.BattleKeywords_Type.Equals("CN"))
+                                    {
+                                        TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/Pretendard/public/static/#Pretendard");
+                                    }
                                     TargetRun.FontStyle = FontStyles.Italic;
                                     break;
 
                                 case "Bold":
-                                    if (!IsContainsFontFamily) TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/Fonts/Pretendard/public/static"), "./#Pretendard-Regular");
+                                    if (!IsContainsFontFamily & !MainWindow.BattleKeywords_Type.Equals("CN"))
+                                    {
+                                        TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/Pretendard/public/static/#Pretendard");
+                                    }
                                     TargetRun.FontWeight = FontWeights.SemiBold;
                                     break;
 
@@ -107,6 +122,11 @@ namespace Limbus_Localization_UI
 
                             break;
                     }
+                }
+                if (!IsContainsFontFamily & MainWindow.BattleKeywords_Type.Equals("CN"))
+                {
+                    //TargetRun.FontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/S_Core_Dream/OTF/#S-Core Dream 5 Medium");
+                    //rin(TargetRun.Text);
                 }
             }
             catch { }

@@ -1,0 +1,54 @@
+[WinDuel]                     ¤ <color=#f95e00>[拼点胜利]</color>
+[WhenUse]                     ¤ <color=#27cefe>[使用时]</color>
+[EndCoin]                     ¤ <color=#93f03f>[硬币攻击结束时]</color>
+[EndSkill]                    ¤ <color=#93f03f>[攻击后]</color>
+[AllyKill]                    ¤ <color=#93f03f>[击杀友方时]</color>
+[CantDuel]                    ¤ <color=#fe0000>[无法拼点]</color>
+[EndBattle]                   ¤ <color=#93f03f>[回合结束时]</color>
+[BeforeHit]                   ¤ <color=#93f03f>[受到攻击前]</color>
+[EnemyKill]                   ¤ <color=#93f03f>[击杀敌方时]</color>
+[DuelGuard]                   ¤ <color=#93f03f>[可拼点防御]</color>
+[BeforeUse]                   ¤ <color=#93f03f>[使用前]</color>
+[DefeatDuel]                  ¤ <color=#fe0000>[拼点失败]</color>
+[TargetKill]                  ¤ <color=#93f03f>[击杀目标时]</color>
+[DuelCounter]                 ¤ <color=#f95e00>[可拼点反击]</color>
+[StartBattle]                 ¤ <color=#93f03f>[战斗开始]</color>
+[EndSkillTail]                ¤ <color=#c90080>[反面攻击结束后]</color>
+[EndSkillHead]                ¤ <color=#fe59c0>[正面攻击结束后]</color>
+[BeforeAttack]                ¤ <color=#93f03f>[攻击前]</color>
+[AllyKillFail]                ¤ <color=#93f03f>[未击杀友方时]</color>
+[CantIdentify]                ¤ <color=#fe0000>[无差别攻击]</color>
+[WinDuelAttack]               ¤ <color=#93f03f>[拼点胜利 - 命中时]</color>
+[EnemyKillFail]               ¤ <color=#93f03f>[未击杀敌方时]</color>
+[OnDefeatEvade]               ¤ <color=#93f03f>[闪避失败时]</color>
+[OnSucceedEvade]              ¤ <color=#93f03f>[闪避成功时]</color>
+[OnSucceedAttack]             ¤ <color=#93f03f>[命中时]</color>
+[TurnStartBattle]             ¤ <color=#93f03f>[回合开始时]</color>
+[CantChangeTarget]            ¤ <color=#93f03f>[无法改变拼点目标]</color>
+[DefeatDuelAttack]            ¤ <color=#93f03f>[拼点失败 - 命中时]</color>
+[WinDuelAttackHead]           ¤ <color=#93f03f>[拼点胜利 - 正面命中时]</color>
+[CriticalActivated]           ¤ <color=#93f03f>[暴击发动时]</color>
+[StartBattle_Force]           ¤ <color=#93f13e>[战斗开始]</color>
+[OnSucceedAttackTail]         ¤ <color=#93f03f>[反面命中时]</color>
+[OnSucceedAttackHead]         ¤ <color=#c6fe94>[正面命中时]</color>
+[CriticalOnSucceedAttack]     ¤ <color=#93f03f>[暴击命中时]</color>
+[CriticalEnemyTargetKill]     ¤ <color=#93f03f>[暴击击杀敌方时]</color>
+[ReUseOnSucceedAttackHead]    ¤ <color=#93f03f>[重复使用 - 正面命中时]</color>
+[CriticalEnemyTargetKillFail] ¤ <color=#93f03f>[暴击未击杀敌方时]</color>
+[UnBrokenCoinOnSucceedAttack] ¤ <color=#93f03f>[未摧毁 - 命中时]</color>
+
+[Something]                   ¤ <sprite name="KeywordID"><color=#9f6a3a>Something</color>
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+Colors hint
+
+#e30000 // Red, Negative status effects
+#f8c200 // Yellow, Positive status effecs (Haste, Charge, ..)
+#9f6a3a // Brown, Neutral status effects
+
+#93f03f // [On Hit]              \ Green
+#27cefe // [On Use]              \ Blue
+#c6fe94 // [Heads Hit]           \ Faded green
+#f95e00 // [Clashable Counter]   \ Orange
+#fe0000 // [Indiscriminate]      \ Red

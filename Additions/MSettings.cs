@@ -47,15 +47,30 @@ namespace Limbus_Localization_UI.Additions
             {
                 MainWindow.BattleKeywords_Type = Settings[4].Split(" ¤ ")[^1].Trim();
                 (MainWindow.Keywords, MainWindow.KeywordIDName) = РазноеДругое.GetKeywords(from: MainWindow.BattleKeywords_Type);
+                MainWindow.Replacements = РазноеДругое.GetAddtReplacements(from: MainWindow.BattleKeywords_Type);
                 T["Keywords Type Display"].Text = MainWindow.BattleKeywords_Type;
             }
             catch { }
             try
             {
                 MainWindow.Shorthand_Type = Settings[5].Split(" ¤ ")[^1].Trim();
-                T["Keywords Type Display"].Text = MainWindow.BattleKeywords_Type;
+                T["Shorthand Type Display"].Text = MainWindow.Shorthand_Type;
             }
             catch { }
+            try
+            {
+                MainWindow.ApplyLanguage(from: Settings[6].Split(" ¤ ")[^1].Trim());
+            }
+            catch { }
+
+            if (MainWindow.BattleKeywords_Type == "KR")
+            {
+                РазноеДругое.SwitchToSDream();
+            }
+            else if (MainWindow.BattleKeywords_Type == "CN")
+            {
+                РазноеДругое.SwitchToSourceHanSansSC();
+            }
         }
 
         public static void SaveSetting(string SettingType, string Setting)
@@ -88,6 +103,10 @@ namespace Limbus_Localization_UI.Additions
 
                     case "Shorthand Type":
                         Settings[5] = $"Shorthand Type          ¤ {Setting}";
+                        break;
+
+                    case "UI Language":
+                        Settings[6] = $"UI Language             ¤ {Setting}";
                         break;
                 }
 

@@ -7,16 +7,16 @@ using System.Windows.Media;
 using Limbus_Localization_UI.Json;
 using System.Windows.Media.Imaging;
 using static Limbus_Localization_UI.Additions.Consola;
-using System.Windows;
-using System.Diagnostics;
 
 
 namespace Limbus_Localization_UI.Additions
 {
     internal class РазноеДругое
     {
-        public static Encoding UTF8_BOM = new UTF8Encoding(true);
+        static Dictionary<string, dynamic> T;
+        public static void InitTDictionaryHere(Dictionary<string, dynamic> FromExternal) => T = FromExternal;
 
+        public static Encoding UTF8_BOM = new UTF8Encoding(true);
         public static void SetRO(string path)
         {
             try
@@ -202,6 +202,35 @@ namespace Limbus_Localization_UI.Additions
         }
 
 
+        public static Dictionary<string, string> GetKRTranslationTips()
+        {
+            Dictionary<string, string> KRTranslationTips = new();
+
+            try
+            {
+                string[] Lines = File.ReadAllLines(@"[Ресурсы]\& Stringtypes\Translation hints.txt");
+                KRTranslationTips = new()
+                {
+                    ["Size"] = Lines[0].Split("Size: ")[1],
+                    ["Color"] = Lines[1].Split("Color: ")[1]
+                };
+
+                foreach (var Replacement in Lines[3..])
+                {
+                    if (Replacement.Contains(" ¤ "))
+                    {
+                        string A = Replacement.Split(" ¤ ")[0];
+                        string B = Replacement.Split(" ¤ ")[1];
+                        KRTranslationTips[A] = B;
+                    }
+                }
+            }
+            catch { }
+
+            return KRTranslationTips;
+        }
+
+
         private static Dictionary<string, byte[]> GetSpriteFiles()
         {
             Dictionary<string, byte[]> SpriteFiles = new();
@@ -243,6 +272,50 @@ namespace Limbus_Localization_UI.Additions
             catch { }
 
             return SpriteBitmaps;
+        }
+
+        public static void SwitchToSourceHanSansSC()
+        {
+            FontFamily Source_Han_Sans_SC = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/SourceHanSansSC/OTF/SimplifiedChinese/#Source Han Sans SC");
+
+            T["Skill PreviewLayout Desc"].FontFamily = Source_Han_Sans_SC;
+            T["PreviewLayout @ EGO Gift"].FontFamily = Source_Han_Sans_SC;
+            T["PreviewLayout @ Skill"].FontFamily = Source_Han_Sans_SC;
+            for (int CoinNumber = 1; CoinNumber <= 5; CoinNumber++)
+            {
+                for (int CoinDescNumber = 1; CoinDescNumber <= 6; CoinDescNumber++)
+                {
+                    T[$"Skill PreviewLayout Coin {CoinNumber} Desc {CoinDescNumber}"].FontFamily = Source_Han_Sans_SC;
+                }
+            }
+        }
+        public static void SwitchToSDream()
+        {
+            FontFamily S_Core_Dream_5_Medium = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/S_Core_Dream/OTF/#S-Core Dream 5 Medium");
+
+            T["PreviewLayout @ EGO Gift"].FontFamily = S_Core_Dream_5_Medium;
+            T["Skill PreviewLayout Desc"].FontFamily = S_Core_Dream_5_Medium;
+            for (int CoinNumber = 1; CoinNumber <= 5; CoinNumber++)
+            {
+                for (int CoinDescNumber = 1; CoinDescNumber <= 6; CoinDescNumber++)
+                {
+                    T[$"Skill PreviewLayout Coin {CoinNumber} Desc {CoinDescNumber}"].FontFamily = S_Core_Dream_5_Medium;
+                }
+            }
+        }
+        public static void SwitchToPretendard()
+        {
+            FontFamily Pretendard = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/Pretendard/public/static/#Pretendard Light");
+
+            T["PreviewLayout @ EGO Gift"].FontFamily = Pretendard;
+            T["Skill PreviewLayout Desc"].FontFamily = Pretendard;
+            for (int CoinNumber = 1; CoinNumber <= 5; CoinNumber++)
+            {
+                for (int CoinDescNumber = 1; CoinDescNumber <= 6; CoinDescNumber++)
+                {
+                    T[$"Skill PreviewLayout Coin {CoinNumber} Desc {CoinDescNumber}"].FontFamily = Pretendard;
+                }
+            }
         }
     }
 }
