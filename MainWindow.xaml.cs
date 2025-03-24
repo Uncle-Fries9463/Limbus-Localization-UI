@@ -775,23 +775,7 @@ namespace Limbus_Localization_UI
             LastPreviewUpdateText = JsonDesc;
             LastPreviewUpdateTarget = Target;
 
-            if (KRTranslationTips.Count > 2 & EnbaleTranslationHints)
-            {
-                try
-                {
-                    string Size = KRTranslationTips["Size"];
-                    string Color = KRTranslationTips["Color"];
-
-                    foreach (var Replacement in KRTranslationTips)
-                    {
-                        JsonDesc = Regex.Replace(JsonDesc, @$"(?<![\uAC00-\uD7A3]){Replacement.Key}(?![\uAC00-\uD7A3])", Match =>
-                        {
-                            return $"{Replacement.Key}<size={Size}><color={Color}>{Replacement.Value}</color></size>";
-                        });
-                    }
-                }
-                catch { }
-            }
+            
 
             if (!JsonEditor_EnableHighlight)
             {
@@ -825,6 +809,24 @@ namespace Limbus_Localization_UI
                         JsonDesc = Regex.Replace(JsonDesc, @"(?<![\uAC00-\uD7A3a-zA-Zа-яА-Я<>\[\]\'""*])" + KeywordName.Key + @"(?![\uAC00-\uD7A3a-zA-Zа-яА-Я<[""*)'])", match =>
                         {
                             return $"[{KeywordName.Value}]";
+                        });
+                    }
+                }
+                catch { }
+            }
+
+            if (KRTranslationTips.Count > 2 & EnbaleTranslationHints)
+            {
+                try
+                {
+                    string Size = KRTranslationTips["Size"];
+                    string Color = KRTranslationTips["Color"];
+
+                    foreach (var Replacement in KRTranslationTips)
+                    {
+                        JsonDesc = Regex.Replace(JsonDesc, @$"(?<![\uAC00-\uD7A3]){Replacement.Key}(?![\uAC00-\uD7A3])", Match =>
+                        {
+                            return $"{Replacement.Key}<size={Size}><color={Color}>{Replacement.Value}</color></size>";
                         });
                     }
                 }
