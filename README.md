@@ -1,3 +1,6 @@
+## Other languages config will be added soon
+---
+---
 # Limbus Localization UI | Версия 1.7
 
 Программа для удобного редактирования большинства json файлов локализации Limbus Company с предпросмотром
