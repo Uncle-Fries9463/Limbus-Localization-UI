@@ -7,6 +7,7 @@
 * Bufs`⋯`.json
 * BattleKeywords`⋯`.json
 * Passive`⋯`.json
+* EGOgift`⋯`.json
 ---
 ## Примеры
 ![Снимок экрана (8841)](https://github.com/user-attachments/assets/2fba6a2e-7c15-4579-9299-ca7a595225af)
