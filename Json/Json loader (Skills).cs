@@ -99,20 +99,31 @@ namespace Limbus_Localization_UI.Json
                                 foreach (var coindesc in Coin.coindescs)
                                 {
                                     COINDESC_AND_INDEX[Skill_ID][Skill_UptieLevel][CoinCounter][COINDESC_INDEX] = COINDESC_INDEX;
-                                    string CoinDesc = coindesc.desc;
-                                    if (WriteInfo) Console.WriteLine($"      - '{coindesc.desc}'");
+                                    try
+                                    {
+                                        string CoinDesc = coindesc.desc;
+                                        if (WriteInfo) Console.WriteLine($"      - '{coindesc.desc}'");
 
-                                    if (CoinDesc.Equals(""))
-                                    {
-                                        // Если описание монеты есть, но оно пустое
-                                        Skill_CoinDescs.Remove(CoinCounter);
-                                        EditBuffer_CoinDescs.Remove(CoinCounter);
+                                        if (CoinDesc.Equals(""))
+                                        {
+                                            // Если описание монеты есть, но оно пустое
+                                            Skill_CoinDescs.Remove(CoinCounter);
+                                            EditBuffer_CoinDescs.Remove(CoinCounter);
+                                        }
+                                        else
+                                        {
+                                            // Добавить описание монеты в список её описаний
+                                            Skill_CoinDescs[CoinCounter].Add(coindesc.desc);
+                                            EditBuffer_CoinDescs[CoinCounter].Add("{unedited}");
+                                        }
                                     }
-                                    else
+                                    catch //(Exception ex)
                                     {
-                                        // Добавить описание монеты в список её описаний
-                                        Skill_CoinDescs[CoinCounter].Add(coindesc.desc);
+                                        Skill_CoinDescs[CoinCounter].Add("{empty}");
                                         EditBuffer_CoinDescs[CoinCounter].Add("{unedited}");
+                                        // Пустое описание монеты ({} в списке), привет 4 Уровень связи ЭГО Синклера
+
+                                        //rin($"ID {Skill_ID}\nUptie {Skill_UptieLevel}\nCoin {CoinCounter}\nDesc №{COINDESC_INDEX+1}");
                                     }
                                     COINDESC_INDEX++;
                                 }
@@ -192,13 +203,7 @@ namespace Limbus_Localization_UI.Json
         public static (string, int) GetUnsavedChanges(Dictionary<int, dynamic> CheckDictionary)
         {
             string Info = "";
-            string Info_Sub;
-            
-
-
             int EditsCount = 0;
-            string ex_Info = "";
-
             foreach (var ID in CheckDictionary)
             {
                 int CurrentID = ID.Key;
@@ -239,7 +244,7 @@ namespace Limbus_Localization_UI.Json
                 }
                 if (IsEditedID)
                 {
-                    Info += $"ID {CurrentID}\n - Уровни связи: {String.Join(", ", EditedUptieLevels)}\n\n";
+                    Info += $"ID {CurrentID}\n - {MainWindow.InterfaceTextContent["[Exit Dialog] Unsaved changes tooltip (Skills - Uptie level)"]}: {String.Join(", ", EditedUptieLevels)}\n\n";
                 }
             }
             return (Info, EditsCount);

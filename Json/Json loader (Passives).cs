@@ -103,17 +103,17 @@ namespace Limbus_Localization_UI.Json
             {
                 bool IsEditedID = false;
                 string Info_Sub = "";
-                //rin(ID.Value["Name"]);
+
                 if (!ID.Value["Desc"].Equals("{unedited}"))
                 {
                     IsEditedID = true;
-                    Info_Sub += "\n - Описание";
+                    Info_Sub += $"\n - {MainWindow.InterfaceTextContent["[Exit Dialog] Unsaved changes tooltip (Desc)"]}";
                     ChangesCount++;
                 }
                 if (!ID.Value["Summary"].Equals("{unedited}"))
                 {
                     IsEditedID = true;
-                    Info_Sub += "\n - Суммарно";
+                    Info_Sub += $"\n - {MainWindow.InterfaceTextContent["[Exit Dialog] Unsaved changes tooltip (Summary)"]}";
                     ChangesCount++;
                 }
 

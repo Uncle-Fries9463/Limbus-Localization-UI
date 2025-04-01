@@ -1,0 +1,20 @@
+<List of defined BattleKeywords>
+{ <--Keywords--> }
+  Title: RU
+  Folder: RU
+
+{ <--Keywords--> }
+  Title: EN
+  Folder: EN
+
+{ <--Keywords--> }
+  Title: CN
+  Folder: CN
+
+{ <--Keywords--> }
+  Title: KR
+  Folder: KR
+
+{ <--Keywords--> }
+  Title: TMP
+  Folder: TMP keywords

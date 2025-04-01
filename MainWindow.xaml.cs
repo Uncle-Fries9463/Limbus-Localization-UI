@@ -22,12 +22,14 @@ namespace Limbus_Localization_UI
     public partial class MainWindow : Window
     {
         public static Dictionary<string, dynamic> InterfaceTextElements = new();
+        public static Dictionary<string, dynamic> InterfaceTextContent = new();
+        bool IsOnlyStartedNow = true;
         public void InitializeUILanguage()
         {
             InterfaceTextElements = new()
             {
-                ["Language Display"] = SelectedLanguage_Display,
-                ["Language Hiths"] = EnbaleTranslationHints,
+                ["Language Display"] = LangLabel,
+                ["Language Hiths"] = EnableTranslationHints,
 
                 ["Program Title"] = ProgramTitleName,
                 ["(Refractor Button at Title) Open links"] = LinksToStyle,
@@ -38,8 +40,6 @@ namespace Limbus_Localization_UI
                 ["[Settings] Enable <style> highlight (Header)"] = Settings_EnableStyleHighlight_Title,
                 ["[Settings] Enable <style> highlight (Description)"] = Settings_EnableStyleHighlight_Desc,
                 ["[Settings] Enable <style> highlight (Display text)"] = ToggleHighlight_Text,
-                ["[Settings] Enable <style> highlight (Display text - Yes)"] = "Да",
-                ["[Settings] Enable <style> highlight (Display text - No)"] = "Нет",
                 ["[Settings] Json Editor Font (Header)"] = Settings_SelectedFont_Title,
                 ["[Settings] Json Editor Font (Description)"] = Settings_SelectedFont_Desc,
                 ["[Settings] Json Editor Foreground (Title)"] = Settings_EditorTextColor_Title,
@@ -47,8 +47,6 @@ namespace Limbus_Localization_UI
 
                 ["[Settings] Enable Dynamic Keywords"] = Settings_EnableDynamicKeywords,
                 ["[Settings] Enable Dynamic Keywords (Display text)"] = EnableDynamicKeywords_Display,
-                ["[Settings] Enable Dynamic Keywords (Display text - Enabled)"] = "Включено",
-                ["[Settings] Enable Dynamic Keywords (Display text - Disabled)"] = "Отключено",
 
                 ["[Settings] Keywords Type"] = Settings_KeywordsType, // Keywords - RU/EN/KR/CN
 
@@ -66,21 +64,22 @@ namespace Limbus_Localization_UI
                 ["[Json Editor - Context Menu] Open Links to Tags"] = ContextMenu_LinkOpenTags,
                 ["[Json Editor - Context Menu] Open Links to Shorthands"] = ContextMenu_LinkOpenShorthand,
                 ["[Json Editor - Context Menu] Collapse Tags to Links"] = ContextMenu_TagsCollapse,
+                ["[Json Editor - Context Menu] Recognize keyword to Tags"] = ContextMenu_RawKeywordConvertToTags,
+                ["[Json Editor - Context Menu] Recognize keyword to Shorthand"] = ContextMenu_RawKeywordConvertToShorthand,
 
                 ["[Json Editor - Context Menu] Use Italic"] = ContextMenu_UseItalic,
                 ["[Json Editor - Context Menu] Use Bold"] = ContextMenu_UseBold,
                 ["[Json Editor - Context Menu] Use Underline"] = ContextMenu_UseUnderline,
                 ["[Json Editor - Context Menu] Use Strikethrough"] = ContextMenu_UseStrikethrough,
+                ["[Json Editor - Context Menu] Use Size"] = ContextMenu_UseSize,
+                ["[Json Editor - Context Menu] Use Font"] = ContextMenu_UseFont,
+                ["[Json Editor - Context Menu] Use Color"] = ContextMenu_UseColor,
 
                 ["[Json Editor - Context Menu] Select line"] = ContextMenu_SelectLine,
                 ["[Json Editor - Context Menu] Clear Text"] = ContextMenu_ClearAllText,
 
                 ["[Json Editor - Context Menu] Enable Translation Tips"] = ContextMenu_EnableTranslationTips_Display,
-                ["[Json Editor - Context Menu] Enable Translation Tips - Enabled"] = "Вкл",
-                ["[Json Editor - Context Menu] Enable Translation Tips - Disabled"] = "Выкл",
 
-
-                ["[Left Menu] Passive Summary Description"] = "Суммарно",
                 ["[Left Menu] Json Filepath (Background text)"] = JsonFilepath_bgtext,
                 ["[Left Menu] Select File tooltip"] = SelectFile_Tooltip,
                 ["[Left Menu] ID Item Name"] = Name_Label,
@@ -100,8 +99,77 @@ namespace Limbus_Localization_UI
                 ["[Left Menu] Sub Description 5 Button"] = SwitchEditorTo_SubDesc5,
 
                 ["[Left Menu] Coin Descriptions"] = CoinDescsList,
+                ["[Settings] Shorthand type Button"] = Shorthand_Type_Display,
+
+                ["[Left Menu] Insertions (Header)"] = FormatInsertions_Title,
+            };
+            InterfaceTextContent = new()
+            {
+                ["[Settings] Enable <style> highlight (Display text - Yes)"] = "Да",
+                ["[Settings] Enable <style> highlight (Display text - No)"] = "Нет",
+                ["[Settings] Enable Dynamic Keywords (Display text - Enabled)"] = "Включено",
+                ["[Settings] Enable Dynamic Keywords (Display text - Disabled)"] = "Отключено",
+                ["[Json Editor - Context Menu] Enable Translation Tips - Enabled"] = "Подсказки перевода: Вкл",
+                ["[Json Editor - Context Menu] Enable Translation Tips - Disabled"] = "Подсказки перевода: Выкл",
+                ["[Left Menu] Passive Summary Description"] = "Суммарно",
+                ["[Left Menu] EGO Gift Description № Button"] = "Простое описание [№]",
+                ["[Left Menu] Skill Coin № Button"] = "Монета [№]",
+                ["[Left Menu] Insertions (Background text)"] = "Вставка [№]",
+
+                ["Unsopported file warning"] = "Не поддерживается",
+                ["File reading warning"] = "Ошибка чтения файла",
+                ["ID not found warning"] = "ID не найден",
+                ["Path to json file (After warning)"] = "Путь к Json файлу",
+                ["Saving error warning"] = "Ошибка сохранения",
+
+                ["[Exit Dialog] Unsaved changes tooltip (Desc)"] = "Описание",
+                ["[Exit Dialog] Unsaved changes tooltip (EGO gift - Simple desc)"] = "Простое описание",
+                ["[Exit Dialog] Unsaved changes tooltip (Summary)"] = "Суммарное описание",
+                ["[Exit Dialog] Unsaved changes tooltip (Skills - Uptie level)"] = "Уровень связи",
             };
         }
+
+        public static Dictionary<string, string> DefinedKeywords = new();
+        public void ReadDefinedKeywords()
+        {
+            string[] Config = File.ReadAllLines(@"[Ресурсы]\& Stringtypes\BattleKeywords\$ Config.txt");
+            int LineIndex = 0;
+            foreach (var Line in Config)
+            {
+                if (Line.StartsWith("{ <--Keywords--> }"))
+                {
+                    string KeywordsTitle = Config[LineIndex + 1][9..];
+                    string KeywordsFolder = Config[LineIndex + 2][10..];
+                    DefinedKeywords[KeywordsTitle] = KeywordsFolder;
+
+                    KeywordsSelector.Items.Add(new { Text = KeywordsTitle, FontSize = 16, Margin = new Thickness(-5,0,0,0), HorizontalAlignment = HorizontalAlignment.Center, Foreground = РазноеДругое.GetColorFromAHEX(@"#FFB4B4B4") });
+                }
+
+                LineIndex++;
+            }
+        }
+
+        public Dictionary<string, string> DefinedLanguages = new();
+        public void ReadDefinedLanguages()
+        {
+            string[] Config = File.ReadAllLines(@"[Ресурсы]\& Stringtypes\Languages\$ Config.txt");
+
+            int LineIndex = 0;
+            foreach(var Line in Config)
+            {
+                if (Line.StartsWith("{ <--Language--> }"))
+                {
+                    string LangTitle = Config[LineIndex + 1][9..];
+                    string LangFile = Config[LineIndex + 2][8..];
+                    DefinedLanguages[LangTitle] = LangFile;
+
+                    LanguageSelector.Items.Add(new { Text = LangTitle, FontSize = 17, HorizontalAlignment=HorizontalAlignment.Center, Foreground = РазноеДругое.GetColorFromAHEX(@"#FFB4B4B4") }); 
+                }
+
+                LineIndex++;
+            }
+        }
+
         public static void ApplyLanguage(string from = "RU")
         {
             List<string> Language = File.ReadLines(@$"[Ресурсы]\& Stringtypes\Languages\{from}.llang").ToList();
@@ -111,42 +179,109 @@ namespace Limbus_Localization_UI
                 if (Language[LineIndex].Equals("{ <--¤--> }"))
                 {
                     string Descriptor = Regex.Match(Language[LineIndex + 1], @"  Descriptor: '(.*?)'").Groups[1].ToString();
-                    string Content = Regex.Match(Language[LineIndex + 3], @"  Content: '(.*?)'").Groups[1].ToString();
+                    string TextData = Regex.Match(Language[LineIndex + 3], @"  Content: '(.*?)'").Groups[1].ToString();
                     try
                     {
+                        TextData = TextData.Replace("\\n", "\n");
                         try
                         {
-                            InterfaceTextElements[Descriptor].Text = Content.Replace("\\n", "\n");
+                            if (!InterfaceTextElements[Descriptor].Text.Equals("")) InterfaceTextElements[Descriptor].Text = TextData;
                         }
                         catch
                         {
-                            InterfaceTextElements[Descriptor].Content = Content.Replace("\\n", "\n");
+                            if (!InterfaceTextElements[Descriptor].Content.Equals("")) InterfaceTextElements[Descriptor].Content = TextData;
                         }
+                        InterfaceTextContent[Descriptor] = TextData.Replace("\\n", "\n");
                     }
                     catch (KeyNotFoundException) { }
                 }
                 else if (Language[LineIndex].Equals("{ <--l--> }"))
                 {
                     string Descriptor = Regex.Match(Language[LineIndex + 1], @"  Descriptor: '(.*?)'").Groups[1].ToString();
-                    string Content = Regex.Match(Language[LineIndex + 3], @"  Content: '(.*?)'").Groups[1].ToString();
+                    string TextData = Regex.Match(Language[LineIndex + 3], @"  Content: '(.*?)'").Groups[1].ToString();
 
-                    InterfaceTextElements[Descriptor] = Content;
+                    if (Descriptor.Equals("[Exit Dialog] Unsaved changes tooltip (Desc)")) rin(TextData);
 
-                    if (Descriptor.StartsWith("[Json Editor - Context Menu] Enable Translation Tips - "))
+                    InterfaceTextContent[Descriptor] = TextData;
+                }
+            }
+
+            #region Дополнительные исключения
+            if (JsonEditor_EnableHighlight)
+            {
+                T["Settings ToggleHighlight"].Text = InterfaceTextContent["[Settings] Enable <style> highlight (Display text - Yes)"];
+            }
+            else
+            {
+                T["Settings ToggleHighlight"].Text = InterfaceTextContent["[Settings] Enable <style> highlight (Display text - No)"];
+            }
+
+
+            if (EditorMode.Equals("Passives"))
+            {
+                T["EditorSwitch SubDesc 1"].Content = InterfaceTextContent["[Left Menu] Passive Summary Description"];
+            }
+
+            for(int i = 1; i <= 6; i++)
+            {
+                if (!T[$"Insertions {i} bgtext"].Equals(""))
+                {
+                    string s = InterfaceTextContent["[Left Menu] Insertions (Background text)"];
+                    if (!T[$"Insertions {i} bgtext"].Text.Equals("")) T[$"Insertions {i} bgtext"].Text = s.Exform(i-1);
+                }
+            }
+
+            
+            if (EditorMode.Equals("EGOgift") & !OnlyStartedNow)
+            {
+                string s = InterfaceTextContent["[Left Menu] EGO Gift Description № Button"];
+                for (int i = 1; i <= 5; i++)
+                {
+                    rin($"SimpleDesc{i}");
+                    if (!EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{i}"].Equals("{unedited}"))
                     {
-                        if (EnbaleTranslationHints & Descriptor.EndsWith("Enabled"))
-                        {
-                            InterfaceTextElements["[Json Editor - Context Menu] Enable Translation Tips"].Text = Content;
-                        }
-                        else if (!EnbaleTranslationHints & Descriptor.EndsWith("Disabled"))
-                        {
-                            InterfaceTextElements["[Json Editor - Context Menu] Enable Translation Tips"].Text = Content;
-                        }
+                        T[$"EditorSwitch SubDesc {i}"].Content = s.Exform(i) + "*";
+                    }
+                    else
+                    {
+                        T[$"EditorSwitch SubDesc {i}"].Content = s.Exform(i);
                     }
                 }
-            }            
+            }
+
+            if (EditorMode.Equals("Skills"))
+            {
+                string s = InterfaceTextContent["[Left Menu] Skill Coin № Button"];
+                for (int i = 1; i <= 5; i++)
+                {
+                    T[$"EditorSwitch SubDesc {i}"].Content = s.Exform(i);
+                }
+            }
+
+            if (!EnableTranslationHints)
+            {
+                InterfaceTextElements["[Json Editor - Context Menu] Enable Translation Tips"].Text = InterfaceTextContent["[Json Editor - Context Menu] Enable Translation Tips - Disabled"];
+            }
+            else
+            {
+                InterfaceTextElements["[Json Editor - Context Menu] Enable Translation Tips"].Text = InterfaceTextContent["[Json Editor - Context Menu] Enable Translation Tips - Enabled"];
+            }
+
+
+            if (!EnableDynamicKeywords)
+            {
+                T["Enable Dynamic Keywords"].Text = InterfaceTextContent["[Settings] Enable Dynamic Keywords (Display text - Disabled)"];
+            }
+            else
+            {
+                T["Enable Dynamic Keywords"].Text = InterfaceTextContent["[Settings] Enable Dynamic Keywords (Display text - Enabled)"];
+            }
+
+
+            #endregion
 
             InterfaceTextElements["Language Display"].Text = from;
+            OnlyStartedNow = false;
         }
 
 
@@ -208,13 +343,15 @@ namespace Limbus_Localization_UI
         
         static Dictionary<string, BitmapImage> SpriteBitmaps = GetSpritesBitmaps();
 
-        static bool EnbaleTranslationHints = false;
-        static Dictionary<string, string> KRTranslationTips = GetKRTranslationTips();
+        static bool EnableTranslationHints = false;
+        static Dictionary<string, string> TranslationHints = GetTranslationHints();
 
         public static Dictionary<string, string> Keywords = new();
         public static Dictionary<string, string> KeywordIDName = new();
-        
 
+        public static Dictionary<string, string> K = new();
+
+        Dictionary<string, string> KeywordsRuSet = GetKeywordsSet();
         public static Dictionary<string, string> Replacements = GetAddtReplacements();
         public static Dictionary<string, string> ColorPairs = GetColorPairs();
 
@@ -322,49 +459,85 @@ namespace Limbus_Localization_UI
                 ["Skill PreviewLayout Coin 5 Panel"] = Skill_Coin5,
 
 
-                ["Coin Descs 1 Button"] = CoinDescs_1_Button,
-                ["Coin Descs 2 Button"] = CoinDescs_2_Button,
-                ["Coin Descs 3 Button"] = CoinDescs_3_Button,
-                ["Coin Descs 4 Button"] = CoinDescs_4_Button,
-                ["Coin Descs 5 Button"] = CoinDescs_5_Button,
-                ["Coin Descs 6 Button"] = CoinDescs_6_Button,
+                ["Coin Descs 1 Button" ] = CoinDescs_1_Button,
+                ["Coin Descs 2 Button" ] = CoinDescs_2_Button,
+                ["Coin Descs 3 Button" ] = CoinDescs_3_Button,
+                ["Coin Descs 4 Button" ] = CoinDescs_4_Button,
+                ["Coin Descs 5 Button" ] = CoinDescs_5_Button,
+                ["Coin Descs 6 Button" ] = CoinDescs_6_Button,
+                ["Coin Descs 7 Button" ] = CoinDescs_7_Button,
+                ["Coin Descs 8 Button" ] = CoinDescs_8_Button,
+                ["Coin Descs 9 Button" ] = CoinDescs_9_Button,
+                ["Coin Descs 10 Button"] = CoinDescs_10_Button,
+                ["Coin Descs 11 Button"] = CoinDescs_11_Button,
+                ["Coin Descs 12 Button"] = CoinDescs_12_Button,
 
-                // Ужас
+                // Гэ
                 ["Skill PreviewLayout Desc"] = MainSkillDesc,
-                ["Skill PreviewLayout Coin 1 Desc 1"] = Skill_Coin1_Desc1,
-                ["Skill PreviewLayout Coin 1 Desc 2"] = Skill_Coin1_Desc2,
-                ["Skill PreviewLayout Coin 1 Desc 3"] = Skill_Coin1_Desc3,
-                ["Skill PreviewLayout Coin 1 Desc 4"] = Skill_Coin1_Desc4,
-                ["Skill PreviewLayout Coin 1 Desc 5"] = Skill_Coin1_Desc5,
-                ["Skill PreviewLayout Coin 1 Desc 6"] = Skill_Coin1_Desc6,
+                ["Skill PreviewLayout Coin 1 Desc 1" ] = Skill_Coin1_Desc1,
+                ["Skill PreviewLayout Coin 1 Desc 2" ] = Skill_Coin1_Desc2,
+                ["Skill PreviewLayout Coin 1 Desc 3" ] = Skill_Coin1_Desc3,
+                ["Skill PreviewLayout Coin 1 Desc 4" ] = Skill_Coin1_Desc4,
+                ["Skill PreviewLayout Coin 1 Desc 5" ] = Skill_Coin1_Desc5,
+                ["Skill PreviewLayout Coin 1 Desc 6" ] = Skill_Coin1_Desc6,
+                ["Skill PreviewLayout Coin 1 Desc 7" ] = Skill_Coin1_Desc7,
+                ["Skill PreviewLayout Coin 1 Desc 8" ] = Skill_Coin1_Desc8,
+                ["Skill PreviewLayout Coin 1 Desc 9" ] = Skill_Coin1_Desc9,
+                ["Skill PreviewLayout Coin 1 Desc 10"] = Skill_Coin1_Desc10,
+                ["Skill PreviewLayout Coin 1 Desc 11"] = Skill_Coin1_Desc11,
+                ["Skill PreviewLayout Coin 1 Desc 12"] = Skill_Coin1_Desc12,
 
-                ["Skill PreviewLayout Coin 2 Desc 1"] = Skill_Coin2_Desc1,
-                ["Skill PreviewLayout Coin 2 Desc 2"] = Skill_Coin2_Desc2,
-                ["Skill PreviewLayout Coin 2 Desc 3"] = Skill_Coin2_Desc3,
-                ["Skill PreviewLayout Coin 2 Desc 4"] = Skill_Coin2_Desc4,
-                ["Skill PreviewLayout Coin 2 Desc 5"] = Skill_Coin2_Desc5,
-                ["Skill PreviewLayout Coin 2 Desc 6"] = Skill_Coin2_Desc6,
+                ["Skill PreviewLayout Coin 2 Desc 1" ] = Skill_Coin2_Desc1,
+                ["Skill PreviewLayout Coin 2 Desc 2" ] = Skill_Coin2_Desc2,
+                ["Skill PreviewLayout Coin 2 Desc 3" ] = Skill_Coin2_Desc3,
+                ["Skill PreviewLayout Coin 2 Desc 4" ] = Skill_Coin2_Desc4,
+                ["Skill PreviewLayout Coin 2 Desc 5" ] = Skill_Coin2_Desc5,
+                ["Skill PreviewLayout Coin 2 Desc 6" ] = Skill_Coin2_Desc6,
+                ["Skill PreviewLayout Coin 2 Desc 7" ] = Skill_Coin2_Desc7,
+                ["Skill PreviewLayout Coin 2 Desc 8" ] = Skill_Coin2_Desc8,
+                ["Skill PreviewLayout Coin 2 Desc 9" ] = Skill_Coin2_Desc9,
+                ["Skill PreviewLayout Coin 2 Desc 10"] = Skill_Coin2_Desc10,
+                ["Skill PreviewLayout Coin 2 Desc 11"] = Skill_Coin2_Desc11,
+                ["Skill PreviewLayout Coin 2 Desc 12"] = Skill_Coin2_Desc12,
 
-                ["Skill PreviewLayout Coin 3 Desc 1"] = Skill_Coin3_Desc1,
-                ["Skill PreviewLayout Coin 3 Desc 2"] = Skill_Coin3_Desc2,
-                ["Skill PreviewLayout Coin 3 Desc 3"] = Skill_Coin3_Desc3,
-                ["Skill PreviewLayout Coin 3 Desc 4"] = Skill_Coin3_Desc4,
-                ["Skill PreviewLayout Coin 3 Desc 5"] = Skill_Coin3_Desc5,
-                ["Skill PreviewLayout Coin 3 Desc 6"] = Skill_Coin3_Desc6,
+                ["Skill PreviewLayout Coin 3 Desc 1" ] = Skill_Coin3_Desc1,
+                ["Skill PreviewLayout Coin 3 Desc 2" ] = Skill_Coin3_Desc2,
+                ["Skill PreviewLayout Coin 3 Desc 3" ] = Skill_Coin3_Desc3,
+                ["Skill PreviewLayout Coin 3 Desc 4" ] = Skill_Coin3_Desc4,
+                ["Skill PreviewLayout Coin 3 Desc 5" ] = Skill_Coin3_Desc5,
+                ["Skill PreviewLayout Coin 3 Desc 6" ] = Skill_Coin3_Desc6,
+                ["Skill PreviewLayout Coin 3 Desc 7" ] = Skill_Coin3_Desc7,
+                ["Skill PreviewLayout Coin 3 Desc 8" ] = Skill_Coin3_Desc8,
+                ["Skill PreviewLayout Coin 3 Desc 9" ] = Skill_Coin3_Desc9,
+                ["Skill PreviewLayout Coin 3 Desc 10"] = Skill_Coin3_Desc10,
+                ["Skill PreviewLayout Coin 3 Desc 11"] = Skill_Coin3_Desc11,
+                ["Skill PreviewLayout Coin 3 Desc 12"] = Skill_Coin3_Desc12,
 
-                ["Skill PreviewLayout Coin 4 Desc 1"] = Skill_Coin4_Desc1,
-                ["Skill PreviewLayout Coin 4 Desc 2"] = Skill_Coin4_Desc2,
-                ["Skill PreviewLayout Coin 4 Desc 3"] = Skill_Coin4_Desc3,
-                ["Skill PreviewLayout Coin 4 Desc 4"] = Skill_Coin4_Desc4,
-                ["Skill PreviewLayout Coin 4 Desc 5"] = Skill_Coin4_Desc5,
-                ["Skill PreviewLayout Coin 4 Desc 6"] = Skill_Coin4_Desc6,
+                ["Skill PreviewLayout Coin 4 Desc 1" ] = Skill_Coin4_Desc1,
+                ["Skill PreviewLayout Coin 4 Desc 2" ] = Skill_Coin4_Desc2,
+                ["Skill PreviewLayout Coin 4 Desc 3" ] = Skill_Coin4_Desc3,
+                ["Skill PreviewLayout Coin 4 Desc 4" ] = Skill_Coin4_Desc4,
+                ["Skill PreviewLayout Coin 4 Desc 5" ] = Skill_Coin4_Desc5,
+                ["Skill PreviewLayout Coin 4 Desc 6" ] = Skill_Coin4_Desc6,
+                ["Skill PreviewLayout Coin 4 Desc 7" ] = Skill_Coin4_Desc7,
+                ["Skill PreviewLayout Coin 4 Desc 8" ] = Skill_Coin4_Desc8,
+                ["Skill PreviewLayout Coin 4 Desc 9" ] = Skill_Coin4_Desc9,
+                ["Skill PreviewLayout Coin 4 Desc 10"] = Skill_Coin4_Desc10,
+                ["Skill PreviewLayout Coin 4 Desc 11"] = Skill_Coin4_Desc11,
+                ["Skill PreviewLayout Coin 4 Desc 12"] = Skill_Coin4_Desc12,
 
-                ["Skill PreviewLayout Coin 5 Desc 1"] = Skill_Coin5_Desc1,
-                ["Skill PreviewLayout Coin 5 Desc 2"] = Skill_Coin5_Desc2,
-                ["Skill PreviewLayout Coin 5 Desc 3"] = Skill_Coin5_Desc3,
-                ["Skill PreviewLayout Coin 5 Desc 4"] = Skill_Coin5_Desc4,
-                ["Skill PreviewLayout Coin 5 Desc 5"] = Skill_Coin5_Desc5,
-                ["Skill PreviewLayout Coin 5 Desc 6"] = Skill_Coin5_Desc6,
+                ["Skill PreviewLayout Coin 5 Desc 1" ] = Skill_Coin5_Desc1,
+                ["Skill PreviewLayout Coin 5 Desc 2" ] = Skill_Coin5_Desc2,
+                ["Skill PreviewLayout Coin 5 Desc 3" ] = Skill_Coin5_Desc3,
+                ["Skill PreviewLayout Coin 5 Desc 4" ] = Skill_Coin5_Desc4,
+                ["Skill PreviewLayout Coin 5 Desc 5" ] = Skill_Coin5_Desc5,
+                ["Skill PreviewLayout Coin 5 Desc 6" ] = Skill_Coin5_Desc6,
+                ["Skill PreviewLayout Coin 5 Desc 7" ] = Skill_Coin5_Desc7,
+                ["Skill PreviewLayout Coin 5 Desc 8" ] = Skill_Coin5_Desc8,
+                ["Skill PreviewLayout Coin 5 Desc 9" ] = Skill_Coin5_Desc9,
+                ["Skill PreviewLayout Coin 5 Desc 10"] = Skill_Coin5_Desc10,
+                ["Skill PreviewLayout Coin 5 Desc 11"] = Skill_Coin5_Desc11,
+                ["Skill PreviewLayout Coin 5 Desc 12"] = Skill_Coin5_Desc12,
 
                 ["Coin Desc Selection Box"] = CoinDescsSelectionBox,
                 ["Coin Desc Selection Box sub"] = CoinDescsSelectionBox_Sub,
@@ -377,7 +550,14 @@ namespace Limbus_Localization_UI
                 ["Uptie Level 1"] = UptieLevel1_Button, ["Uptie Level 1 [UnavalibleCover]"] = UptieLevel1_Cover, ["Uptie Level 1 [UnavalibleSubCover]"] = UptieLevel1_SubCover, 
                 ["Uptie Level 2"] = UptieLevel2_Button, ["Uptie Level 2 [UnavalibleCover]"] = UptieLevel2_Cover, ["Uptie Level 2 [UnavalibleSubCover]"] = UptieLevel2_SubCover, 
                 ["Uptie Level 3"] = UptieLevel3_Button, ["Uptie Level 3 [UnavalibleCover]"] = UptieLevel3_Cover, ["Uptie Level 3 [UnavalibleSubCover]"] = UptieLevel3_SubCover, 
-                ["Uptie Level 4"] = UptieLevel4_Button, ["Uptie Level 4 [UnavalibleCover]"] = UptieLevel4_Cover, ["Uptie Level 4 [UnavalibleSubCover]"] = UptieLevel4_SubCover, 
+                ["Uptie Level 4"] = UptieLevel4_Button, ["Uptie Level 4 [UnavalibleCover]"] = UptieLevel4_Cover, ["Uptie Level 4 [UnavalibleSubCover]"] = UptieLevel4_SubCover,
+
+                ["Insertions 1 bgtext"] = FormatInsertion_1_bgtext,
+                ["Insertions 2 bgtext"] = FormatInsertion_2_bgtext,
+                ["Insertions 3 bgtext"] = FormatInsertion_3_bgtext,
+                ["Insertions 4 bgtext"] = FormatInsertion_4_bgtext,
+                ["Insertions 5 bgtext"] = FormatInsertion_5_bgtext,
+                ["Insertions 6 bgtext"] = FormatInsertion_6_bgtext,
             };
         }
         private void LoadFonts()
@@ -394,7 +574,8 @@ namespace Limbus_Localization_UI
             InitializeComponent();
             InitializeStaticLinks();
             LoadFonts();
-            
+
+
             Mode_Handlers.Mode_Skills   .InitTDictionaryHere(T);
             Mode_Handlers.Mode_EGO_Gifts.InitTDictionaryHere(T);
             Mode_Handlers.Mode_Passives .InitTDictionaryHere(T);
@@ -408,11 +589,11 @@ namespace Limbus_Localization_UI
             try { Console.OutputEncoding = Encoding.UTF8; }
             catch { }
 
+            ReadDefinedLanguages();
+            ReadDefinedKeywords();
             InitializeUILanguage();
             MSettings.InitTDictionaryHere(T);
             MSettings.LoadSettings();
-
-            //ApplyLanguage();
 
             PreviewLayout_Skills.PreviewMouseLeftButtonDown += SurfaceScroll_MouseLeftButtonDown;
             PreviewLayout_Skills.PreviewMouseMove += SurfaceScroll_MouseMove;
@@ -435,7 +616,7 @@ namespace Limbus_Localization_UI
             T[$"Skill PreviewLayout Desc"].SetValue(Paragraph.LineHeightProperty, 30.0);
             for (int i = 1; i <= 5; i++)
             {
-                for (int e = 1; e <= 6; e++)
+                for (int e = 1; e <= 12; e++)
                 {
                     T[$"Skill PreviewLayout Coin {i} Desc {e}"].SetValue(Paragraph.LineHeightProperty, 30.0);
                 }
@@ -452,7 +633,7 @@ namespace Limbus_Localization_UI
         static bool IsPendingUpdate = false;
         public static void Call_UpdatePreview(string JsonDesc, RichTextBox Target, bool UpdatingFromLoad = false)
         {
-            if (!OnlyStartedNow & IsUpdatePreviewDelayEnabled) // Задержка вывода на предпросмотр и анти-лаг, но почему-то работает плохо на эго дарах
+            if (!OnlyStartedNow & IsUpdatePreviewDelayEnabled) // Задержка вывода на предпросмотр и анти-лаг
             {
                 if (!IsPendingUpdate)
                 {
@@ -501,12 +682,12 @@ namespace Limbus_Localization_UI
                             if (!JsonEditor.Text.Equals(Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"]))
                             {
                                 Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"] = JsonEditor.Text;
-                                T["EditorSwitch Desc"].Content = "Описание*";
+                                T["EditorSwitch Desc"].Content = InterfaceTextContent["[Left Menu] Main Description Button"] + "*";
                             }
                             else
                             {
                                 Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"] = "{unedited}";
-                                T["EditorSwitch Desc"].Content = "Описание";
+                                T["EditorSwitch Desc"].Content = InterfaceTextContent["[Left Menu] Main Description Button"];
                             }
 
 
@@ -573,12 +754,12 @@ namespace Limbus_Localization_UI
                         case "Desc":
                             if (!JsonEditor.Text.Equals(Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Desc"]))
                             {
-                                T["EditorSwitch Desc"].Content = "Описание*";
+                                T["EditorSwitch Desc"].Content = InterfaceTextContent["[Left Menu] Main Description Button"] + "*";
                                 Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Desc"] = JsonEditor.Text.Replace("\r", "");
                             }
                             else
                             {
-                                T["EditorSwitch Desc"].Content = "Описание";
+                                T["EditorSwitch Desc"].Content = InterfaceTextContent["[Left Menu] Main Description Button"];
                                 Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Desc"] = "{unedited}";
                             }
                             break;
@@ -586,12 +767,12 @@ namespace Limbus_Localization_UI
                         case "Summary":
                             if (!JsonEditor.Text.Equals(Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Summary"]))
                             {
-                                T["EditorSwitch SubDesc 1"].Content = "Суммарно*";
+                                T["EditorSwitch SubDesc 1"].Content = InterfaceTextContent["[Left Menu] Passive Summary Description"] + "*";
                                 Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"] = JsonEditor.Text.Replace("\r", "");
                             }
                             else
                             {
-                                T["EditorSwitch SubDesc 1"].Content = "Суммарно";
+                                T["EditorSwitch SubDesc 1"].Content = InterfaceTextContent["[Left Menu] Passive Summary Description"];
                                 Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"] = "{unedited}";
                             }
                             break;
@@ -608,12 +789,12 @@ namespace Limbus_Localization_UI
 
                             if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID]["Desc"]))
                             {
-                                SwitchEditorTo_Desc.Content = "Описание";
+                                SwitchEditorTo_Desc.Content = InterfaceTextContent["[Left Menu] Main Description Button"];
                                 EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"] = "{unedited}";
                             }
                             else
                             {
-                                SwitchEditorTo_Desc.Content = "Описание*";
+                                SwitchEditorTo_Desc.Content = InterfaceTextContent["[Left Menu] Main Description Button"] + "*";
                                 EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"] = JsonEditor.Text.Replace("\r", "");
                             }
 
@@ -623,15 +804,16 @@ namespace Limbus_Localization_UI
                         default:
 
                             char DescNumber = EGOgift_CurrentEditingField[^1];
+                            string s = InterfaceTextContent["[Left Menu] EGO Gift Description № Button"];
 
                             if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"]))
                             {
-                                T[$"EditorSwitch SubDesc {DescNumber}"].Content = $"Простое описание {DescNumber}";
+                                T[$"EditorSwitch SubDesc {DescNumber}"].Content = s.Exform(DescNumber); //$"Простое описание {DescNumber}";
                                 EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"] = "{unedited}";
                             }
                             else
                             {
-                                T[$"EditorSwitch SubDesc {DescNumber}"].Content = $"Простое описание {DescNumber}*";
+                                T[$"EditorSwitch SubDesc {DescNumber}"].Content = s.Exform(DescNumber) + "*"; //$"Простое описание {DescNumber}*";
                                 EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"] = JsonEditor.Text.Replace("\r", "");
                             }
 
@@ -775,80 +957,72 @@ namespace Limbus_Localization_UI
             LastPreviewUpdateText = JsonDesc;
             LastPreviewUpdateTarget = Target;
 
-            
-
-            if (!JsonEditor_EnableHighlight)
+            int index = 0;
+            foreach (var Insertion in FormatInsertions)
             {
+                if (Insertion != "")
+                {
+                    JsonDesc = JsonDesc.Replace($"{{{index}}}", Insertion);
+                }
+                index++;
+            }
+            // Выделение вставок через .Format в определённых файлах // Форматирование для других файлов
+            if (Mainfile_Filename.StartsWith("Bufs") | Mainfile_Filename.StartsWith("BattleKeywords"))
+            {
+                JsonDesc = Regex.Replace(JsonDesc, @"{(\d+)}", Match => { return $"<color=#f95e00>{{{Match.Groups[1].Value}}}</color>"; });
                 JsonDesc = JsonDesc.Replace("<style=\"highlight\">", "").Replace("<style=\"upgradeHighlight\">", "").Replace("</style>", "");
             }
             else
             {
-                if (EditorMode.Equals("EGOgift"))
+                if (!JsonEditor_EnableHighlight)
                 {
-                    JsonDesc = JsonDesc.Replace("<style=\"highlight\">", "");
+                    JsonDesc = JsonDesc.Replace("<style=\"highlight\">", "").Replace("<style=\"upgradeHighlight\">", "").Replace("</style>", "");
                 }
-                else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
+                else
                 {
-                    JsonDesc = JsonDesc.Replace("<style=\"upgradeHighlight\">", "");
-                }
-            }
-
-            // Выделение вставок через .Format в определённых файлах // Форматирование для других файлов
-            if (Mainfile_Filename.StartsWith("Bufs") | Mainfile_Filename.StartsWith("BattleKeywords"))
-            {
-                JsonDesc = JsonDesc.Replace("{", "<color=#f95e00>{").Replace("}", "}</color>");
-            }
-            
-            // Замена обычных слов на вствку ключевых с цветом и спрайтом, если они совпадают (Свойства [TabExplain] сохраняются)
-            if (EnableDynamicKeywords)
-            {
-                try
-                {
-                    foreach (var KeywordName in KeywordIDName.Reverse())
+                    if (EditorMode.Equals("EGOgift"))
                     {
-                        JsonDesc = Regex.Replace(JsonDesc, @"(?<![\uAC00-\uD7A3a-zA-Zа-яА-Я<>\[\]\'""*])" + KeywordName.Key + @"(?![\uAC00-\uD7A3a-zA-Zа-яА-Я<[""*)'])", match =>
-                        {
-                            return $"[{KeywordName.Value}]";
-                        });
+                        JsonDesc = JsonDesc.Replace("<style=\"highlight\">", "");
+                    }
+                    else if (EditorMode.Equals("Skills") | EditorMode.Equals("Passives"))
+                    {
+                        JsonDesc = JsonDesc.Replace("<style=\"upgradeHighlight\">", "");
                     }
                 }
-                catch { }
-            }
 
-            if (KRTranslationTips.Count > 2 & EnbaleTranslationHints)
-            {
-                try
+                // Замена обычных слов на вствку ключевых с цветом и спрайтом, если они совпадают (Свойства [TabExplain] сохраняются)
+                if (EnableDynamicKeywords)
                 {
-                    string Size = KRTranslationTips["Size"];
-                    string Color = KRTranslationTips["Color"];
-
-                    foreach (var Replacement in KRTranslationTips)
+                    try
                     {
-                        JsonDesc = Regex.Replace(JsonDesc, @$"(?<![\uAC00-\uD7A3]){Replacement.Key}(?![\uAC00-\uD7A3])", Match =>
+                        foreach (var KeywordName in KeywordIDName.Reverse())
                         {
-                            return $"{Replacement.Key}<size={Size}><color={Color}>{Replacement.Value}</color></size>";
-                        });
+                            JsonDesc = Regex.Replace(JsonDesc, @"(?<![\uAC00-\uD7A3a-zA-Zа-яА-Я<>\[\]\'""*])" + KeywordName.Key + @"(?![\uAC00-\uC773\uC775-\uD7A3a-zA-Zа-яА-Я<[""*)('])", match =>
+                            {
+                                return $"[{KeywordName.Value}]";
+                            });
+                        }
                     }
+                    catch { }
                 }
-                catch { }
+                // Заменить квадратные скобки ссылок на <sprite><color><u>...</u></color>, если текст из них есть в списке id из всех Keywords файлов
+                JsonDesc = Regex.Replace(JsonDesc, @"\[(\w+)\]", match =>
+                {
+                    string MaybeKeyword = match.Groups[1].Value;
+                    try
+                    {
+                        return Keywords.ContainsKey(MaybeKeyword) ? $"<sprite name=\"{MaybeKeyword}\"><color={(ColorPairs.ContainsKey(MaybeKeyword) ? ColorPairs[MaybeKeyword] : "#f8c200")}><u>{Keywords[MaybeKeyword]}</u></color>" : $"[{MaybeKeyword}]";
+                    }
+                    catch
+                    {
+                        return $"[{MaybeKeyword}]";
+                    }
+                });
             }
 
-            // Заменить квадратные скобки ссылок на <sprite><color><u>...</u></color>, если текст из них есть в списке id из всех Keywords файлов
-            JsonDesc = Regex.Replace(JsonDesc, @"\[(\w+)\]", match =>
-            {
-                string MaybeKeyword = match.Groups[1].Value;
-                try
-                {
-                    return Keywords.ContainsKey(MaybeKeyword) ? $"<sprite name=\"{MaybeKeyword}\"><color={(ColorPairs.ContainsKey(MaybeKeyword) ? ColorPairs[MaybeKeyword] : "#f8c200")}><u>{Keywords[MaybeKeyword]}</u></color>" : $"[{MaybeKeyword}]";
-                }
-                catch
-                {
-                    return $"[{MaybeKeyword}]";
-                }
-            });
-            
+
             // Обработка особых вставок эффектов [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки в теги
-            JsonDesc = Regex.Replace(JsonDesc, Shorthand_Type.Equals("kimght") ? @"\[(\w+)\:'(.*?)'\]" : @"\{(\w+)\: \*(.*?)\*\}", match =>
+            JsonDesc = Regex.Replace(JsonDesc, Shorthand_Type.Equals("kimght") ? @"\[(\w+)\:'(.*?)'\]" : @"\[(\w+)\:\*(.*?)\*\]", match =>
             {
                 string MaybeKeyword = match.Groups[1].Value;
                 string MaybeName = match.Groups[2].Value;
@@ -862,8 +1036,26 @@ namespace Limbus_Localization_UI
                     return match.Groups[0].Value;
                 }
             });
-            
 
+
+            if (TranslationHints.Count > 2 & EnableTranslationHints)
+            {
+                try
+                {
+                    string Size = TranslationHints["Size"];
+                    string Color = TranslationHints["Color"];
+
+                    foreach (var Replacement in TranslationHints)
+                    {
+                        JsonDesc = Regex.Replace(JsonDesc, @$"(?<![\uAC00-\uD7A3]){Replacement.Key}(?![\uAC00-\uC773\uC775-\uD7A3])", Match =>
+                        {
+                            return $"{Replacement.Key}<size={Size}><color={Color}>{Replacement.Value}</color></size>";
+                        });
+                    }
+                }
+                catch { }
+            }
+            
 
             // Доп замены
             if (Replacements.Count > 0)
@@ -1173,7 +1365,7 @@ namespace Limbus_Localization_UI
                                         NextTextItem_InnerTags += InnerTagMatch;
                                     }
 
-                                    SpriteKeyword = $":«{SpriteKeywordAppend + NextTextItem_InnerTags}»";
+                                    SpriteKeyword = $":«{(!SpriteKeywordAppend.Contains("\n")? SpriteKeywordAppend : "") + NextTextItem_InnerTags}»";
                                 }
                             }
                         }
@@ -1368,6 +1560,16 @@ namespace Limbus_Localization_UI
         {
             try
             {
+                if (Mainfile_Filename.StartsWith("BattleKeywords") | Mainfile_Filename.StartsWith("Bufs"))
+                {
+                    FormatInsertionsControl.Margin = new Thickness(0, LeftMenu_Box.ActualHeight + 12 , 0,0);
+                    FormatInsertionsControl.Height = double.NaN;
+                }
+                else
+                {
+                    FormatInsertionsControl.Height = 0;
+                }
+
                 if (this.ActualWidth < 728)
                 {
                     Settings.Width = 0;
@@ -1403,7 +1605,7 @@ namespace Limbus_Localization_UI
                 //rin(ActualHeight);
                 NewWindowSizes.Rect = new Rect(0, 0, Width, Height);
             }
-            catch { }
+            catch (Exception ex) { rin(ex.ToString()); }
         }
 
         private static void BackgroundShadowTextCheck(TextBox TextBox, Label Label, string Label_DefaultText)
@@ -1416,21 +1618,21 @@ namespace Limbus_Localization_UI
             catch { }
         }
 
-        private void Check_JsonFilepath_bgtext() { try { BackgroundShadowTextCheck(JsonFilepath, JsonFilepath_bgtext, "Путь к Json файлу"); } catch { } }
-        private void Check_JumpToID_bgtext()     { try { BackgroundShadowTextCheck(JumpToID_Input, JumpToID_bgtext, "Перейти к ID.."); } catch { } }
+        private void Check_JsonFilepath_bgtext() { try { BackgroundShadowTextCheck(JsonFilepath, JsonFilepath_bgtext, InterfaceTextContent["Path to json file (After warning)"]); } catch { } }
+        private void Check_JumpToID_bgtext()     { try { BackgroundShadowTextCheck(JumpToID_Input, JumpToID_bgtext, InterfaceTextContent["[Left Menu] Jump to ID (Background text)"]); } catch { } }
 
-        private void JsonPath_TextChanged(object sender, TextChangedEventArgs e) { try { BackgroundShadowTextCheck(JsonFilepath, JsonFilepath_bgtext, "Путь к Json файлу"); } catch { } }
+        private void JsonPath_TextChanged(object sender, TextChangedEventArgs e) { try { BackgroundShadowTextCheck(JsonFilepath, JsonFilepath_bgtext, InterfaceTextContent["Path to json file (After warning)"]); } catch { } }
         private void Name_EditBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
                 string BGText = EditorMode switch
                 {
-                    "EGOgift"  => "Название ЭГО Дара",
-                    "Skills"   => "Название навыка",
-                    "Passives" => "Название",
+                    "EGOgift"  => InterfaceTextContent["[Left Menu] ID Item Name"],
+                    "Skills"   => InterfaceTextContent["[Left Menu] ID Item Name"],
+                    "Passives" => InterfaceTextContent["[Left Menu] ID Item Name"],
 
-                    _ => "Название",
+                    _ => InterfaceTextContent["[Left Menu] ID Item Name"],
                 };
                 BackgroundShadowTextCheck(Name_EditBox, Name_Label_bgtext, BGText);
             }
@@ -1447,7 +1649,7 @@ namespace Limbus_Localization_UI
             }
             catch { }
         }
-        private void JumpToID_Input_TextChanged(object sender, TextChangedEventArgs e) => BackgroundShadowTextCheck(JumpToID_Input, JumpToID_bgtext, "Перейти к ID..");
+        private void JumpToID_Input_TextChanged(object sender, TextChangedEventArgs e) => BackgroundShadowTextCheck(JumpToID_Input, JumpToID_bgtext, InterfaceTextContent["[Left Menu] Jump to ID (Background text)"]);
 
 
 
@@ -1456,20 +1658,24 @@ namespace Limbus_Localization_UI
         {
             try
             {
-                if (!EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"].Equals("{unedited}"))
-                    SwitchEditorTo_Desc.Content = "Описание*";
-                else
-                    SwitchEditorTo_Desc.Content = "Описание";
+                string s = InterfaceTextContent["[Left Menu] Main Description Button"];
 
+                if (!EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID]["Desc"].Equals("{unedited}"))
+                    SwitchEditorTo_Desc.Content = s + "*";
+                else
+                    SwitchEditorTo_Desc.Content = s;
+
+
+                s = InterfaceTextContent["[Left Menu] EGO Gift Description № Button"];
                 for (int i = 1; i <= 5; i++)
                 {
                     if (!EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{i}"].Equals("{unedited}"))
                     {
-                        T[$"EditorSwitch SubDesc {i}"].Content = $"Простое описание {i}*";
+                        T[$"EditorSwitch SubDesc {i}"].Content = s.Exform(i) + "*";
                     }
                     else
                     {
-                        T[$"EditorSwitch SubDesc {i}"].Content = $"Простое описание {i}";
+                        T[$"EditorSwitch SubDesc {i}"].Content = s.Exform(i);
                     }
 
                 }
@@ -1578,7 +1784,7 @@ namespace Limbus_Localization_UI
             }
             catch (Exception ex)
             {
-                TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Ошибка при чтении файла", "Путь к Json файлу", "Check_JsonFilepath_bgtext");
+                TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, InterfaceTextContent["File reading warning"], InterfaceTextContent["Path to json file (After warning)"], "Check_JsonFilepath_bgtext");
                 Console.WriteLine(ex.StackTrace);
                 Console.WriteLine(ex.Source);
                 Console.WriteLine(ex.Message);
@@ -1613,7 +1819,7 @@ namespace Limbus_Localization_UI
             {
                 if (!File.Exists(path))
                 {
-                    TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Файл не найден", "Путь к Json файлу", "Check_JsonFilepath_bgtext");
+                    TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, InterfaceTextContent["File reading warning"], InterfaceTextContent["Path to json file (After warning)"], "Check_JsonFilepath_bgtext");
                 }
                 else
                 {
@@ -1689,7 +1895,7 @@ namespace Limbus_Localization_UI
                             T["EditorSwitch Desc [UnavalibleCover]"].Height = 0; // Разблокировать кнопку описания
 
                             // Навыки грешников
-                            if (Mainfile_Filename.StartsWith("Skills_Ego_Personality-"))
+                            if (Mainfile_Filename.StartsWith("Skills_Ego_Personality-") | Mainfile_Filename.Equals("Skills_Ego.json"))
                             {
                                 SaveChangesButtons.Height = 270;
                                 SaveChangesButtons.Margin = new Thickness(236, -270, 0, 0);
@@ -1760,18 +1966,18 @@ namespace Limbus_Localization_UI
                         }
                         else if (!IsSupportedFileType)
                         {
-                            TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Неподдерживаемый формат", "Путь к Json файлу", "Check_JsonFilepath_bgtext");
+                            TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, InterfaceTextContent["Unsopported file warning"], InterfaceTextContent["Path to json file (After warning)"], "Check_JsonFilepath_bgtext");
                         }
 
                         else
                         {
-                            TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Неподдерживаемый формат", "Путь к Json файлу", "Check_JsonFilepath_bgtext");
+                            TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, InterfaceTextContent["Unsopported file warning"], InterfaceTextContent["Path to json file (After warning)"], "Check_JsonFilepath_bgtext");
                         }
                     }
                     catch (Exception ex)
                     {
                         JsonFilepath.Text = "";
-                        TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Ошибка при чтении файла", "Путь к Json файлу", "Check_JsonFilepath_bgtext");
+                        TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, InterfaceTextContent["File reading warning"], InterfaceTextContent["Path to json file (After warning)"], "Check_JsonFilepath_bgtext");
                         Console.WriteLine(ex.StackTrace);
                         Console.WriteLine(ex.Source);
                         Console.WriteLine(ex.Message);
@@ -2048,8 +2254,20 @@ namespace Limbus_Localization_UI
                         Skills_CurrentCoinNumber = 1;
                         int DescsCount = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][1].Count;
 
-                        Mode_Handlers.Mode_Skills.ReEnableAvalibleCoinDescs(DescsCount);
-                        Mode_Handlers.Mode_Skills.SetCurrentCoinDescHighlight(0, DescsCount);
+                        List<int> EmptydescExceptions = new();
+                        int descCounter = 1;
+                        foreach (string i in Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][1])
+                        {
+                            rin(i);
+                            if (i.Equals("{empty}"))
+                            {
+                                EmptydescExceptions.Add(descCounter);
+                            }
+                            descCounter++;
+                        }
+
+                        Mode_Handlers.Mode_Skills.ReEnableAvalibleCoinDescs(DescsCount, EmptydescExceptions: EmptydescExceptions);
+                        Mode_Handlers.Mode_Skills.SetCurrentCoinDescHighlight(0, DescsCount, EmptydescExceptions: EmptydescExceptions);
 
                         Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{0}";
 
@@ -2096,8 +2314,19 @@ namespace Limbus_Localization_UI
                         Skills_CurrentCoinNumber = 2;
                         int DescsCount = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][2].Count;
 
-                        Mode_Handlers.Mode_Skills.ReEnableAvalibleCoinDescs(DescsCount);
-                        Mode_Handlers.Mode_Skills.SetCurrentCoinDescHighlight(0, DescsCount);
+                        List<int> EmptydescExceptions = new();
+                        int descCounter = 1;
+                        foreach (string i in Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][2])
+                        {
+                            if (i.Equals("{empty}"))
+                            {
+                                EmptydescExceptions.Add(descCounter);
+                            }
+                            descCounter++;
+                        }
+
+                        Mode_Handlers.Mode_Skills.ReEnableAvalibleCoinDescs(DescsCount, EmptydescExceptions: EmptydescExceptions);
+                        Mode_Handlers.Mode_Skills.SetCurrentCoinDescHighlight(0, DescsCount, EmptydescExceptions: EmptydescExceptions);
 
                         Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{0}";
 
@@ -2131,8 +2360,19 @@ namespace Limbus_Localization_UI
                         Skills_CurrentCoinNumber = 3;
                         int DescsCount = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][3].Count;
 
-                        Mode_Handlers.Mode_Skills.ReEnableAvalibleCoinDescs(DescsCount);
-                        Mode_Handlers.Mode_Skills.SetCurrentCoinDescHighlight(0, DescsCount);
+                        List<int> EmptydescExceptions = new();
+                        int descCounter = 1;
+                        foreach (string i in Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][3])
+                        {
+                            if (i.Equals("{empty}"))
+                            {
+                                EmptydescExceptions.Add(descCounter);
+                            }
+                            descCounter++;
+                        }
+
+                        Mode_Handlers.Mode_Skills.ReEnableAvalibleCoinDescs(DescsCount, EmptydescExceptions: EmptydescExceptions);
+                        Mode_Handlers.Mode_Skills.SetCurrentCoinDescHighlight(0, DescsCount, EmptydescExceptions: EmptydescExceptions);
 
                         Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{0}";
 
@@ -2166,8 +2406,19 @@ namespace Limbus_Localization_UI
                         Skills_CurrentCoinNumber = 4;
                         int DescsCount = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][4].Count;
 
-                        Mode_Handlers.Mode_Skills.ReEnableAvalibleCoinDescs(DescsCount);
-                        Mode_Handlers.Mode_Skills.SetCurrentCoinDescHighlight(0, DescsCount);
+                        List<int> EmptydescExceptions = new();
+                        int descCounter = 1;
+                        foreach (string i in Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][4])
+                        {
+                            if (i.Equals("{empty}"))
+                            {
+                                EmptydescExceptions.Add(descCounter);
+                            }
+                            descCounter++;
+                        }
+
+                        Mode_Handlers.Mode_Skills.ReEnableAvalibleCoinDescs(DescsCount, EmptydescExceptions: EmptydescExceptions);
+                        Mode_Handlers.Mode_Skills.SetCurrentCoinDescHighlight(0, DescsCount, EmptydescExceptions: EmptydescExceptions);
 
                         Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{0}";
 
@@ -2200,8 +2451,19 @@ namespace Limbus_Localization_UI
                         Skills_CurrentCoinNumber = 5;
                         int DescsCount = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][5].Count;
 
-                        Mode_Handlers.Mode_Skills.ReEnableAvalibleCoinDescs(DescsCount);
-                        Mode_Handlers.Mode_Skills.SetCurrentCoinDescHighlight(0, DescsCount);
+                        List<int> EmptydescExceptions = new();
+                        int descCounter = 1;
+                        foreach (string i in Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][5])
+                        {
+                            if (i.Equals("{empty}"))
+                            {
+                                EmptydescExceptions.Add(descCounter);
+                            }
+                            descCounter++;
+                        }
+
+                        Mode_Handlers.Mode_Skills.ReEnableAvalibleCoinDescs(DescsCount, EmptydescExceptions: EmptydescExceptions);
+                        Mode_Handlers.Mode_Skills.SetCurrentCoinDescHighlight(0, DescsCount, EmptydescExceptions: EmptydescExceptions);
 
                         Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{0}";
 
@@ -2283,7 +2545,7 @@ namespace Limbus_Localization_UI
                 }
                 catch
                 {
-                    TextBoxFlashWarning(JumpToID_Input, JumpToID_bgtext, "ID Не найден", "Перейти к ID..", "Check_JumpToID_bgtext");
+                    TextBoxFlashWarning(JumpToID_Input, JumpToID_bgtext, InterfaceTextContent["ID not found warning"], InterfaceTextContent["[Left Menu] Jump to ID (Background text)"], "Check_JumpToID_bgtext");
                 }
             }
             catch { }
@@ -2472,6 +2734,135 @@ namespace Limbus_Localization_UI
             }
             catch { }
         }
+        private void CoinDescs_7(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{6}";
+                Mode_Skills.SetCurrentCoinDescHighlight(6, Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber].Count);
+                if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][6].Equals("{unedited}"))
+                {
+                    JsonEditor.Text = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][6];
+                }
+                else
+                {
+                    JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][6];
+                }
+                ResetUndo();
+            }
+            catch (Exception ex) { rin(ex.ToString()); }
+        }
+        private void CoinDescs_8(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{7}";
+                Mode_Skills.SetCurrentCoinDescHighlight(7, Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber].Count);
+                if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][7].Equals("{unedited}"))
+                {
+                    JsonEditor.Text = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][7];
+                }
+                else
+                {
+                    JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][7];
+                }
+                ResetUndo();
+            }
+            catch { }
+        }
+        private void CoinDescs_9(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{8}";
+                Mode_Skills.SetCurrentCoinDescHighlight(8, Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber].Count);
+                if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][8].Equals("{unedited}"))
+                {
+                    JsonEditor.Text = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][8];
+                }
+                else
+                {
+                    JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][8];
+                }
+                ResetUndo();
+            }
+            catch { }
+        }
+        private void CoinDescs_10(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{9}";
+                Mode_Skills.SetCurrentCoinDescHighlight(9, Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber].Count);
+                if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][9].Equals("{unedited}"))
+                {
+                    JsonEditor.Text = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][9];
+                }
+                else
+                {
+                    JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][9];
+                }
+                ResetUndo();
+            }
+            catch { }
+        }
+        private void CoinDescs_11(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{10}";
+                Mode_Skills.SetCurrentCoinDescHighlight(10, Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber].Count);
+                if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][10].Equals("{unedited}"))
+                {
+                    JsonEditor.Text = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][10];
+                }
+                else
+                {
+                    JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][10];
+                }
+                ResetUndo();
+            }
+            catch { }
+        }
+        private void CoinDescs_12(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{11}";
+                Mode_Skills.SetCurrentCoinDescHighlight(11, Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber].Count);
+                if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][11].Equals("{unedited}"))
+                {
+                    JsonEditor.Text = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][11];
+                }
+                else
+                {
+                    JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][11];
+                }
+                ResetUndo();
+            }
+            catch { }
+        }
+
+        private void CoinDescs_SwitchOver(int CoinDescIndex)
+        {
+            try
+            {
+                Skills_CurrentEditingField = $"Coin {Skills_CurrentCoinNumber} Decs ind.{CoinDescIndex}";
+                Mode_Skills.SetCurrentCoinDescHighlight(CoinDescIndex, Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber].Count);
+                if (Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex].Equals("{unedited}"))
+                {
+                    JsonEditor.Text = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex];
+                }
+                else
+                {
+                    JsonEditor.Text = Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][CoinDescIndex];
+                }
+                ResetUndo();
+            }
+            catch { }
+        }
+
+
 
 
         private void ABName_ChangeName(object sender, RoutedEventArgs e)
@@ -2531,7 +2922,7 @@ namespace Limbus_Localization_UI
                     }
                     Notify("Имя обновлено");
                 } catch(Exception ex) {
-                    TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Ошибка сохранения", "Путь к Json файлу", "Check_JsonFilepath_bgtext", rounds: 3, AfterAwait: 600);
+                    TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, InterfaceTextContent["Saving error warning"], InterfaceTextContent["Path to json file (After warning)"], "Check_JsonFilepath_bgtext", rounds: 3, AfterAwait: 600);
                     Console.WriteLine(ex.StackTrace);
                     Console.WriteLine(ex.Source);
                     Console.WriteLine(ex.Message);
@@ -2666,8 +3057,13 @@ namespace Limbus_Localization_UI
                         SetRO(Json_Filepath);
                     }
                 }
+                catch (KeyNotFoundException)
+                {
+
+                }
+
                 catch(Exception ex) {
-                    TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Ошибка сохранения", "Путь к Json файлу", "Check_JsonFilepath_bgtext", rounds: 3, AfterAwait: 600);
+                    TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, InterfaceTextContent["Saving error warning"], InterfaceTextContent["Path to json file (After warning)"], "Check_JsonFilepath_bgtext", rounds: 3, AfterAwait: 600);
                     Console.WriteLine(ex.StackTrace);
                     Console.WriteLine(ex.Source);
                     Console.WriteLine(ex.Message);
@@ -2894,11 +3290,11 @@ namespace Limbus_Localization_UI
 
                     if (Shorthand_Type.Equals("Crescent Corp."))
                     {
-                        return Keywords.ContainsKey(KeywordID) ? $"{{{KeywordID}: *{Keywords[KeywordID]}*}}" : $"[{KeywordID}]";
+                        return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:*{Keywords[KeywordID]}*]" : $"[{KeywordID}]";
                     }
                     else
                     {
-                    return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:'{Keywords[KeywordID]}']" : $"[{KeywordID}]";
+                        return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:'{Keywords[KeywordID]}']" : $"[{KeywordID}]";
                     }
                 });
 
@@ -2946,12 +3342,12 @@ namespace Limbus_Localization_UI
                 if (EnableDynamicKeywords)
                 {
                     EnableDynamicKeywords = false;
-                    EnableDynamicKeywords_Display.Text = "Отключено";
+                    EnableDynamicKeywords_Display.Text = InterfaceTextContent["[Settings] Enable Dynamic Keywords (Display text - Disabled)"];
                 }
                 else
                 {
                     EnableDynamicKeywords = true;
-                    EnableDynamicKeywords_Display.Text = "Включено";
+                    EnableDynamicKeywords_Display.Text = InterfaceTextContent["[Settings] Enable Dynamic Keywords (Display text - Enabled)"];
                 }
                 MSettings.SaveSetting("Enable Dynamic Keywords", EnableDynamicKeywords ? "Yes" : "No");
                 Call_UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
@@ -3056,12 +3452,12 @@ namespace Limbus_Localization_UI
                 if (JsonEditor_EnableHighlight)
                 {
                     JsonEditor_EnableHighlight = false;
-                    ToggleHighlight_Text.Text = "Нет";
+                    ToggleHighlight_Text.Text = InterfaceTextContent["[Settings] Enable <style> highlight (Display text - No)"];
                 }
                 else
                 {
                     JsonEditor_EnableHighlight = true;
-                    ToggleHighlight_Text.Text = "Да";
+                    ToggleHighlight_Text.Text = InterfaceTextContent["[Settings] Enable <style> highlight (Display text - Yes)"];
                 }
                 Call_UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
 
@@ -3081,6 +3477,43 @@ namespace Limbus_Localization_UI
                 JsonEditor.FontFamily = JsonEditor_FontFamily;
 
                 MSettings.SaveSetting("JsonEditor Font", selectedFont);
+            }
+            catch { }
+        }
+
+        private void LanguageSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                string selectedLang = LanguageSelector.SelectedItem.ToString().Split("{ Text = ")[1].Split(", FontSize")[0];
+                LangLabel.Text = selectedLang;
+                rin(DefinedLanguages[selectedLang]);
+                ApplyLanguage(DefinedLanguages[selectedLang].Replace(".llang", ""));
+                SelectedLanguage_Display.Text = selectedLang;
+                MSettings.SaveSetting("UI Language", DefinedLanguages[selectedLang].Replace(".llang", ""));
+            }
+            catch { }
+        }
+
+        private void KeywordsSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                string selectedKeywords = KeywordsSelector.SelectedItem.ToString().Split("{ Text = ")[1].Split(", FontSize")[0].Trim();
+
+                BattleKeywords_TypeDisplay.Text = selectedKeywords;
+                (Keywords, KeywordIDName) = GetKeywords(from: DefinedKeywords[selectedKeywords]);
+                Replacements = GetAddtReplacements(from: DefinedKeywords[selectedKeywords]);
+                BattleKeywords_Type = selectedKeywords;
+
+                MSettings.SaveSetting("Keywords Type", BattleKeywords_Type);
+
+
+                if (BattleKeywords_Type.Equals("KR")) РазноеДругое.SwitchToSDream();
+                else if (BattleKeywords_Type.Equals("CN")) РазноеДругое.SwitchToSourceHanSansSC();
+                else РазноеДругое.SwitchToPretendard();
+
+                Call_UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
             }
             catch { }
         }
@@ -3124,7 +3557,7 @@ namespace Limbus_Localization_UI
             {
                 (Keywords, KeywordIDName) = GetKeywords(from: BattleKeywords_Type);
                 Replacements = GetAddtReplacements(from: BattleKeywords_Type);
-                KRTranslationTips = GetKRTranslationTips();
+                TranslationHints = GetTranslationHints();
                 Call_UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
             }
             catch { }
@@ -3231,7 +3664,7 @@ namespace Limbus_Localization_UI
                 }
                 catch (Exception ex)
                 {
-                    TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, "Ошибка при чтении файла", "Путь к Json файлу", "Check_JsonFilepath_bgtext");
+                    TextBoxFlashWarning(JsonFilepath, JsonFilepath_bgtext, InterfaceTextContent["File reading warning"], InterfaceTextContent["Path to json file (After warning)"], "Check_JsonFilepath_bgtext");
                     Console.WriteLine(ex.StackTrace);
                     Console.WriteLine(ex.Source);
                     Console.WriteLine(ex.Message);
@@ -3253,13 +3686,9 @@ namespace Limbus_Localization_UI
                     JsonEditor.ContextMenu = cxm;
                     break;
                 case "rbDefault":
-                    // Clearing the value of the ContextMenu property
-                    // restores the default TextBox context menu.
                     JsonEditor.ClearValue(ContextMenuProperty);
                     break;
                 case "rbDisabled":
-                    // Setting the ContextMenu propety to
-                    // null disables the context menu.
                     JsonEditor.ContextMenu = null;
                     break;
                 default:
@@ -3297,6 +3726,65 @@ namespace Limbus_Localization_UI
             catch { }
         }
 
+        private void SelectedText_RawKeywordToShorthand(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string RawKeyword = JsonEditor.SelectedText.Trim();
+
+                Dictionary<string, string> SearchSource = new();
+
+                if (BattleKeywords_Type.Equals("RU"))
+                {
+                    SearchSource = KeywordsRuSet;
+                }
+                else
+                {
+                    SearchSource = Keywords;
+                }
+
+                if (SearchSource.ContainsKey(RawKeyword))
+                {
+                    if (Shorthand_Type.Equals("Crescent Corp."))
+                    {
+                        JsonEditor.SelectedText = JsonEditor.SelectedText.Replace(RawKeyword, $"[{SearchSource[RawKeyword]}:*{RawKeyword}*]");
+                    }
+                    else
+                    {
+                        JsonEditor.SelectedText = JsonEditor.SelectedText.Replace(RawKeyword, $"[{SearchSource[RawKeyword]}:'{RawKeyword}']");
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private void SelectedText_RawKeywordToTags(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string RawKeyword = JsonEditor.SelectedText.Trim();
+
+                Dictionary<string, string> SearchSource = new();
+
+                if (BattleKeywords_Type.Equals("RU"))
+                {
+                    SearchSource = KeywordsRuSet;
+                }
+                else
+                {
+                    SearchSource = Keywords;
+                }
+
+                if (SearchSource.ContainsKey(RawKeyword))
+                {
+                    string KeywordID = SearchSource[RawKeyword];
+                    string KeywordColor = ColorPairs[KeywordID];
+                    JsonEditor.SelectedText = JsonEditor.SelectedText.Replace(RawKeyword, $"<sprite name=\"{KeywordID}\"><color={KeywordColor}><u><link=\"{KeywordID}\">{RawKeyword}</link></u></color>");
+                }
+            }
+            catch { }
+        }
+
         private void SelectedText_TagUnlesh_Shorthand(object sender, RoutedEventArgs e)
         {
             try
@@ -3307,7 +3795,7 @@ namespace Limbus_Localization_UI
 
                     if (Shorthand_Type.Equals("Crescent Corp."))
                     {
-                        return Keywords.ContainsKey(KeywordID) ? $"{{{KeywordID}: *{Keywords[KeywordID]}*}}" : $"[{KeywordID}]";
+                        return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:*{Keywords[KeywordID]}*]" : $"[{KeywordID}]";
                     }
                     else
                     {
@@ -3320,7 +3808,7 @@ namespace Limbus_Localization_UI
             catch { }
         }
 
-        private void SelectedText_CollapseShorthand(object sender, RoutedEventArgs e)
+        private void SelectedText_CollapseTags(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -3438,16 +3926,16 @@ namespace Limbus_Localization_UI
 
         private void ToggleTranslationHints(object sender, RoutedEventArgs e)
         {
-            if (EnbaleTranslationHints)
+            if (EnableTranslationHints)
             {
-                EnbaleTranslationHints = false;
-                ContextMenu_EnableTranslationTips_Display.Text = InterfaceTextElements["[Json Editor - Context Menu] Enable Translation Tips - Disabled"];
+                EnableTranslationHints = false;
+                ContextMenu_EnableTranslationTips_Display.Text = InterfaceTextContent["[Json Editor - Context Menu] Enable Translation Tips - Disabled"];
                 Call_UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
             }
             else
             {
-                EnbaleTranslationHints = true;
-                ContextMenu_EnableTranslationTips_Display.Text = InterfaceTextElements["[Json Editor - Context Menu] Enable Translation Tips - Enabled"];
+                EnableTranslationHints = true;
+                ContextMenu_EnableTranslationTips_Display.Text = InterfaceTextContent["[Json Editor - Context Menu] Enable Translation Tips - Enabled"];
                 Call_UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
             }
         }
@@ -3474,5 +3962,102 @@ namespace Limbus_Localization_UI
                 MSettings.SaveSetting("UI Language", "RU");
             }
         }
+
+        private static List<string> FormatInsertions = new()
+        {
+            "", "", "", "", "", "",
+        };
+        private void FormatInsertion_1_Text_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (FormatInsertion_1_Text.Text != "")
+            {
+                FormatInsertion_1_bgtext.Text = "";
+                FormatInsertions[0] = FormatInsertion_1_Text.Text;
+            }
+            else
+            {
+                string s = InterfaceTextContent["[Left Menu] Insertions (Background text)"];
+                FormatInsertion_1_bgtext.Text = s.Exform(0);
+                FormatInsertions[0] = "";
+            }
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
+        private void FormatInsertion_2_Text_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (FormatInsertion_2_Text.Text != "")
+            {
+                FormatInsertion_2_bgtext.Text = "";
+                FormatInsertions[1] = FormatInsertion_2_Text.Text;
+            }
+            else
+            {
+                string s = InterfaceTextContent["[Left Menu] Insertions (Background text)"];
+                FormatInsertion_2_bgtext.Text = s.Exform(1);
+                FormatInsertions[1] = "";
+            }
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
+        private void FormatInsertion_3_Text_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (FormatInsertion_3_Text.Text != "")
+            {
+                FormatInsertion_3_bgtext.Text = "";
+                FormatInsertions[2] = FormatInsertion_3_Text.Text;
+            }
+
+            else
+            {
+                string s = InterfaceTextContent["[Left Menu] Insertions (Background text)"];
+                FormatInsertion_3_bgtext.Text = s.Exform(2);
+                FormatInsertions[2] = "";
+            }
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
+        private void FormatInsertion_4_Text_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (FormatInsertion_4_Text.Text != "")
+            {
+                FormatInsertion_4_bgtext.Text = "";
+                FormatInsertions[3] = FormatInsertion_4_Text.Text;
+            }
+            else
+            {
+                string s = InterfaceTextContent["[Left Menu] Insertions (Background text)"];
+                FormatInsertion_4_bgtext.Text = s.Exform(3);
+                FormatInsertions[3] = "";
+            }
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
+        private void FormatInsertion_5_Text_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (FormatInsertion_5_Text.Text != "")
+            {
+                FormatInsertion_5_bgtext.Text = "";
+                FormatInsertions[4] = FormatInsertion_5_Text.Text;
+            }
+            else
+            {
+                string s = InterfaceTextContent["[Left Menu] Insertions (Background text)"];
+                FormatInsertion_5_bgtext.Text = s.Exform(4);
+                FormatInsertions[4] = "";
+            }
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
+        private void FormatInsertion_6_Text_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (FormatInsertion_6_Text.Text != "")
+            {
+                FormatInsertion_6_bgtext.Text = "";
+                FormatInsertions[5] = FormatInsertion_6_Text.Text;
+            }
+            else
+            {
+                string s = InterfaceTextContent["[Left Menu] Insertions (Background text)"];
+                FormatInsertion_6_bgtext.Text = s.Exform(5);
+                FormatInsertions[5] = "";
+            }
+            UpdatePreview(LastPreviewUpdateText, LastPreviewUpdateTarget);
+        }
+
     }
 }

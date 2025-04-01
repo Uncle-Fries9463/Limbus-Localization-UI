@@ -17,5 +17,6 @@ namespace Limbus_Localization_UI
 
             return false;
         }
+        public static string Exform(this string Original, object Format) => Original.Replace("[№]", Convert.ToString(Format));
     }
 }

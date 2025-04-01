@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using static Limbus_Localization_UI.MainWindow;
 
 namespace Limbus_Localization_UI.Mode_Handlers
 {
@@ -71,10 +72,10 @@ namespace Limbus_Localization_UI.Mode_Handlers
 
                 T["Left Menu Buttons Box"].Height = Double.NaN;
 
-                T["Name EditBox Shadow"].Content = "Название ЭГО Дара";
+                string s = InterfaceTextContent["[Left Menu] EGO Gift Description № Button"];
                 for (int i = 1; i <= 5; i++)
                 {
-                    T[$"EditorSwitch SubDesc {i}"].Content = $"Простое описание {i}";
+                    T[$"EditorSwitch SubDesc {i}"].Content = s.Exform(i);// $"Простое описание {i}";
                 }
             }
             catch { }

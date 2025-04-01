@@ -40,7 +40,7 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 T["Window"].MaxWidth = 1005; // Максимальная ширина с боковым меню
 
                 T["Window"].Width = 1005;    // Ширина и высота по умолчанию
-                T["Window"].Height = IsEGO ? 572 : 545;
+                T["Window"].Height = IsEGO ? 572 : 543;
 
                 T["JsonIO Column"].Width = new GridLength(705); // Ширина поля предпросмотра и редактора json элемента
                 T["Json EditBox"].Width = 693.5;
@@ -51,14 +51,13 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 if (!IsEnemies)
                 {
                     T["Left Menu Buttons box"].Margin = new Thickness(0, 56, 0, 0);
-                    T["Skill UptieLevel Selection Box"].Height = 52;
+                    T["Skill UptieLevel Selection Box"].Height = 1000;
                 }
                 else
                 {
                     T["Left Menu Buttons box"].Margin = new Thickness(0, 0, 0, 0);
                     T["Skill UptieLevel Selection Box"].Height = 0;
                 }
-
 
                 T["Coin Desc Selection Box"].Height = 42;
                 T["Coin Desc Selection Box sub"].Height = 3.5;
@@ -81,10 +80,10 @@ namespace Limbus_Localization_UI.Mode_Handlers
 
                 T["Unsaved Changes Tooltip"].Width = 190;
 
-                T["Name EditBox Shadow"].Content = "Название навыка";
+                string s = InterfaceTextContent["[Left Menu] Skill Coin № Button"];
                 for (int i = 1; i <= 5;  i++) // Изменить текст на 5 кнопкахс Простого описания на Монету
                 {
-                    T[$"EditorSwitch SubDesc {i}"].Content = $"Монета {i}";
+                    T[$"EditorSwitch SubDesc {i}"].Content = s.Exform(i);
                 }
             }
             catch { }
@@ -114,9 +113,11 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 // По умолчанию сделать недоступными все кнопки монет и скрыть их на предпросмотре вместе с описанием навыка
                 ResetInformationVisiblity();
 
+                //rin(T["Coin Desc Selection Box"].ActualHeight);      // 73
 
+                T["Coin Desc Selection Box"].Height = 72;              // Без этого тоже 73, НО КНОПОК НЕТ БЛЯТЬ ЧТО ЗА МАГИЯ ЕБАНАЯ
 
-
+                //rin(T["Coin Desc Selection Box"].ActualHeight);      // 73
 
                 // Скрыть все кнопки уровней связи по умолчанию
                 for (int IUptieLevel = 1; IUptieLevel <= 4; IUptieLevel++)
@@ -163,16 +164,15 @@ namespace Limbus_Localization_UI.Mode_Handlers
 
                     foreach (var CoinDesc in Skills_Json_Dictionary[SkillID][UptieLevel]["Coins"][CoinNumber])
                     {
-                        // Описаний монеты может быть 7 или даже 8.. Надо бы переделать этот момент
                         try
                         {
                             // Если это описание монеты не пустое в буфере редактирования
-                            if (Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Equals("{unedited}"))
+                            if (Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex].Equals("{unedited}") & !CoinDesc.Equals("{empty}"))
                             {
                                 T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex + 1}"].Height = Double.NaN;
                                 MainWindow.Call_UpdatePreview(CoinDesc, T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
                             }
-                            else
+                            else if (!CoinDesc.Equals("{empty}"))
                             {
                                 T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex + 1}"].Height = Double.NaN;
                                 MainWindow.Call_UpdatePreview(Skills_EditBuffer[SkillID][UptieLevel]["Coins"][CoinNumber][DescIndex], T[$"Skill PreviewLayout Coin {CoinNumber} Desc {DescIndex+1}"]);
@@ -216,7 +216,7 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 T["Json EditBox"].IsUndoEnabled = false;
                 T["Json EditBox"].IsUndoEnabled = true;
             }
-            catch { }
+            catch (Exception ex) { rin(ex.ToString()); }
         }
 
 
@@ -255,7 +255,11 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 // Для каждого ключа монеты в списке монет навыка по его ID и уровню связи (Например 1, 3)
                 foreach (var CoinNumber in Skills_Json_Dictionary[SkillID][UptieLevel]["Coins"].Keys)
                 {
-                    CoinsAvalible.Add(CoinNumber);
+                    
+                    if(Skills_Json_Dictionary[SkillID][UptieLevel]["Coins"][CoinNumber].Count != 0)
+                    {
+                        CoinsAvalible.Add(CoinNumber);
+                    }
                 }
             }
             catch { }
@@ -282,7 +286,7 @@ namespace Limbus_Localization_UI.Mode_Handlers
                     // Скрыть описание монеты на предпросмтре (Высота и минимальная высота стековой панели = 0)
                     T[$"Skill PreviewLayout Coin {CoinNumber} Panel"].Height = 0;
                     T[$"Skill PreviewLayout Coin {CoinNumber} Panel"].MinHeight = 0;
-                    for (int CoinDescNumber = 1; CoinDescNumber <= 6; CoinDescNumber++)
+                    for (int CoinDescNumber = 1; CoinDescNumber <= 12; CoinDescNumber++)
                     {
                         T[$"Skill PreviewLayout Coin {CoinNumber} Desc {CoinDescNumber}"].Height = 0;
                     }
@@ -313,12 +317,12 @@ namespace Limbus_Localization_UI.Mode_Handlers
         /// <summary>
         /// При нажатии на кнопку монеты проверить сколько у неё доступно описаний и разблокировать соответствующие кнопки
         /// </summary>
-        public static void ReEnableAvalibleCoinDescs(int DescsCount = 1, bool Disable = false)
+        public static void ReEnableAvalibleCoinDescs(int DescsCount = 1, bool Disable = false, List<int> EmptydescExceptions = null)
         {
             try
             {
                 // Отключить все 6 кнопок
-                for (int i = 1; i <= 6; i++)
+                for (int i = 1; i <= 12; i++)
                 {
                     T[$"Coin Descs {i} Button"].Foreground = РазноеДругое.GetColorFromAHEX("#FF333333");
                     T[$"Coin Descs {i} Button"].BorderBrush = РазноеДругое.GetColorFromAHEX("#FF333333");
@@ -331,12 +335,15 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 {
                     for (int i = 1; i <= DescsCount; i++)
                     {
-                        T[$"Coin Descs {i} Button"].Foreground = РазноеДругое.GetColorFromAHEX("#FFA69885");
-                        T[$"Coin Descs {i} Button"].BorderBrush = РазноеДругое.GetColorFromAHEX("#FF6B6B6B");
-                        T[$"Coin Descs {i} Button"].IsEnabled = true;
-                        if (!Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][i-1].Equals("{unedited}"))
+                        if (!EmptydescExceptions.Contains(i))
                         {
-                            T[$"Coin Descs {i} Button"].Content = $"№{i}*";
+                            T[$"Coin Descs {i} Button"].Foreground = РазноеДругое.GetColorFromAHEX("#FFA69885");
+                            T[$"Coin Descs {i} Button"].BorderBrush = РазноеДругое.GetColorFromAHEX("#FF6B6B6B");
+                            T[$"Coin Descs {i} Button"].IsEnabled = true;
+                            if (!Skills_EditBuffer[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Coins"][Skills_CurrentCoinNumber][i-1].Equals("{unedited}"))
+                            {
+                                T[$"Coin Descs {i} Button"].Content = $"№{i}*";
+                            }
                         }
                     }
                 }
@@ -347,14 +354,17 @@ namespace Limbus_Localization_UI.Mode_Handlers
         /// <summary>
         /// Подсветить кнопку текущего редактируемого описания монеты
         /// </summary>
-        public static void SetCurrentCoinDescHighlight(int DescIndex, int DescsCount)
+        public static void SetCurrentCoinDescHighlight(int DescIndex, int DescsCount, List<int> EmptydescExceptions = null)
         {
             try
             {
                 // Отключить подсветку для всех остальных
                 for (int i = 1; i <= DescsCount; i++)
                 {
-                    T[$"Coin Descs {i} Button"].BorderBrush = РазноеДругое.GetColorFromAHEX("#FF6B6B6B");
+                    if (!EmptydescExceptions.Contains(i))
+                    {
+                        T[$"Coin Descs {i} Button"].BorderBrush = РазноеДругое.GetColorFromAHEX("#FF6B6B6B");
+                    }
                 }
 
                 // Включить для выбранного

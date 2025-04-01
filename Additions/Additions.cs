@@ -64,6 +64,23 @@ namespace Limbus_Localization_UI.Additions
             catch { }
         }
 
+        public static Dictionary<string, string> GetKeywordsSet(string from = "RU")
+        {
+            Dictionary<string, string> KeywordsSet = new();
+
+            foreach(var line in File.ReadLines(@$"[Ресурсы]\& Stringtypes\BattleKeywords\{from}\Keywords Set.txt"))
+            {
+                string KeywordID = line.Split(": 【")[0];
+                string[] KeywordTexts = line.Split(": 【")[1][0..^1].Split(" ¤ ");
+                foreach(var KeywordText in KeywordTexts)
+                {
+                    KeywordsSet[KeywordText] = KeywordID;
+                }
+            }
+
+            return KeywordsSet;
+        }
+
         public static (Dictionary<string, string>, Dictionary<string, string>) GetKeywords(string from = "RU")
         {
             Dictionary<string, string> SpriteNames = new();
@@ -88,7 +105,7 @@ namespace Limbus_Localization_UI.Additions
                                     string SpriteId = Lines[i].Split("\"id\": \"")[1].Split("\",")[0];
                                     string SpriteName = Lines[i + 1].Split("\"name\": \"")[1].Split("\",")[0];
                                     SpriteNames[SpriteId] = SpriteName;
-                                    KeywordTexts[SpriteName] = SpriteId;
+                                    KeywordTexts[SpriteName.Trim()] = SpriteId;
                                     counter++;
                                 }
                             }
@@ -97,7 +114,6 @@ namespace Limbus_Localization_UI.Additions
                     }
                 }
                 catch{}
-
                 KeywordTexts = KeywordTexts.OrderBy(obj => obj.Key.Length).ToDictionary(obj => obj.Key, obj => obj.Value);
                 rin($"Загружено ключевых слов: {counter}");
             }
@@ -202,7 +218,7 @@ namespace Limbus_Localization_UI.Additions
         }
 
 
-        public static Dictionary<string, string> GetKRTranslationTips()
+        public static Dictionary<string, string> GetTranslationHints()
         {
             Dictionary<string, string> KRTranslationTips = new();
 
@@ -283,7 +299,7 @@ namespace Limbus_Localization_UI.Additions
             T["PreviewLayout @ Skill"].FontFamily = Source_Han_Sans_SC;
             for (int CoinNumber = 1; CoinNumber <= 5; CoinNumber++)
             {
-                for (int CoinDescNumber = 1; CoinDescNumber <= 6; CoinDescNumber++)
+                for (int CoinDescNumber = 1; CoinDescNumber <= 12; CoinDescNumber++)
                 {
                     T[$"Skill PreviewLayout Coin {CoinNumber} Desc {CoinDescNumber}"].FontFamily = Source_Han_Sans_SC;
                 }
@@ -297,7 +313,7 @@ namespace Limbus_Localization_UI.Additions
             T["Skill PreviewLayout Desc"].FontFamily = S_Core_Dream_5_Medium;
             for (int CoinNumber = 1; CoinNumber <= 5; CoinNumber++)
             {
-                for (int CoinDescNumber = 1; CoinDescNumber <= 6; CoinDescNumber++)
+                for (int CoinDescNumber = 1; CoinDescNumber <= 12; CoinDescNumber++)
                 {
                     T[$"Skill PreviewLayout Coin {CoinNumber} Desc {CoinDescNumber}"].FontFamily = S_Core_Dream_5_Medium;
                 }
@@ -311,7 +327,7 @@ namespace Limbus_Localization_UI.Additions
             T["Skill PreviewLayout Desc"].FontFamily = Pretendard;
             for (int CoinNumber = 1; CoinNumber <= 5; CoinNumber++)
             {
-                for (int CoinDescNumber = 1; CoinDescNumber <= 6; CoinDescNumber++)
+                for (int CoinDescNumber = 1; CoinDescNumber <= 12; CoinDescNumber++)
                 {
                     T[$"Skill PreviewLayout Coin {CoinNumber} Desc {CoinDescNumber}"].FontFamily = Pretendard;
                 }

@@ -44,14 +44,14 @@ namespace Limbus_Localization_UI.Mode_Handlers
 
                 T["Unsaved Changes Tooltip"].Width = 100;
 
-                T["Name EditBox Shadow"].Content = "Название";
+                
                 T["Name EditBox [UnavalibleCover]"].Height = 0;
                 T["Name SaveChanges [UnavalibleCover]"].Height = 0;
                 T["EditorSwitch Desc [UnavalibleCover]"].Height = 0;
 
                 T["SaveChanges Desc [UnavalibleCover]"].Height = 0;
 
-                T["EditorSwitch SubDesc 1"].Content = "Суммарно";
+                T["EditorSwitch SubDesc 1"].Content = InterfaceTextContent["[Left Menu] Passive Summary Description"];
 
                 for (int i = 2; i <= 5; i++)
                 {
@@ -91,9 +91,9 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 }
                 if (!Passives_EditBuffer[PassiveID]["Summary"].Equals("{unedited}"))
                 {
-                    T["EditorSwitch SubDesc 1"].Content = "Суммарно*";
+                    T["EditorSwitch SubDesc 1"].Content = InterfaceTextContent["[Left Menu] Passive Summary Description"] + "*";
                 }
-                else T["EditorSwitch SubDesc 1"].Content = "Суммарно";
+                else T["EditorSwitch SubDesc 1"].Content = InterfaceTextContent["[Left Menu] Passive Summary Description"];
 
                 if (!Passives_Json_Dictionary[PassiveID]["Summary"].Equals("{none}"))
                 {

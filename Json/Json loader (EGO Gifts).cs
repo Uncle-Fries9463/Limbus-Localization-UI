@@ -147,8 +147,8 @@ namespace Limbus_Localization_UI.Json
                     {
                         Element = Descriptor.Key switch
                         {
-                            "Desc" => "Описание",
-                            _ => $"Простое описание {Descriptor.Key[^1]}",
+                            "Desc" => MainWindow.InterfaceTextContent["[Exit Dialog] Unsaved changes tooltip (Desc)"],
+                            _ => MainWindow.InterfaceTextContent["[Exit Dialog] Unsaved changes tooltip (EGO gift - Simple desc)"] + " " + Descriptor.Key[^1],
                         };
                         IsEditedID = true;
                         Info_Sub += $"  - {Element}\n";

@@ -46,8 +46,8 @@ namespace Limbus_Localization_UI.Additions
             try
             {
                 MainWindow.BattleKeywords_Type = Settings[4].Split(" ¤ ")[^1].Trim();
-                (MainWindow.Keywords, MainWindow.KeywordIDName) = РазноеДругое.GetKeywords(from: MainWindow.BattleKeywords_Type);
-                MainWindow.Replacements = РазноеДругое.GetAddtReplacements(from: MainWindow.BattleKeywords_Type);
+                (MainWindow.Keywords, MainWindow.KeywordIDName) = РазноеДругое.GetKeywords(from: MainWindow.DefinedKeywords[MainWindow.BattleKeywords_Type]);
+                MainWindow.Replacements = РазноеДругое.GetAddtReplacements(from: MainWindow.DefinedKeywords[MainWindow.BattleKeywords_Type]);
                 T["Keywords Type Display"].Text = MainWindow.BattleKeywords_Type;
             }
             catch { }

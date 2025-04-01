@@ -285,7 +285,7 @@
     },
     {
       "id": "AttackDown",
-      "name": "Offense Level Down ",
+      "name": "Offense Level Down",
       "desc": "Offense level decreases based on the effect's Potency for one turn."
     },
     {
