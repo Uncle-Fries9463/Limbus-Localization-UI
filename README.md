@@ -1,8 +1,5 @@
-## Other languages config will be added soon
-DM me on Discord @x1bviolet, if it requires to adjust something for specific languages
 
----
-# Limbus Localization UI | Версия 1.7
+# Limbus Localization UI | Версия 1.8
 
 Программа для удобного редактирования большинства json файлов локализации Limbus Company с предпросмотром
 
