@@ -1,7 +1,7 @@
 
 # Limbus Localization UI | Версия 1.8
 
-[Steam guide](https://steamcommunity.com/sharedfiles/filedetails/?id=3456329470)
+### [Steam guide](https://steamcommunity.com/sharedfiles/filedetails/?id=3456329470)
 
 Программа для удобного редактирования большинства json файлов локализации Limbus Company с предпросмотром
 
