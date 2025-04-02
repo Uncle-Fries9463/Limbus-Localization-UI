@@ -111,6 +111,7 @@ namespace Limbus_Localization_UI
                 ["[Settings] Enable Dynamic Keywords (Display text - Disabled)"] = "Отключено",
                 ["[Json Editor - Context Menu] Enable Translation Tips - Enabled"] = "Подсказки перевода: Вкл",
                 ["[Json Editor - Context Menu] Enable Translation Tips - Disabled"] = "Подсказки перевода: Выкл",
+                ["[Left Menu] Description button (Duplicate)"] = "Описание",
                 ["[Left Menu] Passive Summary Description"] = "Суммарно",
                 ["[Left Menu] EGO Gift Description № Button"] = "Простое описание [№]",
                 ["[Left Menu] Skill Coin № Button"] = "Монета [№]",
@@ -808,12 +809,12 @@ namespace Limbus_Localization_UI
 
                             if (JsonEditor.Text.Equals(EGOgift_Json_Dictionary[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"]))
                             {
-                                T[$"EditorSwitch SubDesc {DescNumber}"].Content = s.Exform(DescNumber); //$"Простое описание {DescNumber}";
+                                T[$"EditorSwitch SubDesc {DescNumber}"].Content = s.Exform(DescNumber);
                                 EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"] = "{unedited}";
                             }
                             else
                             {
-                                T[$"EditorSwitch SubDesc {DescNumber}"].Content = s.Exform(DescNumber) + "*"; //$"Простое описание {DescNumber}*";
+                                T[$"EditorSwitch SubDesc {DescNumber}"].Content = s.Exform(DescNumber) + "*";
                                 EGOgift_EditBuffer[EGOgift_Json_Dictionary_CurrentID][$"SimpleDesc{DescNumber}"] = JsonEditor.Text.Replace("\r", "");
                             }
 
@@ -2976,7 +2977,7 @@ namespace Limbus_Localization_UI
                                     {
                                         JsonLoader_Skills.JSON.dataList[JSON_IndexOf_ID].levelList[JSON_IndexOf_UptieLevel].desc = Skills_Json_Dictionary[Skills_Json_Dictionary_CurrentID][Skills_Json_Dictionary_CurrentUptieLevel]["Desc"].Replace("\\n", "\n");
                                         SaveJson(JsonLoader_Skills.JSON, Json_Filepath);
-                                        T["EditorSwitch Desc"].Content = "Описание";
+                                        T["EditorSwitch Desc"].Content = InterfaceTextContent["[Left Menu] Main Description Button"];
 
                                     }
                                     catch (Exception ex)
@@ -3035,7 +3036,7 @@ namespace Limbus_Localization_UI
 
                                     Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Desc"] = Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Desc"];
                                     Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Desc"] = "{unedited}";
-                                    T["EditorSwitch Desc"].Content = "Описание";
+                                    T["EditorSwitch Desc"].Content = InterfaceTextContent["[Left Menu] Main Description Button"];
                                 }
                                 break;
 
@@ -3049,7 +3050,7 @@ namespace Limbus_Localization_UI
 
                                     Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Summary"] = Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"];
                                     Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"] = "{unedited}";
-                                    T["EditorSwitch SubDesc 1"].Content = "Суммарно";
+                                    T["EditorSwitch SubDesc 1"].Content = InterfaceTextElements["[Left Menu] Passive Summary Description"];
                                 }
                                 break;
                         }
@@ -3579,6 +3580,7 @@ namespace Limbus_Localization_UI
             {
                 OverrideCover1.Margin = new Thickness(1000);
                 OverrideCover2.Margin = new Thickness(1000);
+                ExitDialog.Margin = new Thickness(1000);
                 SettingsDialog.Margin = new Thickness(1000);
             }
             catch { }
@@ -3590,6 +3592,7 @@ namespace Limbus_Localization_UI
             {
                 OverrideCover1.Margin = new Thickness(1000);
                 OverrideCover2.Margin = new Thickness(1000);
+                ExitDialog.Margin = new Thickness(1000);
                 SettingsDialog.Margin = new Thickness(1000);
             }
             catch{ }

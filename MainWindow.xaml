@@ -457,7 +457,7 @@
                     </TextBlock>
                     <StackPanel Grid.Row="0" HorizontalAlignment="Left" Margin="35,0,0,0" Orientation="Horizontal">
                         <TextBlock x:Name="ProgramTitleName"  FontFamily="Bahnschrift Light" Foreground="#FF232323" FontSize="25">
-                            Limbus Localization UI 1.7
+                            Limbus Localization UI 1.8
                         </TextBlock>
                         <TextBlock FontFamily="Bahnschrift Light" Foreground="#FF232323" FontSize="15" Margin="-2, 9, 0, 0"   Width="0">
                             .02
@@ -491,10 +491,10 @@
                             <ScaleTransform />
                         </Border.RenderTransform>
                     </Border>
-                    <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="0" Grid.Column="1" Panel.ZIndex="1" Focusable="False" Margin="0000" PreviewMouseLeftButtonDown="OverrideCover1_MouseLeftButtonUp"/>
-                    <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="0" Grid.Column="0" Panel.ZIndex="1" Focusable="False" Margin="0000" PreviewMouseLeftButtonDown="OverrideCover2_MouseLeftButtonUp"/>
+                    <Border x:Name="OverrideCover1" Background="#A5000000" Grid.Row="0" Grid.Column="1" Panel.ZIndex="1" Focusable="False" Margin="10000" PreviewMouseLeftButtonDown="OverrideCover1_MouseLeftButtonUp"/>
+                    <Border x:Name="OverrideCover2" Background="#A5000000" Grid.Row="0" Grid.Column="0" Panel.ZIndex="1" Focusable="False" Margin="10000" PreviewMouseLeftButtonDown="OverrideCover2_MouseLeftButtonUp"/>
                     <Border x:Name="SettingsDialog"
-                            Margin="0000"
+                            Margin="10000"
                             Background="#FF191919"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"

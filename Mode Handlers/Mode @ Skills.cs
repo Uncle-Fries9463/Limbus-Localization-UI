@@ -255,10 +255,12 @@ namespace Limbus_Localization_UI.Mode_Handlers
                 // Для каждого ключа монеты в списке монет навыка по его ID и уровню связи (Например 1, 3)
                 foreach (var CoinNumber in Skills_Json_Dictionary[SkillID][UptieLevel]["Coins"].Keys)
                 {
-                    
                     if(Skills_Json_Dictionary[SkillID][UptieLevel]["Coins"][CoinNumber].Count != 0)
                     {
-                        CoinsAvalible.Add(CoinNumber);
+                        if (!Skills_Json_Dictionary[SkillID][UptieLevel]["Coins"][CoinNumber][0].Equals("{empty}"))
+                        {
+                            CoinsAvalible.Add(CoinNumber);
+                        }
                     }
                 }
             }
@@ -358,6 +360,7 @@ namespace Limbus_Localization_UI.Mode_Handlers
         {
             try
             {
+                rin(DescIndex + 1);
                 // Отключить подсветку для всех остальных
                 for (int i = 1; i <= DescsCount; i++)
                 {
@@ -366,7 +369,6 @@ namespace Limbus_Localization_UI.Mode_Handlers
                         T[$"Coin Descs {i} Button"].BorderBrush = РазноеДругое.GetColorFromAHEX("#FF6B6B6B");
                     }
                 }
-
                 // Включить для выбранного
                 T[$"Coin Descs {DescIndex+1} Button"].BorderBrush = РазноеДругое.GetColorFromAHEX("#FFD1CDC5");
             }
