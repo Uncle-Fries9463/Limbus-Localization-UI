@@ -284,7 +284,20 @@ namespace Limbus_Localization_UI
             InterfaceTextElements["Language Display"].Text = from;
             OnlyStartedNow = false;
         }
-
+        private void MouseDownEvent(object sender, MouseButtonEventArgs e)
+        {
+            switch (e.ChangedButton)
+            {
+                case MouseButton.XButton1://Back button
+                    ID_SwitchPrev_Click(null, new RoutedEventArgs());
+                    break;
+                case MouseButton.XButton2://forward button
+                    ID_SwitchNext_Click(null, new RoutedEventArgs());
+                    break;
+                default:
+                    break;
+            }
+        }
 
         #region Системные штуки
 
@@ -599,6 +612,7 @@ namespace Limbus_Localization_UI
             PreviewLayout_Skills.PreviewMouseLeftButtonDown += SurfaceScroll_MouseLeftButtonDown;
             PreviewLayout_Skills.PreviewMouseMove += SurfaceScroll_MouseMove;
             PreviewLayout_Skills.PreviewMouseLeftButtonUp += SurfaceScroll_MouseLeftButtonUp;
+            PreviewMouseDown += MouseDownEvent;
             string Def;
             try
             {
@@ -998,7 +1012,7 @@ namespace Limbus_Localization_UI
                     {
                         foreach (var KeywordName in KeywordIDName.Reverse())
                         {
-                            JsonDesc = Regex.Replace(JsonDesc, @"(?<![\uAC00-\uD7A3a-zA-Zа-яА-Я<>\[\]\'""*])" + KeywordName.Key + @"(?![\uAC00-\uC773\uC775-\uD7A3a-zA-Zа-яА-Я<[""*)('])", match =>
+                            JsonDesc = Regex.Replace(JsonDesc, @"(?<![\uAC00-\uD7A3a-zA-Zа-яА-Я<>\[\]\'`""*])" + KeywordName.Key + @"(?![\uAC00-\uC773\uC775-\uD7A3a-zA-Zа-яА-Я<[""*)('`])", match =>
                             {
                                 return $"[{KeywordName.Value}]";
                             });
@@ -1023,14 +1037,22 @@ namespace Limbus_Localization_UI
 
 
             // Обработка особых вставок эффектов [Sinking:'Утопания'] [Combustion:'Огня'] без полной развёртки в теги
-            JsonDesc = Regex.Replace(JsonDesc, Shorthand_Type.Equals("kimght") ? @"\[(\w+)\:'(.*?)'\]" : @"\[(\w+)\:\*(.*?)\*\]", match =>
+            JsonDesc = Regex.Replace(JsonDesc, Shorthand_Type.Equals("kimght") ? @"\[(\w+)\:`(.*?)`\](\(#[a-fA-F0-9]{6}\))?" : @"\[(\w+)\:\*(.*?)\*\]", match =>
             {
-                string MaybeKeyword = match.Groups[1].Value;
-                string MaybeName = match.Groups[2].Value;
+                string KeywordID = match.Groups[1].Value;
+                string KeywordName = match.Groups[2].Value;
+                string KeywordColor = match.Groups[3].Value;
 
-                if (Keywords.ContainsKey(MaybeKeyword))
+                string InsertColor = ColorPairs.ContainsKey(KeywordID) ? ColorPairs[KeywordID] : "#f8c200";
+
+                if (!KeywordColor.Equals(""))
                 {
-                    return $"<sprite name=\"{MaybeKeyword}\"><color={(ColorPairs.ContainsKey(MaybeKeyword) ? ColorPairs[MaybeKeyword] : "#f8c200")}><u>{MaybeName}</u></color>";
+                    InsertColor = Regex.Match(KeywordColor, @"[a-fA-F0-9]{6}").Groups[1].Value;
+                }
+
+                if (Keywords.ContainsKey(KeywordID))
+                {
+                    return $"<sprite name=\"{KeywordID}\"><color={InsertColor}><u>{KeywordName}</u></color>";
                 }
                 else
                 {
@@ -3047,10 +3069,17 @@ namespace Limbus_Localization_UI
                                     NewLine = $"\"summary\": \"{Convert.ToString(Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"]).Replace("\\\"", "\"").Replace("\\n", "\n").Replace(@"\", @"\\").Replace("\"", "\\\"")}\",";
                                     //rin($"Rewriting line {LineToRewrite} with:\n{NewLine}\n");
                                     RewriteFileLine(NewLine, Json_Filepath, LineToRewrite);
-
+                                    try
+                                    {
+                                        rin(InterfaceTextContent["[Left Menu] Passive Summary Description"]);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        rin(ex.ToString());
+                                    }
                                     Passives_Json_Dictionary[Passives_Json_Dictionary_CurrentID]["Summary"] = Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"];
                                     Passives_EditBuffer[Passives_Json_Dictionary_CurrentID]["Summary"] = "{unedited}";
-                                    T["EditorSwitch SubDesc 1"].Content = InterfaceTextElements["[Left Menu] Passive Summary Description"];
+                                    T["EditorSwitch SubDesc 1"].Content = InterfaceTextContent["[Left Menu] Passive Summary Description"];
                                 }
                                 break;
                         }
@@ -3118,7 +3147,17 @@ namespace Limbus_Localization_UI
                 }
                 else if (e.Key == Key.Left | e.Key == Key.Right)
                 {
-                    if (!ABName_EditBox.IsFocused & !Name_EditBox.IsFocused & !JsonEditor.IsFocused & !JumpToID_Input.IsFocused)
+                    if (!ABName_EditBox.IsFocused &
+                        !Name_EditBox.IsFocused &
+                        !JsonEditor.IsFocused &
+                        !JumpToID_Input.IsFocused &
+                        !FormatInsertion_1_Text.IsFocused & 
+                        !FormatInsertion_2_Text.IsFocused & 
+                        !FormatInsertion_3_Text.IsFocused & 
+                        !FormatInsertion_4_Text.IsFocused & 
+                        !FormatInsertion_5_Text.IsFocused & 
+                        !FormatInsertion_6_Text.IsFocused
+                       )
                     {
                         if (e.Key == Key.Right)
                         {
@@ -3295,7 +3334,7 @@ namespace Limbus_Localization_UI
                     }
                     else
                     {
-                        return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:'{Keywords[KeywordID]}']" : $"[{KeywordID}]";
+                        return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:`{Keywords[KeywordID]}`]" : $"[{KeywordID}]";
                     }
                 });
 
@@ -3754,7 +3793,7 @@ namespace Limbus_Localization_UI
                     }
                     else
                     {
-                        JsonEditor.SelectedText = JsonEditor.SelectedText.Replace(RawKeyword, $"[{SearchSource[RawKeyword]}:'{RawKeyword}']");
+                        JsonEditor.SelectedText = JsonEditor.SelectedText.Replace(RawKeyword, $"[{SearchSource[RawKeyword]}:`{RawKeyword}`]");
                     }
                 }
             }
@@ -3802,7 +3841,7 @@ namespace Limbus_Localization_UI
                     }
                     else
                     {
-                        return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:'{Keywords[KeywordID]}']" : $"[{KeywordID}]";
+                        return Keywords.ContainsKey(KeywordID) ? $"[{KeywordID}:`{Keywords[KeywordID]}`]" : $"[{KeywordID}]";
                     }
                 });
 
