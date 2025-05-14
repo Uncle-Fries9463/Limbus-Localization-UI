@@ -20,8 +20,8 @@
 - **By any of any ways make sure you backup your localization files and after saving file is not corrupted (What should not be)**
 
 ## UI Languages, Themes and Configuration
-Lanugage settings located at `⇲ Assets Directory\[+] Languages` and being selected in `⇲ Assets Directory\Configurazione.json`, theme being selected by it folder name in `⇲ Assets Directory\[+] Themes`.
-Almost all ui elements supports this 'TextMeshPro' with small amount of tags that being used in limbus preview system (E.g. `<color=#abcdef>`, `<i>` or `<font>`), in ui you can use `<sprite name="...">` with id of some keyword or e.g.o gift by its ID, they can be adjusted with technical `<spritessize>`, `<spriteshoffset>` and `<spritesvoffset>` tags (Not avalible for limbus) with values as `=+/-integer` (`<spritesvoffset=-11>` or `<spritessize=+66>`)
+Lanugage settings located at `⇲ Assets Directory\[+] Languages` and being selected in `⇲ Assets Directory\Configurazione.json` as all other settings. Theme being selected by its folder name in `⇲ Assets Directory\[+] Themes`.
+Almost all ui elements supports this 'TextMeshPro' with small amount of tags that being used in limbus preview system (E.g. `<color=#abcdef>`, `<i>` or `<font>`), in ui you can use `<sprite name="...">` with id of some keyword or e.g.o gift by its ID (`⇲ Assets Directory\[⇲] Limbus Images`), they can be adjusted with technical `<spritessize>`, `<spriteshoffset>` and `<spritesvoffset>` tags (Not avalible for limbus) with values as `=+/-integer` (`<spritesvoffset=-11>` or `<spritessize=+66>`).
 
 ------
 
