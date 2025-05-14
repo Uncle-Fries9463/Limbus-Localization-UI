@@ -1,4 +1,4 @@
-### Limbus Company Localization Interface
+# Limbus Company Localization Interface
 
 ## Currently able to edit:
 - `Bufs*.json` and `BattleKeywords*.json`
