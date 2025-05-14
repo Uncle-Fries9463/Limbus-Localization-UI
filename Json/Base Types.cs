@@ -1,0 +1,226 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using Newtonsoft.Json;
+using static LC_Localization_Task_Absolute.Requirements;
+
+namespace LC_Localization_Task_Absolute.Json
+{
+    internal abstract class BaseTypes
+    {
+        internal abstract class Type_Skills
+        {
+            public class Skills
+            {
+                public List<Skill> dataList { get; set; }
+            }
+
+            public class Skill
+            {
+                [JsonProperty("id")]
+                public int ID { get; set; }
+
+                [JsonProperty("levelList")]
+                public List<UptieLevel> UptieLevels { get; set; }
+            }
+            public class UptieLevel
+            {
+                [JsonProperty("level")]
+                public int Uptie { get; set; }
+
+                [JsonProperty("name")]
+                public string Name { get; set; }
+
+                public List<string> keywords { get; set; }
+
+                [JsonProperty("abName")]
+                public string EGOAbnormalityName { get; set; }
+
+                [JsonProperty("desc")]
+                public string Description { get; set; }
+
+                [JsonIgnore] // For editor
+                public string EditorDescription { get; set; }
+
+                [OnDeserialized]
+                private void OnInit(StreamingContext context)
+                {
+                    if (Description.IsNull())
+                    {
+                        Description = "";
+                    }
+                    
+                    EditorDescription = Description;
+                }
+
+                [JsonProperty("coinlist")]
+                public List<Coin> Coins { get; set; }
+            }
+            public class Coin
+            {
+                [JsonProperty("coindescs")]
+                public List<CoinDesc> CoinDescriptions { get; set; }
+            }
+            public class CoinDesc
+            {
+                [JsonProperty("desc")]
+                public string Description { get; set; }
+
+                [JsonIgnore] // For editor
+                public string EditorDescription { get; set; }
+
+                public string summary { get; set; }
+
+                [OnDeserialized]
+                private void OnInit(StreamingContext context)
+                {
+                    if (Description.IsNull())
+                    {
+                        Description = "";
+                    }
+
+                    EditorDescription = Description;
+                }
+            }
+        }
+
+        internal abstract class Type_Passives
+        {
+            public class Passives
+            {
+                public List<Passive> dataList { get; set; }
+            }
+
+            public class Passive
+            {
+                [JsonProperty("id")]
+                public int ID { get; set; }
+
+                [JsonProperty("name")]
+                public string Name { get; set; }
+
+                [JsonProperty("desc")]
+                public string Description { get; set; }
+
+                [JsonProperty("summary")]
+                public string SummaryDescription { get; set; }
+
+                [JsonIgnore] // For editor
+                public string EditorDescription { get; set; }
+                [JsonIgnore] // For editor
+                public string EditorSummaryDescription { get; set; }
+
+                [OnDeserialized]
+                private void OnInit(StreamingContext context)
+                {
+                    if (Description.IsNull()) Description = "";
+
+                    EditorDescription = Description;
+                    EditorSummaryDescription = SummaryDescription;
+                }
+            }
+        }
+
+        internal abstract class Type_EGOGifts
+        {
+            public class EGOGifts
+            {
+                public List<EGOGift> dataList { get; set; }
+            }
+
+            public class EGOGift
+            {
+                [JsonProperty("id")]
+                public int ID { get; set; }
+
+                [JsonIgnore]
+                public List<int> UpgradeLevelsAssociativeIDs { get; set; }
+
+                [JsonProperty("name")]
+                public string Name { get; set; }
+
+                [JsonProperty("desc")]
+                public string Description { get; set; }
+
+                [JsonIgnore] // For editor
+                public string EditorDescription { get; set; }
+                
+                [JsonIgnore] // For Preview
+                public string UpgradeLevel { get; set; }
+
+                [OnDeserialized]
+                private void OnInit(StreamingContext context)
+                {
+                    if (Description.IsNull())
+                    {
+                        Description = "";
+                    }
+
+                    EditorDescription = Description;
+
+                    UpgradeLevel = "1";
+                    UpgradeLevelsAssociativeIDs = new List<int>();
+                }
+
+                [JsonProperty("simpleDesc")]
+                public List<SimpleDescription> SimpleDescriptions { get; set; }
+            }
+            public class SimpleDescription
+            {
+                [JsonProperty("abilityID")]
+                public int ID { get; set; }
+
+                [JsonProperty("simpleDesc")]
+                public string Description { get; set; }
+
+                [JsonIgnore] // For editor
+                public string EditorDescription { get; set; }
+
+                [OnDeserialized]
+                private void OnInit(StreamingContext context) => EditorDescription = Description;
+            }
+        }
+
+        internal abstract class Type_Keywords
+        {
+            public class Keywords
+            {
+                public List<Keyword> dataList { get; set; }
+            }
+
+            public class Keyword
+            {
+                [JsonProperty("id")]
+                public string ID { get; set; }
+
+                [JsonProperty("name")]
+                public string Name { get; set; }
+
+                [JsonProperty("desc")]
+                public string Description { get; set; }
+
+                [JsonProperty("summary")]
+                public string SummaryDescription { get; set; }
+
+                [JsonIgnore] // For editor
+                public string EditorDescription { get; set; }
+                [JsonIgnore] // For editor
+                public string EditorSummaryDescription { get; set; }
+
+                [OnDeserialized]
+                private void OnInit(StreamingContext context)
+                {
+                    if (Description.IsNull()) Description = "";
+                    EditorDescription = Description;
+                    EditorSummaryDescription = SummaryDescription;
+                }
+
+                public string undefined { get; set; }
+            }
+        }
+    }
+}
