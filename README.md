@@ -24,7 +24,7 @@ Lanugage settings located at `⇲ Assets Directory\[+] Languages` and being sele
 Almost all ui elements supports this 'TextMeshPro' with small amount of tags that being used in limbus preview system (E.g. `<color=#abcdef>`, `<i>` or `<font>`), in ui you can use `<sprite name="...">` with id of some keyword or e.g.o gift by its ID (`⇲ Assets Directory\[⇲] Limbus Images`), they can be adjusted with technical `<spritessize>`, `<spriteshoffset>` and `<spritesvoffset>` tags (Not avalible for limbus) with values as `=+/-integer` (`<spritesvoffset=-11>` or `<spritessize=+66>`).
 
 ------
-
+![image](https://github.com/user-attachments/assets/470f4c8f-c49e-4f6f-b03f-77da375af4a9)
 ![Screenshot 2025-05-14 234127](https://github.com/user-attachments/assets/143e1f52-5403-4e8f-b400-142055be6f91)
 ![Screenshot 2025-05-14 234043](https://github.com/user-attachments/assets/e7035f73-a9d2-4df4-92a3-4de2093fbfff)
 ![Screenshot 2025-05-14 234127](https://github.com/user-attachments/assets/32ba8ac2-63d6-4c64-bbfb-32e83e6c0c71)
