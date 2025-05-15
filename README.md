@@ -16,6 +16,7 @@
 
 ## Files saving behavior
 - Program tries to keep original encoding of file on save, otherwise uses UTF8
+- Line break is LF, not CRLF
 - All `null` descs (Non-existing) (Coin descs or regular descs of keywords or skills) being replaced with empty strings
 - **By any of any ways make sure you backup your localization files and after saving file is not corrupted (What should not be)**
 
