@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -155,8 +155,8 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                         return $"<sprite name=\"{MaybeID}\"><color={KeywordColor}><u>{KeywordName}</u></color>";
                     }
                     else if ( // Return skill tag or empty TabExplain if skills, or return default if ego gifts (keywords already excluded)
-                           (Mode_Handlers.Upstairs.ActiveProperties.Key.Equals("Skills") & SkillTags.ContainsKey(Match.Groups[0].Value))
-                         | (Mode_Handlers.Upstairs.ActiveProperties.Key.Equals("Skills") & Match.Groups[0].Value.Equals("[TabExplain]"))
+                           (Mode_Handlers.Upstairs.ActiveProperties.Key.EqualsOneOf(["Skills", "Passives"]) & SkillTags.ContainsKey(Match.Groups[0].Value))
+                         | (Mode_Handlers.Upstairs.ActiveProperties.Key.EqualsOneOf(["Skills", "Passives"]) & Match.Groups[0].Value.Equals("[TabExplain]"))
                          |  Mode_Handlers.Upstairs.ActiveProperties.Key.Equals("E.G.O Gifts")
                     ) {
                         return Match.Groups[0].Value;
@@ -172,8 +172,9 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     PreviewText = RegexRemove(PreviewText, RemoteRegexPatterns.StyleMarker);
                 }
 
+                rin(Mode_Handlers.Upstairs.ActiveProperties.Key);
                 // Skill tags
-                if (Mode_Handlers.Upstairs.ActiveProperties.Key.Equals("Skills"))
+                if (Mode_Handlers.Upstairs.ActiveProperties.Key.EqualsOneOf(["Skills", "Passives"]))
                 {
                     foreach (KeyValuePair<string, string> SkillTag in SkillTags)
                     {
