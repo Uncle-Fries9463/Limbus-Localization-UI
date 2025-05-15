@@ -9,10 +9,11 @@
 ## Interface navigation:
 1. To fast id switch click with right mouse buttom on ID (LMB is copy), type ID or any Name (Automatically founds), then press Enter to switch
 2. For jump to end/start of file click with right mouse button to Next/Previous switch buttons
-3. In passives you can create `"summary"` elements for passives by clicking on unhighlighted (Disabled) summary desc switch buttons, tooltip will appear
-4. In skills you can click with right mouse button to coin descriptions for fast switch on them
-5. In `Bufs` you able to edit name in textfield on preview and 'OK' button saves both name and description
-6. Object name can be scrolled by drag scroll, same as all limbus previews
+3. Id switch also can be executed by pressing Left/Right arrows on keyboard or Back/Forward mouse buttons. In skills, you also can hold shift while pressing Back/Forward mouse buttons to switch between uptie levels.
+4. In passives, you can create `"summary"` desc elements for passives by clicking on unhighlighted (Disabled) summary desc switch buttons, tooltip will appear
+5. In skills you can click with right mouse button to coin descriptions for fast switch on them
+6. In `Bufs` you able to edit name in textfield on preview and 'OK' button saves both name and description
+7. Object name can be scrolled by drag scroll, same as all limbus previews
 
 ## Files saving behavior
 - Program tries to keep original encoding of file on save, otherwise uses UTF8
