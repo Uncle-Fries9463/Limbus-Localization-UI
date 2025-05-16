@@ -12,7 +12,8 @@ using LC_Localization_Task_Absolute.Json;
 using Newtonsoft.Json;
 using static LC_Localization_Task_Absolute.Configurazione;
 using static LC_Localization_Task_Absolute.Requirements;
-using static LC_Localization_Task_Absolute.Json.BaseTypes;
+using static LC_Localization_Task_Absolute.Json.BaseTypes.Type_Keywords;
+using static LC_Localization_Task_Absolute.Json.BaseTypes.Type_SkillTag;
 
 namespace LC_Localization_Task_Absolute.Limbus_Integration
 {
@@ -74,25 +75,35 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
 
             if (Directory.Exists(KeywordsDirectory))
             {
-                //rin($"\n$ Loading adaptive SkillTag.T[-]");
-                Counter = 0;
-                string SkillTagPath = @$"{KeywordsDirectory}\SkillTag.T[-]";
-                if (File.Exists(SkillTagPath))
+                Dictionary<string, string> SkillTagColors = new Dictionary<string, string>();
+                if (File.Exists(@"⇲ Assets Directory\[+] Keywords\SkillTag Colors.T[-]"))
                 {
-                    foreach (string Line in File.ReadAllLines(SkillTagPath).Where(Line => Line.Contains(" ¤ ")))
+                    foreach (string Line in File.ReadAllLines(@"⇲ Assets Directory\[+] Keywords\SkillTag Colors.T[-]").Where(Line => Line.Contains(" ¤ ")))
                     {
-                        string[] LineSplit = Line.Split(" ¤ ");
-                    
-                        if (LineSplit.Count() == 2)
+                        string[] ColorPair = Line.Split(" ¤ ");
+                        if (ColorPair.Count() == 2)
                         {
-                            string Original = LineSplit[0].Trim();
-                            string Replacement = LineSplit[1].Trim();
-
-                            SkillTags[Original] = Replacement;
-                            Counter++;
+                            string SkillTagID = ColorPair[0].Trim();
+                            string SkillTagColor = ColorPair[1].Trim();
+                            //rin($"  Load {SkillTagID} -> {SkillTagColor}");
+                            SkillTagColors[SkillTagID] = SkillTagColor;
                         }
                     }
                 }
+
+                if (File.Exists(@$"{KeywordsDirectory}\SkillTag.json"))
+                {
+                    BaseTypes.Type_SkillTag.SkillTags SkillTagsJson = JsonConvert.DeserializeObject<SkillTags>(File.ReadAllText(@$"{KeywordsDirectory}\SkillTag.json"));
+                    if (!SkillTagsJson.dataList.IsNull())
+                    {
+                        foreach (SkillTag SkillTag in SkillTagsJson.dataList)
+                        {
+                            SkillTags[$"[{SkillTag.ID}]"] = $"<color={(SkillTagColors.ContainsKey(SkillTag.ID) ? SkillTagColors[SkillTag.ID] : "#93f03f")}>{SkillTag.Tag}</color>";
+                            //rin($"{SkillTag.ID} -> {SkillTags[$"[{SkillTag.ID}]"]}");
+                        }
+                    }
+                }
+
                 //rin($"  Skill tags loaded: {Counter}");
 
                 //rin($"\n$ Loading keyword colors");
@@ -117,11 +128,11 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     searchPattern: "*.json",
                     searchOption: SearchOption.AllDirectories
                 ).Where(file => file.Name.RemovePrefix("EN_", "KR_", "JP_").StartsWith("Bufs"))) {
-                    BaseTypes.Type_Keywords.Keywords TargetSite = KeywordFileInfo.Deserealize<Type_Keywords.Keywords>() as Type_Keywords.Keywords;
+                    BaseTypes.Type_Keywords.Keywords TargetSite = KeywordFileInfo.Deserealize<Keywords>() as Keywords;
 
                     if (!TargetSite.IsNull())
                     {
-                        foreach(Type_Keywords.Keyword KeywordItem in TargetSite.dataList)
+                        foreach(Keyword KeywordItem in TargetSite.dataList)
                         {
                             if (!KeywordItem.ID.ContainsOneOf(Settings.Preview.KeywordsIgnore))
                             {
@@ -136,10 +147,10 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                                 if (!KeywordItem.Name.Equals(KeywordItem.ID))
                                 {
                                     // Fallback overwrite
-                                    if (Keywords_IDName_OrderByLength.ContainsValue(KeywordItem.ID) & WriteOverFallback)
-                                    {
-                                        Keywords_IDName_OrderByLength = Keywords_IDName_OrderByLength.RemoveItemWithValue(KeywordItem.ID);
-                                    }
+                                    //if (Keywords_IDName_OrderByLength.ContainsValue(KeywordItem.ID) & WriteOverFallback)
+                                    //{
+                                    //    Keywords_IDName_OrderByLength = Keywords_IDName_OrderByLength.RemoveItemWithValue(KeywordItem.ID);
+                                    //}
 
                                     Keywords_IDName_OrderByLength[KeywordItem.Name] = KeywordItem.ID;
                                 }

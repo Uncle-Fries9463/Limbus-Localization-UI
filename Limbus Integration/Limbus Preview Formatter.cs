@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -172,15 +172,14 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     PreviewText = RegexRemove(PreviewText, RemoteRegexPatterns.StyleMarker);
                 }
 
-                rin(Mode_Handlers.Upstairs.ActiveProperties.Key);
                 // Skill tags
                 if (Mode_Handlers.Upstairs.ActiveProperties.Key.EqualsOneOf(["Skills", "Passives"]))
                 {
+                    PreviewText = PreviewText.Replace("[TabExplain]", "");
                     foreach (KeyValuePair<string, string> SkillTag in SkillTags)
                     {
                         PreviewText = PreviewText.Replace(SkillTag.Key, SkillTag.Value);
                     }
-                    PreviewText = PreviewText.Replace("[TabExplain]", "");
                 }
             }
 

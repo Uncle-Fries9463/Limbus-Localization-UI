@@ -76,6 +76,9 @@ namespace LC_Localization_Task_Absolute
             [JsonProperty("Height")]
             public double? Height { get; set; }
 
+            [JsonProperty("Visible")]
+            public bool? Visible { get; set; }
+
             [OnDeserialized] internal void OnInit(StreamingContext context) => NullableControl.NullExterminate(this);
         }
 
@@ -151,6 +154,10 @@ namespace LC_Localization_Task_Absolute
                 {
                     string LoadFontAttach = "";
 
+                    if (!UIStaticItemData.Visible.IsNull())
+                    {
+                        UILanguage[TargetUIElementID].Visibility = (bool)UIStaticItemData.Visible ? Visibility.Visible : Visibility.Collapsed;
+                    }
 
                     if (!UIStaticItemData.VericalOffset.IsNull())
                     {

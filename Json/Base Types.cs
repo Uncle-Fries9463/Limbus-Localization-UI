@@ -222,5 +222,22 @@ namespace LC_Localization_Task_Absolute.Json
                 public string undefined { get; set; }
             }
         }
+    
+        internal abstract class Type_SkillTag
+        {
+            public class SkillTags
+            {
+                public List<SkillTag> dataList { get; set; }
+            }
+
+            public class SkillTag
+            {
+                [JsonProperty("id")]
+                public string ID { get; set; }
+                
+                [JsonProperty("name")]
+                public string Tag { get; set; }
+            }
+        }
     }
 }

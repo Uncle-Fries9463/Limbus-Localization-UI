@@ -111,15 +111,15 @@ namespace LC_Localization_Task_Absolute
 
             KeywordsInterrogate.InitializeGlossaryFrom(@$"⇲ Assets Directory\[+] Keywords\Text\{Settings.Preview.FallbackKeywordsFolder}");
 
+            UpdatePreviewLayoutsFont();
             if (!Settings.Preview.KeywordsCustomFolder.Enabled & !Configurazione.SelectedLanguageProperties.FolderName.IsNull())
             {
-                UpdatePreviewLayoutsFont();
                 Configurazione.KeywordsFolder = Configurazione.SelectedLanguageProperties.FolderName;
                 KeywordsInterrogate.InitializeGlossaryFrom(@$"⇲ Assets Directory\[+] Keywords\Text\{Settings.Preview.KeywordsFolder}", WriteOverFallback: true);
             }
             else
             {
-                rin($" Custom keywords folder: \"{Settings.Preview.KeywordsCustomFolder.Path}\"");
+                rin($"  Custom keywords folder: \"{Settings.Preview.KeywordsCustomFolder.Path}\"");
                 Configurazione.KeywordsFolder = Settings.Preview.KeywordsCustomFolder.Path;
                 KeywordsInterrogate.InitializeGlossaryFrom(Settings.Preview.KeywordsCustomFolder.Path, WriteOverFallback: true);
             }
@@ -197,17 +197,18 @@ namespace LC_Localization_Task_Absolute
             [JsonProperty("UI Theme (⇲ Assets Directory/[+] Themes/)")]
             public string UITheme { get; set; }
 
-            [JsonProperty("Show Background Image")]
-            public bool ShowBackgroundImage { get; set; }
+            [JsonProperty("Topmost Window")]
+            public bool? AlwaysOnTop { get; set; }
 
             [OnDeserialized]
             internal void OnInit(StreamingContext context)
             {
                 UILanguageLoader.InitializeUILanguage(UILanguage);
                 UIThemesLoader.InitializeUITheme(UITheme);
-                if (!ShowBackgroundImage.IsNull())
+
+                if (!AlwaysOnTop.IsNull())
                 {
-                    ChangeBackgroundImageVisibility(ShowBackgroundImage);
+                    MainControl.Topmost = (bool)AlwaysOnTop;
                 }
             }
         }

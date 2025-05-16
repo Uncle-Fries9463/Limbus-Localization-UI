@@ -176,6 +176,13 @@ public partial class MainWindow : Window
         }
 
         InternalModel.InitializingEvent = false;
+
+
+        // Default file load on startup
+        //FileInfo s = new FileInfo(@"p..s..x\@Localization-MTL'RU\[-] Task Valid\Task Valid @Skills'.json\Skills_Ego_Personality-11.json");
+
+        //FocusOnFile(s);
+        //Mode_Skills.LoadStructure(s);
     }
 
 
@@ -1763,16 +1770,16 @@ public partial class MainWindow : Window
     #region Context Menu
     private void Actions_ContextMenu_Shared(object sender, RoutedEventArgs e)
     {
-        string EditorSelectedTemplate = Editor.SelectedText;
+        string Editor_SelectedTextTemplate = Editor.SelectedText;
         
         switch ((sender as MenuItem).Name.Split("ContextMenuItem_")[^1])
         {
             case "InsertStyle":
-                EditorSelectedTemplate = $"<style=\"{(Mode_Handlers.Upstairs.ActiveProperties.Key.Equals("Skills") ? "highlight" : "upgradeHighlight")}\">{EditorSelectedTemplate}</style>";
+                Editor_SelectedTextTemplate = $"<style=\"{(Mode_Handlers.Upstairs.ActiveProperties.Key.Equals("Skills") ? "highlight" : "upgradeHighlight")}\">{Editor_SelectedTextTemplate}</style>";
                 break;
 
             case "TMProToKeywordLinks":
-                EditorSelectedTemplate = LimbusPreviewFormatter.RemoteRegexPatterns.TMProKeyword.Replace(EditorSelectedTemplate, Match =>
+                Editor_SelectedTextTemplate = LimbusPreviewFormatter.RemoteRegexPatterns.TMProKeyword.Replace(Editor_SelectedTextTemplate, Match =>
                 {
                     string ID = Match.Groups["ID"].Value;
                     if (KeywordsInterrogate.KeywordsGlossary.ContainsKey(ID))
@@ -1785,7 +1792,7 @@ public partial class MainWindow : Window
                 break;
 
             case "TMProToShorthands":
-                EditorSelectedTemplate = LimbusPreviewFormatter.RemoteRegexPatterns.TMProKeyword.Replace(EditorSelectedTemplate, Match =>
+                Editor_SelectedTextTemplate = LimbusPreviewFormatter.RemoteRegexPatterns.TMProKeyword.Replace(Editor_SelectedTextTemplate, Match =>
                 {
                     string ID = Match.Groups["ID"].Value;
                     string Color = Match.Groups["Color"].Value;
@@ -1810,7 +1817,7 @@ public partial class MainWindow : Window
                 {
                     if (Editor.Text.Contains(UnevidentKeyword.Key))
                     {
-                        EditorSelectedTemplate = Regex.Replace(EditorSelectedTemplate, LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection.Replace("KeywordNameWillBeHere", UnevidentKeyword.Key), Match =>
+                        Editor_SelectedTextTemplate = Regex.Replace(Editor_SelectedTextTemplate, LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection.Replace("KeywordNameWillBeHere", UnevidentKeyword.Key), Match =>
                         {
                             return $"[{UnevidentKeyword.Value}]";
                         });
@@ -1821,9 +1828,9 @@ public partial class MainWindow : Window
             case "UnevidentKeywordsToShorthands":
                 foreach (KeyValuePair<string, string> UnevidentKeyword in KeywordsInterrogate.Keywords_IDName_OrderByLength)
                 {
-                    if (EditorSelectedTemplate.Contains(UnevidentKeyword.Key))
+                    if (Editor_SelectedTextTemplate.Contains(UnevidentKeyword.Key))
                     {
-                        EditorSelectedTemplate = Regex.Replace(EditorSelectedTemplate, LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection.Replace("KeywordNameWillBeHere", UnevidentKeyword.Key), Match =>
+                        Editor_SelectedTextTemplate = Regex.Replace(Editor_SelectedTextTemplate, LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection.Replace("KeywordNameWillBeHere", UnevidentKeyword.Key), Match =>
                         {
                             return Configurazione.SelectedShorthands.InsertionShape.Replace("<KeywordID>", UnevidentKeyword.Value).Replace("<KeywordName>", UnevidentKeyword.Key).Replace("<KeywordColor>", "");
                         });
@@ -1832,7 +1839,7 @@ public partial class MainWindow : Window
                 break;
 
             case "KeywordLinksToShorthand":
-                EditorSelectedTemplate = LimbusPreviewFormatter.RemoteRegexPatterns.KeywordLink.Replace(EditorSelectedTemplate, Match =>
+                Editor_SelectedTextTemplate = LimbusPreviewFormatter.RemoteRegexPatterns.KeywordLink.Replace(Editor_SelectedTextTemplate, Match =>
                 {
                     string ID = Match.Groups["ID"].Value;
                     if (KeywordsInterrogate.KeywordsGlossary.ContainsKey(ID))
@@ -1847,7 +1854,7 @@ public partial class MainWindow : Window
                 break;
 
             case "KeywordLinksToTMPro":
-                EditorSelectedTemplate = LimbusPreviewFormatter.RemoteRegexPatterns.KeywordLink.Replace(EditorSelectedTemplate, Match =>
+                Editor_SelectedTextTemplate = LimbusPreviewFormatter.RemoteRegexPatterns.KeywordLink.Replace(Editor_SelectedTextTemplate, Match =>
                 {
                     string ID = Match.Groups["ID"].Value;
                     if (KeywordsInterrogate.KeywordsGlossary.ContainsKey(ID))
@@ -1862,7 +1869,7 @@ public partial class MainWindow : Window
                 break;
         }
 
-        if (!EditorSelectedTemplate.Equals(Editor.SelectedText)) Editor.SelectedText = EditorSelectedTemplate;
+        if (!Editor_SelectedTextTemplate.Equals(Editor.SelectedText)) Editor.SelectedText = Editor_SelectedTextTemplate;
     }
     #endregion
 }
