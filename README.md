@@ -12,9 +12,9 @@
 3. For jump to end/start of file click with right mouse button to Next/Previous switch buttons.
 4. Id switch also can be executed by pressing Left/Right arrows on keyboard or Back/Forward mouse buttons. In skills, you also can hold shift while pressing Back/Forward mouse buttons to switch between uptie levels.
 5. In passives, you can create `"summary"` desc elements for passives by clicking on unhighlighted (Disabled) summary desc switch buttons, tooltip will appear.
-6. In skills you can click with right mouse button to coin descriptions for fast switch on them.
+6. In skills you can click with right mouse button to coin descriptions on preview for fast switch on them.
 7. In `Bufs` you able to edit name in textfield on preview and 'OK' button saves both name and description.
-8. Object name can be scrolled by drag scroll, same as all limbus previews.
+8. Object name in right menu can be scrolled by drag scroll, same as all limbus previews.
 
 ## Files saving behavior
 - Program tries to keep original encoding of file on save, otherwise uses UTF8.
@@ -24,7 +24,7 @@
 
 ## UI Languages, Themes and Configuration
 Lanugage settings located at `⇲ Assets Directory\[+] Languages` and being selected in `⇲ Assets Directory\Configurazione.json` as all other settings. Theme being selected by its folder name in `⇲ Assets Directory\[+] Themes`.
-Almost all ui elements supports this 'TextMeshPro' with small amount of tags that being used in limbus preview system (E.g. `<color=#abcdef>`, `<i>` or `<font>`), in ui you can use `<sprite name="...">` with id of some keyword or e.g.o gift by its ID (`⇲ Assets Directory\[⇲] Limbus Images`), they can be adjusted with technical `<spritessize>`, `<spriteshoffset>` and `<spritesvoffset>` tags (Not avalible for limbus) with values as `=+/-integer` (`<spritesvoffset=-11>` or `<spritessize=+66>`).
+Almost all ui elements supports this 'TextMeshPro' with small amount of tags that being used in limbus preview system (E.g. `<color=#abcdef>`, `<i>` or `<font>`), in ui you can use `<sprite name="...">` with id of some Keyword or E.G.O gift by their ID (`⇲ Assets Directory\[⇲] Limbus Images`), they can be adjusted with technical `<spritessize>`, `<spriteshoffset>` and `<spritesvoffset>` tags (Not avalible for limbus) with values as `=+/-integer` (`<spritesvoffset=-11>` or `<spritessize=+66>`).
 
 ------
 ![image](https://github.com/user-attachments/assets/470f4c8f-c49e-4f6f-b03f-77da375af4a9)
