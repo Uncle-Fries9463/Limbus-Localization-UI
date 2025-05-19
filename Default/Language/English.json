@@ -218,11 +218,54 @@
       "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"9732\"><u>[KeywordID]</u> to <sprite name=\"2038\"><u>TextMeshPro</u>"
     },
     {
-      "Element ID": "Editor Context Menu — some example context menu element (They can be hidden by setting height to 0.01 and vertical offset to -10)",
-      "Height": 0.01,
-      "Vertical Offset": -10
+      "Element ID": "Unsaved Changes Window — Title",
+      "Text": "Unsaved Changes",
+      "Font": "Excelsior Sans",
+      "Font Color": "#CFCFCF",
+      "Font Size": 40
+    },
+    {
+      "Element ID": "Unsaved Changes Window — Confirm Exit",
+      "Text": "Proceed",
+      "Font": "Excelsior Sans",
+      "Font Color": "#CFCFCF",
+      "Font Size": 25
+    },
+    {
+      "Element ID": "Unsaved Changes Window — Cancel",
+      "Text": "Cancel",
+      "Font": "Excelsior Sans",
+      "Font Color": "#CFCFCF",
+      "Font Size": 25
+    },
+    {
+      "Element ID": "Unsaved Changes Window — Information Text",
+      "Font:": "GOST Type BU",
+      "Font Color": "#D2D2D2",
+      "Font Size": 21
     }
   ],
+  "Unsaved Changes Info": {
+    "Passives": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
+      "Main Desc": "\n  > Main description",
+      "Summary Desc": "\n  > Summary description"
+    },
+    "Keywords": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
+      "Main Desc": "\n  > Main description",
+      "Summary Desc": "\n  > Summary description"
+    },
+    "E.G.O Gifts": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
+      "Main Desc": "\n  > Main description",
+      "Simple Desc": "\n  > Simple description №[$]\n"
+    },
+    "Skills": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color>sadsad 「<color=#afbff9>[$2]</color>」",
+      "Uptie Level": "\n  > Uptie Level [$]"
+    }
+  },
   "UI Textfields": [
     {
       "Element ID": "Json File Path",

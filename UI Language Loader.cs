@@ -15,7 +15,7 @@ namespace LC_Localization_Task_Absolute
         internal protected static Dictionary<string, String> UILanguageElementsTextData = [];
         internal protected static Dictionary<string, FontFamily> LoadedFontFamilies = [];
         internal protected static Dictionary<string, String> DynamicTypeElements = [];
-        internal protected static List<String> AdditionalImagesLoaded = [];
+        internal protected static UnsavedChangesInfo LangUnsavedChangesInfo = new();
 
         internal protected static Dictionary<string, RichTextBox> AbleToSetForegroundByTheme = [];
 
@@ -38,8 +38,76 @@ namespace LC_Localization_Task_Absolute
             [JsonProperty("UI Textfields")]
             public List<UITextfieldItem> TextfieldUIElements { get; set; }
 
+            [JsonProperty("Unsaved Changes Info")]
+            public UnsavedChangesInfo UnsavedChangesInfo { get; set; }
+
             [JsonProperty("Fonts")]
             public FontsInfo Fonts { get; set; }
+
+            [OnDeserialized]
+            internal void OnInit(StreamingContext context)
+            {
+                NullableControl.NullExterminate(this);
+                if (!UnsavedChangesInfo.IsNull())
+                {
+                    LangUnsavedChangesInfo = UnsavedChangesInfo;
+                }
+            }
+        }
+
+        internal protected class UnsavedChangesInfo
+        {
+            public UnsavedChangesInfo_Passives Passives { get; set; }
+            public UnsavedChangesInfo_Keywords Keywords { get; set; }
+            public UnsavedChangesInfo_EGOGifts EGOGifts { get; set; }
+            public UnsavedChangesInfo_Skills   Skills   { get; set; }
+        }
+        internal protected class UnsavedChangesInfo_Passives
+        {
+            [JsonProperty("ID Header")]
+            public string IDHeader { get; set; }
+
+            [JsonProperty("Main Desc")]
+            public string MainDesc { get; set; }
+
+            [JsonProperty("Summary Desc")]
+            public string SummaryDesc { get; set; }
+
+            [OnDeserialized] internal void OnInit(StreamingContext context) => NullableControl.NullExterminate(this);
+        }
+        internal protected class UnsavedChangesInfo_Keywords
+        {
+            [JsonProperty("ID Header")]
+            public string IDHeader { get; set; }
+
+            [JsonProperty("Main Desc")]
+            public string MainDesc { get; set; }
+
+            [JsonProperty("Summary Desc")]
+            public string SummaryDesc { get; set; }
+
+            [OnDeserialized] internal void OnInit(StreamingContext context) => NullableControl.NullExterminate(this);
+        }
+        internal protected class UnsavedChangesInfo_EGOGifts
+        {
+            [JsonProperty("ID Header")]
+            public string IDHeader { get; set; }
+
+            [JsonProperty("Main Desc")]
+            public string MainDesc { get; set; }
+
+            [JsonProperty("Simple Desc")]
+            public string SimpleDesc { get; set; }
+
+            [OnDeserialized] internal void OnInit(StreamingContext context) => NullableControl.NullExterminate(this);
+        }
+        internal protected class UnsavedChangesInfo_Skills
+        {
+            [JsonProperty("ID Header")]
+            public string IDHeader { get; set; }
+
+            [JsonProperty("Uptie Level")]
+            public string UptieLevel { get; set; }
 
             [OnDeserialized] internal void OnInit(StreamingContext context) => NullableControl.NullExterminate(this);
         }

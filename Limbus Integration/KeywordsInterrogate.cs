@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using static LC_Localization_Task_Absolute.Configurazione;
 using static LC_Localization_Task_Absolute.Requirements;
 using static LC_Localization_Task_Absolute.Json.BaseTypes.Type_Keywords;
 using static LC_Localization_Task_Absolute.Json.BaseTypes.Type_SkillTag;
+using System.Text.Json.Serialization;
 
 namespace LC_Localization_Task_Absolute.Limbus_Integration
 {
@@ -38,12 +40,110 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
             public string File { get; set; }
         }
 
+        #region Keywords Multiple Meanings create/read
+        internal protected static Dictionary<string, List<string>> KeywordsMultipleMeaningsDictionary = new();
+        internal protected record KeywordsMultipleMeaningsDictionaryJson
+        {
+            public List<KeywordsMultipleMeanings> Info { get; set; }
+        }
+        internal protected record KeywordsMultipleMeanings
+        {
+            [JsonProperty("Keyword ID")]
+            public string KeywordID { get; set; }
+
+            public List<string> Meanings { get; set; }
+        }
+        internal protected static void ExportKeywordsMultipleMeaningsDictionary(string LocalizationWithKeywordsPath, bool IgnoreRailAndMirrorKeywords = true)
+        {
+            KeywordsMultipleMeaningsDictionaryJson Export = new KeywordsMultipleMeaningsDictionaryJson();
+            Export.Info = new List<KeywordsMultipleMeanings>();
+            int FoundCounter = 0;
+            foreach (FileInfo LocalizeFile in new DirectoryInfo(LocalizationWithKeywordsPath)
+                .GetFiles(searchPattern: "*.json", searchOption: SearchOption.AllDirectories)
+                    .Where(file => file.Name.StartsWithOneOf([
+                        "Passive",
+                        "EGOgift",
+                        "Bufs",
+                        "BattleKeywords",
+                        "Skills",
+                        "PanicInfo"
+                    ])
+                )
+            )
+            {
+                string TextToAnalyze = File.ReadAllText(LocalizeFile.FullName);
+                foreach (Match keywordMatch in Regex.Matches(TextToAnalyze, @"<sprite name=\\""(?<ID>\w+)\\""><color=(?<Color>#[a-fA-F0-9]{6})><u><link=\\""\w+\\"">(?<Name>.*?)</link></u></color>"))
+                {
+                    string ID = keywordMatch.Groups["ID"].Value;
+                    string VariativeName = keywordMatch.Groups["Name"].Value;
+
+                    if (!KeywordsMultipleMeaningsDictionary.ContainsKey(ID)) KeywordsMultipleMeaningsDictionary[ID] = new();
+
+                    if (KeywordsGlossary.ContainsKey(ID))
+                    {
+                        if (!KeywordsMultipleMeaningsDictionary[ID].Contains(KeywordsGlossary[ID].Name))
+                        {
+                            KeywordsMultipleMeaningsDictionary[ID].Add(KeywordsGlossary[ID].Name);
+                        }
+                    }
+
+                    if (!KeywordsMultipleMeaningsDictionary[ID].Contains(VariativeName))
+                    {
+                        KeywordsMultipleMeaningsDictionary[ID].Add(VariativeName);
+                    }
+
+                    FoundCounter++;
+                }
+            }
+
+            foreach (var i in KeywordsMultipleMeaningsDictionary)
+            {
+                Export.Info.Add(new KeywordsMultipleMeanings()
+                {
+                    KeywordID = i.Key,
+                    Meanings = i.Value
+                });
+            }
+
+            if (FoundCounter > 0)
+            {
+                Export.MarkSerialize("Keywords Multiple Meanings.json");
+                MessageBox.Show($"Keywords multiple meanings from \"{LocalizationWithKeywordsPath}\" dir exported as \"Keywords Multiple Meanings.json\" at program folder");
+            }
+        }
+        internal protected static void ReadKeywordsMultipleMeanings(string Filepath)
+        {
+            if (File.Exists(Filepath))
+            {
+                KeywordsMultipleMeaningsDictionaryJson Readed = JsonConvert.DeserializeObject<KeywordsMultipleMeaningsDictionaryJson>(File.ReadAllText(Filepath));
+                if (!Readed.IsNull())
+                {
+                    KeywordsMultipleMeaningsDictionary = new();
+                    foreach(KeywordsMultipleMeanings KeywordMeaningsInfo in Readed.Info)
+                    {
+                        if (!KeywordsMultipleMeaningsDictionary.ContainsKey(KeywordMeaningsInfo.KeywordID)) KeywordsMultipleMeaningsDictionary[KeywordMeaningsInfo.KeywordID] = new();
+                        foreach(string KeywordMeaning in KeywordMeaningsInfo.Meanings)
+                        {
+                            KeywordsMultipleMeaningsDictionary[KeywordMeaningsInfo.KeywordID].Add(KeywordMeaning);
+
+                            Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter[KeywordMeaning] = KeywordMeaningsInfo.KeywordID;
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
         internal protected static Dictionary<string, KeywordSingleton> KeywordsGlossary = [];
         internal protected static Dictionary<string, string> Keywords_IDName = [];
         /// <summary>
-        /// Contains matches of keyword names and their IDs in descending order of name length
+        /// Contains matches of keyword names and their IDs in descending order of name length (For limbus preview formatter, only base keyword names)
         /// </summary>
-        internal protected static Dictionary<string, string> Keywords_IDName_OrderByLength = [];
+        internal protected static Dictionary<string, string> Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter = [];
+        /// <summary>
+        /// Extended version with other keyword meanings (E.g. "Charge", "Charges" for same Charge keyword id)
+        /// </summary>
+        internal protected static Dictionary<string, string> Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter = [];
         internal protected static Dictionary<string, BitmapImage> KeywordImages = [];
         internal protected static Dictionary<string, BitmapImage> EGOGiftInlineImages = [];
         internal protected static Dictionary<string, string> SkillTags = [];
@@ -144,7 +244,7 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                                 };
 
                                 Keywords_IDName[KeywordItem.ID] = KeywordItem.Name;
-                                if (!KeywordItem.Name.Equals(KeywordItem.ID))
+                                if (!KeywordItem.Name.Equals(KeywordItem.ID) & !KeywordItem.ID.EndsWithOneOf(["_Re", "Re", "Mirror"]))
                                 {
                                     // Fallback overwrite
                                     //if (Keywords_IDName_OrderByLength.ContainsValue(KeywordItem.ID) & WriteOverFallback)
@@ -152,7 +252,8 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                                     //    Keywords_IDName_OrderByLength = Keywords_IDName_OrderByLength.RemoveItemWithValue(KeywordItem.ID);
                                     //}
 
-                                    Keywords_IDName_OrderByLength[KeywordItem.Name] = KeywordItem.ID;
+                                    Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter[KeywordItem.Name] = KeywordItem.ID;
+                                    Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter[KeywordItem.Name] = KeywordItem.ID;
                                 }
 
                                 KnownID.Add(KeywordItem.ID);
@@ -163,7 +264,8 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     }
                 }
 
-                Keywords_IDName_OrderByLength = Keywords_IDName_OrderByLength.OrderBy(obj => obj.Key.Length).ToDictionary(obj => obj.Key, obj => obj.Value).Reverse().ToDictionary();
+                Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter = Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter.OrderBy(obj => obj.Key.Length).ToDictionary(obj => obj.Key, obj => obj.Value).Reverse().ToDictionary();
+                Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter = Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter.OrderBy(obj => obj.Key.Length).ToDictionary(obj => obj.Key, obj => obj.Value).Reverse().ToDictionary();
             }
             else
             {

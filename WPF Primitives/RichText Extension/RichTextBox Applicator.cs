@@ -65,20 +65,20 @@ namespace RichText
             return s;
         }
 
-        internal protected static Size AbstractedTextSize(string TargetString, RichTextBox FontParametersSource)
-        {
-            FormattedText AbstractedWidth = new FormattedText(
-                textToFormat: TargetString,
-                culture: CultureInfo.CurrentCulture,
-                flowDirection: FlowDirection.LeftToRight,
-                typeface: new Typeface(FontParametersSource.FontFamily, FontParametersSource.FontStyle, FontParametersSource.FontWeight, FontParametersSource.FontStretch),
-                emSize: FontParametersSource.FontSize,
-                foreground: Brushes.Black,
-                numberSubstitution: new NumberSubstitution(),
-                pixelsPerDip: VisualTreeHelper.GetDpi(FontParametersSource).PixelsPerDip);
+        //internal protected static Size AbstractedTextSize(string TargetString, RichTextBox FontParametersSource)
+        //{
+        //    FormattedText AbstractedWidth = new FormattedText(
+        //        textToFormat: TargetString,
+        //        culture: CultureInfo.CurrentCulture,
+        //        flowDirection: FlowDirection.LeftToRight,
+        //        typeface: new Typeface(FontParametersSource.FontFamily, FontParametersSource.FontStyle, FontParametersSource.FontWeight, FontParametersSource.FontStretch),
+        //        emSize: FontParametersSource.FontSize,
+        //        foreground: Brushes.Black,
+        //        numberSubstitution: new NumberSubstitution(),
+        //        pixelsPerDip: VisualTreeHelper.GetDpi(FontParametersSource).PixelsPerDip);
 
-            return new Size(AbstractedWidth.Width, AbstractedWidth.Height);
-        }
+        //    return new Size(AbstractedWidth.Width, AbstractedWidth.Height);
+        //}
 
         #region Методы добавления текста и спрайтов на предпросмотр
         private protected static void AppendText(InlineTextConstructor TextData, RichTextBox Target)
@@ -200,36 +200,29 @@ namespace RichText
                 else
                 {
                     if (!RichTextBoxApplicator.IsProcessingLimbusText) ImageData.TextBase.Text = "";
+
                     Run KeywordRun = new Run(ImageData.TextBase.Text);
                     TagManager.ApplyTags(ref KeywordRun, ImageData.TextBase.InnerTags);
 
-                    TextBlock KeywordTextblock = new TextBlock(KeywordRun)
-                    {
-                        Margin = new Thickness(SpriteImage.Width, 0, 0, 0)
-                    };
+                    TextBlock KeywordTextblock = new TextBlock(KeywordRun);
 
-                    Canvas SpritePlusEffectNameCanvas = new()
+                    StackPanel SpritePlusEffectNameCanvas = new()
                     {
+                        Orientation = Orientation.Horizontal,
                         Children = {
                             SpriteImage,
                             KeywordTextblock
                         },
                     };
 
-                    double AbstractedKeywordWidth = AbstractedTextSize(ImageData.TextBase.Text, Target).Width + SpriteImage.Width;
-
                     if (!ImageData.PunctuationMarksTextBase.Text.Equals(""))
                     {
-                        Run MarkRun = new Run(ImageData.PunctuationMarksTextBase.Text);
-                        TagManager.ApplyTags(ref MarkRun, ImageData.PunctuationMarksTextBase.InnerTags);
-                        TextBlock PunctuationMarkTextBlock = new TextBlock(MarkRun) { Margin = new Thickness(AbstractedKeywordWidth, 0, 0, 0) };
-                        SpritePlusEffectNameCanvas.Children.Add(PunctuationMarkTextBlock);
-                        AbstractedKeywordWidth += AbstractedTextSize(ImageData.PunctuationMarksTextBase.Text, Target).Width;
+                        Run PunctuationMarkRun = new Run(ImageData.PunctuationMarksTextBase.Text);
+                        TagManager.ApplyTags(ref PunctuationMarkRun, ImageData.PunctuationMarksTextBase.InnerTags);
+                        SpritePlusEffectNameCanvas.Children.Add(new TextBlock(PunctuationMarkRun));
                     }
 
-                    // Fucking incredible
-                    SpritePlusEffectNameCanvas.Width = AbstractedKeywordWidth;
-
+                    //                                                                                                                              this mf
                     LastFlowDocumentParagraph.Inlines.Add(new InlineUIContainer(SpritePlusEffectNameCanvas) { BaselineAlignment = BaselineAlignment.Top});
 
                 }

@@ -19,6 +19,8 @@ using System.Windows.Media;
 using System.Windows.Documents;
 using LC_Localization_Task_Absolute.Limbus_Integration;
 using System.Text.RegularExpressions;
+using static LC_Localization_Task_Absolute.Json.BaseTypes.Type_Skills;
+using System.Windows.Media.Imaging;
 
 namespace LC_Localization_Task_Absolute;
 
@@ -106,7 +108,11 @@ public partial class MainWindow : Window
             ["Editor Context Menu — Unevident to Shorthands"] = STE_ContextMenu_UnevidentKeywordsToShorthands,
             ["Editor Context Menu — [KeywordID] to Shorthands"] = STE_ContextMenu_KeywordLinksToShorthand,
             ["Editor Context Menu — [KeywordID] to TextMeshPro"] = STE_ContextMenu_KeywordLinksToTMPro,
-            
+
+            ["Unsaved Changes Window — Title"] = STE_UnsavedChangesWindow_Title,
+            ["Unsaved Changes Window — Cancel"] = STE_UnsavedChangesWindow_Cancel,
+            ["Unsaved Changes Window — Confirm Exit"] = STE_UnsavedChangesWindow_ConfirmExit,
+            ["Unsaved Changes Window — Information Text"] = DTE_UnsavedChangesInfo,
         };
         UITextfieldElements = new()
         {
@@ -148,6 +154,7 @@ public partial class MainWindow : Window
         InitSurfaceScroll(SurfaceScrollPreview_Passives);
         InitSurfaceScroll(SurfaceScrollPreview_EGOGifts);
         InitSurfaceScroll(SurfaceScrollPreview_Default);
+        InitSurfaceScroll(SurfaceScroll_UnsavedChangesInfo);
 
         PreviewMouseDown += MouseDownEvent;
 
@@ -175,9 +182,14 @@ public partial class MainWindow : Window
             Editor.Text = "               <spritessize=+30><font=\"BebasKai SDF\"><size=140%><sprite name=\"9202\"> <u>Limbus Company Localization Interface</u> <color=#f8c200>'1.0:0</color></size></font></spritessize>";
         }
 
-        InternalModel.InitializingEvent = false;
+        RichText.InternalModel.InitializingEvent = false;
 
 
+        //KeywordsInterrogate.GetKeywordsMultipleMeaningsDictionary(@"C:\Program Files (x86)\Steam\steamapps\common\Limbus Company\LimbusCompany_Data\Lang\ru-mtl",
+            //new Regex(@"\[(?<ID>\w+):`(?<Name>.*?)`\]|<sprite name=\\""(?<ID>\w+)\\""><color=(?<Color>#[a-fA-F0-9]{6})><u><link=\\""\w+\\"">(?<Name>.*?)</link></u></color>"));
+        
+        
+        
         // Default file load on startup
         //FileInfo s = new FileInfo(@"p..s..x\@Localization-MTL'RU\[-] Task Valid\Task Valid @Skills'.json\Skills_Ego_Personality-11.json");
 
@@ -1220,7 +1232,7 @@ public partial class MainWindow : Window
         MainControl.JsonFilePath.Text = CurrentFile.FullName;
     }
 
-    private void Actions_FILE_SelectFile(object sender, MouseButtonEventArgs e)
+    internal protected void Actions_FILE_SelectFile_Acutal()
     {
         OpenFileDialog JsonFileSelector = new Microsoft.Win32.OpenFileDialog();
         JsonFileSelector.DefaultExt = ".json";
@@ -1261,6 +1273,11 @@ public partial class MainWindow : Window
                 Mode_EGOGifts.LoadStructure(CurrentFile);
             }
         }
+    }
+
+    private void Actions_FILE_SelectFile(object sender, MouseButtonEventArgs e)
+    {
+        CheckUnsavedChanges(SelectFileOnEnd: true);
     }
     #endregion
 
@@ -1305,9 +1322,230 @@ public partial class MainWindow : Window
     }
 
 
+    internal protected void CheckUnsavedChanges(bool ExitOnEnd = false, bool SelectFileOnEnd = false)
+    {
+        int UnsavedChangesCount = 0;
+        string UnsavedChangesInfo = "";
+
+        switch (Mode_Handlers.Upstairs.ActiveProperties.Key)
+        {
+            case "Passives":
+                foreach (KeyValuePair<int, BaseTypes.Type_Passives.Passive> CheckPassive in DelegatePassives)
+                {
+                    bool UnsavedChangesInPassiveDesc = false;
+                    bool UnsavedChangesInPassiveSummary = false;
+
+                    if (!CheckPassive.Value.Description.Equals(CheckPassive.Value.EditorDescription))
+                    {
+                        UnsavedChangesInPassiveDesc = true;
+                        UnsavedChangesCount++;
+                    }
+                    if (!CheckPassive.Value.SummaryDescription.IsNull())
+                    {
+                        if (!CheckPassive.Value.SummaryDescription.Equals(CheckPassive.Value.EditorSummaryDescription))
+                        {
+                            UnsavedChangesInPassiveSummary = true;
+                            UnsavedChangesCount++;
+                        }
+                    }
+
+                    if (UnsavedChangesInPassiveDesc | UnsavedChangesInPassiveSummary)
+                    {
+                        //UnsavedChangesInfo += $"\n\n<b>ID</b> <color=#f8c200>{CheckPassive.Key}</color> 「<color=#afbff9>{CheckPassive.Value.Name}</color>」";
+                        UnsavedChangesInfo += UILanguageLoader.LangUnsavedChangesInfo.Passives.IDHeader.Exform(CheckPassive.Key, CheckPassive.Value.Name);
+                        if (UnsavedChangesInPassiveDesc)
+                        {
+                            //UnsavedChangesInfo += "\n  > Главное описание";
+                            UnsavedChangesInfo += UILanguageLoader.LangUnsavedChangesInfo.Passives.MainDesc;
+                        }
+                        if (UnsavedChangesInPassiveSummary)
+                        {
+                            //UnsavedChangesInfo += "\n  > Суммарное описание";
+                            UnsavedChangesInfo += UILanguageLoader.LangUnsavedChangesInfo.Passives.SummaryDesc;
+                        }
+                    }
+                }
+
+                break;
+
+
+            case "Skills":
+                foreach (KeyValuePair<int, Dictionary<int, BaseTypes.Type_Skills.UptieLevel>> CheckSkill in DelegateSkills)
+                {
+                    bool AlreadyAddedThisID = false;
+                    string SkillName = "";
+                    foreach (var UptieLevel in CheckSkill.Value.Values)
+                    {
+                        SkillName = UptieLevel.Name;
+                        bool AnythingChanged = false;
+                        
+                        if (!UptieLevel.Description.Equals(UptieLevel.EditorDescription))
+                        {
+                            AnythingChanged = true;
+                        }
+                        
+                        if (!UptieLevel.Coins.IsNull())
+                        {
+                            foreach (var Coin in UptieLevel.Coins)
+                            {
+                                if (!Coin.IsNull())
+                                {
+                                    if (!Coin.CoinDescriptions.IsNull())
+                                    {
+                                        foreach (var CoinDesc in Coin.CoinDescriptions)
+                                        {
+                                            if (!CoinDesc.IsNull())
+                                            {
+                                                if (!CoinDesc.Description.IsNull())
+                                                {
+                                                    if (!CoinDesc.Description.Equals(CoinDesc.EditorDescription))
+                                                    {
+                                                        AnythingChanged = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (AnythingChanged)
+                        {
+                            if (!AlreadyAddedThisID)
+                            {
+                                //UnsavedChangesInfo += $"\n\n<b>ID</b> <color=#f8c200>{CheckSkill.Key}</color> 「<color=#afbff9>{SkillName}</color>」";
+                                UnsavedChangesInfo += UILanguageLoader.LangUnsavedChangesInfo.Skills.IDHeader.Exform(CheckSkill.Key, SkillName);
+                                AlreadyAddedThisID = true;
+                            }
+                            //UnsavedChangesInfo += $"\n  > Уровень связи {UptieLevel.Uptie}";
+                            UnsavedChangesInfo += UILanguageLoader.LangUnsavedChangesInfo.Skills.UptieLevel.Extern($"{UptieLevel.Uptie}");
+                        }
+                    }
+                }
+                break;
+
+
+            case "Keywords":
+                foreach (KeyValuePair<string, BaseTypes.Type_Keywords.Keyword> CheckKeyword in DelegateKeywords)
+                {
+                    bool UnsavedChangesInKeywordDesc = false;
+                    bool UnsavedChangesInKeywordSummary = false;
+
+                    if (!CheckKeyword.Value.Description.Equals(CheckKeyword.Value.EditorDescription))
+                    {
+                        UnsavedChangesInKeywordDesc = true;
+                        UnsavedChangesCount++;
+                    }
+                    if (!CheckKeyword.Value.SummaryDescription.IsNull())
+                    {
+                        if (!CheckKeyword.Value.SummaryDescription.Equals(CheckKeyword.Value.EditorSummaryDescription))
+                        {
+                            UnsavedChangesInKeywordSummary = true;
+                            UnsavedChangesCount++;
+                        }
+                    }
+
+                    if (UnsavedChangesInKeywordDesc | UnsavedChangesInKeywordSummary)
+                    {
+                        //UnsavedChangesInfo += $"\n\n<b>ID</b> <color=#f8c200>{CheckKeyword.Key}</color> 「<color=#afbff9>{CheckKeyword.Value.Name}</color>」";
+                        UnsavedChangesInfo += UILanguageLoader.LangUnsavedChangesInfo.Keywords.IDHeader.Exform(CheckKeyword.Key, CheckKeyword.Value.Name);
+                        if (UnsavedChangesInKeywordDesc)
+                        {
+                            //UnsavedChangesInfo += "\n  > Главное описание";
+                            UnsavedChangesInfo += UILanguageLoader.LangUnsavedChangesInfo.Keywords.MainDesc;
+                        }
+                        if (UnsavedChangesInKeywordSummary)
+                        {
+                            //UnsavedChangesInfo += "\n  > Суммарное описание";
+                            UnsavedChangesInfo += UILanguageLoader.LangUnsavedChangesInfo.Passives.MainDesc;
+                        }
+                    }
+                }
+                break;
+
+
+            case "E.G.O Gifts":
+                if (DelegateEGOGifts.Keys.Count != 0)
+                {
+                    foreach (KeyValuePair<int, BaseTypes.Type_EGOGifts.EGOGift> CheckEGOGift in DelegateEGOGifts)
+                    {
+                        string ChangedSimpleDescs = "";
+                        bool ChangedDesc = false;
+                        if (!CheckEGOGift.Value.Description.Equals(CheckEGOGift.Value.EditorDescription))
+                        {
+                            ChangedDesc = true;
+                        }
+                        if (!CheckEGOGift.Value.SimpleDescriptions.IsNull())
+                        {
+                            int SimpleDescIndexer = 1;
+                            foreach (var SimpleDesc in CheckEGOGift.Value.SimpleDescriptions)
+                            {
+                                if (!SimpleDesc.Description.Equals(SimpleDesc.EditorDescription))
+                                {
+                                    //ChangedSimpleDescs += $"\n  > Простое описание №{SimpleDescIndexer}\n";
+                                    ChangedSimpleDescs += UILanguageLoader.LangUnsavedChangesInfo.EGOGifts.SimpleDesc.Extern(SimpleDescIndexer);
+                                }
+
+                                SimpleDescIndexer++;
+                            }
+                        }
+
+                        if (ChangedDesc | !ChangedSimpleDescs.Equals(""))
+                        {
+                            //UnsavedChangesInfo += $"\n<b>ID</b> <color=#f8c200>{CheckEGOGift.Key}</color> 「<color=#afbff9>{CheckEGOGift.Value.Name}</color>」";
+                            UnsavedChangesInfo += UILanguageLoader.LangUnsavedChangesInfo.EGOGifts.IDHeader.Exform(CheckEGOGift.Key, CheckEGOGift.Value.Name);
+                            if (ChangedDesc)
+                            {
+                                //UnsavedChangesInfo += "\n  > Описание";
+                                UnsavedChangesInfo += UILanguageLoader.LangUnsavedChangesInfo.EGOGifts.MainDesc;
+                            }
+                            if (!ChangedSimpleDescs.Equals(""))
+                            {
+                                UnsavedChangesInfo += ChangedSimpleDescs;
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+        if (!UnsavedChangesInfo.Equals(""))
+        {
+            DTE_UnsavedChangesInfo.SetRichText(UnsavedChangesInfo.Trim());
+            BackgroundCover_UnsavedChanges.Visibility = Visible;
+            if (SelectFileOnEnd) SelectFileInstead = true;
+        }
+        else
+        {
+            if (ExitOnEnd) Application.Current.Shutdown();
+            if (SelectFileOnEnd) Actions_FILE_SelectFile_Acutal();
+        }
+    }
+    internal protected bool SelectFileInstead = false;
     private void Window_DragMove(object sender, MouseButtonEventArgs e) => this.DragMove();
     private void Minimize(object sender, MouseButtonEventArgs e) => WindowState = WindowState.Minimized;
-    private void Shutdown(object sender, MouseButtonEventArgs e) => Close();
+    private void Shutdown(object sender, MouseButtonEventArgs e)
+    {
+        CheckUnsavedChanges(ExitOnEnd: true);
+    }
+    private void UnsavedChangesDialog_ConfirmProceed(object sender, MouseButtonEventArgs e)
+    {
+        if (SelectFileInstead)
+        {
+            Actions_FILE_SelectFile_Acutal();
+            BackgroundCover_UnsavedChanges.Visibility = Collapsed;
+            SelectFileInstead = false;
+        }
+        else Application.Current.Shutdown();
+    }
+
+    private void UnsavedChangesDialog_Cancel(object sender, MouseButtonEventArgs e)
+    {
+        BackgroundCover_UnsavedChanges.Visibility = Collapsed;
+    }
+
+
 
     private void ProcessLogicalTree(object current)
     {
@@ -1813,7 +2051,7 @@ public partial class MainWindow : Window
                 break;
 
             case "UnevidentKeywordsToKeywordLinks":
-                foreach(KeyValuePair<string, string> UnevidentKeyword in KeywordsInterrogate.Keywords_IDName_OrderByLength)
+                foreach(KeyValuePair<string, string> UnevidentKeyword in KeywordsInterrogate.Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter)
                 {
                     if (Editor.Text.Contains(UnevidentKeyword.Key))
                     {
@@ -1826,7 +2064,7 @@ public partial class MainWindow : Window
                 break;
 
             case "UnevidentKeywordsToShorthands":
-                foreach (KeyValuePair<string, string> UnevidentKeyword in KeywordsInterrogate.Keywords_IDName_OrderByLength)
+                foreach (KeyValuePair<string, string> UnevidentKeyword in KeywordsInterrogate.Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter)
                 {
                     if (Editor_SelectedTextTemplate.Contains(UnevidentKeyword.Key))
                     {
@@ -1871,5 +2109,22 @@ public partial class MainWindow : Window
 
         if (!Editor_SelectedTextTemplate.Equals(Editor.SelectedText)) Editor.SelectedText = Editor_SelectedTextTemplate;
     }
+
     #endregion
+
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (!Settings.TechnicalActions.IsNull() & !File.Exists("Keywords Multiple Meanings.json"))
+        {
+            if (!Settings.TechnicalActions.KeywordsMultipleMeanings.IsNull())
+            {
+                if (Directory.Exists(Settings.TechnicalActions.KeywordsMultipleMeanings.SourcePath))
+                {
+                    KeywordsInterrogate.ExportKeywordsMultipleMeaningsDictionary(
+                        Settings.TechnicalActions.KeywordsMultipleMeanings.SourcePath
+                    );
+                }
+            }
+        }
+    }
 }

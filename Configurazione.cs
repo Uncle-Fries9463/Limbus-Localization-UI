@@ -124,6 +124,25 @@ namespace LC_Localization_Task_Absolute
                 KeywordsInterrogate.InitializeGlossaryFrom(Settings.Preview.KeywordsCustomFolder.Path, WriteOverFallback: true);
             }
 
+            if (!Configurazione.SelectedLanguageProperties.KeywordsMultipleMeaningsFile.Equals(""))
+            {
+                string FinalPath = "";
+
+                if (File.Exists(Configurazione.SelectedLanguageProperties.KeywordsMultipleMeaningsFile))
+                {
+                    FinalPath = Configurazione.SelectedLanguageProperties.KeywordsMultipleMeaningsFile;
+                }
+                else if (File.Exists(@$"⇲ Assets Directory\[+] Keywords\Text\{Settings.Preview.KeywordsFolder}\{Configurazione.SelectedLanguageProperties.KeywordsMultipleMeaningsFile}"))
+                {
+                    FinalPath = @$"⇲ Assets Directory\[+] Keywords\Text\{Settings.Preview.KeywordsFolder}\{Configurazione.SelectedLanguageProperties.KeywordsMultipleMeaningsFile}";
+                }
+
+                if (!FinalPath.Equals(""))
+                {
+                    rin($"  Keywords Multiple Meanings file: {FinalPath}");
+                    KeywordsInterrogate.ReadKeywordsMultipleMeanings(FinalPath);
+                }
+            }
         }
 
 
@@ -188,6 +207,9 @@ namespace LC_Localization_Task_Absolute
         {
             public Internal Internal { get; set; }
             public Preview Preview { get; set; }
+
+            [JsonProperty("Technical Actions")]
+            public TechnicalActions TechnicalActions { get; set; }
         }
         internal protected class Internal
         {
@@ -291,6 +313,9 @@ namespace LC_Localization_Task_Absolute
             [JsonProperty("Keywords Auto Detection Regex Pattern")]
             public string AutoKeywordsDetectionRegex { get; set; }
 
+            [JsonProperty("Keywords Multiple Meanings File")]
+            public string KeywordsMultipleMeaningsFile { get; set; }
+
             [OnDeserialized]
             internal void OnInit(StreamingContext context) => NullableControl.NullExterminate(this);
         }
@@ -310,6 +335,21 @@ namespace LC_Localization_Task_Absolute
 
             [JsonProperty("(Context Menu) Insertion Shape (Color)")]
             public string InsertionShape_Color { get; set; }
+        }
+        internal protected class TechnicalActions
+        {
+            [JsonProperty("Keywords Multiple Meanings Dictionary")]
+            public TechnicalActions_KeywordsMultipleMeanings KeywordsMultipleMeanings { get; set; }
+        }
+        internal protected class TechnicalActions_KeywordsMultipleMeanings
+        {
+            [JsonProperty("Generate On Startup")]
+            public bool GenerateOnStartup { get; set; }
+
+            [JsonProperty("Source Path")]
+            public string SourcePath { get; set; }
+
+            [OnDeserialized] internal void OnInit(StreamingContext context) => NullableControl.NullExterminate(this);
         }
     }
 }

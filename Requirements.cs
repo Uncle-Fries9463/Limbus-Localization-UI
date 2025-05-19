@@ -15,8 +15,8 @@ using System.Windows.Documents;
 using System.Runtime.InteropServices;
 using System.Drawing.Text;
 using System.Reflection;
-using static LC_Localization_Task_Absolute.Requirements;
 using Newtonsoft.Json.Linq;
+using static LC_Localization_Task_Absolute.Requirements;
 
 namespace LC_Localization_Task_Absolute
 {
@@ -29,6 +29,7 @@ namespace LC_Localization_Task_Absolute
             internal protected static string StringNullMarker = "<Null>";
         }
 
+        // All null strings to "<Null>" strings
         internal protected static void NullExterminate(object Target, bool WriteInfo = false)
         {
             string NullValueInformation = "\x1b[0m\x1b[38;5;197mNull\x1b[0m";
@@ -255,7 +256,7 @@ namespace LC_Localization_Task_Absolute
         {
             Dictionary<string, string> IndexReplacements = new();
             int ReplacementsIndexer = 1;
-            foreach (string Replacement in Replacements)
+            foreach (object Replacement in Replacements)
             {
                 IndexReplacements[$"[${ReplacementsIndexer}]"] = $"{Replacement}";
                 ReplacementsIndexer++;

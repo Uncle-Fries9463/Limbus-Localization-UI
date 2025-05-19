@@ -9,10 +9,12 @@
         Title="LC Localization Task Absolute"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen" 
-        ResizeMode="CanResize"
+        ResizeMode="CanResizeWithGrip"
         Opacity="1" AllowsTransparency="True"
         Height="550"
         Width="1000"
+        
+        Loaded="Window_Loaded"
         
         MinHeight="425"
         MinWidth="710.5"
@@ -134,6 +136,18 @@
             </Style.Triggers>
         </Style>
 
+        <Style TargetType="Border" x:Key="ButtonDefaultDeskHighlightableDefault">
+            <Setter Property="Background" Value="#FF202020"/>
+            <Setter Property="BorderBrush" Value="#393939"/>
+            <Setter Property="CornerRadius" Value="1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF272529"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <Style TargetType="Border" x:Key="BorderDefaultDesk">
             <Setter Property="Background" Value="{DynamicResource UITheme_BordersBackground}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource UITheme_BordersBorderColor}"/>
@@ -250,7 +264,6 @@
                     <RowDefinition Height="34"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <RichTextBox x:Name="Testificate" Margin="10000" Foreground="#ebcaa2" IsReadOnly="True" FontFamily="{Binding Path=FontFamily, ElementName=Special_PreviewLayout_Keywords_BattleKeywords_Desc}" FontSize="19" Visibility="Visible"/>
                 <Border Grid.Row="0" Background="#FF101117" CornerRadius="5 5 0 0" MouseLeftButtonDown="Window_DragMove">
                     <Grid x:Name="TitleBar">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -285,6 +298,62 @@
 
 
                 <Grid Grid.Row="1" x:Name="MainContent">
+                    <Grid Panel.ZIndex="111" x:Name="BackgroundCover_UnsavedChanges" Visibility="Collapsed">
+                        <Border Background="#8C090909" MouseLeftButtonDown="UnsavedChangesDialog_Cancel"/>
+                        <Grid x:Name="UnsavedChangesInfo">
+                            <Border Width="500" Height="380" Background="#1b1a1b" BorderBrush="#393939" BorderThickness="2" CornerRadius="1">
+                                <Grid>
+                                    <RichTextBox x:Name="STE_UnsavedChangesWindow_Title" FontSize="40" Margin="0 10 0 0" VerticalAlignment="Top" FontFamily="/UI/Fonts/#EXCELSIOR SANS" Foreground="#CFCFCF">
+                                        <FlowDocument TextAlignment="Center">
+                                            <Paragraph>
+                                                <Run>
+                                                    Несохранённые изменения
+                                                </Run>
+                                            </Paragraph>
+                                        </FlowDocument>
+                                    </RichTextBox>
+                                    <ScrollViewer x:Name="SurfaceScroll_UnsavedChangesInfo" Width="450" Height="240" Margin="0 60 0 0" BorderBrush="AliceBlue" BorderThickness="2" VerticalAlignment="Top">
+                                        <RichTextBox x:Name="DTE_UnsavedChangesInfo" Foreground="#D2D2D2" FontFamily="GOST Type BU" FontSize="21">
+                                            <FlowDocument>
+                                                <Paragraph>
+                                                    <Run>
+                                                        
+                                                    </Run>
+                                                </Paragraph>
+                                            </FlowDocument>
+                                        </RichTextBox>
+                                        <ScrollViewer.Resources>
+                                            <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
+                                        </ScrollViewer.Resources>
+                                    </ScrollViewer>
+                                    <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0 0 0 10" HorizontalAlignment="Center">
+                                        <Border MouseLeftButtonUp="UnsavedChangesDialog_ConfirmProceed" Height="50" Width="150" Margin="0 0 5 0" Style="{StaticResource ButtonDefaultDeskHighlightableDefault}">
+                                            <RichTextBox x:Name="STE_UnsavedChangesWindow_ConfirmExit" VerticalAlignment="Center" Foreground="#CFCFCF" FontFamily="/UI/Fonts/#EXCELSIOR SANS" FontSize="25">
+                                                <FlowDocument TextAlignment="Center">
+                                                    <Paragraph>
+                                                        <Run>
+                                                            Выйти
+                                                        </Run>
+                                                    </Paragraph>
+                                                </FlowDocument>
+                                            </RichTextBox>
+                                        </Border>
+                                        <Border MouseLeftButtonUp="UnsavedChangesDialog_Cancel"  Height="50" Width="150" Margin="5 0 0 0" Style="{StaticResource ButtonDefaultDeskHighlightableDefault}">
+                                            <RichTextBox x:Name="STE_UnsavedChangesWindow_Cancel" VerticalAlignment="Center" Foreground="#CFCFCF" FontFamily="/UI/Fonts/#EXCELSIOR SANS" FontSize="25">
+                                                <FlowDocument TextAlignment="Center">
+                                                    <Paragraph>
+                                                        <Run>
+                                                            Остаться
+                                                        </Run>
+                                                    </Paragraph>
+                                                </FlowDocument>
+                                            </RichTextBox>
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Grid>
                     <StackPanel>
                         <Image x:Name="BackgroundImage" Source="UI\Images\Floor of Literature.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                         <Image Margin="0 -1 0 0" Visibility="{Binding ElementName=BackgroundImage, Path=Visibility}" Source="{Binding ElementName=BackgroundImage, Path=Source}" RenderTransformOrigin="0.5 0.5" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -1561,7 +1630,7 @@
                                                         </TextBlock>
                                                         <TextBlock Foreground="#c6c3bd" Text="※" FontWeight="Light" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5"/>
                                                         <TextBlock Foreground="#c6c3bd" FontWeight="Black" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5">
-                                                           1.0:2
+                                                           1.0:3
                                                         </TextBlock>
                                                     </StackPanel>
                                                 </StackPanel>
