@@ -246,13 +246,15 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                                 Keywords_IDName[KeywordItem.ID] = KeywordItem.Name;
                                 if (!KeywordItem.Name.Equals(KeywordItem.ID) & !KeywordItem.ID.EndsWithOneOf(["_Re", "Re", "Mirror"]))
                                 {
-                                    // Fallback overwrite
-                                    //if (Keywords_IDName_OrderByLength.ContainsValue(KeywordItem.ID) & WriteOverFallback)
-                                    //{
-                                    //    Keywords_IDName_OrderByLength = Keywords_IDName_OrderByLength.RemoveItemWithValue(KeywordItem.ID);
-                                    //}
-
+                                    //Fallback overwrite
+                                    if (Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter.ContainsValue(KeywordItem.ID) & WriteOverFallback)
+                                    {
+                                        Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter = Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter.RemoveItemWithValue(KeywordItem.ID);
+                                    }
                                     Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter[KeywordItem.Name] = KeywordItem.ID;
+
+
+                                    
                                     Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter[KeywordItem.Name] = KeywordItem.ID;
                                 }
 
