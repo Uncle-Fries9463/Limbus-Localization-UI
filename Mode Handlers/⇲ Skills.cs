@@ -187,58 +187,69 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                             {
                                 int CoinDescNumber = 1;
                                 Grid MainCoinPanel = MainControl.FindName($"PreviewLayout_Skills_CoinShelf{CoinNumber}") as Grid;
-                                foreach(CoinDesc CoinDescription in CurrentCoin.CoinDescriptions)
+
+                                if (!MainCoinPanel.IsNull())
                                 {
-                                    if (!CoinDescription.Description.IsNull())
+                                    foreach(CoinDesc CoinDescription in CurrentCoin.CoinDescriptions)
                                     {
-                                        RichTextBox ThisCoinDescPanel = MainControl.FindName($"PreviewLayout_Skills_CoinShelf{CoinNumber}_Desc{CoinDescNumber}") as RichTextBox;
-                                        Border RightMenuCoinButton_DisableCover = MainControl.FindName($"STE_DisableCover_Skills_Coin_{CoinNumber}") as Border;
-
-                                        VisibilityChangeQuery[ThisCoinDescPanel] = Visible;
-                                        VisibilityChangeQuery[RightMenuCoinButton_DisableCover] = Collapsed;
-
-                                        if (!CoinDescription.Description.Equals(CoinDescription.EditorDescription))
+                                        if (!CoinDescription.Description.IsNull())
                                         {
-                                            ThisCoinDescPanel.SetLimbusRichText(CoinDescription.EditorDescription);
+                                            RichTextBox ThisCoinDescPanel = MainControl.FindName($"PreviewLayout_Skills_CoinShelf{CoinNumber}_Desc{CoinDescNumber}") as RichTextBox;
+                                            if (!ThisCoinDescPanel.IsNull())
+                                            {
+                                                rin($"PreviewLayout_Skills_CoinShelf{CoinNumber}_Desc{CoinDescNumber}");
+                                                Border RightMenuCoinButton_DisableCover = MainControl.FindName($"STE_DisableCover_Skills_Coin_{CoinNumber}") as Border;
 
-                                            (MainControl.FindName($"STE_Skills_Coin_{CoinNumber}") as RichTextBox)
-                                                .SetRichText(UILanguageLoader.LoadedLanguage.UnsavedChangesMarker
-                                                .Extern(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — Skill Coin {CoinNumber}"]));
+                                                VisibilityChangeQuery[ThisCoinDescPanel] = Visible;
+                                                VisibilityChangeQuery[RightMenuCoinButton_DisableCover] = Collapsed;
+
+                                                if (!CoinDescription.Description.Equals(CoinDescription.EditorDescription))
+                                                {
+                                                    ThisCoinDescPanel.SetLimbusRichText(CoinDescription.EditorDescription);
+
+                                                    (MainControl.FindName($"STE_Skills_Coin_{CoinNumber}") as RichTextBox)
+                                                        .SetRichText(UILanguageLoader.LoadedLanguage.UnsavedChangesMarker
+                                                        .Extern(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — Skill Coin {CoinNumber}"]));
+                                                }
+                                                else
+                                                {
+                                                    ThisCoinDescPanel.SetLimbusRichText(CoinDescription.Description);
+                                                    (MainControl.FindName($"STE_Skills_Coin_{CoinNumber}") as RichTextBox)
+                                                        .SetRichText(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — Skill Coin {CoinNumber}"]);
+                                                }
+                                            }
                                         }
-                                        else
+
+                                        CoinDescNumber++;
+                                    }
+                                    //}
+                                
+
+                                    if (FullLink.Coins[CoinNumber - 1].CoinDescriptions
+                                        .Where(x => x.Description != x.EditorDescription).Any())
+                                    {
+                                        (MainControl.FindName($"STE_Skills_Coin_{CoinNumber}") as RichTextBox)
+                                            .SetRichText(UILanguageLoader.LoadedLanguage.UnsavedChangesMarker
+                                                .Extern(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — Skill Coin {CoinNumber}"]));
+                                    }
+                                    else
+                                    {
+                                        if (!MainControl.FindName($"STE_Skills_Coin_{CoinNumber}").IsNull())
                                         {
-                                            ThisCoinDescPanel.SetLimbusRichText(CoinDescription.Description);
                                             (MainControl.FindName($"STE_Skills_Coin_{CoinNumber}") as RichTextBox)
                                                 .SetRichText(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — Skill Coin {CoinNumber}"]);
                                         }
                                     }
 
-                                    CoinDescNumber++;
-                                }
-                                //}
-                                
 
-                                if (FullLink.Coins[CoinNumber - 1].CoinDescriptions
-                                    .Where(x => x.Description != x.EditorDescription).Any())
-                                {
-                                    (MainControl.FindName($"STE_Skills_Coin_{CoinNumber}") as RichTextBox)
-                                        .SetRichText(UILanguageLoader.LoadedLanguage.UnsavedChangesMarker
-                                            .Extern(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — Skill Coin {CoinNumber}"]));
-                                }
-                                else
-                                {
-                                    (MainControl.FindName($"STE_Skills_Coin_{CoinNumber}") as RichTextBox)
-                                        .SetRichText(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — Skill Coin {CoinNumber}"]);
-                                }
-
-
-                                if (CurrentCoin.CoinDescriptions.Where(x => x.EditorDescription.EqualsOneOf(["", "<style=\"highlight\"></style>"])).Count() == CurrentCoin.CoinDescriptions.Count)
-                                {
-                                    MainCoinPanel.Visibility = Collapsed;
-                                }
-                                else
-                                {
-                                    MainCoinPanel.Visibility = Visible;
+                                    if (CurrentCoin.CoinDescriptions.Where(x => x.EditorDescription.EqualsOneOf(["", "<style=\"highlight\"></style>"])).Count() == CurrentCoin.CoinDescriptions.Count)
+                                    {
+                                        MainCoinPanel.Visibility = Collapsed;
+                                    }
+                                    else
+                                    {
+                                        MainCoinPanel.Visibility = Visible;
+                                    }
                                 }
                             }
                         }
@@ -268,7 +279,7 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                 (MainControl.FindName($"NavigationPanel_Skills_UptieLevelSwitch_DisableCover_{UptieLevelNumber}") as Border).Visibility = Visible;
             }
 
-            for (int CoinNumber = 1; CoinNumber <= 5; CoinNumber++)
+            for (int CoinNumber = 1; CoinNumber <= 6; CoinNumber++)
             {
                 //Grid CoinPanel = MainControl.FindName($"PreviewLayout_Skills_CoinShelf{CoinNumber}") as Grid;
 

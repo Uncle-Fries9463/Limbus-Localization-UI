@@ -71,6 +71,7 @@ public partial class MainWindow : Window
             ["Right Menu — Skill Coin 3"] = STE_Skills_Coin_3,
             ["Right Menu — Skill Coin 4"] = STE_Skills_Coin_4,
             ["Right Menu — Skill Coin 5"] = STE_Skills_Coin_5,
+            ["Right Menu — Skill Coin 6"] = STE_Skills_Coin_6,
             ["Right Menu — Skill Coin Descs Title"] = STE_CoinDescriptionsTitle,
             ["Right Menu — Skill Coin Desc Number"] = STE_Skills_Coin_DescNumberDisplay,
 
@@ -184,17 +185,12 @@ public partial class MainWindow : Window
 
         RichText.InternalModel.InitializingEvent = false;
 
-
-        //KeywordsInterrogate.GetKeywordsMultipleMeaningsDictionary(@"C:\Program Files (x86)\Steam\steamapps\common\Limbus Company\LimbusCompany_Data\Lang\ru-mtl",
-            //new Regex(@"\[(?<ID>\w+):`(?<Name>.*?)`\]|<sprite name=\\""(?<ID>\w+)\\""><color=(?<Color>#[a-fA-F0-9]{6})><u><link=\\""\w+\\"">(?<Name>.*?)</link></u></color>"));
-        
-        
-        
         // Default file load on startup
-        //FileInfo s = new FileInfo(@"p..s..x\@Localization-MTL'RU\[-] Task Valid\Task Valid @Skills'.json\Skills_Ego_Personality-11.json");
+        //FileInfo s = new FileInfo(@"C:\Program Files (x86)\Steam\steamapps\common\Limbus Company\LimbusCompany_Data\Assets\Resources_moved\Localize\en\EN_Skills_Abnormality-a1c8p3.json");
 
         //FocusOnFile(s);
         //Mode_Skills.LoadStructure(s);
+        //Mode_Skills.TransformToSkill(114507);
     }
 
 
@@ -1225,6 +1221,7 @@ public partial class MainWindow : Window
         CurrentFile = Target;
         CurrentFileEncoding = Target.GetFileEncoding();
         MainControl.JsonFilePath.Text = CurrentFile.FullName;
+        MainControl.JsonFilePath.CaretIndex = MainControl.JsonFilePath.Text.Length;
     }
     internal protected static void FocusOnFile(string TargetPath)
     {

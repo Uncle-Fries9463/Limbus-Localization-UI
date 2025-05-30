@@ -594,6 +594,23 @@
                                                             <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf5_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
                                                         </StackPanel>
                                                     </Grid>
+                                                    <Grid x:Name="PreviewLayout_Skills_CoinShelf6" Margin="0 3 0 0" Visibility="Visible">
+                                                        <Image Source="/UI/Limbus/Coins/Coin 6.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                        <StackPanel Margin="53 15 0 0">
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc1"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_CoinShelf6_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                        </StackPanel>
+                                                    </Grid>
                                                 </StackPanel>
                                             </ScrollViewer>
                                         </Grid>
@@ -1160,6 +1177,20 @@
                                                         </RichTextBox>
                                                     </Grid>
 
+                                                    <Grid Height="33.5" Margin="0 3 0 0" HorizontalAlignment="Left" Width="275.6">
+                                                        <Border x:Name="STE_DisableCover_Skills_Coin_6" Style="{StaticResource Button_DisableCover}" Panel.ZIndex="1" Visibility="Collapsed"/>
+                                                        <Border x:Name="STE_Action_Skills_Coin_6" PreviewMouseLeftButtonDown="Actions_Skills_SetCoinFocus" Style="{StaticResource ButtonDefaultDeskHighlightable}"/>
+                                                        <RichTextBox x:Name="STE_Skills_Coin_6" Margin="3 2 3 2" FontFamily="Segoe UI" Foreground="{DynamicResource UITheme_DefaultTextColor}" FontSize="22">
+                                                            <FlowDocument>
+                                                                <Paragraph>
+                                                                    <Run>
+                                                                        Монета №5
+                                                                    </Run>
+                                                                </Paragraph>
+                                                            </FlowDocument>
+                                                        </RichTextBox>
+                                                    </Grid>
+
                                                     <RichTextBox x:Name="STE_CoinDescriptionsTitle" Width="275.6" Margin="0 4 0 0" HorizontalAlignment="Left" Foreground="{DynamicResource UITheme_DefaultTextColor}" FontSize="20" FontFamily="Bahnschrift Light">
                                                         <FlowDocument TextAlignment="Center">
                                                             <Paragraph LineHeight="20">
@@ -1620,7 +1651,7 @@
 
                                             
 
-                                            <Grid x:Name="SwitchMenuButtons_DefaultMenu">
+                                            <Grid x:Name="SwitchMenuButtons_DefaultMenu" Visibility="Visible">
                                                 <Border Style="{StaticResource BorderDefaultDesk}"/>
                                                 <StackPanel HorizontalAlignment="Center">
                                                     <Image Source="/UI/Logo.png" HorizontalAlignment="Center" Height="200" Width="200" Margin="0 5 0 5"/>
@@ -1630,7 +1661,7 @@
                                                         </TextBlock>
                                                         <TextBlock Foreground="#c6c3bd" Text="※" FontWeight="Light" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5"/>
                                                         <TextBlock Foreground="#c6c3bd" FontWeight="Black" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5">
-                                                           1.0:3
+                                                           1.0:4
                                                         </TextBlock>
                                                     </StackPanel>
                                                 </StackPanel>

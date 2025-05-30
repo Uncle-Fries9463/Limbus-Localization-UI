@@ -62,7 +62,6 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
 
         internal protected static string Apply(string PreviewText)
         {
-
             // Format Insertions
             foreach(KeyValuePair<string, string> Insert in FormatInsertions)
             {
@@ -111,6 +110,11 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
 
             if (Mode_Handlers.Upstairs.ActiveProperties.Key.EqualsOneOf(["Skills", "Passives", "E.G.O Gifts"]))
             {
+                PreviewText = RemoteRegexPatterns.KeywordLink.Replace(PreviewText, Match =>
+                {
+                    return $"[{Match.Groups["ID"].Value}]\0{Match.Groups["Color"].Value}"; // To avoid color error [abcdeID](#color), get out, that must be converted at line 150 after shorthands
+                });
+
                 // Collapse all TMPro evident keywords with default names into links for safe unevident keywords conversion
                 if (PreviewText.Contains("<sprite name=\""))
                 {

@@ -70,6 +70,10 @@
       "Text": "Skill Coin №5"
     },
     {
+      "Element ID": "Right Menu — Skill Coin 6",
+      "Text": "Skill Coin №6"
+    },
+    {
       "Element ID": "Right Menu — Skill Coin Descs Title",
       "Text": "Coin <b>№[$]</b> descs:"
     },

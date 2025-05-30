@@ -59,13 +59,13 @@ namespace LC_Localization_Task_Absolute
         {
             [JsonProperty("Passives")]
             public UnsavedChangesInfo_Passives Passives { get; set; }
-            
+
             [JsonProperty("Keywords")]
             public UnsavedChangesInfo_Keywords Keywords { get; set; }
-            
+
             [JsonProperty("E.G.O Gifts")]
             public UnsavedChangesInfo_EGOGifts EGOGifts { get; set; }
-            
+
             [JsonProperty("Skills")]
             public UnsavedChangesInfo_Skills   Skills   { get; set; }
         }
@@ -224,7 +224,7 @@ namespace LC_Localization_Task_Absolute
             {
                 string TargetUIElementID = UIStaticItemData.ElementID;
                 string TargetUIElementText = UIStaticItemData.Text;
-                    
+                rin(TargetUIElementID);
                 if (UILanguage.ContainsKey(TargetUIElementID))
                 {
                     string LoadFontAttach = "";
