@@ -21,6 +21,7 @@ using LC_Localization_Task_Absolute.Limbus_Integration;
 using System.Text.RegularExpressions;
 using static LC_Localization_Task_Absolute.Json.BaseTypes.Type_Skills;
 using System.Windows.Media.Imaging;
+using NLog.Targets;
 
 namespace LC_Localization_Task_Absolute;
 
@@ -206,7 +207,7 @@ public partial class MainWindow : Window
                 IsPendingPreviewUpdate = true;
                 try
                 {
-                    DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(Settings.Preview.PreviewUpdateDelay) };
+                    DispatcherTimer Timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.PreviewUpdateDelay) };
                     Timer.Start();
 
                     Timer.Tick += (sender, args) =>
@@ -592,7 +593,7 @@ public partial class MainWindow : Window
         string CoinNumber = $"{Sender.Name[^1]}";
         Mode_Handlers.Mode_Skills.SetCoinFocus(int.Parse(CoinNumber));
 
-        if (Settings.Preview.HighlightCoinDescsOnManualSwitch)
+        if (DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightCoinDescsOnManualSwitch)
         {
             RichTextBox HighlightTarget = FindName($"PreviewLayout_Skills_CoinShelf{Mode_Skills.CurrentSkillCoinIndex + 1}_Desc{Mode_Skills.CurrentSkillCoinDescIndex + 1}") as RichTextBox;
             NavigationPanel_Skills_SwitchToCoinDesc_FastSwitch_CoinDescFocusHighlightEvent(HighlightTarget);
@@ -610,7 +611,7 @@ public partial class MainWindow : Window
 
         Mode_Skills.SwitchToCoinDesc(TargetSwitchIndex);
 
-        if (Settings.Preview.HighlightCoinDescsOnManualSwitch)
+        if (DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightCoinDescsOnManualSwitch)
         {
             RichTextBox HighlightTarget = FindName($"PreviewLayout_Skills_CoinShelf{Mode_Skills.CurrentSkillCoinIndex + 1}_Desc{Mode_Skills.CurrentSkillCoinDescIndex + 1}") as RichTextBox;
             NavigationPanel_Skills_SwitchToCoinDesc_FastSwitch_CoinDescFocusHighlightEvent(HighlightTarget);
@@ -653,7 +654,10 @@ public partial class MainWindow : Window
         Mode_Skills.SetCoinFocus(int.Parse(CoinNumber));
         Mode_Skills.SwitchToCoinDesc(int.Parse(CoinDescNumber) - 1);
 
-        if (Settings.Preview.HighlightCoinDescsOnClick) NavigationPanel_Skills_SwitchToCoinDesc_FastSwitch_CoinDescFocusHighlightEvent(Sender);
+        if (DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightCoinDescsOnRightClick)
+        {
+            NavigationPanel_Skills_SwitchToCoinDesc_FastSwitch_CoinDescFocusHighlightEvent(Sender);
+        }
     }
 
     internal protected static async void NavigationPanel_Skills_SwitchToCoinDesc_FastSwitch_CoinDescFocusHighlightEvent(RichTextBox TargetDesc)
@@ -1298,7 +1302,7 @@ public partial class MainWindow : Window
         DefaultTheme = LoadFromEmbeddedResources("LC_Localization_Task_Absolute.Default.Theme.Theme.json");
         DefaultLanguage = LoadFromEmbeddedResources("LC_Localization_Task_Absolute.Default.Language.English.json");
 
-        UILanguageLoader.InitializeUILanguage(DefaultLanguage);
+        UILanguageLoader.InitializeUILanguage("хуй]");
     }
 
     
@@ -1307,7 +1311,7 @@ public partial class MainWindow : Window
     {
         //rin($"Autohide:{UIThemesLoader.LoadedTheme.AutoHideBackgroundOnMinWidth}; Width:{Width} (>{Mode_Handlers.Upstairs.ActiveProperties.DefaultValues.MinWidth}), Height:{Height} (>{Mode_Handlers.Upstairs.ActiveProperties.DefaultValues.MinHeight})");
         if ((Width <= Mode_Handlers.Upstairs.ActiveProperties.DefaultValues.MinWidth + 2 & Height <= Mode_Handlers.Upstairs.ActiveProperties.DefaultValues.MinHeight + 2)
-            | (UIThemesLoader.LoadedTheme.AutoHideBackgroundOnMinWidth & Width <= Mode_Handlers.Upstairs.ActiveProperties.DefaultValues.MinWidth + 2))
+            | (((UIThemesLoader.LoadedTheme != null ? UIThemesLoader.LoadedTheme.AutoHideBackgroundOnMinWidth : false) & Width <= Mode_Handlers.Upstairs.ActiveProperties.DefaultValues.MinWidth + 2)))
         {
             BackgroundImage.Visibility = Visibility.Collapsed;
         }
@@ -2037,9 +2041,10 @@ public partial class MainWindow : Window
                         string CustomColorAttach = "";
                         if (!Color.Equals(KeywordsInterrogate.KeywordsGlossary[ID].StringColor))
                         {
-                            CustomColorAttach = Configurazione.SelectedShorthands.InsertionShape_Color.Extern(Color);
+                            CustomColorAttach = Configurazione.ShorthandsInsertionShape.InsertionShape_Color.Replace("<HexColor>", Color);
                         }
-                        string OutputShorthand = Configurazione.SelectedShorthands.InsertionShape.Replace("<KeywordID>", ID).Replace("<KeywordName>", Name).Replace("<KeywordColor>", CustomColorAttach);
+
+                        string OutputShorthand = Configurazione.ShorthandsInsertionShape.InsertionShape.Replace("<KeywordID>", ID).Replace("<KeywordName>", Name).Replace("<KeywordColor>", CustomColorAttach);
 
                         return OutputShorthand;
                     }
@@ -2067,7 +2072,7 @@ public partial class MainWindow : Window
                     {
                         Editor_SelectedTextTemplate = Regex.Replace(Editor_SelectedTextTemplate, LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection.Replace("KeywordNameWillBeHere", UnevidentKeyword.Key), Match =>
                         {
-                            return Configurazione.SelectedShorthands.InsertionShape.Replace("<KeywordID>", UnevidentKeyword.Value).Replace("<KeywordName>", UnevidentKeyword.Key).Replace("<KeywordColor>", "");
+                            return Configurazione.ShorthandsInsertionShape.InsertionShape.Replace("<KeywordID>", UnevidentKeyword.Value).Replace("<KeywordName>", UnevidentKeyword.Key.Replace(" ", "<\0TMPSPACE>")).Replace("<KeywordColor>", "");
                         });
                     }
                 }
@@ -2079,7 +2084,7 @@ public partial class MainWindow : Window
                     string ID = Match.Groups["ID"].Value;
                     if (KeywordsInterrogate.KeywordsGlossary.ContainsKey(ID))
                     {
-                        return Configurazione.SelectedShorthands.InsertionShape.Replace("<KeywordID>", ID).Replace("<KeywordName>", KeywordsInterrogate.KeywordsGlossary[ID].Name).Replace("<KeywordColor>", "");
+                        return Configurazione.ShorthandsInsertionShape.InsertionShape.Replace("<KeywordID>", ID).Replace("<KeywordName>", KeywordsInterrogate.KeywordsGlossary[ID].Name).Replace("<KeywordColor>", "");
                     }
                     else
                     {
@@ -2103,25 +2108,34 @@ public partial class MainWindow : Window
                 });
                 break;
         }
-
-        if (!Editor_SelectedTextTemplate.Equals(Editor.SelectedText)) Editor.SelectedText = Editor_SelectedTextTemplate;
+        // tmpspace to avoid conversion of same keywords within other, as example 'Attack Power Up' with 'Power Up' inside that being converted too without tmpspace
+        if (!Editor_SelectedTextTemplate.Equals(Editor.SelectedText)) Editor.SelectedText = Editor_SelectedTextTemplate.Replace("<\0TMPSPACE>", " ");
     }
 
     #endregion
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        if (!Settings.TechnicalActions.IsNull() & !File.Exists("Keywords Multiple Meanings.json"))
+        if (DeltaConfig.TechnicalActions.KeywordsDictionary.Generate & !File.Exists("Keywords Multiple Meanings.json"))
         {
-            if (!Settings.TechnicalActions.KeywordsMultipleMeanings.IsNull())
+            if (Directory.Exists(DeltaConfig.TechnicalActions.KeywordsDictionary.Path))
             {
-                if (Directory.Exists(Settings.TechnicalActions.KeywordsMultipleMeanings.SourcePath))
-                {
-                    KeywordsInterrogate.ExportKeywordsMultipleMeaningsDictionary(
-                        Settings.TechnicalActions.KeywordsMultipleMeanings.SourcePath
-                    );
-                }
+                KeywordsInterrogate.ExportKeywordsMultipleMeaningsDictionary(
+                    DeltaConfig.TechnicalActions.KeywordsDictionary.Path
+                );
+            }
+            else
+            {
+                MessageBox.Show($"Keywords multiple meanings dir \"{DeltaConfig.TechnicalActions.KeywordsDictionary.Path}\" not found");
             }
         }
+    }
+
+    private void ReloadConfig(object sender, MouseButtonEventArgs e)
+    {
+        Configurazione.PullLoad();
+
+        // Update last textfield that was changed
+        RichTextBoxApplicator.SetLimbusRichText(RichText.RichTextBoxApplicator.LastUpdateTarget, RichText.RichTextBoxApplicator.LastUpdateText);
     }
 }

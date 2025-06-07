@@ -162,7 +162,7 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
             }
             //rin($"  {Counter} images loaded from \"⇲ Assets Directory\\[⇲] Limbus Images\\Keywords\" directory");
         }
-        internal protected static void InitializeGlossaryFrom(string KeywordsDirectory, bool WriteOverFallback = false)
+        internal protected static void InitializeGlossaryFrom(string KeywordsDirectory, bool WriteOverFallback = false, string FilesPrefix = "")
         {
             if (!WriteOverFallback)
             {
@@ -170,11 +170,13 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                 SkillTags.Clear();
                 KnownID.Clear();
             }
+
             
             int Counter = 0;
 
             if (Directory.Exists(KeywordsDirectory))
             {
+                rin($"Loading Keywords from \"{KeywordsDirectory}\" with files prefix \"{FilesPrefix}\"");
                 Dictionary<string, string> SkillTagColors = new Dictionary<string, string>();
                 if (File.Exists(@"⇲ Assets Directory\[+] Keywords\SkillTag Colors.T[-]"))
                 {
@@ -191,9 +193,9 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     }
                 }
 
-                if (File.Exists(@$"{KeywordsDirectory}\SkillTag.json"))
+                if (File.Exists(@$"{KeywordsDirectory}\{FilesPrefix}SkillTag.json"))
                 {
-                    BaseTypes.Type_SkillTag.SkillTags SkillTagsJson = JsonConvert.DeserializeObject<SkillTags>(File.ReadAllText(@$"{KeywordsDirectory}\SkillTag.json"));
+                    BaseTypes.Type_SkillTag.SkillTags SkillTagsJson = JsonConvert.DeserializeObject<SkillTags>(File.ReadAllText(@$"{KeywordsDirectory}\{FilesPrefix}SkillTag.json"));
                     if (!SkillTagsJson.dataList.IsNull())
                     {
                         foreach (SkillTag SkillTag in SkillTagsJson.dataList)
@@ -211,11 +213,12 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                 Dictionary<string, string> KeywordColors = [];
                 try
                 {
-                    foreach(string ColorPair in File.ReadAllLines(@"⇲ Assets Directory\[+] Keywords\Colors.T[-]"))
+                    foreach(string ColorPair in File.ReadAllLines(@"⇲ Assets Directory\[+] Keywords\Keyword Colors.T[-]"))
                     {
                         try
                         {
                             KeywordColors[ColorPair.Split(" ¤ ")[0].Trim()] = ColorPair.Split(" ¤ ")[1].Trim();
+                            //rin($"{ColorPair.Split(" ¤ ")[0].Trim()}: {ColorPair.Split(" ¤ ")[1].Trim()}");
                             Counter++;
                         } catch { }
                     }
@@ -228,13 +231,14 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     searchPattern: "*.json",
                     searchOption: SearchOption.AllDirectories
                 ).Where(file => file.Name.RemovePrefix("EN_", "KR_", "JP_").StartsWith("Bufs"))) {
+
                     BaseTypes.Type_Keywords.Keywords TargetSite = KeywordFileInfo.Deserealize<Keywords>() as Keywords;
 
                     if (!TargetSite.IsNull())
                     {
                         foreach(Keyword KeywordItem in TargetSite.dataList)
                         {
-                            if (!KeywordItem.ID.ContainsOneOf(Settings.Preview.KeywordsIgnore))
+                            if (!KeywordItem.ID.ContainsOneOf(DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsIgnore))
                             {
                                 KeywordsGlossary[KeywordItem.ID] = new KeywordSingleton
                                 {
@@ -244,7 +248,7 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                                 };
 
                                 Keywords_IDName[KeywordItem.ID] = KeywordItem.Name;
-                                if (!KeywordItem.Name.Equals(KeywordItem.ID) & !KeywordItem.ID.EndsWithOneOf(["_Re", "Re", "Mirror"]))
+                                if (!KeywordItem.ID.EndsWithOneOf(["_Re", "Re", "Mirror"]))
                                 {
                                     //Fallback overwrite
                                     if (Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter.ContainsValue(KeywordItem.ID) & WriteOverFallback)

@@ -272,14 +272,14 @@
                                     
                                 </TextBlock>
                             </Border>
-                            <Border x:Name="SettingsButton" Visibility="Collapsed"  Style="{StaticResource TB_Highlight}" MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Margin="1" CornerRadius="5">
-                                <TextBlock HorizontalAlignment="Center" Foreground="#FF9D9D9D" FontSize="20" VerticalAlignment="Center" FontFamily="UI\Fonts\#Segoe Fluent Icons">
-                                    
-                                </TextBlock>
-                            </Border>
                             <Border x:Name="MinimizeButton" PreviewMouseLeftButtonDown="Minimize" Style="{StaticResource TB_Highlight}" MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Margin="1" CornerRadius="5">
                                 <TextBlock HorizontalAlignment="Center" Foreground="#FF9D9D9D" FontSize="20" VerticalAlignment="Bottom" FontFamily="UI\Fonts\#Segoe Fluent Icons">
                                     
+                                </TextBlock>
+                            </Border>
+                            <Border x:Name="SettingsButton" PreviewMouseLeftButtonDown="ReloadConfig" Visibility="Visible"  Style="{StaticResource TB_Highlight}" MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Margin="1" CornerRadius="5">
+                                <TextBlock HorizontalAlignment="Center" Foreground="#FF9D9D9D" FontSize="20" VerticalAlignment="Center" FontFamily="UI\Fonts\#Segoe Fluent Icons">
+                                    
                                 </TextBlock>
                             </Border>
                             <Border x:Name="ShutdownButton" PreviewMouseLeftButtonDown="Shutdown" Style="{StaticResource TB_ShutdownHighlight}" MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Margin="1" CornerRadius="5">
@@ -726,11 +726,11 @@
                                                                 <StackPanel Orientation="Horizontal" Margin="0" MaxHeight="55" VerticalAlignment="Top">
                                                                     <Image x:Name="CurrentBattleKeywordsKeywordImage" VerticalAlignment="Top" Width="32" Margin="6 7 0 0"/>
                                                                     <Viewbox MaxWidth="350" Width="350" Height="49" Stretch="Uniform" HorizontalAlignment="Left" Margin="5 0 0 0">
-                                                                        <TextBlock Width="230"
+                                                                        <TextBlock x:Name="PreviewLayout_Keywords_BattleKeywords_Name"
+                                                                                   Width="230"
                                                                                    TextWrapping="Wrap"
                                                                                    VerticalAlignment="Center"
                                                                                    FontSize="20"
-                                                                                   x:Name="PreviewLayout_Keywords_BattleKeywords_Name"
                                                                                    Foreground="#ebcaa2"
                                                                                    FontFamily="{Binding Path=FontFamily, ElementName=NavigationPanel_ObjectName_Display}"
                                                                                    FontWeight="{Binding Path=FontWeight, ElementName=NavigationPanel_ObjectName_Display}"
@@ -797,7 +797,7 @@
                                                 </TextBlock>
                                             </Grid>
                                             <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Width="271" Height="47" Margin="212,123,0,0">
-                                                <RichTextBox x:Name="STE_EGOGifts_LivePreview_ViewDescButtons" Width="125" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="-5 0 0 0" Foreground="{Binding Path=Foreground, ElementName=NavigationPanel_ObjectName_Display}" FontFamily="{Binding Path=FontFamily, ElementName=NavigationPanel_ObjectName_Display}">
+                                                <RichTextBox x:Name="STE_EGOGifts_LivePreview_ViewDescButtons" Width="125" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Margin="-5 0 0 0" Foreground="{Binding Path=Foreground, ElementName=NavigationPanel_ObjectName_Display}" FontFamily="{Binding Path=FontFamily, ElementName=NavigationPanel_ObjectName_Display}" FontWeight="{Binding Path=FontWeight, ElementName=NavigationPanel_ObjectName_Display}">
                                                     <FlowDocument>
                                                         <Paragraph>
                                                             <Run>
@@ -1661,7 +1661,7 @@
                                                         </TextBlock>
                                                         <TextBlock Foreground="#c6c3bd" Text="※" FontWeight="Light" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5"/>
                                                         <TextBlock Foreground="#c6c3bd" FontWeight="Black" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5">
-                                                           1.0:4
+                                                           1.1:0
                                                         </TextBlock>
                                                     </StackPanel>
                                                 </StackPanel>

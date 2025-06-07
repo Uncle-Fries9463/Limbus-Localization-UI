@@ -93,18 +93,25 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
             PreviewText = ShorthandsPattern.Replace(PreviewText, Match =>
             {
                 string KeywordID = Match.Groups["ID"].Value;
-                string KeywordName = Match.Groups["Name"].Value;
-                string KeywordColor = Regex.Match(Match.Groups["Color"].Value, @"#[a-fA-F0-9]{6}").Value;
-                if (KeywordColor.Equals("") & KeywordsGlossary.ContainsKey(KeywordID))
+                if (!KeywordID.Equals(""))
                 {
-                    KeywordColor = KeywordsGlossary[KeywordID].StringColor;
+                    string KeywordName = Match.Groups["Name"].Value;
+                    string KeywordColor = Regex.Match(Match.Groups["Color"].Value, @"#[a-fA-F0-9]{6}").Value;
+                    if (KeywordColor.Equals("") & KeywordsGlossary.ContainsKey(KeywordID))
+                    {
+                        KeywordColor = KeywordsGlossary[KeywordID].StringColor;
+                    }
+                    else
+                    {
+                        if (KeywordColor.Equals("")) KeywordColor = "#9f6a3a";
+                    }
+
+                    return $"<sprite name=\"{KeywordID}\"><color={KeywordColor}><u><link=\"{KeywordID}\">{KeywordName}</link></u></color>";
                 }
                 else
                 {
-                    if (KeywordColor.Equals("")) KeywordColor = "#9f6a3a";
+                    return Match.Groups[0].Value;
                 }
-
-                return $"<sprite name=\"{KeywordID}\"><color={KeywordColor}><u><link=\"{KeywordID}\">{KeywordName}</link></u></color>";
             });
 
 
@@ -149,7 +156,6 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                 PreviewText = RemoteRegexPatterns.KeywordLink.Replace(PreviewText, Match =>
                 {
                     string MaybeID = Match.Groups["ID"].Value;
-
                     if (KeywordsGlossary.ContainsKey(MaybeID))
                     {
                         string KeywordName = KeywordsGlossary[MaybeID].Name;
@@ -171,7 +177,7 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     }
                 });
 
-                if (!Settings.Preview.EnableStyleHighlight)
+                if (!DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightStyle)
                 {
                     PreviewText = RegexRemove(PreviewText, RemoteRegexPatterns.StyleMarker);
                 }
@@ -189,8 +195,7 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
 
             // Preview does not support any keyword tooltips
             PreviewText = RegexRemove(PreviewText, LimbusPreviewFormatter.RemoteRegexPatterns.TMProLinks);
-
-            return PreviewText;
+            return PreviewText.Replace("\0", "");
         }
     }
 }

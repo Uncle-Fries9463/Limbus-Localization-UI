@@ -207,10 +207,10 @@ namespace LC_Localization_Task_Absolute
 
         internal protected static void InitializeUILanguage(string SourceFile)
         {
-            string LanugageFile = @$"⇲ Assets Directory\[+] Languages\{SourceFile}";
-            if (File.Exists(LanugageFile))
+            string LanugageFile;
+            if (File.Exists(SourceFile))
             {
-                LanugageFile = File.ReadAllText(@$"⇲ Assets Directory\[+] Languages\{SourceFile}");
+                LanugageFile = File.ReadAllText(SourceFile);
             }
             else
             {
@@ -224,7 +224,6 @@ namespace LC_Localization_Task_Absolute
             {
                 string TargetUIElementID = UIStaticItemData.ElementID;
                 string TargetUIElementText = UIStaticItemData.Text;
-                rin(TargetUIElementID);
                 if (UILanguage.ContainsKey(TargetUIElementID))
                 {
                     string LoadFontAttach = "";

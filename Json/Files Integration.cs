@@ -20,7 +20,7 @@ namespace LC_Localization_Task_Absolute.Json
                 formatting: Formatting.Indented,
                 settings:   new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }
             );
-            File.WriteAllText(Filename, Output.Replace("\r", ""), MainWindow.CurrentFileEncoding);
+            File.WriteAllText(Filename, Output.Replace("\r\n", "\n"), MainWindow.CurrentFileEncoding);
         }
 
         internal static object? Deserealize<TargetType>(this FileInfo Target) => JsonConvert.DeserializeObject<TargetType>(Target.GetText());

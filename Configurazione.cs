@@ -15,341 +15,301 @@ using static LC_Localization_Task_Absolute.Configurazione;
 using static LC_Localization_Task_Absolute.Requirements;
 using static LC_Localization_Task_Absolute.MainWindow;
 using LC_Localization_Task_Absolute.Limbus_Integration;
+using System.Windows.Controls.Primitives;
+using static LC_Localization_Task_Absolute.UILanguageLoader;
 
 namespace LC_Localization_Task_Absolute
 {
-    internal static class S
+    internal static class Saver
     {
-        internal static void Save(this Configurazione.SettingsValue Target)
+        internal static void Save(this Configurazione.ConfigDelta Target)
         {
-            Target.MarkSerialize(@"⇲ Assets Directory\Configurazione.json");
+            Target.MarkSerialize(@"⇲ Assets Directory\Configurazione^.json");
         }
     }
+
     internal abstract class Configurazione
     {
-        internal protected static SettingsValue Settings = new();
-        internal protected static FontFamily MainText_FontFamily;
+        #region loads
+        internal protected static ConfigDelta DeltaConfig = new ConfigDelta();
 
-        internal protected static Regex ShorthandsPattern = new Regex("");
+        internal protected static Regex ShorthandsPattern = new Regex("NOTHING THERE");
 
-        internal protected static string KeywordsFolder;
-
-        internal protected static AssociativeKeywordsSettings SelectedLanguageProperties;
-        internal protected static ShorthandsProperty SelectedShorthands = new()
+        internal protected static ShorthandInsertionProperty ShorthandsInsertionShape = new ShorthandInsertionProperty()
         {
-            Regex = @"\[(?<ID>\w+):`(?<Name>.*?)`\](?<Color>\(#[a-fA-F0-9]{6}\))?",
-            InsertionShape = "[<KeywordID>:`<KeywordName>`][<KeywordColor>]",
-            InsertionShape_Color = "([$])",
+            InsertionShape = "[<KeywordID>]",
+            InsertionShape_Color = "",
         };
 
         internal protected static double KeywordSpriteHorizontalOffset = 0;
-        internal protected static double KeywordSpriteVerticalOffset = 0;
+        internal protected static double KeywordSpriteVerticalOffset = -4;
         internal protected static double KeywordSpriteKeywordContainerHorizontalOffset = 0;
 
         internal protected static dynamic FormalTaskCompleted = null;
 
+        
         internal protected static void PullLoad()
         {
-            rin($"[ Settings load pull initialized ]\n");
-
-            Settings = JsonConvert.DeserializeObject<Configurazione.SettingsValue>(File.ReadAllText(@"⇲ Assets Directory\Configurazione.json"));
-
-            rin("※ Keywords settings:");
-            rin($"  Fallback Keywords: \"{Settings.Preview.FallbackKeywordsFolder}\"");
-
-            List<ShorthandsProperty> SelectedShorthandsProperties_Found = Settings.Preview.Shorthands.Where(x => x.Name.Equals(Settings.Preview.SelectedShorthands)).ToList();
-            if (SelectedShorthandsProperties_Found.Count > 0)
+            #region new
+            if (File.Exists(@"⇲ Assets Directory\Configurazione^.json"))
             {
-                Configurazione.SelectedShorthands = SelectedShorthandsProperties_Found[0];
-                Configurazione.ShorthandsPattern = new Regex(SelectedShorthands.Regex);
-            }
+                rin($"[ Settings load pull initialized ]\n");
 
-            List<AssociativeKeywordsSettings> SelectedKeywordsPropertyFound = Settings.Preview.KeywordsAssociativeSettings.Where(x => x.FolderName.Equals(Settings.Preview.KeywordsFolder)).ToList();
-            if (SelectedKeywordsPropertyFound.Count > 0)
-            {
-                Configurazione.SelectedLanguageProperties = SelectedKeywordsPropertyFound[0];
-                rin($"  Keywords: \"{SelectedLanguageProperties.FolderName}\"");
+                Configurazione.DeltaConfig = JsonConvert.DeserializeObject<Configurazione.ConfigDelta>(File.ReadAllText(@"⇲ Assets Directory\Configurazione^.json"));
 
-                if (!Configurazione.SelectedLanguageProperties.KeywordSpriteHorizontalOffset.IsNull())
+
+                KeywordsInterrogate.InitializeGlossaryFrom(
+                    KeywordsDirectory: DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory,
+                    FilesPrefix: DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FilesPrefix
+                );
+
+
+                string SelectedAssociativePropertyName = DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.Selected;
+
+                var SelectedAssociativePropery_Found = DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.List
+                    .Where(x => x.PropertyName.Equals(SelectedAssociativePropertyName)).ToList();
+
+                if (SelectedAssociativePropery_Found.Count() > 0)
                 {
-                    Configurazione.KeywordSpriteHorizontalOffset = (double)Configurazione.SelectedLanguageProperties.KeywordSpriteHorizontalOffset;
-                    rin($"  Sprites Horizontal Offset: {Configurazione.KeywordSpriteHorizontalOffset}");
-                }
+                    CustomLanguageAssociativePropertyMain SelectedAssociativePropery = SelectedAssociativePropery_Found[0];
+                    
+                    KeywordsInterrogate.InitializeGlossaryFrom(
+                        KeywordsDirectory: SelectedAssociativePropery.Properties.KeywordsDirectory,
+                        FilesPrefix: SelectedAssociativePropery.Properties.KeywordsDirectory_FilesPrefix,
+                        WriteOverFallback: true
+                    );
 
-                if (!Configurazione.SelectedLanguageProperties.KeywordSpriteVerticalOffset.IsNull())
-                {
-                    Configurazione.KeywordSpriteVerticalOffset = (double)Configurazione.SelectedLanguageProperties.KeywordSpriteVerticalOffset;
-                    rin($"  Sprites Vertical Offset: {Configurazione.KeywordSpriteVerticalOffset}");
-                }
+                    LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection = SelectedAssociativePropery.Properties.Keywords_AutodetectionRegex;
+                    Configurazione.ShorthandsPattern = new Regex(SelectedAssociativePropery.Properties.Keywords_ShorthandsRegex);
 
-                if (!Configurazione.SelectedLanguageProperties.AutoKeywordsDetectionRegex.IsNull())
-                {
-                    LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection = Configurazione.SelectedLanguageProperties.AutoKeywordsDetectionRegex;
-                    rin($"  Keywords Auto Keywords Detection: {LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection}");
-                }
 
-                if (!Configurazione.SelectedLanguageProperties.MainText_FontWeigt.IsNull())
-                {
-                    FontWeight FontWeight = WeightFrom(Configurazione.SelectedLanguageProperties.MainText_FontWeigt);
-                    rin($"  Main Text Font Weight: {FontWeight}");
-                    foreach (RichTextBox PreviewLayoutItem in MainWindow.PreviewLayoutsList)
+                    if (SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape != null)
                     {
-                        PreviewLayoutItem.FontWeight = FontWeight;
+                        ShorthandsInsertionShape.InsertionShape = SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape;
+                    }
+                    if (SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape_HexColor != null)
+                    {
+                        ShorthandsInsertionShape.InsertionShape_Color = SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape_HexColor;
+                    }
+
+
+                    UpdatePreviewLayoutsFont(SelectedAssociativePropery.Properties);
+                }
+            }
+            #endregion
+        }
+
+
+
+        internal protected static Task UpdatePreviewLayoutsFont(CustomLanguageAssociativePropertyValues Properties = null)
+        {
+            if (Properties != null)
+            {
+                if (File.Exists(Properties.ContextFont))
+                {
+                    FontFamily ContextFontFamily = FileToFontFamily(Properties.ContextFont, Properties.ContextFont_OverrideReadName);
+                    rin(Properties.ContextFont_FontWeight);
+                    foreach (RichTextBox PreviewLayoutItem in PreviewLayoutsList)
+                    {
+                        PreviewLayoutItem.FontFamily = ContextFontFamily;
+                        PreviewLayoutItem.FontSize  *= Properties.ContextFont_FontSizeMultipler;
+                        PreviewLayoutItem.FontWeight = WeightFrom(Properties.ContextFont_FontWeight);
                     }
                 }
 
-                if (!Configurazione.SelectedLanguageProperties.TitlesAndNames_FontWeight.IsNull())
+
+                if (File.Exists(Properties.TitleFont))
                 {
-                    MainControl.NavigationPanel_ObjectName_Display.FontWeight = WeightFrom(Configurazione.SelectedLanguageProperties.TitlesAndNames_FontWeight);
+                    FontFamily TitleFontFamily = FileToFontFamily(Properties.TitleFont, Properties.TitleFont_OverrideReadName);
+
+                    MainControl.NavigationPanel_ObjectName_Display.FontFamily = TitleFontFamily;
+                    MainControl.NavigationPanel_ObjectName_Display.FontWeight = WeightFrom(Properties.TitleFont_FontWeight);
+
+                    MainControl.NavigationPanel_ObjectName_Display.FontSize *= Properties.TitleFont_FontSizeMultipler;
+                    MainControl.PreviewLayout_Keywords_Bufs_Name.FontSize   *= Properties.TitleFont_FontSizeMultipler;
+                    MainControl.EGOGiftName_PreviewLayout.FontSize          *= Properties.TitleFont_FontSizeMultipler;
+                    MainControl.STE_EGOGifts_LivePreview_ViewDescButtons.FontSize   *= Properties.TitleFont_FontSizeMultipler;
+                    MainControl.PreviewLayout_Keywords_BattleKeywords_Name.FontSize *= Properties.TitleFont_FontSizeMultipler;
                 }
-                if (Configurazione.SelectedLanguageProperties.TitlesAndNames_FontSize != 0)
+                
+
+                if (File.Exists(@"⇲ Assets Directory\[⇲] Limbus Images\UI\BattleKeywords Background.png"))
                 {
-                    MainControl.NavigationPanel_ObjectName_Display.FontSize = Configurazione.SelectedLanguageProperties.TitlesAndNames_FontSize;
+                    MainControl.PreviewLayoutGrid_Keywords_Sub_BattleKeywords_BackgroundImage.Source = GenerateBitmapFromFile(@"⇲ Assets Directory\[⇲] Limbus Images\UI\BattleKeywords Background.png");
                 }
-            }
-
-
-            KeywordsInterrogate.InitializeGlossaryFrom(@$"⇲ Assets Directory\[+] Keywords\Text\{Settings.Preview.FallbackKeywordsFolder}");
-
-            UpdatePreviewLayoutsFont();
-            if (!Settings.Preview.KeywordsCustomFolder.Enabled & !Configurazione.SelectedLanguageProperties.FolderName.IsNull())
-            {
-                Configurazione.KeywordsFolder = Configurazione.SelectedLanguageProperties.FolderName;
-                KeywordsInterrogate.InitializeGlossaryFrom(@$"⇲ Assets Directory\[+] Keywords\Text\{Settings.Preview.KeywordsFolder}", WriteOverFallback: true);
-            }
-            else
-            {
-                rin($"  Custom keywords folder: \"{Settings.Preview.KeywordsCustomFolder.Path}\"");
-                Configurazione.KeywordsFolder = Settings.Preview.KeywordsCustomFolder.Path;
-                KeywordsInterrogate.InitializeGlossaryFrom(Settings.Preview.KeywordsCustomFolder.Path, WriteOverFallback: true);
-            }
-
-            if (!Configurazione.SelectedLanguageProperties.KeywordsMultipleMeaningsFile.Equals(""))
-            {
-                string FinalPath = "";
-
-                if (File.Exists(Configurazione.SelectedLanguageProperties.KeywordsMultipleMeaningsFile))
-                {
-                    FinalPath = Configurazione.SelectedLanguageProperties.KeywordsMultipleMeaningsFile;
-                }
-                else if (File.Exists(@$"⇲ Assets Directory\[+] Keywords\Text\{Settings.Preview.KeywordsFolder}\{Configurazione.SelectedLanguageProperties.KeywordsMultipleMeaningsFile}"))
-                {
-                    FinalPath = @$"⇲ Assets Directory\[+] Keywords\Text\{Settings.Preview.KeywordsFolder}\{Configurazione.SelectedLanguageProperties.KeywordsMultipleMeaningsFile}";
-                }
-
-                if (!FinalPath.Equals(""))
-                {
-                    rin($"  Keywords Multiple Meanings file: {FinalPath}");
-                    KeywordsInterrogate.ReadKeywordsMultipleMeanings(FinalPath);
-                }
-            }
-        }
-
-
-
-        internal protected static Task UpdatePreviewLayoutsFont()
-        {
-            string MainText_FontPath = @$"⇲ Assets Directory\[+] Keywords\Associative Fonts\{SelectedLanguageProperties.MainText_FontFile}";
-            string TitlesAndNames_FontPath = @$"⇲ Assets Directory\[+] Keywords\Associative Fonts\{SelectedLanguageProperties.TitlesAndNames_FontFile}";
-
-            if (File.Exists(MainText_FontPath))
-            {
-                string OverrideInternalFontName = "";
-                if (!Configurazione.SelectedLanguageProperties.MainText_OverrideFontInternalName.IsNull()) OverrideInternalFontName = SelectedLanguageProperties.MainText_OverrideFontInternalName;
-
-                MainText_FontFamily = FileToFontFamily(MainText_FontPath, OverrideInternalFontName);
-
-                foreach (RichTextBox PreviewLayoutItem in PreviewLayoutsList)
-                {
-                    PreviewLayoutItem.FontFamily = MainText_FontFamily;
-                }
-            }
-
-
-            if (File.Exists(TitlesAndNames_FontPath) & !SelectedLanguageProperties.TitlesAndNames_FontFile.IsNull())
-            {
-                string OverrideObjectNameInternalFontName = "";
-                if (!Configurazione.SelectedLanguageProperties.TitlesAndNames_OverrideFontInternalName.IsNull()) OverrideObjectNameInternalFontName = SelectedLanguageProperties.TitlesAndNames_OverrideFontInternalName;
-
-                FontFamily NameFontFamily = FileToFontFamily(TitlesAndNames_FontPath, OverrideObjectNameInternalFontName);
-
-                // All other title and names fonts binded to this element fontfamily
-                MainControl.NavigationPanel_ObjectName_Display.FontFamily = NameFontFamily;
-            }
-            
-            if (File.Exists(@"⇲ Assets Directory\[⇲] Limbus Images\UI\BattleKeywords Background.png"))
-            {
-                MainControl.PreviewLayoutGrid_Keywords_Sub_BattleKeywords_BackgroundImage.Source = GenerateBitmapFromFile(@"⇲ Assets Directory\[⇲] Limbus Images\UI\BattleKeywords Background.png");
             }
 
             return FormalTaskCompleted;
         }
+        #endregion
 
-        internal protected static Task ChangeBackgroundImageVisibility(bool ShowBackgroundImage)
+        #region oldconfig
+        internal protected class ShorthandInsertionProperty
         {
-            MainControl.BackgroundImage.Visibility = ShowBackgroundImage switch
-            {
-                true => Visibility.Visible,
-                false => Visibility.Collapsed,
-            };
+            [JsonProperty("(Context Menu) Insertion Shape")]
+            public string InsertionShape { get; set; } = "[<KeywordID>:`<KeywordName>`]<KeywordColor>";
 
-            return FormalTaskCompleted;
+            [JsonProperty("(Context Menu) Insertion Shape (Color)")]
+            public string InsertionShape_Color { get; set; } = "<HexColor>";
         }
+        #endregion
 
-        internal protected static Task ChangeBackgroundImageShadowTransperacy(string BackgroundImageTransperacy)
+
+        #region newconfig
+        internal protected class ConfigDelta
         {
-            MainControl.BackgroundImageShadowingColor.Background = ToColor(BackgroundImageTransperacy);
+            [JsonProperty("Internal")]
+            public Internal Internal { get; set; } = new Internal();
 
-            return FormalTaskCompleted;
-        }
-
-        internal protected class SettingsValue
-        {
-            public Internal Internal { get; set; }
-            public Preview Preview { get; set; }
+            [JsonProperty("Preview Settings")]
+            public PreviewSettings PreviewSettings { get; set; } = new PreviewSettings();
 
             [JsonProperty("Technical Actions")]
-            public TechnicalActions TechnicalActions { get; set; }
+            public TechnicalActions TechnicalActions { get; set; } = new TechnicalActions();
         }
         internal protected class Internal
         {
-            [JsonProperty("UI Language (⇲ Assets Directory/[+] Languages/)")]
-            public string UILanguage { get; set; }
+            [JsonProperty("UI Language")]
+            public string UILanguage { get; set; } = "";
 
-            [JsonProperty("UI Theme (⇲ Assets Directory/[+] Themes/)")]
-            public string UITheme { get; set; }
+            [JsonProperty("UI Theme")]
+            public string UITheme { get; set; } = "";
 
             [JsonProperty("Topmost Window")]
-            public bool? AlwaysOnTop { get; set; }
+            public bool AlwaysOnTop { get; set; } = true;
 
             [OnDeserialized]
-            internal void OnInit(StreamingContext context)
+            internal void OnDeserialized(StreamingContext context)
             {
                 UILanguageLoader.InitializeUILanguage(UILanguage);
                 UIThemesLoader.InitializeUITheme(UITheme);
 
-                if (!AlwaysOnTop.IsNull())
-                {
-                    MainControl.Topmost = (bool)AlwaysOnTop;
-                }
+                MainControl.Topmost = AlwaysOnTop;
             }
         }
-        
-        internal protected class Preview
+        internal protected class PreviewSettings
         {
-            [JsonProperty("Information Board [README]")]
-            public List<string> Readme { get; set; }
+            [JsonProperty("Base")]
+            public PreviewSettingsBaseSettings PreviewSettingsBaseSettings { get; set; } = new PreviewSettingsBaseSettings();
 
+            [JsonProperty("Custom Language Properties")]
+            public CustomLanguageProperties CustomLanguageProperties { get; set; } = new CustomLanguageProperties();
+        }
+        internal protected class PreviewSettingsBaseSettings
+        {
             [JsonProperty("Preview Update Delay (Seconds)")]
-            public float PreviewUpdateDelay { get; set; }
+            public double PreviewUpdateDelay { get; set; } = 0.00;
 
             [JsonProperty("Highlight <style>")]
-            public bool EnableStyleHighlight { get; set; }
+            public bool HighlightStyle { get; set; } = true;
 
-            [JsonProperty("Highlight Coin Descs on click")]
-            public bool HighlightCoinDescsOnClick { get; set; }
+            [JsonProperty("Highlight Coin Descs on right click")]
+            public bool HighlightCoinDescsOnRightClick { get; set; } = true;
 
             [JsonProperty("Highlight Coin Descs on manual switch")]
-            public bool HighlightCoinDescsOnManualSwitch { get; set; }
-
-            [JsonProperty("Fallback Keywords Folder (⇲ Assets Directory/[+] Keywords/Text/)")]
-            public string FallbackKeywordsFolder { get; set; }
-            
-            [JsonProperty("Keywords Folder (⇲ Assets Directory/[+] Keywords/Text/)")]
-            public string KeywordsFolder { get; set; }
-
-            [JsonProperty("Keywords Associative Settings (⇲ Assets Directory/[+] Keywords/Associative Fonts)")]
-            public List<AssociativeKeywordsSettings> KeywordsAssociativeSettings { get; set; }
-
-            [JsonProperty("Keywords Custom Folder")]
-            public KeywordsCustomFolder KeywordsCustomFolder { get; set; }
-
-            [JsonProperty("Selected Shorthands")]
-            public string SelectedShorthands { get; set; }
-
-            public List<ShorthandsProperty> Shorthands { get; set; }
-
+            public bool HighlightCoinDescsOnManualSwitch { get; set; } = false;
+        }
+        internal protected class CustomLanguageProperties
+        {
             [JsonProperty("Keywords Ignore")]
-            public List<string> KeywordsIgnore { get; set; }
+            public List<string> KeywordsIgnore { get; set; } = new List<string>();
 
-            [OnDeserialized]
-            internal void OnInit(StreamingContext context)
-            {
-                Configurazione.KeywordsFolder = KeywordsFolder;
-            }
+            [JsonProperty("Keywords Fallback")]
+            public FallbackKeywords KeywordsFallback { get; set; } = new FallbackKeywords();
+
+            [JsonProperty("Custom Language Associative Settings")]
+            public CustomLanguageAssociativeSettings AssociativeSettings { get; set; }
         }
-        internal protected class AssociativeKeywordsSettings
+        internal protected class FallbackKeywords
         {
-            [JsonProperty("Folder Name")]
-            public string FolderName { get; set; }
+            [JsonProperty("Directory")]
+            public string FallbackKeywordsDirectory { get; set; } = "";
 
-            [JsonProperty("[Main Text] Font File")]
-            public string MainText_FontFile { get; set; }
+            [JsonProperty("Files Prefix")]
+            public string FilesPrefix { get; set; } = "";
+        }
+        internal protected class CustomLanguageAssociativeSettings
+        {
+            [JsonProperty("Associative Properties Selected")]
+            public string Selected { get; set; } = "";
+
+            [JsonProperty("Associative Properties List")]
+            public List<CustomLanguageAssociativePropertyMain> List { get; set; } = new List<CustomLanguageAssociativePropertyMain>();
+        }
+        internal protected class CustomLanguageAssociativePropertyMain
+        {
+            [JsonProperty("Name")]
+            public string PropertyName { get; set; } = "<none>";
+
+            [JsonProperty("Properties")]
+            public CustomLanguageAssociativePropertyValues Properties { get; set; } = new CustomLanguageAssociativePropertyValues();
+        }
+        internal protected class CustomLanguageAssociativePropertyValues
+        {
+            [JsonProperty("Keywords Directory")]
+            public string KeywordsDirectory { get; set; } = "";
+
+            [JsonProperty("Keywords Directory (Files Prefix)")]
+            public string KeywordsDirectory_FilesPrefix { get; set; } = "";
+
+            [JsonProperty("Keywords Autodetection Regex Pattern")]
+            public string Keywords_AutodetectionRegex { get; set; } = new Regex(@"(KeywordNameWillBeHere)(?![\p{L}\[\]\-<'"":+])").ToString();
+
+            [JsonProperty("Keywords Shorthands Regex Pattern")]
+            public string Keywords_ShorthandsRegex { get; set; } = new Regex(@"NOTHING THERE").ToString();
+
+            [JsonProperty("Keywords Shorthands Contextmenu Insertion Shape")]
+            public string? Keywords_ShorthandsContextMenuInsertionShape { get; set; }
+
+            [JsonProperty("Keywords Shorthands Contextmenu Insertion Shape <KeywordColor>")]
+            public string? Keywords_ShorthandsContextMenuInsertionShape_HexColor { get; set; }
+
+            [JsonProperty("Keywords Sprite Horizontal Offset")]
+            public double KeywordsSpriteHorizontalOffset { get; set; } = 0;
+
+            [JsonProperty("Keywords Sprite Vertical Offset")]
+            public double KeywordsSpriteVerticalOffset { get; set; } = -4;
+
+
+
+            [JsonProperty("Title Font")]
+            public string TitleFont { get; set; } = "";
+
+            [JsonProperty("Title Font (Override Read Name)")]
+            public string TitleFont_OverrideReadName { get; set; } = "";
+
+            [JsonProperty("Title Font (Font Weight)")]
+            public string TitleFont_FontWeight { get; set; } = "";
+
+            [JsonProperty("Title Font (Font Size Multipler)")]
+            public double TitleFont_FontSizeMultipler { get; set; } = 1.0;
+
             
-            [JsonProperty("[Main Text] Font Weight")]
-            public string MainText_FontWeigt { get; set; }
-
-            [JsonProperty("[Main Text] Font Override Internal Name")]
-            public string MainText_OverrideFontInternalName { get; set; }
-
-            [JsonProperty("[Titles and Names] Font File")]
-            public string TitlesAndNames_FontFile { get; set; }
-
-            [JsonProperty("[Titles and Names] Font Weight")]
-            public string TitlesAndNames_FontWeight { get; set; }
-
-            [JsonProperty("[Titles and Names] Font Size")]
-            public double TitlesAndNames_FontSize { get; set; }
-
-            [JsonProperty("[Titles and Names] Font Override Internal Name")]
-            public string TitlesAndNames_OverrideFontInternalName { get; set; }
-
-            [JsonProperty("Keyword Sprite Horizontal Offset")]
-            public double? KeywordSpriteHorizontalOffset { get; set; }
-            
-            [JsonProperty("Keyword Sprite Vertical Offset")]
-            public double? KeywordSpriteVerticalOffset { get; set; }
-
-            [JsonProperty("Keywords Auto Detection Regex Pattern")]
-            public string AutoKeywordsDetectionRegex { get; set; }
-
-            [JsonProperty("Keywords Multiple Meanings File")]
-            public string KeywordsMultipleMeaningsFile { get; set; }
-
-            [OnDeserialized]
-            internal void OnInit(StreamingContext context) => NullableControl.NullExterminate(this);
-        }
-        internal protected class KeywordsCustomFolder
-        {
-            public bool Enabled { get; set; }
-            public string Path { get; set; }
-        }
-        internal protected class ShorthandsProperty
-        {
-            public string Name { get; set; }
-            public string Regex { get; set; }
-            public string Comment { get; set; }
-
-            [JsonProperty("(Context Menu) Insertion Shape")]
-            public string InsertionShape { get; set; }
-
-            [JsonProperty("(Context Menu) Insertion Shape (Color)")]
-            public string InsertionShape_Color { get; set; }
+            [JsonProperty("Context Font")]
+            public string ContextFont { get; set; } = "";
+            [JsonProperty("Context Font (Override Read Name)")]
+            public string ContextFont_OverrideReadName { get; set; } = "";
+            [JsonProperty("Context Font (Font Weight)")]
+            public string ContextFont_FontWeight { get; set; } = "";
+            [JsonProperty("Context Font (Font Size Multipler)")]
+            public double ContextFont_FontSizeMultipler { get; set; } = 1.0;
         }
         internal protected class TechnicalActions
         {
             [JsonProperty("Keywords Multiple Meanings Dictionary")]
-            public TechnicalActions_KeywordsMultipleMeanings KeywordsMultipleMeanings { get; set; }
+            public TA_KeywordsDictionary KeywordsDictionary { get; set; } = new TA_KeywordsDictionary();
         }
-        internal protected class TechnicalActions_KeywordsMultipleMeanings
+        internal protected class TA_KeywordsDictionary
         {
             [JsonProperty("Generate On Startup")]
-            public bool GenerateOnStartup { get; set; }
+            public bool Generate { get; set; } = false;
 
             [JsonProperty("Source Path")]
-            public string SourcePath { get; set; }
+            public string Path { get; set; } = "";
 
-            [OnDeserialized] internal void OnInit(StreamingContext context) => NullableControl.NullExterminate(this);
+            [JsonProperty("Comment")]
+            public string Comment { get; set; } = "";
         }
+        #endregion
     }
 }

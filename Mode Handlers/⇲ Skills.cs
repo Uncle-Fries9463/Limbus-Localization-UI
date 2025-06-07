@@ -53,16 +53,19 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
         internal protected static void TriggerSwitch(bool EnableUptieLevels, bool EnableEGOAbnormalityName)
         {
             MainControl.PreviewLayouts.Height = 383;
-            MainControl.NavigationPanel_HeightControlScrollViewer.MaxHeight = 370;
             MainControl.EditorWidthControl.Width = new GridLength(706.6);
 
             if (EnableEGOAbnormalityName)
             {
                 MainControl.PreviewLayout_EGOSkills_Background.Visibility = Visibility.Visible;
+                MainControl.NavigationPanel_HeightControlScrollViewer.MaxHeight = 403.5;
+                SwitchedInterfaceProperties.DefaultValues.Height = 603.5;
             }
             else
             {
                 MainControl.PreviewLayout_EGOSkills_Background.Visibility = Visibility.Collapsed;
+                MainControl.NavigationPanel_HeightControlScrollViewer.MaxHeight = 370;
+                SwitchedInterfaceProperties.DefaultValues.Height = 570;
             }
 
             MainControl.PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = EnableEGOAbnormalityName ? 578 : double.NaN;
@@ -197,7 +200,6 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                                             RichTextBox ThisCoinDescPanel = MainControl.FindName($"PreviewLayout_Skills_CoinShelf{CoinNumber}_Desc{CoinDescNumber}") as RichTextBox;
                                             if (!ThisCoinDescPanel.IsNull())
                                             {
-                                                rin($"PreviewLayout_Skills_CoinShelf{CoinNumber}_Desc{CoinDescNumber}");
                                                 Border RightMenuCoinButton_DisableCover = MainControl.FindName($"STE_DisableCover_Skills_Coin_{CoinNumber}") as Border;
 
                                                 VisibilityChangeQuery[ThisCoinDescPanel] = Visible;

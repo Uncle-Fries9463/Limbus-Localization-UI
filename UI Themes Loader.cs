@@ -221,20 +221,20 @@ namespace LC_Localization_Task_Absolute
             [OnDeserialized] internal void OnInit(StreamingContext context) => NullableControl.NullExterminate(this);
         }
 
-        internal protected static void InitializeUITheme(string SourceName)
+        internal protected static void InitializeUITheme(string FolderName)
         {
-            if (File.Exists(@$"⇲ Assets Directory\[+] Themes\{SourceName}\Theme.json"))
+            if (File.Exists(@$"{FolderName}\Theme.json"))
             {
-                LoadedTheme = JsonConvert.DeserializeObject<Theme>(File.ReadAllText(@$"⇲ Assets Directory\[+] Themes\{SourceName}\Theme.json"));
+                LoadedTheme = JsonConvert.DeserializeObject<Theme>(File.ReadAllText(@$"{FolderName}\Theme.json"));
             }
             else
             {
                 LoadedTheme = JsonConvert.DeserializeObject<Theme>(MainWindow.DefaultTheme);
             }
 
-            if (File.Exists(@$"⇲ Assets Directory\[+] Themes\{SourceName}\Background.png"))
+            if (File.Exists(@$"{FolderName}\Background.png"))
             {
-                MainControl.BackgroundImage.Source = GenerateBitmapFromFile(@$"⇲ Assets Directory\[+] Themes\{SourceName}\Background.png");
+                MainControl.BackgroundImage.Source = GenerateBitmapFromFile(@$"{FolderName}\Background.png");
             }
             else
             {

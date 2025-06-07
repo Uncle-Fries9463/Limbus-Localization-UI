@@ -17,14 +17,20 @@ using System.Xml.Linq;
 using System.Xml;
 using System.Globalization;
 using System.Net.Mail;
+using System.Windows.Input;
 
 namespace RichText 
 {
     internal static class RichTextBoxApplicator
     {
+        internal static RichTextBox LastUpdateTarget = new RichTextBox();
+        internal static string LastUpdateText = "";
+
         internal static bool IsProcessingLimbusText = false;
         internal static void SetLimbusRichText(this RichTextBox Target, string RichTextString)
         {
+            RichTextBoxApplicator.LastUpdateTarget = Target;
+            RichTextBoxApplicator.LastUpdateText = RichTextString;
             RichTextString = LimbusPreviewFormatter.Apply(RichTextString);
             IsProcessingLimbusText = true;
             Target.SetRichText(RichTextString, ImagesLineBreak: true);
@@ -679,7 +685,8 @@ namespace RichText
 
 
             #region Debug Preview
-            //foreach(var i in __TextSegmented__)
+            //if (RichTextBoxApplicator.IsProcessingLimbusText)
+            //foreach (var i in __TextSegmented__)
             //{
             //    rin($"  > {i.R()}");
             //}
@@ -693,7 +700,8 @@ namespace RichText
 
             #region Вывод на предпросмотр
             int Indexer = 0;
-            foreach (string TextItem in __TextSegmented__)
+            __TextSegmented__ = __TextSegmented__.Where(x => !x.Equals("")).ToList();
+            foreach (string TextItem in __TextSegmented__.Where(x => !x.Equals("")))
             {
                 #region Спрайты
                 if (TextItem.StartsWith("\uFFF0LevelTag/SpriteLink@") & TextItem.EndsWith('\uFFF1'))
