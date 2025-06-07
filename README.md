@@ -6,6 +6,8 @@
 - `Passives*.json`
 - `EGOgift*.json`
 
+## CONFIG SETUP MANUAL: https://gist.github.com/x1bViolet/86bd93b8ac147fec74e1051850814e85
+
 ## Interface navigation:
 1. To save any description, press CTRL + S. For names there are special button.
 2. To fast id switch, click with right mouse button on ID (LMB is copy), type ID or any Name (Automatically finds an existing one), then press Enter to switch.
