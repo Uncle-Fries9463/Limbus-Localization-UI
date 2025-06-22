@@ -173,6 +173,8 @@ public partial class MainWindow : Window
 
         PreviewUpdate_TargetSite = PreviewLayout_Default;
 
+        File.WriteAllText(@"⇲ Assets Directory\Latest loading.txt", "");
+
         Configurazione.PullLoad();
 
         if (File.Exists(@"⇲ Assets Directory\Default Text.txt"))

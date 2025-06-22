@@ -56,7 +56,7 @@ namespace LC_Localization_Task_Absolute
                 rin($"[ Settings load pull initialized ]\n");
 
                 Configurazione.DeltaConfig = JsonConvert.DeserializeObject<Configurazione.ConfigDelta>(File.ReadAllText(@"⇲ Assets Directory\Configurazione^.json"));
-
+                rin($" Configuration file readed");
 
                 KeywordsInterrogate.InitializeGlossaryFrom(
                     KeywordsDirectory: DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory,
@@ -65,6 +65,8 @@ namespace LC_Localization_Task_Absolute
 
 
                 string SelectedAssociativePropertyName = DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.Selected;
+                rin($"\n Custom language properties: {SelectedAssociativePropertyName}");
+
 
                 var SelectedAssociativePropery_Found = DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.List
                     .Where(x => x.PropertyName.Equals(SelectedAssociativePropertyName)).ToList();
@@ -80,7 +82,9 @@ namespace LC_Localization_Task_Absolute
                     );
 
                     LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection = SelectedAssociativePropery.Properties.Keywords_AutodetectionRegex;
+                    rin($"  Keywords Autodetection Regex Pattern: {LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection}");
                     Configurazione.ShorthandsPattern = new Regex(SelectedAssociativePropery.Properties.Keywords_ShorthandsRegex);
+                    rin($"  Keywords Shorthands Regex Pattern: {Configurazione.ShorthandsPattern}");
 
 
                     if (SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape != null)
@@ -92,7 +96,7 @@ namespace LC_Localization_Task_Absolute
                         ShorthandsInsertionShape.InsertionShape_Color = SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape_HexColor;
                     }
 
-
+                    rin($"   Loading fonts:");
                     UpdatePreviewLayoutsFont(SelectedAssociativePropery.Properties);
                 }
             }
@@ -107,31 +111,48 @@ namespace LC_Localization_Task_Absolute
             {
                 if (File.Exists(Properties.ContextFont))
                 {
-                    FontFamily ContextFontFamily = FileToFontFamily(Properties.ContextFont, Properties.ContextFont_OverrideReadName);
-                    rin(Properties.ContextFont_FontWeight);
+                    rin($"    - Context font file: \"{Properties.ContextFont}\"");
+
+                    FontFamily ContextFontFamily = FileToFontFamily(Properties.ContextFont, Properties.ContextFont_OverrideReadName, WriteInfo: true);
+                    
                     foreach (RichTextBox PreviewLayoutItem in PreviewLayoutsList)
                     {
-                        PreviewLayoutItem.FontFamily = ContextFontFamily;
-                        PreviewLayoutItem.FontSize  *= Properties.ContextFont_FontSizeMultipler;
-                        PreviewLayoutItem.FontWeight = WeightFrom(Properties.ContextFont_FontWeight);
+                        try
+                        {
+                            PreviewLayoutItem.FontFamily = ContextFontFamily;
+                            PreviewLayoutItem.FontSize  *= Properties.ContextFont_FontSizeMultipler;
+                            PreviewLayoutItem.FontWeight = WeightFrom(Properties.ContextFont_FontWeight);
+                        }
+                        catch { }
                     }
+                    rin($"      Applied context font");
+                }
+                else
+                {
+                    rin($"    - [!] Context font file NOT FOUND (\"{Properties.ContextFont}\")");
                 }
 
 
                 if (File.Exists(Properties.TitleFont))
                 {
-                    FontFamily TitleFontFamily = FileToFontFamily(Properties.TitleFont, Properties.TitleFont_OverrideReadName);
+                    rin($"    - Title font file: \"{Properties.TitleFont}\"");
+                    FontFamily TitleFontFamily = FileToFontFamily(Properties.TitleFont, Properties.TitleFont_OverrideReadName, WriteInfo: true);
 
                     MainControl.NavigationPanel_ObjectName_Display.FontFamily = TitleFontFamily;
+                    rin($"      Applied title font");
                     MainControl.NavigationPanel_ObjectName_Display.FontWeight = WeightFrom(Properties.TitleFont_FontWeight);
 
                     MainControl.NavigationPanel_ObjectName_Display.FontSize *= Properties.TitleFont_FontSizeMultipler;
-                    MainControl.PreviewLayout_Keywords_Bufs_Name.FontSize   *= Properties.TitleFont_FontSizeMultipler;
-                    MainControl.EGOGiftName_PreviewLayout.FontSize          *= Properties.TitleFont_FontSizeMultipler;
-                    MainControl.STE_EGOGifts_LivePreview_ViewDescButtons.FontSize   *= Properties.TitleFont_FontSizeMultipler;
+                    MainControl.PreviewLayout_Keywords_Bufs_Name.FontSize *= Properties.TitleFont_FontSizeMultipler;
+                    MainControl.EGOGiftName_PreviewLayout.FontSize *= Properties.TitleFont_FontSizeMultipler;
+                    MainControl.STE_EGOGifts_LivePreview_ViewDescButtons.FontSize *= Properties.TitleFont_FontSizeMultipler;
                     MainControl.PreviewLayout_Keywords_BattleKeywords_Name.FontSize *= Properties.TitleFont_FontSizeMultipler;
                 }
-                
+                else
+                {
+                    rin($"    - [!] Title font file NOT FOUND (\"{Properties.TitleFont}\")");
+                }
+
 
                 if (File.Exists(@"⇲ Assets Directory\[⇲] Limbus Images\UI\BattleKeywords Background.png"))
                 {
@@ -182,9 +203,12 @@ namespace LC_Localization_Task_Absolute
             internal void OnDeserialized(StreamingContext context)
             {
                 UILanguageLoader.InitializeUILanguage(UILanguage);
+                rin($" UI Language loaded from \"{UILanguage}\"");
                 UIThemesLoader.InitializeUITheme(UITheme);
+                rin($" UI Theme loaded from \"{UITheme}\"");
 
                 MainControl.Topmost = AlwaysOnTop;
+                rin($" Always on top: {AlwaysOnTop}");
             }
         }
         internal protected class PreviewSettings

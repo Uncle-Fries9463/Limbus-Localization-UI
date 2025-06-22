@@ -154,7 +154,7 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
             //rin($"\n$ Loading keyword images");
             KeywordImages["Unknown"] = new BitmapImage(new Uri("pack://application:,,,/Default/Images/Unknown.png"));
             int Counter = 0;
-            foreach (FileInfo KeywordImage in new DirectoryInfo(@"⇲ Assets Directory\[⇲] Limbus Images\Keywords").GetFiles("*.png"))
+            foreach (FileInfo KeywordImage in new DirectoryInfo(@"⇲ Assets Directory\[⇲] Limbus Images\Keywords").GetFiles("*.png", SearchOption.AllDirectories))
             {
                 string TargetID = KeywordImage.Name.Replace(KeywordImage.Extension, "");
                 KeywordImages[TargetID] = GenerateBitmapFromFile(KeywordImage.FullName);
@@ -176,7 +176,7 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
 
             if (Directory.Exists(KeywordsDirectory))
             {
-                rin($"Loading Keywords from \"{KeywordsDirectory}\" with files prefix \"{FilesPrefix}\"");
+                rin($" {(WriteOverFallback ? " " : "[Fallback] ")}Loading Keywords from \"{KeywordsDirectory}\"{(!FilesPrefix.Equals("") ? $" with files prefix \"{FilesPrefix}\"" : "")}");
                 Dictionary<string, string> SkillTagColors = new Dictionary<string, string>();
                 if (File.Exists(@"⇲ Assets Directory\[+] Keywords\SkillTag Colors.T[-]"))
                 {
@@ -200,8 +200,11 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     {
                         foreach (SkillTag SkillTag in SkillTagsJson.dataList)
                         {
-                            SkillTags[$"[{SkillTag.ID}]"] = $"<color={(SkillTagColors.ContainsKey(SkillTag.ID) ? SkillTagColors[SkillTag.ID] : "#93f03f")}>{SkillTag.Tag}</color>";
-                            //rin($"{SkillTag.ID} -> {SkillTags[$"[{SkillTag.ID}]"]}");
+                            if (!SkillTag.ID.Equals(""))
+                            {
+                                SkillTags[$"[{SkillTag.ID}]"] = $"<color={(SkillTagColors.ContainsKey(SkillTag.ID) ? SkillTagColors[SkillTag.ID] : "#93f03f")}>{SkillTag.Tag}</color>";
+                                //rin($"{SkillTag.ID} -> {SkillTags[$"[{SkillTag.ID}]"]}");
+                            }
                         }
                     }
                 }
@@ -238,33 +241,36 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     {
                         foreach(Keyword KeywordItem in TargetSite.dataList)
                         {
-                            if (!KeywordItem.ID.ContainsOneOf(DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsIgnore))
+                            if (!!KeywordItem.ID.Equals(""))
                             {
-                                KeywordsGlossary[KeywordItem.ID] = new KeywordSingleton
+                                if (!KeywordItem.ID.ContainsOneOf(DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsIgnore))
                                 {
-                                    Name = KeywordItem.Name,
-                                    Description = KeywordItem.Description,
-                                    StringColor = KeywordColors.ContainsKey(KeywordItem.ID) ? KeywordColors[KeywordItem.ID] : "#9f6a3a"
-                                };
-
-                                Keywords_IDName[KeywordItem.ID] = KeywordItem.Name;
-                                if (!KeywordItem.ID.EndsWithOneOf(["_Re", "Re", "Mirror"]))
-                                {
-                                    //Fallback overwrite
-                                    if (Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter.ContainsValue(KeywordItem.ID) & WriteOverFallback)
+                                    KeywordsGlossary[KeywordItem.ID] = new KeywordSingleton
                                     {
-                                        Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter = Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter.RemoveItemWithValue(KeywordItem.ID);
-                                    }
-                                    Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter[KeywordItem.Name] = KeywordItem.ID;
+                                        Name = KeywordItem.Name,
+                                        Description = KeywordItem.Description,
+                                        StringColor = KeywordColors.ContainsKey(KeywordItem.ID) ? KeywordColors[KeywordItem.ID] : "#9f6a3a"
+                                    };
+
+                                    Keywords_IDName[KeywordItem.ID] = KeywordItem.Name;
+                                    if (!KeywordItem.ID.EndsWithOneOf(["_Re", "Re", "Mirror"]))
+                                    {
+                                        //Fallback overwrite
+                                        if (Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter.ContainsValue(KeywordItem.ID) & WriteOverFallback)
+                                        {
+                                            Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter = Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter.RemoveItemWithValue(KeywordItem.ID);
+                                        }
+                                        Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter[KeywordItem.Name] = KeywordItem.ID;
 
 
                                     
-                                    Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter[KeywordItem.Name] = KeywordItem.ID;
+                                        Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter[KeywordItem.Name] = KeywordItem.ID;
+                                    }
+
+                                    KnownID.Add(KeywordItem.ID);
+
+                                    Counter++;
                                 }
-
-                                KnownID.Add(KeywordItem.ID);
-
-                                Counter++;
                             }
                         }
                     }

@@ -68,7 +68,7 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                 SwitchedInterfaceProperties.DefaultValues.Height = 570;
             }
 
-            MainControl.PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = EnableEGOAbnormalityName ? 578 : double.NaN;
+            MainControl.PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = EnableEGOAbnormalityName ? 578 : 670;
 
             if (EnableUptieLevels)
             {

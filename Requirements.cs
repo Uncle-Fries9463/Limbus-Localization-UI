@@ -286,7 +286,11 @@ namespace LC_Localization_Task_Absolute
                 return false;
             }
         }
-        internal static void rin(params object[] s) => Console.WriteLine(String.Join(' ', s));
+        internal static void rin(params object[] s)
+        {
+            File.AppendAllText(@"⇲ Assets Directory\Latest loading.txt", String.Join(' ', s) + "\n");
+            Console.WriteLine(String.Join(' ', s));
+        }
         internal static void rinx(params object[] s) { Console.WriteLine(String.Join(' ', s)); rinx(); }
         internal static void rinx() => Console.ReadKey();
 
@@ -351,19 +355,19 @@ namespace LC_Localization_Task_Absolute
         }
 
 
-        internal static System.Windows.Media.FontFamily FileToFontFamily(string FontPath, string OverrideFontInternalName = "")
+        internal static System.Windows.Media.FontFamily FileToFontFamily(string FontPath, string OverrideFontInternalName = "", bool WriteInfo = false)
         {
             if (File.Exists(FontPath))
             {
                 string FontFullPath = new FileInfo(FontPath).FullName;
                 Uri FontUri = new Uri(FontFullPath, UriKind.Absolute);
-                //rin($"  Successful font loading from file \"{FontPath}\"");
                 string FontInternalName = OverrideFontInternalName.Equals("") ? GetFontName(FontFullPath) : OverrideFontInternalName;
+                if (WriteInfo) rin($"      Successful font loading from file as `{FontInternalName}`");
                 return new System.Windows.Media.FontFamily(FontUri, $"./#{FontInternalName}");
             }
             else
             {
-                //rin($"  Font file \"{FontPath}\" not found, returning Arial");
+                if (WriteInfo) rin($"      Font file \"{FontPath}\" not found, returning \"Arial\"");
                 return new System.Windows.Media.FontFamily("Arial");
             }
         }

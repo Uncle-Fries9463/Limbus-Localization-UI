@@ -24,16 +24,16 @@ namespace LC_Localization_Task_Absolute
         internal protected class Language
         {
             [JsonProperty("Default Font")]
-            public string DefaultUIFont { get; set; }
+            public string DefaultUIFont { get; set; } = "";
 
             [JsonProperty("UI Static")]
             public List<UIStaticTextItem> StaticUIElements { get; set; }
 
             [JsonProperty("Default [$] Insertion")]
-            public string DefaultInsertionText { get; set; }
-            
+            public string DefaultInsertionText { get; set; } = "";
+
             [JsonProperty("Unsaved Changes Marker")]
-            public string UnsavedChangesMarker { get; set; }
+            public string UnsavedChangesMarker { get; set; } = "";
 
             [JsonProperty("UI Textfields")]
             public List<UITextfieldItem> TextfieldUIElements { get; set; }
@@ -47,7 +47,6 @@ namespace LC_Localization_Task_Absolute
             [OnDeserialized]
             internal void OnInit(StreamingContext context)
             {
-                NullableControl.NullExterminate(this);
                 if (!UnsavedChangesInfo.IsNull())
                 {
                     LangUnsavedChangesInfo = UnsavedChangesInfo;

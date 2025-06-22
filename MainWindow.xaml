@@ -487,13 +487,13 @@
                                                     <TranslateTransform Y="-0.9"/>
                                                 </Image.RenderTransform>
                                             </Image>
-                                            <ScrollViewer x:Name="SurfaceScrollPreview_Skills" Margin="10 20 40 40">
+                                            <ScrollViewer x:Name="SurfaceScrollPreview_Skills" Margin="10 20 30 40">
 
                                                 <ScrollViewer.Resources>
                                                     <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
                                                 </ScrollViewer.Resources>
 
-                                                <StackPanel x:Name="PreviewLayoutGrid_Skills_ContentControlStackPanel" VerticalAlignment="Top" HorizontalAlignment="Left" Width="578">
+                                                <StackPanel x:Name="PreviewLayoutGrid_Skills_ContentControlStackPanel" VerticalAlignment="Top" HorizontalAlignment="Left" Width="581">
                                                     <RichTextBox x:Name="PreviewLayout_Skills_MainDesc" Foreground="#ebcaa2" IsReadOnly="True" FontFamily="Pretendard Light" FontSize="20" Margin="0 0 0 7">
                                                         <FlowDocument>
                                                             <Paragraph>
@@ -1661,7 +1661,7 @@
                                                         </TextBlock>
                                                         <TextBlock Foreground="#c6c3bd" Text="※" FontWeight="Light" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5"/>
                                                         <TextBlock Foreground="#c6c3bd" FontWeight="Black" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5">
-                                                           1.1:0
+                                                           1.1:1
                                                         </TextBlock>
                                                     </StackPanel>
                                                 </StackPanel>
