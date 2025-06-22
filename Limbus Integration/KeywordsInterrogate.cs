@@ -241,7 +241,7 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     {
                         foreach(Keyword KeywordItem in TargetSite.dataList)
                         {
-                            if (!!KeywordItem.ID.Equals(""))
+                            if (!KeywordItem.ID.Equals(""))
                             {
                                 if (!KeywordItem.ID.ContainsOneOf(DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsIgnore))
                                 {
