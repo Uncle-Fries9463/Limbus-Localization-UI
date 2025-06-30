@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -80,6 +80,9 @@ namespace LC_Localization_Task_Absolute
                         FilesPrefix: SelectedAssociativePropery.Properties.KeywordsDirectory_FilesPrefix,
                         WriteOverFallback: true
                     );
+
+                    KeywordsInterrogate.ReadKeywordsMultipleMeanings(SelectedAssociativePropery.Properties.KeywordsMultipleMeaningsDictionary);
+                    
 
                     LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection = SelectedAssociativePropery.Properties.Keywords_AutodetectionRegex;
                     rin($"  Keywords Autodetection Regex Pattern: {LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection}");
@@ -287,6 +290,9 @@ namespace LC_Localization_Task_Absolute
 
             [JsonProperty("Keywords Shorthands Contextmenu Insertion Shape <KeywordColor>")]
             public string? Keywords_ShorthandsContextMenuInsertionShape_HexColor { get; set; }
+
+            [JsonProperty("Keywords Multiple Meanings Dictionary")]
+            public string? KeywordsMultipleMeaningsDictionary { get; set; }
 
             [JsonProperty("Keywords Sprite Horizontal Offset")]
             public double KeywordsSpriteHorizontalOffset { get; set; } = 0;
