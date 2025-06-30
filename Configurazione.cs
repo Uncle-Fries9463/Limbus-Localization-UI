@@ -286,13 +286,13 @@ namespace LC_Localization_Task_Absolute
             public string Keywords_ShorthandsRegex { get; set; } = new Regex(@"NOTHING THERE").ToString();
 
             [JsonProperty("Keywords Shorthands Contextmenu Insertion Shape")]
-            public string? Keywords_ShorthandsContextMenuInsertionShape { get; set; }
+            public string Keywords_ShorthandsContextMenuInsertionShape { get; set; } = "";
 
             [JsonProperty("Keywords Shorthands Contextmenu Insertion Shape <KeywordColor>")]
-            public string? Keywords_ShorthandsContextMenuInsertionShape_HexColor { get; set; }
+            public string Keywords_ShorthandsContextMenuInsertionShape_HexColor { get; set; } = "";
 
             [JsonProperty("Keywords Multiple Meanings Dictionary")]
-            public string? KeywordsMultipleMeaningsDictionary { get; set; }
+            public string KeywordsMultipleMeaningsDictionary { get; set; } = "";
 
             [JsonProperty("Keywords Sprite Horizontal Offset")]
             public double KeywordsSpriteHorizontalOffset { get; set; } = 0;
