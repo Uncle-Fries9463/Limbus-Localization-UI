@@ -1,4 +1,4 @@
-﻿{
+{
   "Readme": "There are no IDs of upgraded ego gifts versions, only basic",
   "E.G.O Gifts Info": [
     {
@@ -768,7 +768,7 @@
       "ID": 9015,
       "Image": "Blood, Sweat, and Tears.png",
       "Affinity": "Sloth",
-      "Keyword": "-",
+      "Keyword": "Tremor",
       "Tier": "2"
     },
     {
@@ -1762,14 +1762,14 @@
       "ID": 9407,
       "Image": "Made-to-Order.png",
       "Affinity": "Pride",
-      "Keyword": "-",
+      "Keyword": "Tremor",
       "Tier": "2"
     },
     {
       "ID": 9408,
       "Image": "Haunted Shoes.png",
       "Affinity": "Lust",
-      "Keyword": "-",
+      "Keyword": "Sinking",
       "Tier": "2"
     },
     {
@@ -2063,7 +2063,7 @@
       "ID": 9739,
       "Image": "Crystallized Blood.png",
       "Affinity": "Wrath",
-      "Keyword": "-",
+      "Keyword": "Bleed",
       "Tier": "2"
     },
     {
@@ -2252,7 +2252,7 @@
       "ID": 9192,
       "Image": "Layered Bandages.png",
       "Affinity": "Gloom",
-      "Keyword": "-",
+      "Keyword": "Bleed",
       "Tier": "1"
     },
     {
@@ -2672,7 +2672,7 @@
       "ID": 9759,
       "Image": "Snuffed Lantern.png",
       "Affinity": "Sloth",
-      "Keyword": "-",
+      "Keyword": "Tremor",
       "Tier": "1"
     },
     {
@@ -2686,7 +2686,7 @@
       "ID": 9761,
       "Image": "Shadow Monster.png",
       "Affinity": "Wrath",
-      "Keyword": "-",
+      "Keyword": "Tremor",
       "Tier": "3"
     },
     {
@@ -2959,7 +2959,7 @@
       "ID": 2038,
       "Image": "Warning Notice.png",
       "Affinity": "Pride",
-      "Keyword": "-",
+      "Keyword": "Tremor",
       "Tier": "-"
     },
     {
@@ -3029,7 +3029,7 @@
       "ID": 9782,
       "Image": "Worn Hilt.png",
       "Affinity": "Sloth",
-      "Keyword": "-",
+      "Keyword": "Slash",
       "Tier": "3"
     },
     {
