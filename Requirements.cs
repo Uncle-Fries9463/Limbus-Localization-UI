@@ -16,6 +16,8 @@ using System.Drawing.Text;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 using static LC_Localization_Task_Absolute.Requirements;
+using System.Windows.Markup;
+using System.Xml;
 
 namespace LC_Localization_Task_Absolute
 {
@@ -498,10 +500,16 @@ namespace LC_Localization_Task_Absolute
 
         internal static void ScanScrollviewer(ScrollViewer Target, string NameHint, int Upscale = 4, double DpiX = 96d, double DpiY = 96d)
         {
+            ////////////////////////////////////////////////////
+            double OriginalScrollOffset = Target.VerticalOffset;
+            Target.ScrollToVerticalOffset(0);
+            // Because text on image somehow will slide up if preview was scrolled
+
+
             FrameworkElement PreviewContent = Target.Content as FrameworkElement;
 
             PreviewContent.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
-            PreviewContent.Arrange(new Rect(PreviewContent.DesiredSize));
+            PreviewContent.Arrange(new System.Windows.Rect(PreviewContent.DesiredSize));
             PreviewContent.UpdateLayout();
 
             int RenderWidth = (int)(PreviewContent.ActualWidth * Upscale);
@@ -517,6 +525,10 @@ namespace LC_Localization_Task_Absolute
             {
                 ExportBitmapEncoder.Save(ExportStream);
             }
+
+
+            ////////////////////////////////////////////////////
+            Target.ScrollToVerticalOffset(OriginalScrollOffset);
         }
     }
 }
