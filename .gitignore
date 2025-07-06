@@ -10,3 +10,5 @@ bin/Debug/net8.0-windows/LC Localization Interface.dll
 bin/Debug/net8.0-windows/LC Localization Interface.deps.json
 LC Localization Interface.csproj.user
 /Properties
+/bin/Release
+bin/Debug/net8.0-windows/⇲ Assets Directory/Latest loading.txt
