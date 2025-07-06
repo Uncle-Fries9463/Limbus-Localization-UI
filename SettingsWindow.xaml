@@ -660,7 +660,7 @@ TargetType="{x:Type ScrollBar}">
                                                     </Border>
                                                     <Border x:Name="Recheck_PreviewUpdateDelay" PreviewMouseLeftButtonUp="OptionToggle" Grid.Column="1" Style="{StaticResource BorderButton}" Width="26.4" Height="26.4">
                                                         <TextBlock Style="{StaticResource ButtonInner}">
-                                                            
+                                                            
                                                         </TextBlock>
                                                     </Border>
                                                 </Grid>
@@ -720,7 +720,7 @@ TargetType="{x:Type ScrollBar}">
                                                             </Border>
                                                             <Border x:Name="Recheck_KeywordsDir" PreviewMouseLeftButtonUp="OptionToggle" Grid.Column="1" Style="{StaticResource BorderButton}" Width="26.4" Height="26.4">
                                                                 <TextBlock Style="{StaticResource ButtonInner}">
-                                                                    
+                                                                    
                                                                 </TextBlock>
                                                             </Border>
                                                         </Grid>
@@ -747,7 +747,7 @@ TargetType="{x:Type ScrollBar}">
                                                             </Border>
                                                             <Border x:Name="Recheck_TitleFont" PreviewMouseLeftButtonUp="OptionToggle" Grid.Column="1" Style="{StaticResource BorderButton}" Width="26.4" Height="26.4">
                                                                 <TextBlock Style="{StaticResource ButtonInner}">
-                                                                    
+                                                                    
                                                                 </TextBlock>
                                                             </Border>
                                                         </Grid>
@@ -774,7 +774,7 @@ TargetType="{x:Type ScrollBar}">
                                                             </Border>
                                                             <Border x:Name="Recheck_ContextFont" PreviewMouseLeftButtonUp="OptionToggle" Grid.Column="1" Style="{StaticResource BorderButton}" HorizontalAlignment="Left" Width="26.4" Height="26.4">
                                                                 <TextBlock Style="{StaticResource ButtonInner}">
-                                                                    
+                                                                    
                                                                 </TextBlock>
                                                             </Border>
                                                         </Grid>
