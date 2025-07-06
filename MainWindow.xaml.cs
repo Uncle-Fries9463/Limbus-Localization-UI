@@ -32,6 +32,7 @@ public partial class MainWindow : Window
     /// Damn
     /// </summary>
     internal protected static MainWindow MainControl;
+    internal protected static SettingsWindow SettingsControl = new SettingsWindow();
 
 
     internal protected static Dictionary<string, RichTextBox> UILanguage;
@@ -188,12 +189,14 @@ public partial class MainWindow : Window
 
         RichText.InternalModel.InitializingEvent = false;
 
-        // Default file load on startup
-        //FileInfo s = new FileInfo(@"C:\Program Files (x86)\Steam\steamapps\common\Limbus Company\LimbusCompany_Data\Assets\Resources_moved\Localize\en\EN_Skills_Abnormality-a1c8p3.json");
 
-        //FocusOnFile(s);
-        //Mode_Skills.LoadStructure(s);
-        //Mode_Skills.TransformToSkill(114507);
+
+        ////Default file load on startup
+        //FileInfo SomeFile = new FileInfo(@"Skills_personality-01.json");
+
+        //FocusOnFile(SomeFile);
+        //Mode_Skills.LoadStructure(SomeFile);
+        //Mode_Skills.TransformToSkill(1011302);
     }
 
 
@@ -228,6 +231,8 @@ public partial class MainWindow : Window
             PullUpdatePreview(Editor.Text);
         }
 
+        // Window_PreviewKeyDown() -> if ctrlv and \" -> Editor_TextChanged() -> here
+        // After pasting formatted clipboard return normal text to clipboard that was before
         if (IsQuotesConvertedInClipboard)
         {
             Clipboard.SetText(QuotesClipboardOldText);
@@ -320,11 +325,11 @@ public partial class MainWindow : Window
                         
                         if (CoinInfoFullLink.CoinDescriptions.Where(x => x.EditorDescription.EqualsOneOf(["", "<style=\"highlight\"></style>"])).Count() == CoinInfoFullLink.CoinDescriptions.Count)
                         {
-                            (MainControl.FindName($"PreviewLayout_Skills_CoinShelf{Mode_Skills.CurrentSkillCoinIndex + 1}") as Grid).Visibility = Collapsed;
+                            (MainControl.FindName($"PreviewLayout_Skills_Coin{Mode_Skills.CurrentSkillCoinIndex + 1}") as Grid).Visibility = Collapsed;
                         }
                         else
                         {
-                            (MainControl.FindName($"PreviewLayout_Skills_CoinShelf{Mode_Skills.CurrentSkillCoinIndex + 1}") as Grid).Visibility = Visible;
+                            (MainControl.FindName($"PreviewLayout_Skills_Coin{Mode_Skills.CurrentSkillCoinIndex + 1}") as Grid).Visibility = Visible;
                         }
                     }
                 }
@@ -597,7 +602,7 @@ public partial class MainWindow : Window
 
         if (DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightCoinDescsOnManualSwitch)
         {
-            RichTextBox HighlightTarget = FindName($"PreviewLayout_Skills_CoinShelf{Mode_Skills.CurrentSkillCoinIndex + 1}_Desc{Mode_Skills.CurrentSkillCoinDescIndex + 1}") as RichTextBox;
+            RichTextBox HighlightTarget = FindName($"PreviewLayout_Skills_Coin{Mode_Skills.CurrentSkillCoinIndex + 1}_Desc{Mode_Skills.CurrentSkillCoinDescIndex + 1}") as RichTextBox;
             NavigationPanel_Skills_SwitchToCoinDesc_FastSwitch_CoinDescFocusHighlightEvent(HighlightTarget);
             HighlightTarget.Focus();
         }
@@ -615,7 +620,7 @@ public partial class MainWindow : Window
 
         if (DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightCoinDescsOnManualSwitch)
         {
-            RichTextBox HighlightTarget = FindName($"PreviewLayout_Skills_CoinShelf{Mode_Skills.CurrentSkillCoinIndex + 1}_Desc{Mode_Skills.CurrentSkillCoinDescIndex + 1}") as RichTextBox;
+            RichTextBox HighlightTarget = FindName($"PreviewLayout_Skills_Coin{Mode_Skills.CurrentSkillCoinIndex + 1}_Desc{Mode_Skills.CurrentSkillCoinDescIndex + 1}") as RichTextBox;
             NavigationPanel_Skills_SwitchToCoinDesc_FastSwitch_CoinDescFocusHighlightEvent(HighlightTarget);
             HighlightTarget.Focus();
         }
@@ -650,7 +655,7 @@ public partial class MainWindow : Window
     {
         RichTextBox Sender = sender as RichTextBox;
 
-        string CoinNumber = $"{Sender.Name.Split("PreviewLayout_Skills_CoinShelf")[1][0]}";
+        string CoinNumber = $"{Sender.Name.Split("PreviewLayout_Skills_Coin")[1][0]}";
         string CoinDescNumber = $"{Sender.Name.Split("_Desc")[1]}";
 
         Mode_Skills.SetCoinFocus(int.Parse(CoinNumber));
@@ -1675,6 +1680,13 @@ public partial class MainWindow : Window
                 Clipboard.SetText(ClipboardText.Replace("\\\"", "\"").Replace("\\\n", "\n"));
                 IsQuotesConvertedInClipboard = true;
             }
+
+            // ... -> Editor_TextChanged()
+        }
+
+        if (Keyboard.IsKeyDown(Key.LeftCtrl) & Keyboard.IsKeyDown(Key.P))
+        {
+            SavePreviewlayoutScan();
         }
 
         #region Files saving
@@ -1909,6 +1921,11 @@ public partial class MainWindow : Window
         #endregion
     }
 
+    private void MakeLimbusPreviewScan_Do(object sender, MouseButtonEventArgs e)
+    {
+        SavePreviewlayoutScan();
+    }
+
     private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.S) IsCtrlSPressed = false;
@@ -2133,11 +2150,72 @@ public partial class MainWindow : Window
         }
     }
 
-    private void ReloadConfig(object sender, MouseButtonEventArgs e)
+    private void ReloadConfig(object sender, MouseButtonEventArgs e) => ReloadConfig_Direct();
+    async private void OpenSettings(object sender, MouseButtonEventArgs e)
+    {
+        if (!SettingsControl.IsActive)
+        {
+            await Task.Delay(50);
+            SettingsControl.Show();
+        }
+    }
+
+    internal protected static void ReloadConfig_Direct()
     {
         Configurazione.PullLoad();
 
         // Update last textfield that was changed
         RichTextBoxApplicator.SetLimbusRichText(RichText.RichTextBoxApplicator.LastUpdateTarget, RichText.RichTextBoxApplicator.LastUpdateText);
+    }
+
+    private void SavePreviewlayoutScan()
+    {
+        string NameHint = "";
+
+        ScrollViewer CurrentTarget = null;
+
+        switch (Upstairs.ActiveProperties.Key)
+        {
+            case "Skills":
+                CurrentTarget = SurfaceScrollPreview_Skills;
+                NameHint = $"{CurrentFile.Name.Replace(".json", "")}, " +
+                           $"ID {Mode_Skills.CurrentSkillID}" +
+                           (CurrentFile.Name.ToLower().Contains("personality") ? $", Uptie {Mode_Skills.CurrentSkillUptieLevel}" : "");
+                break;
+
+            case "Passives":
+                CurrentTarget = SurfaceScrollPreview_Passives;
+                NameHint = $"{CurrentFile.Name.Replace(".json", "")}, " +
+                           $"ID {Mode_Passives.CurrentPassiveID}";
+                break;
+
+            case "Keywords":
+                CurrentTarget = 
+                    PreviewLayoutGrid_Keywords_Sub_Bufs.Visibility == Visibility.Visible ?
+                        Scanable__PreviewLayout_Keywords_Bufs_Desc
+                        :
+                        SurfaceScrollPreview_Keywords__BattleKeywords;
+                NameHint = $"{CurrentFile.Name.Replace(".json", "")}, " +
+                           $"ID {Mode_Keywords.CurrentKeywordID}";
+                break;
+
+            case "E.G.O Gifts":
+                CurrentTarget = SurfaceScrollPreview_EGOGifts;
+                NameHint = $"{CurrentFile.Name.Replace(".json", "")}, " +
+                           $"ID {Mode_EGOGifts.CurrentEGOGiftID}";
+                break;
+
+            default: break;
+        }
+
+        if (!Directory.Exists(@"⇲ Assets Directory\[⇲] Scans"))
+        {
+            Directory.CreateDirectory(@"⇲ Assets Directory\[⇲] Scans");
+        }
+
+        if (CurrentTarget != null)
+        {
+            ScanScrollviewer(CurrentTarget, NameHint);
+        }
     }
 }

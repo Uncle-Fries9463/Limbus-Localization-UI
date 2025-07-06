@@ -26,12 +26,16 @@ namespace LC_Localization_Task_Absolute.Json
         
         internal protected static Dictionary<string, Type_Keywords.Keyword> DelegateKeywords = [];
             internal protected static List<string> DelegateKeywords_IDList = [];
-        
+
+        internal protected static Dictionary<dynamic, Type_ContentBasedUniversal.ContentBasedUniversal> DelegateUniversal = [];
+            internal protected static List<dynamic> DelegateUniversal_IDList = [];
+
         internal protected static List<dynamic> Delegates = [
             DelegateSkills  , DelegateSkills_IDList,
             DelegatePassives, DelegatePassives_IDList,
             DelegateKeywords, DelegateEGOGifts_IDList,
             DelegateEGOGifts, DelegateKeywords_IDList,
+            DelegateUniversal, DelegateUniversal_IDList,
         ];
 
         internal protected static void ClearDelegates()
@@ -113,6 +117,32 @@ namespace LC_Localization_Task_Absolute.Json
                 }
 
                 DelegateEGOGifts_IDList = DelegateEGOGifts.Keys.ToList();
+            }
+        }
+
+        internal protected static void InitializeContentBasedUniversalDelegateFrom(Type_ContentBasedUniversal.ContentBasedUniversal? Source)
+        {
+            DelegateUniversal.Clear();
+            DelegateUniversal_IDList.Clear();
+            Mode_Passives.Passives_NameIDs.Clear();
+
+            if (!Source.dataList.IsNull())
+            {
+                if (Source.dataList.Count > 0)
+                {
+                    Type CheckItem = Source.dataList[0].GetType();
+                    if (CheckItem.HasProperty("id") & CheckItem.HasProperty("content"))
+                    {
+                        
+                        foreach (dynamic CurrentItem in Source.dataList)
+                        {
+                            DelegateUniversal[CurrentItem.id] = CurrentItem;
+                            //Mode_Passives.Passives_NameIDs[CurrentPassive.Name.Trim()] = CurrentPassive.ID;
+                        }
+
+                        DelegatePassives_IDList = DelegatePassives.Keys.ToList();
+                    }
+                }
             }
         }
     }

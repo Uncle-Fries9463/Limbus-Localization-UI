@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -47,63 +47,84 @@ namespace LC_Localization_Task_Absolute
 
         internal protected static dynamic FormalTaskCompleted = null;
 
-        
+        internal protected static CustomLanguageAssociativePropertyMain SelectedAssociativePropery_Shared = null;
+
+        internal protected static bool SettingsLoadingEvent = false;
         internal protected static void PullLoad()
         {
             #region new
             if (File.Exists(@"⇲ Assets Directory\Configurazione^.json"))
             {
-                rin($"[ Settings load pull initialized ]\n");
-
-                Configurazione.DeltaConfig = JsonConvert.DeserializeObject<Configurazione.ConfigDelta>(File.ReadAllText(@"⇲ Assets Directory\Configurazione^.json"));
-                rin($" Configuration file readed");
-
-                KeywordsInterrogate.InitializeGlossaryFrom(
-                    KeywordsDirectory: DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory,
-                    FilesPrefix: DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FilesPrefix
-                );
-
-
-                string SelectedAssociativePropertyName = DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.Selected;
-                rin($"\n Custom language properties: {SelectedAssociativePropertyName}");
-
-
-                var SelectedAssociativePropery_Found = DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.List
-                    .Where(x => x.PropertyName.Equals(SelectedAssociativePropertyName)).ToList();
-
-                if (SelectedAssociativePropery_Found.Count() > 0)
+                try
                 {
-                    CustomLanguageAssociativePropertyMain SelectedAssociativePropery = SelectedAssociativePropery_Found[0];
-                    
+                    SettingsLoadingEvent = true;
+                    rin($"\n\n\n[ Settings load pull initialized ]\n");
+
+                    Configurazione.DeltaConfig = JsonConvert.DeserializeObject<Configurazione.ConfigDelta>(File.ReadAllText(@"⇲ Assets Directory\Configurazione^.json"));
+                    rin($" Configuration file readed");
+
+                    SettingsWindow.UpdateSettingsMenu_Regular();
+
+
                     KeywordsInterrogate.InitializeGlossaryFrom(
-                        KeywordsDirectory: SelectedAssociativePropery.Properties.KeywordsDirectory,
-                        FilesPrefix: SelectedAssociativePropery.Properties.KeywordsDirectory_FilesPrefix,
-                        WriteOverFallback: true
+                        KeywordsDirectory: DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory
                     );
 
-                    KeywordsInterrogate.ReadKeywordsMultipleMeanings(SelectedAssociativePropery.Properties.KeywordsMultipleMeaningsDictionary);
-                    
-
-                    LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection = SelectedAssociativePropery.Properties.Keywords_AutodetectionRegex;
-                    rin($"  Keywords Autodetection Regex Pattern: {LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection}");
-                    Configurazione.ShorthandsPattern = new Regex(SelectedAssociativePropery.Properties.Keywords_ShorthandsRegex);
-                    rin($"  Keywords Shorthands Regex Pattern: {Configurazione.ShorthandsPattern}");
+                    string SelectedAssociativePropertyName = DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.Selected;
+                    rin($"\n Custom language properties: {SelectedAssociativePropertyName}");
 
 
-                    if (SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape != null)
+                    var SelectedAssociativePropery_Found = DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.List
+                        .Where(x => x.PropertyName.Equals(SelectedAssociativePropertyName)).ToList();
+
+                    if (SelectedAssociativePropery_Found.Count() > 0)
                     {
-                        ShorthandsInsertionShape.InsertionShape = SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape;
-                    }
-                    if (SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape_HexColor != null)
-                    {
-                        ShorthandsInsertionShape.InsertionShape_Color = SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape_HexColor;
+                        SelectedAssociativePropery_Shared = SelectedAssociativePropery_Found[0];
+
+                        UpdateCustomLanguagePart(SelectedAssociativePropery_Shared);
+
+                        SettingsWindow.UpdateSettingsMenu_CustomLang();
                     }
 
-                    rin($"   Loading fonts:");
-                    UpdatePreviewLayoutsFont(SelectedAssociativePropery.Properties);
+
+                    SettingsLoadingEvent = false;
+                }
+                catch
+                {
+                    SettingsLoadingEvent = false;
                 }
             }
             #endregion
+        }
+
+        internal protected static void UpdateCustomLanguagePart(CustomLanguageAssociativePropertyMain SelectedAssociativePropery)
+        {
+            KeywordsInterrogate.InitializeGlossaryFrom
+            (
+                KeywordsDirectory: SelectedAssociativePropery.Properties.KeywordsDirectory,
+                WriteOverFallback: true
+            );
+
+            KeywordsInterrogate.ReadKeywordsMultipleMeanings(SelectedAssociativePropery.Properties.KeywordsMultipleMeaningsDictionary);
+
+
+            LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection = SelectedAssociativePropery.Properties.Keywords_AutodetectionRegex;
+            rin($"  Keywords Autodetection Regex Pattern: {LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection}");
+            Configurazione.ShorthandsPattern = new Regex(SelectedAssociativePropery.Properties.Keywords_ShorthandsRegex);
+            rin($"  Keywords Shorthands Regex Pattern: {Configurazione.ShorthandsPattern}");
+
+
+            if (SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape != null)
+            {
+                ShorthandsInsertionShape.InsertionShape = SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape;
+            }
+            if (SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape_HexColor != null)
+            {
+                ShorthandsInsertionShape.InsertionShape_Color = SelectedAssociativePropery.Properties.Keywords_ShorthandsContextMenuInsertionShape_HexColor;
+            }
+
+            rin($"   Loading fonts:");
+            UpdatePreviewLayoutsFont(SelectedAssociativePropery.Properties);
         }
 
 
@@ -167,7 +188,6 @@ namespace LC_Localization_Task_Absolute
         }
         #endregion
 
-        #region oldconfig
         internal protected class ShorthandInsertionProperty
         {
             [JsonProperty("(Context Menu) Insertion Shape")]
@@ -176,10 +196,7 @@ namespace LC_Localization_Task_Absolute
             [JsonProperty("(Context Menu) Insertion Shape (Color)")]
             public string InsertionShape_Color { get; set; } = "<HexColor>";
         }
-        #endregion
 
-
-        #region newconfig
         internal protected class ConfigDelta
         {
             [JsonProperty("Internal")]
@@ -251,9 +268,6 @@ namespace LC_Localization_Task_Absolute
         {
             [JsonProperty("Directory")]
             public string FallbackKeywordsDirectory { get; set; } = "";
-
-            [JsonProperty("Files Prefix")]
-            public string FilesPrefix { get; set; } = "";
         }
         internal protected class CustomLanguageAssociativeSettings
         {
@@ -268,6 +282,9 @@ namespace LC_Localization_Task_Absolute
             [JsonProperty("Name")]
             public string PropertyName { get; set; } = "<none>";
 
+            [JsonProperty("Hide in list")]
+            public bool HideInList { get; set; } = false;
+
             [JsonProperty("Properties")]
             public CustomLanguageAssociativePropertyValues Properties { get; set; } = new CustomLanguageAssociativePropertyValues();
         }
@@ -276,9 +293,6 @@ namespace LC_Localization_Task_Absolute
             [JsonProperty("Keywords Directory")]
             public string KeywordsDirectory { get; set; } = "";
 
-            [JsonProperty("Keywords Directory (Files Prefix)")]
-            public string KeywordsDirectory_FilesPrefix { get; set; } = "";
-
             [JsonProperty("Keywords Autodetection Regex Pattern")]
             public string Keywords_AutodetectionRegex { get; set; } = new Regex(@"(KeywordNameWillBeHere)(?![\p{L}\[\]\-<'"":+])").ToString();
 
@@ -286,10 +300,10 @@ namespace LC_Localization_Task_Absolute
             public string Keywords_ShorthandsRegex { get; set; } = new Regex(@"NOTHING THERE").ToString();
 
             [JsonProperty("Keywords Shorthands Contextmenu Insertion Shape")]
-            public string Keywords_ShorthandsContextMenuInsertionShape { get; set; } = "";
+            public string Keywords_ShorthandsContextMenuInsertionShape { get; set; }
 
             [JsonProperty("Keywords Shorthands Contextmenu Insertion Shape <KeywordColor>")]
-            public string Keywords_ShorthandsContextMenuInsertionShape_HexColor { get; set; } = "";
+            public string Keywords_ShorthandsContextMenuInsertionShape_HexColor { get; set; }
 
             [JsonProperty("Keywords Multiple Meanings Dictionary")]
             public string KeywordsMultipleMeaningsDictionary { get; set; } = "";
@@ -340,6 +354,5 @@ namespace LC_Localization_Task_Absolute
             [JsonProperty("Comment")]
             public string Comment { get; set; } = "";
         }
-        #endregion
     }
 }

@@ -193,9 +193,10 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     }
                 }
 
-                if (File.Exists(@$"{KeywordsDirectory}\{FilesPrefix}SkillTag.json"))
+                List<FileInfo> SkillTag_Found = new DirectoryInfo(KeywordsDirectory).GetFiles("*SkillTag.Json").ToList();
+                if (SkillTag_Found.Count > 0)
                 {
-                    BaseTypes.Type_SkillTag.SkillTags SkillTagsJson = JsonConvert.DeserializeObject<SkillTags>(File.ReadAllText(@$"{KeywordsDirectory}\{FilesPrefix}SkillTag.json"));
+                    BaseTypes.Type_SkillTag.SkillTags SkillTagsJson = JsonConvert.DeserializeObject<SkillTags>(File.ReadAllText(SkillTag_Found[0].FullName));
                     if (!SkillTagsJson.dataList.IsNull())
                     {
                         foreach (SkillTag SkillTag in SkillTagsJson.dataList)
@@ -208,8 +209,6 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                         }
                     }
                 }
-
-                //rin($"  Skill tags loaded: {Counter}");
 
                 //rin($"\n$ Loading keyword colors");
                 Counter = 0;
@@ -231,10 +230,9 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                 //rin($"\n$ Loading keywords");
                 Counter = 0;
                 foreach (FileInfo KeywordFileInfo in new DirectoryInfo(KeywordsDirectory).GetFiles(
-                    searchPattern: "*.json",
+                    searchPattern: "*Bufs*.json",
                     searchOption: SearchOption.AllDirectories
-                ).Where(file => file.Name.RemovePrefix("EN_", "KR_", "JP_").StartsWith("Bufs"))) {
-
+                )) {
                     BaseTypes.Type_Keywords.Keywords TargetSite = KeywordFileInfo.Deserealize<Keywords>() as Keywords;
 
                     if (!TargetSite.IsNull())
@@ -275,7 +273,6 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                         }
                     }
                 }
-
                 Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter = Keywords_NamesWithIDs_OrderByLength_ForLimbusPreviewFormatter.OrderBy(obj => obj.Key.Length).ToDictionary(obj => obj.Key, obj => obj.Value).Reverse().ToDictionary();
                 Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter = Keywords_NamesWithIDs_OrderByLength_ForContextMenuUnevidentConverter.OrderBy(obj => obj.Key.Length).ToDictionary(obj => obj.Key, obj => obj.Value).Reverse().ToDictionary();
             }

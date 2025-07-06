@@ -354,6 +354,17 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                     _ => ""
                 };
 
+                if (OrganizedData.DisplayInfo_Attributes[CurrentEGOGiftID].Tier == "EX")
+                {
+                    MainControl.EGOGiftDisplay_Tier.Visibility = Collapsed;
+                    MainControl.EGOGiftDisplay_EXTier.Visibility = Visible;
+                }
+                else
+                {
+                    MainControl.EGOGiftDisplay_Tier.Visibility = Visible;
+                    MainControl.EGOGiftDisplay_EXTier.Visibility = Collapsed;
+                }
+
                 if (!OrganizedData.DisplayInfo_Attributes[CurrentEGOGiftID].Keyword.Equals("-"))
                 {
                     MainControl.EGOGiftDisplay_Keyword.Visibility = Visibility.Visible;
@@ -365,7 +376,7 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                         "Tremor"  => KeywordsInterrogate.KeywordImages["Vibration"],
                         "Poise"   => KeywordsInterrogate.KeywordImages["Breath"],
                         "Charge"  => KeywordsInterrogate.KeywordImages["Charge"],
-                        "Burst"   => KeywordsInterrogate.KeywordImages["Burst"],
+                        "Rupture" => KeywordsInterrogate.KeywordImages["Burst"],
                         "Sinking" => KeywordsInterrogate.KeywordImages["Sinking"],
                         "Blunt"   => KeywordsInterrogate.KeywordImages["LCLocaliazationInterface_Blunt"],
                         "Pierce"  => KeywordsInterrogate.KeywordImages["LCLocaliazationInterface_Pierce"],

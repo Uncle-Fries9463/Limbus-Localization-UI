@@ -68,7 +68,7 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                 SwitchedInterfaceProperties.DefaultValues.Height = 570;
             }
 
-            MainControl.PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = EnableEGOAbnormalityName ? 578 : 670;
+            MainControl.PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = EnableEGOAbnormalityName ? 578 : double.NaN;
 
             if (EnableUptieLevels)
             {
@@ -189,7 +189,7 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                             if (CurrentCoin.CoinDescriptions.Where(x => x.Description.IsNull()).Count() != CurrentCoin.CoinDescriptions.Count())
                             {
                                 int CoinDescNumber = 1;
-                                Grid MainCoinPanel = MainControl.FindName($"PreviewLayout_Skills_CoinShelf{CoinNumber}") as Grid;
+                                Grid MainCoinPanel = MainControl.FindName($"PreviewLayout_Skills_Coin{CoinNumber}") as Grid;
 
                                 if (!MainCoinPanel.IsNull())
                                 {
@@ -197,7 +197,7 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                                     {
                                         if (!CoinDescription.Description.IsNull())
                                         {
-                                            RichTextBox ThisCoinDescPanel = MainControl.FindName($"PreviewLayout_Skills_CoinShelf{CoinNumber}_Desc{CoinDescNumber}") as RichTextBox;
+                                            RichTextBox ThisCoinDescPanel = MainControl.FindName($"PreviewLayout_Skills_Coin{CoinNumber}_Desc{CoinDescNumber}") as RichTextBox;
                                             if (!ThisCoinDescPanel.IsNull())
                                             {
                                                 Border RightMenuCoinButton_DisableCover = MainControl.FindName($"STE_DisableCover_Skills_Coin_{CoinNumber}") as Border;
@@ -283,12 +283,12 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
 
             for (int CoinNumber = 1; CoinNumber <= 6; CoinNumber++)
             {
-                //Grid CoinPanel = MainControl.FindName($"PreviewLayout_Skills_CoinShelf{CoinNumber}") as Grid;
+                //Grid CoinPanel = MainControl.FindName($"PreviewLayout_Skills_Coin{CoinNumber}") as Grid;
 
                 (MainControl.FindName($"STE_DisableCover_Skills_Coin_{CoinNumber}") as Border).Visibility = Visible;
                 for (int CoinDescNumber = 1; CoinDescNumber <= 12; CoinDescNumber++)
                 {
-                    RichTextBox CoinDescPanel = MainControl.FindName($"PreviewLayout_Skills_CoinShelf{CoinNumber}_Desc{CoinDescNumber}") as RichTextBox;
+                    RichTextBox CoinDescPanel = MainControl.FindName($"PreviewLayout_Skills_Coin{CoinNumber}_Desc{CoinDescNumber}") as RichTextBox;
                     CoinDescPanel.Document.Blocks.Clear();
                     CoinDescPanel.Visibility = Collapsed;
 
@@ -296,7 +296,7 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                     CoinSwitchButtonText.SetRichText(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — Skill Coin {CoinNumber}"]);
                 }
 
-                (MainControl.FindName($"PreviewLayout_Skills_CoinShelf{CoinNumber}") as Grid).Visibility = Collapsed;
+                (MainControl.FindName($"PreviewLayout_Skills_Coin{CoinNumber}") as Grid).Visibility = Collapsed;
             }
         }
 
@@ -337,7 +337,7 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                 ManualTextLoadEvent = true;
             }
 
-            PreviewUpdate_TargetSite = MainControl.FindName($"PreviewLayout_Skills_CoinShelf{CurrentSkillCoinIndex + 1}_Desc{CoinDescIndex + 1}") as RichTextBox;
+            PreviewUpdate_TargetSite = MainControl.FindName($"PreviewLayout_Skills_Coin{CurrentSkillCoinIndex + 1}_Desc{CoinDescIndex + 1}") as RichTextBox;
 
             CurrentSkillCoinDescIndex = CoinDescIndex;
 

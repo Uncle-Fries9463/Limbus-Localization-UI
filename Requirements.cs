@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows;
-using System.Drawing;
 using System.Windows.Media.Imaging;
 using SixLabors.ImageSharp;
 using System.Windows.Controls;
@@ -98,6 +97,17 @@ namespace LC_Localization_Task_Absolute
             }
 
             return Target;
+        }
+
+        internal static string ToEscapeRegexString(this string TargetString)
+        {
+            return TargetString.Replace("(", @"\(").Replace(")", @"\)")
+                               .Replace("[", @"\[").Replace("]", @"\]")
+                               .Replace(".", @"\.")
+                               .Replace("?", @"\?")
+                               .Replace("$", @"\$")
+                               .Replace("^", @"\^")
+                               .Replace("+", @"\+");
         }
 
         internal static string RegexRemove(string TargetString, Regex PartPattern)
@@ -479,6 +489,34 @@ namespace LC_Localization_Task_Absolute
                 "UltraLight" => FontWeights.UltraLight,
                            _ => FontWeights.Regular,
             };
+        }
+
+        internal static bool HasProperty(this Type Target, string PropertyName)
+        {
+            return Target.GetProperties().Where(property => property.Name.Equals(PropertyName)).Count() > 0;
+        }
+
+        internal static void ScanScrollviewer(ScrollViewer Target, string NameHint, int Upscale = 4, double DpiX = 96d, double DpiY = 96d)
+        {
+            FrameworkElement PreviewContent = Target.Content as FrameworkElement;
+
+            PreviewContent.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
+            PreviewContent.Arrange(new Rect(PreviewContent.DesiredSize));
+            PreviewContent.UpdateLayout();
+
+            int RenderWidth = (int)(PreviewContent.ActualWidth * Upscale);
+            int RenderHeight = (int)(PreviewContent.ActualHeight * Upscale);
+
+            RenderTargetBitmap PreviewLayoutRender = new RenderTargetBitmap(RenderWidth, RenderHeight, 96 * Upscale, 96 * Upscale, PixelFormats.Pbgra32);
+            PreviewLayoutRender.Render(PreviewContent);
+
+            PngBitmapEncoder ExportBitmapEncoder = new PngBitmapEncoder();
+            ExportBitmapEncoder.Frames.Add(BitmapFrame.Create(PreviewLayoutRender));
+
+            using (FileStream ExportStream = new FileStream(path: @$"⇲ Assets Directory\[⇲] Scans\{NameHint} @ {DateTime.Now.ToString("HHːmmːss (dd.MM.yyyy)")}.png", mode: FileMode.Create))
+            {
+                ExportBitmapEncoder.Save(ExportStream);
+            }
         }
     }
 }

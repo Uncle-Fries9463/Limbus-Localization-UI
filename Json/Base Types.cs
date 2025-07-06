@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
+using static LC_Localization_Task_Absolute.Json.BaseTypes.Type_SkillTag;
 using static LC_Localization_Task_Absolute.Requirements;
 
 namespace LC_Localization_Task_Absolute.Json
@@ -237,6 +238,17 @@ namespace LC_Localization_Task_Absolute.Json
                 
                 [JsonProperty("name")]
                 public string Tag { get; set; }
+            }
+        }
+
+        /// <summary>
+        /// For most other files with a simple structure in the form of "id" and "content" only objects
+        /// </summary>
+        internal abstract class Type_ContentBasedUniversal
+        {
+            public class ContentBasedUniversal
+            {
+                public List<dynamic> dataList { get; set; } // dynamic = "any"
             }
         }
     }
