@@ -1,3 +1,10 @@
 /.vs
-/bin
 /obj
+bin/Debug/net8.0-windows/SixLabors.ImageSharp.dll
+bin/Debug/net8.0-windows/NLog.dll
+bin/Debug/net8.0-windows/Newtonsoft.Json.dll
+bin/Debug/net8.0-windows/LC Localization Interface.runtimeconfig.json
+bin/Debug/net8.0-windows/LC Localization Interface.pdb
+bin/Debug/net8.0-windows/LC Localization Interface.exe
+bin/Debug/net8.0-windows/LC Localization Interface.dll
+bin/Debug/net8.0-windows/LC Localization Interface.deps.json

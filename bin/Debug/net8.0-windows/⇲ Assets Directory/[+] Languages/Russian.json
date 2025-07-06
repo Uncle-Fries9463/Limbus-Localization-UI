@@ -1,0 +1,384 @@
+{
+  "Default Font": "GOST Type BU",
+  "UI Static": [
+    {
+      "Element ID": "Title",
+      "Text": "<spritesvoffset=-15><spriteshoffset=-6><spritessize=+66><sprite name=\"9202\">LC Localization Interface",
+      "Font": "Bookman Old Style",
+      "Font Color": "#493227",
+      "Font Size": 23,
+      "Vertical Offset": 2,
+      "Horizontal Offset": 1.8
+    },
+    {
+      "Element ID": "Json Path [Shadow Text]",
+      "Text": "Путь к Json файлу",
+      "Vertical Offset": 1
+    },
+    {
+      "Element ID": "Skills Main Name [Shadow Text]",
+      "Text": "Имя навыка",
+      "Font": "GOST Type BU",
+      "Font Color": "#FF58424A"
+    },
+    {
+      "Element ID": "Skills EGO Abnormality Name [Shadow Text]",
+      "Text": "Имя аномалии <b>ЭГО</b>",
+      "Font": "GOST Type BU",
+      "Font Color": "#FF58424A"
+    },
+    {
+      "Element ID": "Right Menu — Current ID Copy Button",
+      "Text": "[$]",
+      "Height": 14,
+      "Vertical Offset": -2,
+      "Font": "Bookman Old Style"
+    },
+    {
+      "Element ID": "Right Menu — Current ID Copy Button (Copied)",
+      "Text": "ID Скопирован",
+      "Height": 14,
+      "Vertical Offset": -2,
+      "Font": "Bookman Old Style"
+    },
+    {
+      "Element ID": "Right Menu — Skill Desc",
+      "Text": "Главное описание"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 1",
+      "Text": "Монета навыка №1"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 2",
+      "Text": "Монета навыка №2"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 3",
+      "Text": "Монета навыка №3"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 4",
+      "Text": "Монета навыка №4"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 5",
+      "Text": "Монета навыка №5"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 6",
+      "Text": "Монета навыка №6"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin Descs Title",
+      "Text": "<loadfont=`GOST Type BU`>Описания монеты <b>№[$]</b>:"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin Desc Number",
+      "Text": "№[$]"
+    },
+    {
+      "Element ID": "Right Menu — Passive Name [Shadow Text]",
+      "Text": "Название пассивки"
+    },
+    {
+      "Element ID": "Right Menu — Passive Desc",
+      "Text": "Главное описание"
+    },
+    {
+      "Element ID": "Right Menu — Passive Summary",
+      "Text": "Суммарное описание"
+    },
+    {
+      "Element ID": "Right Menu — Keyword Name [Shadow Text]",
+      "Text": "Ключевое слово"
+    },
+    {
+      "Element ID": "Right Menu — Keyword Desc",
+      "Text": "Главное описание"
+    },
+    {
+      "Element ID": "Right Menu — Keyword Summary",
+      "Text": "Суммарное описание"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertions Button",
+      "Text": "Динамические вставки",
+      "Vertical Offset": 1.1,
+      "Height": 20,
+      "Width": 148,
+      "Font Size": 14
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {0} [Shadow Text]",
+      "Text": "Вставка {0}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {1} [Shadow Text]",
+      "Text": "Вставка {1}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {2} [Shadow Text]",
+      "Text": "Вставка {2}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {3} [Shadow Text]",
+      "Text": "Вставка {3}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {4} [Shadow Text]",
+      "Text": "Вставка {4}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {5} [Shadow Text]",
+      "Text": "Вставка {5}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {6} [Shadow Text]",
+      "Text": "Вставка {6}"
+    },
+    {
+      "Element ID": "Right Menu — Add Passive Summary Description Tooltip",
+      "Text": "Добавить суммарное описание",
+      "Font Size": 18,
+      "Width": 262.4,
+      "Height": 22,
+      "Vertical Offset": 1.6
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Name [Shadow Text]",
+      "Text": "Название ЭГО Дара"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Desc",
+      "Text": "Главное описание"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 1",
+      "Text": "Простое описание №1"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 2",
+      "Text": "Простое описание №2"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 3",
+      "Text": "Простое описание №3"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 4",
+      "Text": "Простое описание №4"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 5",
+      "Text": "Простое описание №5"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 6",
+      "Text": "Простое описание №6"
+    },
+    {
+      "Element ID": "E.G.O Gifts Preview 'View Desc.' Text",
+      "Text": "См. описание",
+      "Font": "Mikodacs"
+    },
+    {
+      "Element ID": "Editor Context Menu — Insert Style",
+      "Font": "Unispace",
+      "Text": "※ Вставить <color=#f8c200><style> Higlight</color>",
+      "Height": 17.6
+    },
+    {
+      "Element ID": "Editor Context Menu — TextMeshPro to [KeywordID]",
+      "Font": "Unispace",
+      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"2038\"><u>TextMeshPro</u> в <sprite name=\"9732\"><u>[KeywordID]</u>",
+      "Visible": false
+    },
+    {
+      "Element ID": "Editor Context Menu — TextMeshPro to Shorthands",
+      "Font": "Unispace",
+      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"2038\"><u>TextMeshPro</u> в <sprite name=\"9202\"><u>Shorthands</u>",
+      "Visible": false
+    },
+    {
+      "Element ID": "Editor Context Menu — Unevident to [KeywordID]",
+      "Font": "Unispace",
+      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"9085\"><u>Неочевидные</u> в <sprite name=\"9732\"><u>[KeywordID]</u>",
+      "Visible": false
+    },
+    {
+      "Element ID": "Editor Context Menu — Unevident to Shorthands",
+      "Font": "Unispace",
+      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"9085\"><u>Неочевидные</u> в <sprite name=\"9202\"><u>Shorthands</u>"
+    },
+    {
+      "Element ID": "Editor Context Menu — [KeywordID] to Shorthands",
+      "Font": "Unispace",
+      "Text": "spritesvoffset=-4><spritessize=+22><sprite name=\"9732\"><u>[KeywordID]</u> в <sprite name=\"9202\"><u>Shorthands</u>"
+    },
+    {
+      "Element ID": "Editor Context Menu — [KeywordID] to TextMeshPro",
+      "Font": "Unispace",
+      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"9732\"><u>[KeywordID]</u> в <sprite name=\"2038\"><u>TextMeshPro</u>",
+      "Visible": false
+    },
+    {
+      "Element ID": "Unsaved Changes Window — Title",
+      "Text": "Несохранённые изменения",
+      "Font": "Excelsior Sans",
+      "Font Color": "#CFCFCF",
+      "Font Size": 40
+    },
+    {
+      "Element ID": "Unsaved Changes Window — Confirm Exit",
+      "Text": "Продолжить",
+      "Font": "Excelsior Sans",
+      "Font Color": "#CFCFCF",
+      "Font Size": 25
+    },
+    {
+      "Element ID": "Unsaved Changes Window — Cancel",
+      "Text": "Остаться",
+      "Font": "Excelsior Sans",
+      "Font Color": "#CFCFCF",
+      "Font Size": 25
+    },
+    {
+      "Element ID": "Unsaved Changes Window — Information Text",
+      "Font:": "GOST Type BU",
+      "Font Color": "#D2D2D2",
+      "Font Size": 21
+    }
+  ],
+  "Unsaved Changes Info": {
+    "Passives": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
+      "Main Desc": "\n  > Главное описание",
+      "Summary Desc": "\n  > Суммарное описание"
+    },
+    "Keywords": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
+      "Main Desc": "\n  > Главное описание",
+      "Summary Desc": "\n  > Суммарное описание"
+    },
+    "E.G.O Gifts": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
+      "Main Desc": "\n  > Главное описание",
+      "Simple Desc": "\n  > Простое описание №[$]"
+    },
+    "Skills": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
+      "Uptie Level": "\n  > Уровень связи [$]"
+    }
+  },
+  "UI Textfields": [
+    {
+      "Element ID": "Json File Path",
+      "Font": "GOST Type BU",
+      "Font Size": 25,
+      "Font Weight":  "Bold",
+      "Horizontal Offset": 3.8,
+      "Vertical Offset": 2.5
+    },
+    {
+      "Element ID": "Right Menu — Manual ID Input",
+      "Font": "Bookman Old Style",
+      "Font Size": 12,
+      "Vertical Offset": 2
+    },
+    {
+      "Element ID": "Right Menu — Skills Main Name",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — EGO Abnormality Name",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Passive Name",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keyword Name",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Name",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {0}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {1}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {2}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {3}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {4}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {5}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {6}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    }
+  ],
+  "Default [$] Insertion": "…",
+  "Unsaved Changes Marker": "[$] <size=76%><color=#fc5a03><b>(Изм.)</b></color></size>",
+  "Fonts": {
+    "Font Files (⇲ Assets Directory/[+] Languages/Fonts)": [
+      {
+        "File": "Segoe Fluent Icons.ttf",
+        "Name": "Segoe Fluent Icons"
+      },
+      {
+        "File": "Ionicons.ttf",
+        "Name": "Ionicons"
+      },
+      {
+        "File": "Bookman Old Style.ttf",
+        "Name": "Bookman Old Style"
+      },
+      {
+        "File": "GOST Type BU.ttf",
+        "Name": "GOST Type BU"
+      },
+      {
+        "File": "Mikodacs.otf",
+        "Name": "Mikodacs"
+      },
+      {
+        "File": "Unispace.ttf",
+        "Name": "Unispace"
+      },
+      {
+        "File": "ExcelsiorSans.ttf",
+        "Name": "Excelsior Sans"
+      }
+    ]
+  }
+}

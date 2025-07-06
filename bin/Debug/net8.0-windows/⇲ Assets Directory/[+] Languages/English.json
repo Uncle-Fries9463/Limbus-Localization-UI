@@ -1,0 +1,383 @@
+{
+  "Readme": [
+    "[$] in string means place for some insertions, e.g. 'Skill Main Desc (Changed)' at '[$] (Changed)' from Unsaved Changes Marker",
+    "All fonts will be taken primarily from defined fonts in the 'Fonts' section, otherwise you can use the name of any font installed on your computer"
+  ],
+  "Default Font": "GOST Type BU",
+  "UI Static": [
+    {
+      "Element ID": "Title",
+      "Text": "<spritesvoffset=-15><spriteshoffset=-6><spritessize=+66><sprite name=\"9202\">LC Localization Interface",
+      "Font": "Bookman Old Style",
+      "Font Color": "#493227",
+      "Font Size": 23,
+      "Vertical Offset": 2,
+      "Horizontal Offset": 1.8
+    },
+    {
+      "Element ID": "Json Path [Shadow Text]",
+      "Text": "Json file path",
+      "Vertical Offset": 1
+    },
+    {
+      "Element ID": "Skills Main Name [Shadow Text]",
+      "Text": "Skill name",
+      "Font": "GOST Type BU",
+      "Font Color": "#FF58424A"
+    },
+    {
+      "Element ID": "Skills EGO Abnormality Name [Shadow Text]",
+      "Text": "E.G.O Abnormality",
+      "Font": "GOST Type BU",
+      "Font Color": "#FF58424A"
+    },
+    {
+      "Element ID": "Right Menu — Current ID Copy Button",
+      "Text": "[$]",
+      "Height": 14,
+      "Vertical Offset": -2,
+      "Font": "Bookman Old Style"
+    },
+    {
+      "Element ID": "Right Menu — Current ID Copy Button (Copied)",
+      "Text": "ID Copied",
+      "Height": 14,
+      "Vertical Offset": -2,
+      "Font": "Bookman Old Style"
+    },
+    {
+      "Element ID": "Right Menu — Skill Desc",
+      "Text": "Main Description"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 1",
+      "Text": "Skill Coin №1"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 2",
+      "Text": "Skill Coin №2"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 3",
+      "Text": "Skill Coin №3"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 4",
+      "Text": "Skill Coin №4"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 5",
+      "Text": "Skill Coin №5"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin 6",
+      "Text": "Skill Coin №6"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin Descs Title",
+      "Text": "Coin <b>№[$]</b> descs:"
+    },
+    {
+      "Element ID": "Right Menu — Skill Coin Desc Number",
+      "Text": "№[$]"
+    },
+    {
+      "Element ID": "Right Menu — Passive Name [Shadow Text]",
+      "Text": "Passive name"
+    },
+    {
+      "Element ID": "Right Menu — Passive Desc",
+      "Text": "Main Description"
+    },
+    {
+      "Element ID": "Right Menu — Passive Summary",
+      "Text": "Summary Description"
+    },
+    {
+      "Element ID": "Right Menu — Keyword Name [Shadow Text]",
+      "Text": "Keyword"
+    },
+    {
+      "Element ID": "Right Menu — Keyword Desc",
+      "Text": "Main Description"
+    },
+    {
+      "Element ID": "Right Menu — Keyword Summary",
+      "Text": "Summary Description"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertions Button",
+      "Text": "<b>Dynamic Insertions</b>",
+      "Vertical Offset": 1.1,
+      "Height": 20,
+      "Width": 128,
+      "Font Size": 14
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {0} [Shadow Text]",
+      "Text": "Insertion {0}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {1} [Shadow Text]",
+      "Text": "Insertion {1}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {2} [Shadow Text]",
+      "Text": "Insertion {2}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {3} [Shadow Text]",
+      "Text": "Insertion {3}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {4} [Shadow Text]",
+      "Text": "Insertion {4}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {5} [Shadow Text]",
+      "Text": "Insertion {5}"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {6} [Shadow Text]",
+      "Text": "Insertion {6}"
+    },
+    {
+      "Element ID": "Right Menu — Add Passive Summary Description Tooltip",
+      "Text": "Add Summary Description",
+      "Font Size": 18,
+      "Width": 262.4,
+      "Height": 22,
+      "Vertical Offset": 1.6
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Name [Shadow Text]",
+      "Text": "E.G.O Gift name"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Desc",
+      "Text": "Main Description"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 1",
+      "Text": "Simple Desc №1"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 2",
+      "Text": "Simple Desc №2"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 3",
+      "Text": "Simple Desc №3"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 4",
+      "Text": "Simple Desc №4"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 5",
+      "Text": "Simple Desc №5"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Simple Desc 6",
+      "Text": "Simple Desc №6"
+    },
+    {
+      "Element ID": "E.G.O Gifts Preview 'View Desc.' Text",
+      "Text": "View Desc."
+    },
+    {
+      "Element ID": "Editor Context Menu — Insert Style",
+      "Font": "Unispace",
+      "Text": "※ Insert <color=#f8c200><style> Higlight</color>",
+      "Height": 17.6
+    },
+    {
+      "Element ID": "Editor Context Menu — TextMeshPro to [KeywordID]",
+      "Font": "Unispace",
+      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"2038\"><u>TextMeshPro</u> to <sprite name=\"9732\"><u>[KeywordID]</u>"
+    },
+    {
+      "Element ID": "Editor Context Menu — TextMeshPro to Shorthands",
+      "Font": "Unispace",
+      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"2038\"><u>TextMeshPro</u> to <sprite name=\"9202\"><u>Shorthands</u>"
+    },
+    {
+      "Element ID": "Editor Context Menu — Unevident to [KeywordID]",
+      "Font": "Unispace",
+      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"9085\"><u>Unevident</u> to <sprite name=\"9732\"><u>[KeywordID]</u>"
+    },
+    {
+      "Element ID": "Editor Context Menu — Unevident to Shorthands",
+      "Font": "Unispace",
+      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"9085\"><u>Unevident</u> to <sprite name=\"9202\"><u>Shorthands</u>"
+    },
+    {
+      "Element ID": "Editor Context Menu — [KeywordID] to Shorthands",
+      "Font": "Unispace",
+      "Text": "spritesvoffset=-4><spritessize=+22><sprite name=\"9732\"><u>[KeywordID]</u> to <sprite name=\"9202\"><u>Shorthands</u>"
+    },
+    {
+      "Element ID": "Editor Context Menu — [KeywordID] to TextMeshPro",
+      "Font": "Unispace",
+      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"9732\"><u>[KeywordID]</u> to <sprite name=\"2038\"><u>TextMeshPro</u>"
+    },
+    {
+      "Element ID": "Unsaved Changes Window — Title",
+      "Text": "Unsaved Changes",
+      "Font": "Excelsior Sans",
+      "Font Color": "#CFCFCF",
+      "Font Size": 40
+    },
+    {
+      "Element ID": "Unsaved Changes Window — Confirm Exit",
+      "Text": "Proceed",
+      "Font": "Excelsior Sans",
+      "Font Color": "#CFCFCF",
+      "Font Size": 25
+    },
+    {
+      "Element ID": "Unsaved Changes Window — Cancel",
+      "Text": "Cancel",
+      "Font": "Excelsior Sans",
+      "Font Color": "#CFCFCF",
+      "Font Size": 25
+    },
+    {
+      "Element ID": "Unsaved Changes Window — Information Text",
+      "Font:": "GOST Type BU",
+      "Font Color": "#D2D2D2",
+      "Font Size": 21
+    }
+  ],
+  "UI Textfields": [
+    {
+      "Element ID": "Json File Path",
+      "Font": "GOST Type BU",
+      "Font Size": 25,
+      "Font Weight":  "Bold",
+      "Horizontal Offset": 3.8,
+      "Vertical Offset": 2.5
+    },
+    {
+      "Element ID": "Right Menu — Manual ID Input",
+      "Font": "Bookman Old Style",
+      "Font Size": 12,
+      "Vertical Offset": 2
+    },
+    {
+      "Element ID": "Right Menu — Skills Main Name",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — EGO Abnormality Name",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Passive Name",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keyword Name",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — E.G.O Gift Name",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {0}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {1}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {2}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {3}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {4}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {5}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "Right Menu — Keywords Format Insertion {6}",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    }
+  ],
+  "Unsaved Changes Info": {
+    "Passives": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
+      "Main Desc": "\n  > Main description",
+      "Summary Desc": "\n  > Summary description"
+    },
+    "Keywords": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
+      "Main Desc": "\n  > Main description",
+      "Summary Desc": "\n  > Summary description"
+    },
+    "E.G.O Gifts": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
+      "Main Desc": "\n  > Main description",
+      "Simple Desc": "\n  > Simple description №[$]"
+    },
+    "Skills": {
+      "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
+      "Uptie Level": "\n  > Uptie Level [$]"
+    }
+  },
+  "Default [$] Insertion": "…",
+  "Unsaved Changes Marker": "[$] <size=66%><color=#fc5a03><b>(Changed)</b></color></size>",
+  "Fonts": {
+    "Font Files (⇲ Assets Directory/[+] Languages/Fonts)": [
+      {
+        "File": "Segoe Fluent Icons.ttf",
+        "Name": "Segoe Fluent Icons"
+      },
+      {
+        "File": "Ionicons.ttf",
+        "Name": "Ionicons"
+      },
+      {
+        "File": "Bookman Old Style.ttf",
+        "Name": "Bookman Old Style"
+      },
+      {
+        "File": "GOST Type BU.ttf",
+        "Name": "GOST Type BU"
+      },
+      {
+        "File": "Mikodacs.otf",
+        "Name": "Mikodacs"
+      },
+      {
+        "File": "Unispace.ttf",
+        "Name": "Unispace"
+      },
+      {
+        "File": "ExcelsiorSans.ttf",
+        "Name": "Excelsior Sans"
+      }
+    ]
+  }
+}
