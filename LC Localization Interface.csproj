@@ -53,6 +53,7 @@
     <None Remove="UI\Limbus\Coins\Coin 3.png" />
     <None Remove="UI\Limbus\Coins\Coin 4.png" />
     <None Remove="UI\Limbus\Coins\Coin 5.png" />
+    <None Remove="UI\Limbus\Coins\Coin 6.png" />
     <None Remove="UI\Limbus\Uptie leves\Background.png" />
     <None Remove="UI\Limbus\Uptie leves\EX E.G.O Gifts Tier.png" />
     <None Remove="UI\Limbus\Uptie leves\Uptie 1.png" />
@@ -72,6 +73,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Fonts\GOST Type BU.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Limbus\Coins\Coin 6.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="UI\Limbus\Uptie leves\EX E.G.O Gifts Tier.png">
