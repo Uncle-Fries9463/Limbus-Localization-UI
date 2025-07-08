@@ -59,7 +59,8 @@ namespace LC_Localization_Task_Absolute
 
             Dictionary<string, int> ThemeIndexes = new Dictionary<string, int>();
             int Index_Themes = 0;
-            foreach(var ThemeDir in new DirectoryInfo(@"⇲ Assets Directory\[+] Themes").GetDirectories())
+            ThemeSelector.Items.Clear();
+            foreach (var ThemeDir in new DirectoryInfo(@"⇲ Assets Directory\[+] Themes").GetDirectories())
             {
                 ThemeSelector.Items.Add(new TextBlock { Text = ThemeDir.Name });
                 ThemeIndexes[ThemeDir.Name] = Index_Themes;
@@ -79,6 +80,7 @@ namespace LC_Localization_Task_Absolute
 
             int Index_Languages = 0;
             Dictionary<string, int> LanguageIndexes = new Dictionary<string, int>();
+            LanguageSelector.Items.Clear();
             foreach (var LanguageFile in new DirectoryInfo(@"⇲ Assets Directory\[+] Languages").GetFiles("*.json"))
             {
                 LanguageSelector.Items.Add(new TextBlock { Text = LanguageFile.Name.Replace(".json", "") });
@@ -96,6 +98,7 @@ namespace LC_Localization_Task_Absolute
 
             int Index_CustomLanguageProperties = 0;
             Dictionary<string, int> CustomLanguagePropIndexes = new Dictionary<string, int>();
+            CustomLanguagePropertiesSelector.Items.Clear();
             foreach (var CustomLanguageProperty in Configurazione.DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.List)
             {
                 if (!CustomLanguageProperty.HideInList)
