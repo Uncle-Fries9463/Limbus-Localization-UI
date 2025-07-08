@@ -231,6 +231,10 @@ namespace LC_Localization_Task_Absolute
                     {
                         UILanguage[TargetUIElementID].Visibility = (bool)UIStaticItemData.Visible ? Visibility.Visible : Visibility.Collapsed;
                     }
+                    else
+                    {
+                        UILanguage[TargetUIElementID].Visibility = Visibility.Visible;
+                    }
 
                     if (!UIStaticItemData.VericalOffset.IsNull())
                     {
