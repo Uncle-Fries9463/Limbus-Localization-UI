@@ -52,7 +52,6 @@ namespace LC_Localization_Task_Absolute
         internal protected static bool SettingsLoadingEvent = false;
         internal protected static void PullLoad()
         {
-            #region new
             if (File.Exists(@"⇲ Assets Directory\Configurazione^.json"))
             {
                 try
@@ -83,6 +82,9 @@ namespace LC_Localization_Task_Absolute
 
                         UpdateCustomLanguagePart(SelectedAssociativePropery_Shared);
 
+                        KeywordSpriteHorizontalOffset = SelectedAssociativePropery_Shared.Properties.KeywordsSpriteHorizontalOffset;
+                        KeywordSpriteVerticalOffset = SelectedAssociativePropery_Shared.Properties.KeywordsSpriteVerticalOffset;
+
                         SettingsWindow.UpdateSettingsMenu_CustomLang();
                     }
 
@@ -94,7 +96,6 @@ namespace LC_Localization_Task_Absolute
                     SettingsLoadingEvent = false;
                 }
             }
-            #endregion
         }
 
         internal protected static void UpdateCustomLanguagePart(CustomLanguageAssociativePropertyMain SelectedAssociativePropery)
