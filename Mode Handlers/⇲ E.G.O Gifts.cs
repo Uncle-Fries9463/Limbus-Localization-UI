@@ -272,18 +272,22 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
             {
                 for (int i = 1; i <= FullLink.SimpleDescriptions.Count; i++)
                 {
-                    if (!FullLink.SimpleDescriptions[i-1].Description.Equals(FullLink.SimpleDescriptions[i - 1].EditorDescription))
+                    try
                     {
-                        (MainControl.FindName($"STE_EGOGift_SimpleDescription{i}") as RichTextBox)
-                            .SetRichText(UILanguageLoader.LoadedLanguage.UnsavedChangesMarker
-                            .Extern(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — E.G.O Gift Simple Desc {i}"]));
+                        if (!FullLink.SimpleDescriptions[i-1].Description.Equals(FullLink.SimpleDescriptions[i - 1].EditorDescription))
+                        {
+                            (MainControl.FindName($"STE_EGOGift_SimpleDescription{i}") as RichTextBox)
+                                .SetRichText(UILanguageLoader.LoadedLanguage.UnsavedChangesMarker
+                                .Extern(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — E.G.O Gift Simple Desc {i}"]));
+                        }
+                        else
+                        {
+                            (MainControl.FindName($"STE_EGOGift_SimpleDescription{i}") as RichTextBox)
+                                .SetRichText(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — E.G.O Gift Simple Desc {i}"]);
+                        }
+                        ((MainControl.FindName($"STE_DisableCover_EGOGift_SimpleDescription{i}")) as Border).Visibility = Visibility.Collapsed;
                     }
-                    else
-                    {
-                        (MainControl.FindName($"STE_EGOGift_SimpleDescription{i}") as RichTextBox)
-                            .SetRichText(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — E.G.O Gift Simple Desc {i}"]);
-                    }
-                    ((MainControl.FindName($"STE_DisableCover_EGOGift_SimpleDescription{i}")) as Border).Visibility = Visibility.Collapsed;
+                    catch { }
                 }
             }
 
