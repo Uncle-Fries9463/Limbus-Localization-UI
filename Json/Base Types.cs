@@ -18,6 +18,9 @@ namespace LC_Localization_Task_Absolute.Json
             public class Skills
             {
                 public List<Skill> dataList { get; set; }
+
+                [JsonProperty("Template Marker")]
+                public string ScansTemplateMarker { get; set; }
             }
 
             public class Skill
