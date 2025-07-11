@@ -863,7 +863,7 @@ TargetType="{x:Type ScrollBar}">
                                             <TextBlock Style="{StaticResource CommentSection}" TextWrapping="Wrap" Margin="5 5 0 0">
                                                 Drop-down lists only consider files and folders from
                                                 <LineBreak />
-                                                «⇲ Assets Directory\[+] Languages» and «⇲ Assets Directory\[+]» Themes respectively
+                                                «⇲ Assets Directory\[+] Languages» and «⇲ Assets Directory\[+] Themes» respectively
                                             </TextBlock>
                                         </StackPanel>
                                     </StackPanel>
