@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using LC_Localization_Task_Absolute.Json;
+using LC_Localization_Task_Absolute.Mode_Handlers;
 using RichText;
 using static System.Windows.Visibility;
 using static LC_Localization_Task_Absolute.MainWindow;
@@ -125,7 +126,14 @@ namespace LC_Localization_Task_Absolute
         }
 
         private void Settings_Minimize(object sender, MouseButtonEventArgs e) => WindowState = WindowState.Minimized;
-        private void Settings_Close(object sender, MouseButtonEventArgs e) => this.Hide();
+        private void Settings_Close(object sender, MouseButtonEventArgs e) => DoClose();
+        private void DoClose()
+        {
+            MainControl.ScanAreaView_Skills.BorderThickness = new Thickness(2);
+            ScansManager.ToggleScanAreaView();
+            this.Hide();
+        }
+
         private void Settings_ReloadConfig(object sender, MouseButtonEventArgs e) => MainWindow.ReloadConfig_Direct();
         private void Window_DragMove(object sender, MouseButtonEventArgs e) => this.DragMove();
         private void AntiComboBoxScroll(object sender, MouseWheelEventArgs e)
@@ -136,6 +144,7 @@ namespace LC_Localization_Task_Absolute
             }
         }
 
+        // idontwanttoserializeidontwanttoserializeidontwanttoserialize
         private void OptionToggle(object sender, MouseButtonEventArgs e)
         {
             if (!Configurazione.SettingsLoadingEvent)
@@ -150,6 +159,12 @@ namespace LC_Localization_Task_Absolute
 
                 switch (Sender)
                 {
+                    case "ToggleScansPreview":
+                        ScansManager.ToggleScanAreaView();
+                        break;
+
+
+
                     case "ToggleStyleHighlightion":
                         Configurazione.DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightStyle = !Configurazione.DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightStyle;
                         ToggleStyleHighlightion_I.Visibility = ToggleStyleHighlightion_I.Visibility switch
@@ -239,6 +254,39 @@ namespace LC_Localization_Task_Absolute
                         {
                             MessageBox.Show("Not a number!");
                         }
+                        break;
+
+
+
+                    case "Recheck_SkillsPanelWidth":
+                        try
+                        {
+                            double NewSkillsWidth = double.Parse(SettingsControl.InputSkillsPanelWidth.Text.Replace(".", ","));
+
+                            SettingsControl.InputSkillsPanelWidth.Text = NewSkillsWidth.ToString();
+
+                            Configurazione.DeltaConfig.ScanParameters.AreaWidth = NewSkillsWidth;
+                            if (MainControl.ScanAreaView_Skills.BorderThickness.Top != 0)
+                            {
+                                if (NewSkillsWidth != 0)
+                                {
+                                    MainControl.PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = NewSkillsWidth;
+                                }
+                                else
+                                {
+                                    MainControl.PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = Mode_Skills.LastRegisteredWidth;
+                                }
+                            }
+
+                            string StringWidthSkills = NewSkillsWidth.ToString();
+                            InputSkillsPanelWidth.Text = StringWidthSkills;
+                            TempConfigFile = Regex.Replace(TempConfigFile, @"""Skills Area Width"": (\d+)(\.(\d+))?(?<Afterward>(,)?(\r)?\n)", Match =>
+                            {
+                                return @$"""Skills Area Width"": {StringWidthSkills.Replace(",", ".")}{Match.Groups["Afterward"].Value}";
+                            });
+                            File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
+                        }
+                        catch (Exception ex) { rin(ex.ToString()); }
                         break;
 
 
@@ -371,7 +419,7 @@ namespace LC_Localization_Task_Absolute
                             Configurazione.SelectedAssociativePropery_Shared = NewSelection;
 
                             Configurazione.DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.Selected = NewSelection.PropertyName;
-                            
+
                             Configurazione.UpdateCustomLanguagePart(NewSelection);
                             UpdateSelectedCustomLanguageSettingsView();
 
@@ -380,12 +428,12 @@ namespace LC_Localization_Task_Absolute
 
                             TempConfigFile = File.ReadAllText(@"⇲ Assets Directory\Configurazione^.json");
                             TempConfigFile = Regex.Replace(TempConfigFile, @"""Associative Properties Selected"": ""(.*?)""(?<Afterward>(,)?(\r)?\n)", Match =>
-                            { 
-                                return @$"""Associative Properties Selected"": ""{NewSelection.PropertyName}""{Match.Groups["Afterward"].Value}"; 
+                            {
+                                return @$"""Associative Properties Selected"": ""{NewSelection.PropertyName}""{Match.Groups["Afterward"].Value}";
                             });
                             File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
 
-                            
+
                             RichTextBoxApplicator.SetLimbusRichText(RichText.RichTextBoxApplicator.LastUpdateTarget, RichText.RichTextBoxApplicator.LastUpdateText);
                         }
 
@@ -417,6 +465,12 @@ namespace LC_Localization_Task_Absolute
                         break;
                 }
             }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            DoClose();
         }
     }
 }

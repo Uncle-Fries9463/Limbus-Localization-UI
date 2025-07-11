@@ -1,27 +1,25 @@
-﻿using Microsoft.Win32;
+﻿using LC_Localization_Task_Absolute.Json;
+using LC_Localization_Task_Absolute.Limbus_Integration;
+using LC_Localization_Task_Absolute.Mode_Handlers;
+using Microsoft.Win32;
 using RichText;
 using System.IO;
-using System.Text;
 using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
-using LC_Localization_Task_Absolute.Json;
-using LC_Localization_Task_Absolute.Mode_Handlers;
 using static LC_Localization_Task_Absolute.Configurazione;
+using static LC_Localization_Task_Absolute.Json.BaseTypes.Type_Skills;
 using static LC_Localization_Task_Absolute.Json.DelegateDictionaries;
 using static LC_Localization_Task_Absolute.Json.FilesIntegration;
 using static LC_Localization_Task_Absolute.Requirements;
 using static System.Globalization.NumberStyles;
 using static System.Windows.Visibility;
-using System.Windows.Media;
-using System.Windows.Documents;
-using LC_Localization_Task_Absolute.Limbus_Integration;
-using System.Text.RegularExpressions;
-using static LC_Localization_Task_Absolute.Json.BaseTypes.Type_Skills;
-using System.Windows.Media.Imaging;
-using NLog.Targets;
 
 namespace LC_Localization_Task_Absolute;
 
@@ -1256,6 +1254,11 @@ public partial class MainWindow : Window
 
             string CheckName = TemplateTarget.Name.RemovePrefix(["JP_", "KR_", "EN_"]);
 
+            if (File.ReadAllText(TemplateTarget.FullName).Contains(@"""Template Marker"": ""(Don't remove)"""))
+            {
+                CheckName = "Skills";
+            }
+
             if (CheckName.StartsWith("Skills"))
             {
                 FocusOnFile(TemplateTarget);
@@ -1686,7 +1689,7 @@ public partial class MainWindow : Window
 
         if (Keyboard.IsKeyDown(Key.LeftCtrl) & Keyboard.IsKeyDown(Key.P))
         {
-            SavePreviewlayoutScan();
+            if (MakeLimbusPreviewScan.IsHitTestVisible) SavePreviewlayoutScan();
         }
 
         #region Files saving
@@ -1923,7 +1926,22 @@ public partial class MainWindow : Window
 
     private void MakeLimbusPreviewScan_Do(object sender, MouseButtonEventArgs e)
     {
+        SurfaceScrollPreview_Skills.ReconnectAsChildTo(SkillsPreviewFreeBordersCanvas);
+        if (Configurazione.DeltaConfig.ScanParameters.AreaWidth == 0)
+        {
+            PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = Mode_Skills.LastRegisteredWidth;
+        }
+        else
+        {
+            PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = Configurazione.DeltaConfig.ScanParameters.AreaWidth;
+        }
+
+        
         SavePreviewlayoutScan();
+
+
+        SurfaceScrollPreview_Skills.ReconnectAsChildTo(PreviewLayoutGrid_Skills);
+        PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = Mode_Skills.LastRegisteredWidth;
     }
 
     private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
@@ -2217,5 +2235,57 @@ public partial class MainWindow : Window
         {
             ScanScrollviewer(CurrentTarget, NameHint);
         }
+    }
+}
+public static class RemoveChildHelper
+{
+    public static void ReconnectAsChildTo(this UIElement TargetElement, dynamic NewParent)
+    {
+        DependencyObject TargetElement_Parent = (TargetElement as FrameworkElement).Parent;
+        TargetElement_Parent.RemoveChild(TargetElement);
+
+        NewParent.Children.Add(TargetElement);
+    } 
+
+    public static void RemoveChild(this DependencyObject parent, UIElement child)
+    {
+        var panel = parent as Panel;
+        if (panel != null)
+        {
+            panel.Children.Remove(child);
+            return;
+        }
+
+        var decorator = parent as Decorator;
+        if (decorator != null)
+        {
+            if (decorator.Child == child)
+            {
+                decorator.Child = null;
+            }
+            return;
+        }
+
+        var contentPresenter = parent as ContentPresenter;
+        if (contentPresenter != null)
+        {
+            if (contentPresenter.Content == child)
+            {
+                contentPresenter.Content = null;
+            }
+            return;
+        }
+
+        var contentControl = parent as ContentControl;
+        if (contentControl != null)
+        {
+            if (contentControl.Content == child)
+            {
+                contentControl.Content = null;
+            }
+            return;
+        }
+
+        // maybe more
     }
 }

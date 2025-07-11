@@ -9,6 +9,7 @@
         ResizeMode="NoResize"
         WindowStyle="None"
         AllowsTransparency="True"
+        Closing="Window_Closing"
         Opacity="1"
         Topmost="True"
         Title="Settings" Height="495" Width="420">
@@ -535,6 +536,15 @@ TargetType="{x:Type ScrollBar}">
             <Setter Property="Margin" Value="0 1 0 0"/>
             <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
         </Style>
+        <Style TargetType="TextBlock" x:Key="CommentSection">
+            <Setter Property="FontFamily" Value="/UI/Fonts/#Linotype Syntax Com Regular"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#FFC7BCBC"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0 1 0 0"/>
+        </Style>
 
 
 
@@ -849,6 +859,93 @@ TargetType="{x:Type ScrollBar}">
                                                         
                                                     </TextBlock>
                                                 </Border>
+                                            </Grid>
+                                            <TextBlock Style="{StaticResource CommentSection}" TextWrapping="Wrap" Margin="5 5 0 0">
+                                                Drop-down lists only consider files and folders from
+                                                <LineBreak />
+                                                «⇲ Assets Directory\[+] Languages» and «⇲ Assets Directory\[+]» Themes respectively
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel Margin="0 15 0 0">
+                                        <RichTextBox Style="{StaticResource Header}">
+                                            <FlowDocument>
+                                                <Paragraph Padding="0,1,0,0">
+                                                    ⦁ Preview scans
+                                                </Paragraph>
+                                            </FlowDocument>
+                                        </RichTextBox>
+                                        <StackPanel Margin="6 0 0 0">
+                                            <Grid Margin="0 5 0 0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                    <FlowDocument>
+                                                        <Paragraph Padding="0 1 0 0">
+                                                            Toggle scan area view
+                                                        </Paragraph>
+                                                    </FlowDocument>
+                                                </RichTextBox>
+                                                <Border x:Name="ToggleScansPreview" PreviewMouseLeftButtonUp="OptionToggle" Grid.Column="1" Style="{StaticResource BorderButton}" HorizontalAlignment="Left" Width="26.4" Height="26.4">
+                                                    <TextBlock x:Name="ToggleScansPreview_I" Style="{StaticResource ButtonInner}" Visibility="Collapsed">
+                                                        
+                                                    </TextBlock>
+                                                </Border>
+                                            </Grid>
+                                            <Grid Margin="0 5 0 0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                    <FlowDocument>
+                                                        <Paragraph Padding="0 1 0 0">
+                                                            Skills Panel Width
+                                                        </Paragraph>
+                                                    </FlowDocument>
+                                                </RichTextBox>
+                                                <Grid Grid.Column="1">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition Width="26.4"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Border Background="#FF191919" Grid.Column="0" Style="{StaticResource BorderButton}" Margin="0 0 5 0" Height="26.4">
+                                                        <TextBox x:Name="InputSkillsPanelWidth" Style="{StaticResource InputText}">
+                                                            0.00
+                                                        </TextBox>
+                                                    </Border>
+                                                    <Border x:Name="Recheck_SkillsPanelWidth" PreviewMouseLeftButtonUp="OptionToggle" Grid.Column="1" Style="{StaticResource BorderButton}" Width="26.4" Height="26.4">
+                                                        <TextBlock Style="{StaticResource ButtonInner}">
+                                                            
+                                                        </TextBlock>
+                                                    </Border>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid Margin="0 5 0 0">
+                                                <StackPanel>
+                                                    <RichTextBox Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                        <FlowDocument>
+                                                            <Paragraph Padding="0 1 0 0">
+                                                                Readme (Why Skills width adjustment only)
+                                                            </Paragraph>
+                                                        </FlowDocument>
+                                                    </RichTextBox>
+                                                    <Grid Margin="8 0 0 0">
+                                                        <StackPanel>
+                                                            <TextBlock Style="{StaticResource CommentSection}" TextWrapping="Wrap">
+                                                                «Universal Template.json» (Skills .json file) file in «⇲ Assets Directory\[⇲] Scans» can be used for translating new Identities preview Skills and Passives both, Status Effects as well if you adjust this width to appropriate value. So it counts as Skills for viewer only if you write something in coins and they will be visible. Type 0 to reset to default width, all text even outside of window still being rendered and scanned.
+                                                            </TextBlock>
+                                                            <TextBlock Margin="0 5 0 0" Style="{StaticResource CommentSection}" TextWrapping="Wrap">
+                                                                If you would make copies and rename this file, it will still be recognized automatically by the special line "Template Marker": "(Don't remove)" inside.
+                                                            </TextBlock>
+                                                            <TextBlock Margin="0 5 0 0" Style="{StaticResource CommentSection}" TextWrapping="Wrap">
+                                                                Just use it for all.
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </StackPanel>
                                             </Grid>
                                         </StackPanel>
                                     </StackPanel>

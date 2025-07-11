@@ -55,6 +55,13 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
             );
         }
 
+        internal protected static bool IsMatchesStructure(object Class)
+        {
+
+
+            return false;
+        }
+
         internal protected static Task LoadStructure(FileInfo JsonFile)
         {
             DeserializedInfo = JsonFile.Deserealize<ContentBasedUniversal>() as ContentBasedUniversal;

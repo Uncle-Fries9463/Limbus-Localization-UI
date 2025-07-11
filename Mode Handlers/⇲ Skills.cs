@@ -36,6 +36,9 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
         internal protected static Skills DeserializedInfo;
         internal protected static Dictionary<string, int> Skills_NameIDs = [];
 
+
+        internal protected static double LastRegisteredWidth = 0;
+
         internal protected static SwitchedInterfaceProperties SwitchedInterfaceProperties = new()
         {
             Key = "Skills",
@@ -68,7 +71,8 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                 SwitchedInterfaceProperties.DefaultValues.Height = 570;
             }
 
-            MainControl.PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = EnableEGOAbnormalityName ? 578 : double.NaN;
+            LastRegisteredWidth = EnableEGOAbnormalityName ? 578 : 663;
+            MainControl.PreviewLayoutGrid_Skills_ContentControlStackPanel.Width = LastRegisteredWidth;
 
             if (EnableUptieLevels)
             {

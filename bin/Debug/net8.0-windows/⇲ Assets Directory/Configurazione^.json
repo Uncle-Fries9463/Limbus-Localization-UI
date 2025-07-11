@@ -191,6 +191,10 @@
       }
     }
   },
+  "Scan Parameters": {
+    "Skills Area Width": 0,
+    "Comment": "0 means default width"
+  },
   "Technical Actions": {
     "Keywords Multiple Meanings Dictionary": {
       "Generate On Startup": false,

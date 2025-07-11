@@ -183,6 +183,9 @@ namespace LC_Localization_Task_Absolute
                 {
                     MainControl.PreviewLayoutGrid_Keywords_Sub_BattleKeywords_BackgroundImage.Source = GenerateBitmapFromFile(@"⇲ Assets Directory\[⇲] Limbus Images\UI\BattleKeywords Background.png");
                 }
+
+                string StringWidthSkills = Configurazione.DeltaConfig.ScanParameters.AreaWidth.ToString();
+                SettingsControl.InputSkillsPanelWidth.Text = StringWidthSkills;
             }
 
             return FormalTaskCompleted;
@@ -205,6 +208,9 @@ namespace LC_Localization_Task_Absolute
 
             [JsonProperty("Preview Settings")]
             public PreviewSettings PreviewSettings { get; set; } = new PreviewSettings();
+
+            [JsonProperty("Scan Parameters")]
+            public ScanParameters ScanParameters { get; set; } = new ScanParameters();
 
             [JsonProperty("Technical Actions")]
             public TechnicalActions TechnicalActions { get; set; } = new TechnicalActions();
@@ -338,6 +344,11 @@ namespace LC_Localization_Task_Absolute
             public string ContextFont_FontWeight { get; set; } = "";
             [JsonProperty("Context Font (Font Size Multipler)")]
             public double ContextFont_FontSizeMultipler { get; set; } = 1.0;
+        }
+        internal protected class ScanParameters
+        {
+            [JsonProperty("Skills Area Width")]
+            public double AreaWidth { get; set; } = 0;
         }
         internal protected class TechnicalActions
         {

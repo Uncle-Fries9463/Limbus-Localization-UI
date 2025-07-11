@@ -273,7 +273,7 @@
                                 </TextBlock>
                             </Border>
                             <Border x:Name="MakeLimbusPreviewScan" PreviewMouseLeftButtonDown="MakeLimbusPreviewScan_Do" Visibility="Visible"  Style="{StaticResource TB_Highlight}" MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}" Margin="1" CornerRadius="5">
-                                <TextBlock HorizontalAlignment="Center" Foreground="#FF9D9D9D" FontSize="20" VerticalAlignment="Center" FontFamily="UI\Fonts\#Segoe Fluent Icons">
+                                <TextBlock x:Name="PreviewScanButtonIndicator" HorizontalAlignment="Center" Foreground="#FF9D9D9D" FontSize="20" VerticalAlignment="Center" FontFamily="UI\Fonts\#Segoe Fluent Icons">
                                     
                                 </TextBlock>
                                 <Border.ToolTip>
@@ -375,8 +375,7 @@
                             <ColumnDefinition x:Name="EditorWidthControl" Width="706.6"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-
-                        <Grid Grid.Column="0" x:Name="Sector_EditorPreview">
+                        <Grid Grid.Column="0" x:Name="Sector_EditorPreview" Panel.ZIndex="10">
                             <Border CornerRadius="7" Margin="2 1 2 2">
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -494,135 +493,139 @@
                                                     <TranslateTransform Y="-0.9"/>
                                                 </Image.RenderTransform>
                                             </Image>
-                                            <ScrollViewer x:Name="SurfaceScrollPreview_Skills" Margin="10 20 30 40">
 
-                                                <ScrollViewer.Resources>
-                                                    <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
-                                                </ScrollViewer.Resources>
-
-                                                <StackPanel x:Name="PreviewLayoutGrid_Skills_ContentControlStackPanel" VerticalAlignment="Top" HorizontalAlignment="Left" Width="581">
-                                                    <RichTextBox x:Name="PreviewLayout_Skills_MainDesc" Foreground="#ebcaa2" IsReadOnly="True" FontFamily="Pretendard Light" FontSize="20" Margin="0 0 0 7">
-                                                        <FlowDocument>
-                                                            <Paragraph>
-                                                                <Run>
-                                                                    [В конце атаки] Восстанавливает 20 CД четырём союзникам с наименьшей СД
-                                                                </Run>
-                                                            </Paragraph>
-                                                        </FlowDocument>
-                                                    </RichTextBox>
-                                                    <Grid x:Name="PreviewLayout_Skills_Coin1" Margin="0 3 0 0" Visibility="Visible">
-                                                        <Image Source="/UI/Limbus/Coins/Coin 1.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                                        <StackPanel Margin="53 15 0 0">
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc1" Style="{StaticResource CoinDesc}" Visibility="Visible">
+                                            <Canvas x:Name="SkillsPreviewFreeBordersCanvas"></Canvas>
+                                                <ScrollViewer x:Name="SurfaceScrollPreview_Skills" Margin="10 20 30 40">
+                                                    <ScrollViewer.Resources>
+                                                        <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
+                                                    </ScrollViewer.Resources>
+                                                    <Grid x:Name="SurfaceScrollPreview_Skills_Inner">
+                                                        <Border x:Name="ScanAreaView_Skills" BorderBrush="Red" BorderThickness="0" Background="#00121212"/>
+                                                        <StackPanel x:Name="PreviewLayoutGrid_Skills_ContentControlStackPanel" VerticalAlignment="Top" HorizontalAlignment="Left" Width="663">
+                                                            <RichTextBox x:Name="PreviewLayout_Skills_MainDesc" Foreground="#ebcaa2" IsReadOnly="True" FontFamily="Pretendard Light" FontSize="20" Margin="0 0 0 7">
                                                                 <FlowDocument>
                                                                     <Paragraph>
-                                                                        <Run Text="Монета 1"/>
+                                                                        <Run>
+                                                                            [В конце атаки] Восстанавливает 20 CД четырём союзникам с наименьшей СД
+                                                                        </Run>
                                                                     </Paragraph>
                                                                 </FlowDocument>
                                                             </RichTextBox>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                            <Grid x:Name="PreviewLayout_Skills_Coin1" Margin="0 3 0 0" Visibility="Visible">
+                                                                <Image Source="/UI/Limbus/Coins/Coin 1.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                                <StackPanel Margin="53 15 0 0">
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc1" Style="{StaticResource CoinDesc}" Visibility="Visible">
+                                                                        <FlowDocument>
+                                                                            <Paragraph>
+                                                                                <Run Text="Монета 1"/>
+                                                                            </Paragraph>
+                                                                        </FlowDocument>
+                                                                    </RichTextBox>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin1_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                </StackPanel>
+                                                            </Grid>
+                                                            <Grid x:Name="PreviewLayout_Skills_Coin2" Margin="0 3 0 0" Visibility="Visible">
+                                                                <Image Source="/UI/Limbus/Coins/Coin 2.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                                <StackPanel Margin="53 15 0 0">
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc1"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                </StackPanel>
+                                                            </Grid>
+                                                            <Grid x:Name="PreviewLayout_Skills_Coin3" Margin="0 3 0 0" Visibility="Visible">
+                                                                <Image Source="/UI/Limbus/Coins/Coin 3.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                                <StackPanel Margin="53 15 0 0">
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc1"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                </StackPanel>
+                                                            </Grid>
+                                                            <Grid x:Name="PreviewLayout_Skills_Coin4" Margin="0 3 0 0" Visibility="Visible">
+                                                                <Image Source="/UI/Limbus/Coins/Coin 4.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                                <StackPanel Margin="53 15 0 0">
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc1"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                </StackPanel>
+                                                            </Grid>
+                                                            <Grid x:Name="PreviewLayout_Skills_Coin5" Margin="0 3 0 0" Visibility="Visible">
+                                                                <Image Source="/UI/Limbus/Coins/Coin 5.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                                <StackPanel Margin="53 15 0 0">
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc1"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                </StackPanel>
+                                                            </Grid>
+                                                            <Grid x:Name="PreviewLayout_Skills_Coin6" Margin="0 3 0 0" Visibility="Visible">
+                                                                <Image Source="/UI/Limbus/Coins/Coin 6.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                                                <StackPanel Margin="53 15 0 0">
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc1"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                    <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
+                                                                </StackPanel>
+                                                            </Grid>
                                                         </StackPanel>
                                                     </Grid>
-                                                    <Grid x:Name="PreviewLayout_Skills_Coin2" Margin="0 3 0 0" Visibility="Visible">
-                                                        <Image Source="/UI/Limbus/Coins/Coin 2.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                                        <StackPanel Margin="53 15 0 0">
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc1"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin2_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                        </StackPanel>
-                                                    </Grid>
-                                                    <Grid x:Name="PreviewLayout_Skills_Coin3" Margin="0 3 0 0" Visibility="Visible">
-                                                        <Image Source="/UI/Limbus/Coins/Coin 3.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                                        <StackPanel Margin="53 15 0 0">
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc1"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin3_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                        </StackPanel>
-                                                    </Grid>
-                                                    <Grid x:Name="PreviewLayout_Skills_Coin4" Margin="0 3 0 0" Visibility="Visible">
-                                                        <Image Source="/UI/Limbus/Coins/Coin 4.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                                        <StackPanel Margin="53 15 0 0">
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc1"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin4_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                        </StackPanel>
-                                                    </Grid>
-                                                    <Grid x:Name="PreviewLayout_Skills_Coin5" Margin="0 3 0 0" Visibility="Visible">
-                                                        <Image Source="/UI/Limbus/Coins/Coin 5.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                                        <StackPanel Margin="53 15 0 0">
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc1"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin5_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                        </StackPanel>
-                                                    </Grid>
-                                                    <Grid x:Name="PreviewLayout_Skills_Coin6" Margin="0 3 0 0" Visibility="Visible">
-                                                        <Image Source="/UI/Limbus/Coins/Coin 6.png" Width="43.6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                                        <StackPanel Margin="53 15 0 0">
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc1"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc2"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc3"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc4"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc5"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc6"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc7"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc8"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc9"  Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc10" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc11" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                            <RichTextBox x:Name="PreviewLayout_Skills_Coin6_Desc12" Style="{StaticResource CoinDesc}" Visibility="Collapsed"/>
-                                                        </StackPanel>
-                                                    </Grid>
-                                                </StackPanel>
                                             </ScrollViewer>
+                                            
                                         </Grid>
 
-                                        <Grid x:Name="PreviewLayoutGrid_Passives" Visibility="Visible">
+                                        <Grid x:Name="PreviewLayoutGrid_Passives" Visibility="Collapsed">
                                             <Image Source="UI/Limbus/Backgrounds/Skills.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
                                             <ScrollViewer x:Name="SurfaceScrollPreview_Passives" VerticalAlignment="Top" Margin="10 20 40 70">
 
@@ -1667,7 +1670,7 @@
                                                         </TextBlock>
                                                         <TextBlock Foreground="#c6c3bd" Text="※" FontWeight="Light" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5"/>
                                                         <TextBlock Foreground="#c6c3bd" FontWeight="Black" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5">
-                                                           1.1:2
+                                                           1.1:3
                                                         </TextBlock>
                                                     </StackPanel>
                                                 </StackPanel>
@@ -1693,6 +1696,7 @@
                             </Grid>
                         </Grid>
                     </Grid>
+                    
                 </Grid>
             </Grid>
         </Border>
