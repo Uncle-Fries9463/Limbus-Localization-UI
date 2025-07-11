@@ -6,7 +6,7 @@
 - `Passives*.json`
 - `EGOgift*.json`
 
-## CONFIG SETUP MANUAL: https://gist.github.com/x1bViolet/86bd93b8ac147fec74e1051850814e85
+# Check out program [Wiki](https://github.com/x1bViolet/Limbus-Localization-UI/wiki)!
 
 ## Interface navigation:
 1. To save any description, press CTRL + S. For names there are special button.
