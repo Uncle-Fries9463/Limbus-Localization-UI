@@ -782,12 +782,27 @@
                                             <Border x:Name="EGOGiftAffinityType_NameBackground" Margin="190 15 18 0" Height="95" VerticalAlignment="Top">
                                                 <Grid>
                                                     <Image Source="/UI/Limbus/Backgrounds/E.G.O Gift Name Background.png" Margin="30 -12 0 0"/>
-
-                                                    <TextBlock x:Name="EGOGiftName_PreviewLayout" Panel.ZIndex="10" LineStackingStrategy="BlockLineHeight" LineHeight="22" Text="{Binding Path=Text, ElementName=SWBT_EGOGifts_EGOGiftName}" Margin="24 15 24 10" TextAlignment="Center" VerticalAlignment="Center" FontSize="29" TextWrapping="Wrap" FontFamily="{Binding Path=FontFamily, ElementName=NavigationPanel_ObjectName_Display}" FontWeight="{Binding Path=FontWeight, ElementName=NavigationPanel_ObjectName_Display}" Foreground="{DynamicResource UITheme_ObjectNameColor}">
-                                                        <TextBlock.Effect>
-                                                            <DropShadowEffect BlurRadius="0" ShadowDepth="2.5"/>
-                                                        </TextBlock.Effect>
-                                                    </TextBlock>
+                                                    
+                                                    <Viewbox Width="280" Height="49" Stretch="Uniform" HorizontalAlignment="Center">
+                                                        <TextBlock x:Name="EGOGiftName_PreviewLayout"
+                                                                   Panel.ZIndex="10"
+                                                                   LineStackingStrategy="BlockLineHeight"
+                                                                   LineHeight="24"
+                                                                   Width="280"
+                                                                   TextAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="29"
+                                                                   TextWrapping="Wrap"
+                                                                   Text      ="{Binding Path=Text,       ElementName=SWBT_EGOGifts_EGOGiftName}"
+                                                                   FontFamily="{Binding Path=FontFamily, ElementName=NavigationPanel_ObjectName_Display}"
+                                                                   FontWeight="{Binding Path=FontWeight, ElementName=NavigationPanel_ObjectName_Display}"
+                                                                   Foreground="{DynamicResource UITheme_ObjectNameColor}">
+                                                            Мечта адской бабочки
+                                                            <TextBlock.Effect>
+                                                                <DropShadowEffect BlurRadius="0" ShadowDepth="2.5"/>
+                                                            </TextBlock.Effect>
+                                                        </TextBlock>
+                                                    </Viewbox>
                                                 </Grid>
                                             </Border>
                                             <Image Source="/UI/Limbus/Backgrounds/E.G.O Gifts.png" VerticalAlignment="Bottom" Stretch="Uniform"/>
