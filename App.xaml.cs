@@ -20,9 +20,6 @@ public partial class App : Application
         base.OnStartup(e);
         SetupExceptionHandling();
 
-        // Probably to prevent application running on background after closing
-        ShutdownMode = ShutdownMode.OnLastWindowClose;
-
         SplashScreen StartupSplash = new SplashScreen("UI/Logo.png");
         StartupSplash.Show(true, topMost: true);
 
