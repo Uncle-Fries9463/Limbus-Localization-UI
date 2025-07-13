@@ -23,7 +23,6 @@
         "RailBuff",
         "S2Mirror",
         "AttackLevelAdder",
-        "Anger",
         "Keyword will not be loaded if its ID contains one of these lines"
       ],
       "Keywords Fallback": {
