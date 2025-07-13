@@ -106,7 +106,13 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                         if (KeywordColor.Equals("")) KeywordColor = "#9f6a3a";
                     }
 
-                    return $"<sprite name=\"{KeywordID}\"><color={KeywordColor}><u><link=\"{KeywordID}\">{KeywordName}</link></u></color>";
+                    return 
+                    (Configurazione.Spec_EnableKeywordIDSprite ? $"<sprite name=\"{KeywordID}\">" : "") +
+                    $"<color={KeywordColor}>" +
+                    (Configurazione.Spec_EnableKeywordIDUnderline ? $"<u>" : "") +
+                    $"<link=\"{KeywordID}\">{KeywordName}</link>" +
+                    (Configurazione.Spec_EnableKeywordIDUnderline? $"</u>" : "") +
+                    $"</color>";
                 }
                 else
                 {
@@ -152,7 +158,7 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                     }
                 }
 
-                // Keyword links deconversion
+                // [KeywordID] deconversion
                 PreviewText = RemoteRegexPatterns.KeywordLink.Replace(PreviewText, Match =>
                 {
                     string MaybeID = Match.Groups["ID"].Value;
@@ -162,7 +168,13 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                         string KeywordColor = RemoteRegexPatterns.HexColor.Match(Match.Groups["Color"].Value).Groups[1].Value;
                         if (KeywordColor.Equals("")) KeywordColor = KeywordsGlossary[MaybeID].StringColor;
 
-                        return $"<sprite name=\"{MaybeID}\"><color={KeywordColor}><u>{KeywordName}</u></color>";
+                        return 
+                        (Configurazione.Spec_EnableKeywordIDSprite ? $"<sprite name=\"{MaybeID}\">" : "") +
+                        $"<color={KeywordColor}>" +
+                        (Configurazione.Spec_EnableKeywordIDUnderline ? $"<u>" : "") +
+                        $"{KeywordName}" +
+                        (Configurazione.Spec_EnableKeywordIDUnderline ? $"</u>" : "") +
+                        $"</color>";
                     }
                     else if ( // Return skill tag or empty TabExplain if skills, or return default if ego gifts (keywords already excluded)
                            (Mode_Handlers.Upstairs.ActiveProperties.Key.EqualsOneOf(["Skills", "Passives"]) & SkillTags.ContainsKey(Match.Groups[0].Value))

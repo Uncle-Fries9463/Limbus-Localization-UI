@@ -15,6 +15,7 @@ namespace LC_Localization_Task_Absolute
     {
         internal protected static SettingsWindow SettingsControl;
 
+
         private static Dictionary<string, int> FontWeights = new Dictionary<string, int>();
         public SettingsWindow()
         {
@@ -221,6 +222,34 @@ namespace LC_Localization_Task_Absolute
                         };
 
                         ChangeJsonConfigViaRegex("Show Load Warnings", Configurazione.DeltaConfig.Internal.ShowLoadWarnings);
+
+                        break;
+
+
+
+                    case "ToggleKeywordSprites":
+                        Configurazione.Spec_EnableKeywordIDSprite = !Configurazione.Spec_EnableKeywordIDSprite;
+                        ToggleKeywordSprites_I.Visibility = ToggleKeywordSprites_I.Visibility switch
+                        {
+                            Visible => Collapsed,
+                            _/*Collapsed*/ => Visible
+                        };
+
+                        RichTextBoxApplicator.UpdateLast();
+
+                        break;
+
+
+
+                    case "ToggleKeywordUnderline":
+                        Configurazione.Spec_EnableKeywordIDUnderline = !Configurazione.Spec_EnableKeywordIDUnderline;
+                        ToggleKeywordUnderline_I.Visibility = ToggleKeywordUnderline_I.Visibility switch
+                        {
+                            Visible => Collapsed,
+                            _/*Collapsed*/ => Visible
+                        };
+
+                        RichTextBoxApplicator.UpdateLast();
 
                         break;
 

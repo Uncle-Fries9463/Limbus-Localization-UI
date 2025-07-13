@@ -88,6 +88,12 @@ namespace LC_Localization_Task_Absolute
         internal protected static string LoadErrors = "";
 
         internal protected static bool SettingsLoadingEvent = false;
+
+
+        // Per-session, no config
+        internal protected static bool Spec_EnableKeywordIDSprite = true;
+        internal protected static bool Spec_EnableKeywordIDUnderline = true;
+
         internal protected static void PullLoad()
         {
             if (File.Exists(@"⇲ Assets Directory\Configurazione^.json"))
