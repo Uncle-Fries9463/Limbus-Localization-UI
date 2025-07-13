@@ -118,8 +118,11 @@ namespace LC_Localization_Task_Absolute
         private void Settings_Close(object sender, MouseButtonEventArgs e) => DoClose();
         private void DoClose()
         {
-            MainControl.ScanAreaView_Skills.BorderThickness = new Thickness(2);
-            ScansManager.ToggleScanAreaView();
+            if (ScansManager.IsAreaViewEnabled)
+            {
+                MainControl.ScanAreaView_Skills.BorderThickness = new Thickness(2);
+                ScansManager.ToggleScanAreaView();
+            }
             this.Hide();
         }
 
