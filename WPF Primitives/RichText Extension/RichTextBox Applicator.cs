@@ -149,13 +149,13 @@ namespace RichText
                 }
                 else
                 {
-                    if (RichTextBoxApplicator.IsProcessingLimbusText & !Target.Equals(MainControl. PreviewLayout_Default))
-                    {
-                        KeywordImageSource = KeywordsInterrogate.KeywordImages["Unknown"];
-                    }
-                    else if (KeywordsInterrogate.EGOGiftInlineImages.ContainsKey(ImageData.ImageID))
+                    if (KeywordsInterrogate.EGOGiftInlineImages.ContainsKey(ImageData.ImageID) & Target.Equals(MainControl.PreviewLayout_Default))
                     {
                         KeywordImageSource = KeywordsInterrogate.EGOGiftInlineImages[ImageData.ImageID];
+                    }
+                    else if (RichTextBoxApplicator.IsProcessingLimbusText)
+                    {
+                        KeywordImageSource = KeywordsInterrogate.KeywordImages["Unknown"];
                     }
                 }
 

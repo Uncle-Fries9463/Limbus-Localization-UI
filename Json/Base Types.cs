@@ -216,6 +216,11 @@ namespace LC_Localization_Task_Absolute.Json
                 }
 
                 public string undefined { get; set; }
+
+
+                // Special settings that can be used instead of "⇲ Assets Directory\[+] Keywords\Keyword Colors.T[-]"
+                [JsonProperty("Color")]
+                public string Color { get; set; }
             }
         }
     
@@ -233,6 +238,11 @@ namespace LC_Localization_Task_Absolute.Json
                 
                 [JsonProperty("name")]
                 public string Tag { get; set; }
+
+
+                // Special settings that can be used instead of "⇲ Assets Directory\[+] Keywords\SkillTag Colors.T[-]"
+                [JsonProperty("Color")]
+                public string Color { get; set; }
             }
         }
 

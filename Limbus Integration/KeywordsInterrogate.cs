@@ -203,7 +203,17 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                         {
                             if (!SkillTag.ID.Equals(""))
                             {
-                                SkillTags[$"[{SkillTag.ID}]"] = $"<color={(SkillTagColors.ContainsKey(SkillTag.ID) ? SkillTagColors[SkillTag.ID] : "#93f03f")}>{SkillTag.Tag}</color>";
+                                string DefinedColor = "#93f03f";
+                                if (SkillTagColors.ContainsKey(SkillTag.ID))
+                                {
+                                    DefinedColor = SkillTagColors[SkillTag.ID];
+                                }
+                                else if (SkillTag.Color != null)
+                                {
+                                    DefinedColor = SkillTag.Color;
+                                }
+
+                                SkillTags[$"[{SkillTag.ID}]"] = $"<color={DefinedColor}>{SkillTag.Tag}</color>";
                                 //rin($"{SkillTag.ID} -> {SkillTags[$"[{SkillTag.ID}]"]}");
                             }
                         }
@@ -243,11 +253,22 @@ namespace LC_Localization_Task_Absolute.Limbus_Integration
                             {
                                 if (!KeywordItem.ID.ContainsOneOf(DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsIgnore))
                                 {
+                                    string DefinedColor = "#9f6a3a";
+
+                                    if (KeywordColors.ContainsKey(KeywordItem.ID))
+                                    {
+                                        DefinedColor = KeywordColors[KeywordItem.ID];
+                                    }
+                                    else if (KeywordItem.Color != null)
+                                    {
+                                        DefinedColor = KeywordItem.Color;
+                                    }
+
                                     KeywordsGlossary[KeywordItem.ID] = new KeywordSingleton
                                     {
                                         Name = KeywordItem.Name,
                                         Description = KeywordItem.Description,
-                                        StringColor = KeywordColors.ContainsKey(KeywordItem.ID) ? KeywordColors[KeywordItem.ID] : "#9f6a3a"
+                                        StringColor = DefinedColor
                                     };
 
                                     Keywords_IDName[KeywordItem.ID] = KeywordItem.Name;
