@@ -675,42 +675,6 @@ TargetType="{x:Type ScrollBar}">
                                                     </Border>
                                                 </Grid>
                                             </Grid>
-                                            <Grid Margin="0 5 0 0">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition/>
-                                                    <ColumnDefinition/>
-                                                </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
-                                                    <FlowDocument>
-                                                        <Paragraph Padding="0 1 0 0">
-                                                            Display [KeywordID] Sprites (Per-session)
-                                                        </Paragraph>
-                                                    </FlowDocument>
-                                                </RichTextBox>
-                                                <Border x:Name="ToggleKeywordSprites" PreviewMouseLeftButtonUp="OptionToggle" Grid.Column="1" Style="{StaticResource BorderButton}" HorizontalAlignment="Left" Width="26.4" Height="26.4">
-                                                    <TextBlock x:Name="ToggleKeywordSprites_I" Style="{StaticResource ButtonInner}">
-                                                        
-                                                    </TextBlock>
-                                                </Border>
-                                            </Grid>
-                                            <Grid Margin="0 5 0 0">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition/>
-                                                    <ColumnDefinition/>
-                                                </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
-                                                    <FlowDocument>
-                                                        <Paragraph Padding="0 1 0 0">
-                                                            Display [KeywordID] Underline (Per-session)
-                                                        </Paragraph>
-                                                    </FlowDocument>
-                                                </RichTextBox>
-                                                <Border x:Name="ToggleKeywordUnderline" PreviewMouseLeftButtonUp="OptionToggle" Grid.Column="1" Style="{StaticResource BorderButton}" HorizontalAlignment="Left" Width="26.4" Height="26.4">
-                                                    <TextBlock x:Name="ToggleKeywordUnderline_I" Style="{StaticResource ButtonInner}">
-                                                        
-                                                    </TextBlock>
-                                                </Border>
-                                            </Grid>
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Margin="0 15 0 0" Visibility="Visible">
@@ -976,6 +940,42 @@ TargetType="{x:Type ScrollBar}">
                                                         </TextBlock>
                                                     </Border>
                                                 </Grid>
+                                            </Grid>
+                                            <Grid Margin="0 5 0 0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                    <FlowDocument>
+                                                        <Paragraph Padding="0 1 0 0">
+                                                            Display [KeywordID] Sprites (Per-session)
+                                                        </Paragraph>
+                                                    </FlowDocument>
+                                                </RichTextBox>
+                                                <Border x:Name="ToggleKeywordSprites" PreviewMouseLeftButtonUp="OptionToggle" Grid.Column="1" Style="{StaticResource BorderButton}" HorizontalAlignment="Left" Width="26.4" Height="26.4">
+                                                    <TextBlock x:Name="ToggleKeywordSprites_I" Style="{StaticResource ButtonInner}">
+                                                        
+                                                    </TextBlock>
+                                                </Border>
+                                            </Grid>
+                                            <Grid Margin="0 5 0 0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                    <FlowDocument>
+                                                        <Paragraph Padding="0 1 0 0">
+                                                            Display [KeywordID] Underline (Per-session)
+                                                        </Paragraph>
+                                                    </FlowDocument>
+                                                </RichTextBox>
+                                                <Border x:Name="ToggleKeywordUnderline" PreviewMouseLeftButtonUp="OptionToggle" Grid.Column="1" Style="{StaticResource BorderButton}" HorizontalAlignment="Left" Width="26.4" Height="26.4">
+                                                    <TextBlock x:Name="ToggleKeywordUnderline_I" Style="{StaticResource ButtonInner}">
+                                                        
+                                                    </TextBlock>
+                                                </Border>
                                             </Grid>
                                             <Grid Margin="0 5 0 0">
                                                 <StackPanel>
