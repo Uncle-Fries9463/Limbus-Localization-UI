@@ -3,7 +3,7 @@
     "UI Language": "⇲ Assets Directory/[+] Languages/English.json",
     "UI Theme": "⇲ Assets Directory/[+] Themes/Limbus Localization UI",
     "Topmost Window": true,
-    "Show Load Warnings": false
+    "Show Load Warnings": true
   },
   "Preview Settings": {
     "Base": {
