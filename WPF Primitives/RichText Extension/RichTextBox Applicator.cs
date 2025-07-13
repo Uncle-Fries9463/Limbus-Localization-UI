@@ -149,7 +149,7 @@ namespace RichText
                 }
                 else
                 {
-                    if (KeywordsInterrogate.EGOGiftInlineImages.ContainsKey(ImageData.ImageID) & Target.Equals(MainControl.PreviewLayout_Default))
+                    if ((KeywordsInterrogate.EGOGiftInlineImages.ContainsKey(ImageData.ImageID) & InternalModel.InitializingEvent) || Target.Equals(MainControl.PreviewLayout_Default))
                     {
                         KeywordImageSource = KeywordsInterrogate.EGOGiftInlineImages[ImageData.ImageID];
                     }
