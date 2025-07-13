@@ -1,13 +1,8 @@
-﻿using System;
-using System.Windows;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows;
 using System.Windows.Controls;
 using static LC_Localization_Task_Absolute.MainWindow;
 
-namespace LC_Localization_TaskValid.Mode_Handlers
+namespace LC_Localization_Task_Absolute.Mode_Handlers
 {
     internal abstract class Shared
     {

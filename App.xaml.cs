@@ -1,10 +1,5 @@
-﻿using System.Configuration;
-using System.Data;
+﻿using NLog;
 using System.Windows;
-using NLog;
-
-
-
 using static LC_Localization_Task_Absolute.Requirements;
 
 

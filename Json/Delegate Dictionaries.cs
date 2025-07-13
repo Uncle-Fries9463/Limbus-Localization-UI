@@ -1,12 +1,5 @@
 ﻿using LC_Localization_Task_Absolute.Mode_Handlers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static LC_Localization_Task_Absolute.Json.BaseTypes;
-using static LC_Localization_Task_Absolute.Json.BaseTypes.Type_Skills;
-using static LC_Localization_Task_Absolute.Requirements;
 
 namespace LC_Localization_Task_Absolute.Json
 {

@@ -3,7 +3,6 @@ using LC_Localization_Task_Absolute.Limbus_Integration;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Media;
 using static LC_Localization_Task_Absolute.Requirements;
 
 namespace RichText

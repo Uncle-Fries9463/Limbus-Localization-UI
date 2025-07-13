@@ -1,13 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using Newtonsoft.Json;
-using static LC_Localization_Task_Absolute.Json.BaseTypes;
 
 namespace LC_Localization_Task_Absolute.Json
 {

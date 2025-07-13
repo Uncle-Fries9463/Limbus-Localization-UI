@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using LC_Localization_Task_Absolute.Mode_Handlers;
 using System.Windows;
-using System.Threading.Tasks;
-using static LC_Localization_Task_Absolute.Requirements;
 using static LC_Localization_Task_Absolute.MainWindow;
-using static LC_Localization_Task_Absolute.SettingsWindow;
+using static LC_Localization_Task_Absolute.Requirements;
 using static System.Windows.Visibility;
-using LC_Localization_Task_Absolute.Mode_Handlers;
 
 namespace LC_Localization_Task_Absolute
 {

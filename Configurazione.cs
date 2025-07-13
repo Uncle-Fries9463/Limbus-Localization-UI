@@ -1,23 +1,12 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using LC_Localization_Task_Absolute.Limbus_Integration;
+using Newtonsoft.Json;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Media;
-using System.Threading.Tasks;
 using System.Runtime.Serialization;
-using LC_Localization_Task_Absolute.Json;
-using System.Windows;
-using System.Windows.Controls;
 using System.Text.RegularExpressions;
-using static LC_Localization_Task_Absolute.Configurazione;
-using static LC_Localization_Task_Absolute.Requirements;
+using System.Windows.Controls;
+using System.Windows.Media;
 using static LC_Localization_Task_Absolute.MainWindow;
-using LC_Localization_Task_Absolute.Limbus_Integration;
-using System.Windows.Controls.Primitives;
-using static LC_Localization_Task_Absolute.UILanguageLoader;
-using RichText;
+using static LC_Localization_Task_Absolute.Requirements;
 
 namespace LC_Localization_Task_Absolute
 {
@@ -48,18 +37,23 @@ namespace LC_Localization_Task_Absolute
                 /*lang=regex*/ "System.String"    => @"""(.*?)""",
                 /*lang=regex*/ _ => @"""(.*?)"""
             };
-            rin(@$"{MatchAppend}""{PropertyName.ToEscapeRegexString()}"": {ValueTypePattern}(?<Afterward>(,)?(\r)?\n)");
-            CurrentConfigurationJsonContent = Regex.Replace(CurrentConfigurationJsonContent, @$"{MatchAppend}""{PropertyName.ToEscapeRegexString()}"": {ValueTypePattern}(?<Afterward>(,)?(\r)?\n)", Match =>
-            {
-                string ValueReplacementString = ValueTypePattern switch
+
+            CurrentConfigurationJsonContent = Regex.Replace(
+                input:       CurrentConfigurationJsonContent,
+                pattern:    @$"{MatchAppend}""{PropertyName.ToEscapeRegexString()}"": {ValueTypePattern}(?<Afterward>(,)?(\r)?\n)",
+                evaluator: Match => {
+
+                    string ValueReplacementString = ValueTypePattern switch
                     {
                         /*lang=regex*/ @"(\d+)(\.(\d+))?" => $"{NewValue.ToString().Replace(",", ".")}",
                         /*lang=regex*/ @"(true|false)"        => $"{NewValue.ToString().ToLower()}",
                         /*lang=regex*/ @"""(.*?)"""            => $"\"{NewValue}\"",
                         /*lang=regex*/ _                            => $"\"{NewValue}\"",
                     };
-                return @$"{Match.Groups["PatternInsideThisProperty"].Value}""{PropertyName}"": {ValueReplacementString}{Match.Groups["Afterward"].Value}";
-            }, MatchAppend.Equals("") ? RegexOptions.None : RegexOptions.Singleline);
+
+                    return @$"{Match.Groups["PatternInsideThisProperty"].Value}""{PropertyName}"": {ValueReplacementString}{Match.Groups["Afterward"].Value}";
+                    
+            }, options: MatchAppend.Equals("") ? RegexOptions.None : RegexOptions.Singleline);
             #endregion
 
             if (!OldConfig.Equals(CurrentConfigurationJsonContent))

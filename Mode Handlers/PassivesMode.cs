@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using static LC_Localization_Task_Absolute.MainWindow;
-using static LC_Localization_Task_Absolute.Requirements;
-using static LC_Localization_TaskValid.Mode_Handlers.Shared;
+using static LC_Localization_Task_Absolute.Mode_Handlers.Shared;
 
 namespace LC_Localization_Task_Absolute.Mode_Handlers
 {

@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using SixLabors.ImageSharp;
 using System.IO;
-using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Media;
 using System.Windows;
-using System.Windows.Media.Imaging;
-using SixLabors.ImageSharp;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Runtime.InteropServices;
-using System.Drawing.Text;
-using System.Reflection;
-using Newtonsoft.Json.Linq;
-using static LC_Localization_Task_Absolute.Requirements;
-using System.Windows.Markup;
-using System.Xml;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace LC_Localization_Task_Absolute
 {

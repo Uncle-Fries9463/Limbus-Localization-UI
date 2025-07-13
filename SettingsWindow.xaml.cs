@@ -1,27 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using LC_Localization_Task_Absolute.Mode_Handlers;
+using RichText;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Shapes;
-using LC_Localization_Task_Absolute.Json;
-using LC_Localization_Task_Absolute.Mode_Handlers;
-using RichText;
-using static System.Windows.Visibility;
+using static LC_Localization_Task_Absolute.ConfigRegexSaver;
 using static LC_Localization_Task_Absolute.MainWindow;
 using static LC_Localization_Task_Absolute.Requirements;
-using static LC_Localization_Task_Absolute.UIThemesLoader;
-using static LC_Localization_Task_Absolute.ConfigRegexSaver;
+using static System.Windows.Visibility;
 
 namespace LC_Localization_Task_Absolute
 {

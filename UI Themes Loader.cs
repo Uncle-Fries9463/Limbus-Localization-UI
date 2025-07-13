@@ -1,16 +1,13 @@
-﻿using RichText;
+﻿using Newtonsoft.Json;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Windows;
-using Newtonsoft.Json;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Runtime.Serialization;
 using static LC_Localization_Task_Absolute.MainWindow;
 using static LC_Localization_Task_Absolute.Requirements;
-using static LC_Localization_Task_Absolute.NullableControl;
 using static LC_Localization_Task_Absolute.UILanguageLoader;
-using System.Reflection;
 
 namespace LC_Localization_Task_Absolute
 {
