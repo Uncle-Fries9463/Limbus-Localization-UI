@@ -860,6 +860,24 @@ TargetType="{x:Type ScrollBar}">
                                                     </TextBlock>
                                                 </Border>
                                             </Grid>
+                                            <Grid Margin="0 5 0 0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                    <FlowDocument>
+                                                        <Paragraph Padding="0 1 0 0">
+                                                            Enable Load Warnings
+                                                        </Paragraph>
+                                                    </FlowDocument>
+                                                </RichTextBox>
+                                                <Border x:Name="ToggleLoadWarnings" PreviewMouseLeftButtonUp="OptionToggle" Grid.Column="1" Style="{StaticResource BorderButton}" HorizontalAlignment="Left" Width="26.4" Height="26.4">
+                                                    <TextBlock x:Name="ToggleLoadWarnings_I" Style="{StaticResource ButtonInner}">
+                                                        
+                                                    </TextBlock>
+                                                </Border>
+                                            </Grid>
                                             <TextBlock Style="{StaticResource CommentSection}" TextWrapping="Wrap" Margin="5 5 0 0">
                                                 Drop-down lists only consider files and folders from
                                                 <LineBreak />

@@ -2153,6 +2153,11 @@ public partial class MainWindow : Window
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        if (!Configurazione.LoadErrors.Equals("") & Configurazione.DeltaConfig.Internal.ShowLoadWarnings)
+        {
+            MessageBox.Show(Configurazione.LoadErrors + "\n\n(You can disable this warning in Settings, Internal section)", $"Loading exceptions @ {Configurazione.SelectedAssociativePropery_Shared.PropertyName}", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         if (DeltaConfig.TechnicalActions.KeywordsDictionary.Generate & !File.Exists("Keywords Multiple Meanings.json"))
         {
             if (Directory.Exists(DeltaConfig.TechnicalActions.KeywordsDictionary.Path))

@@ -2,7 +2,8 @@
   "Internal": {
     "UI Language": "⇲ Assets Directory/[+] Languages/English.json",
     "UI Theme": "⇲ Assets Directory/[+] Themes/Limbus Localization UI",
-    "Topmost Window": true
+    "Topmost Window": true,
+    "Show Load Warnings": false
   },
   "Preview Settings": {
     "Base": {
@@ -60,7 +61,7 @@
           {
             "Name": "Russian (MTL)",
             "Properties": {
-              "Keywords Directory": "C:/Dream-Devouring Siltcurrent/LimbusCompanyRuMTL [Git]/localize",
+              "Keywords Directory": "C:/Program Files (x86)/Steam/steamapps/common/Limbus Company/LimbusCompany_Data/Lang/ru-mtl",
               "Keywords Autodetection Regex Pattern": "(KeywordNameWillBeHere)(?![\\p{L}\\[\\]\\-<`'\":+])",
               "Keywords Shorthands Regex Pattern": "\\[(?<ID>\\w+):`(?<Name>.*?)`\\](?<Color>\\(#[a-fA-F0-9]{6}\\))?",
               "Keywords Shorthands Contextmenu Insertion Shape": "[<KeywordID>:`<KeywordName>`]<KeywordColor>",
@@ -68,7 +69,7 @@
               "Keywords Multiple Meanings Dictionary": "⇲ Assets Directory/[+] Keywords/Another/MTL Keywords Dictionary.json",
 
               "Title Font": "C:/Program Files (x86)/Steam/steamapps/common/Limbus Company/LimbusCompany_Data/Lang/ru-mtl/Font/Title/Title.ttf",
-              "Context Font": "C:/Dream-Devouring Siltcurrent/Pretendard-Light.otf",
+              "Context Font": "C:/Program Files (x86)/Steam/steamapps/common/Limbus Company/LimbusCompany_Data/Lang/ru-mtl/Font/Context/Context.ttf",
               "Context Font (Font Weight)": "Light"
             }
           },

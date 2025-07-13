@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using static LC_Localization_Task_Absolute.MainWindow;
@@ -84,6 +85,8 @@ namespace LC_Localization_Task_Absolute
 
         internal protected static CustomLanguageAssociativePropertyMain SelectedAssociativePropery_Shared = null;
 
+        internal protected static string LoadErrors = "";
+
         internal protected static bool SettingsLoadingEvent = false;
         internal protected static void PullLoad()
         {
@@ -91,6 +94,8 @@ namespace LC_Localization_Task_Absolute
             {
                 try
                 {
+                    LoadErrors = "";
+
                     SettingsLoadingEvent = true;
                     rin($"\n\n\n[ Settings load pull initialized ]\n");
 
@@ -99,10 +104,16 @@ namespace LC_Localization_Task_Absolute
 
                     SettingsWindow.UpdateSettingsMenu_Regular();
 
-
-                    KeywordsInterrogate.InitializeGlossaryFrom(
-                        KeywordsDirectory: DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory
-                    );
+                    if (Directory.Exists(DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory))
+                    {
+                        KeywordsInterrogate.InitializeGlossaryFrom(
+                            KeywordsDirectory: DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory
+                        );
+                    }
+                    else
+                    {
+                        LoadErrors += $"¤ Cannot find fallback keywords directory \"{DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory}\" (Can it be on disk D:\\ or E:\\??)\n\n";
+                    }
 
                     string SelectedAssociativePropertyName = DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.Selected;
                     rin($"\n Custom language properties: {SelectedAssociativePropertyName}");
@@ -122,12 +133,15 @@ namespace LC_Localization_Task_Absolute
 
                         SettingsWindow.UpdateSettingsMenu_CustomLang();
                     }
-
-
+                    else
+                    {
+                        LoadErrors += $"¤ Cannot find Custom Language property named \"{SelectedAssociativePropertyName}\"\n\n";
+                    }
                     SettingsLoadingEvent = false;
                 }
-                catch
+                catch (Exception ex)
                 {
+                    rin(ex.ToString());
                     SettingsLoadingEvent = false;
                 }
             }
@@ -135,13 +149,30 @@ namespace LC_Localization_Task_Absolute
 
         internal protected static void UpdateCustomLanguagePart(CustomLanguageAssociativePropertyMain SelectedAssociativePropery)
         {
-            KeywordsInterrogate.InitializeGlossaryFrom
-            (
-                KeywordsDirectory: SelectedAssociativePropery.Properties.KeywordsDirectory,
-                WriteOverFallback: true
-            );
+            if (Directory.Exists(SelectedAssociativePropery.Properties.KeywordsDirectory))
+            {
+                KeywordsInterrogate.InitializeGlossaryFrom
+                (
+                    KeywordsDirectory: SelectedAssociativePropery.Properties.KeywordsDirectory,
+                    WriteOverFallback: true
+                );
+            }
+            else
+            {
+                LoadErrors += $"¤ Cannot find Custom Language keywords directory \"{SelectedAssociativePropery.Properties.KeywordsDirectory}\"\n\n";
+            }
 
-            KeywordsInterrogate.ReadKeywordsMultipleMeanings(SelectedAssociativePropery.Properties.KeywordsMultipleMeaningsDictionary);
+            if (!SelectedAssociativePropery.Properties.KeywordsMultipleMeaningsDictionary.Equals(""))
+            {
+                if (File.Exists(SelectedAssociativePropery.Properties.KeywordsMultipleMeaningsDictionary))
+                {
+                    KeywordsInterrogate.ReadKeywordsMultipleMeanings(SelectedAssociativePropery.Properties.KeywordsMultipleMeaningsDictionary);
+                }
+                else
+                {
+                    LoadErrors += $"¤ Cannot find Keywords Multiple Meanings Dictionary \"{SelectedAssociativePropery.Properties.KeywordsDirectory}\"\n\n";
+                }
+            }
 
 
             LimbusPreviewFormatter.RemoteRegexPatterns.AutoKeywordsDetection = SelectedAssociativePropery.Properties.Keywords_AutodetectionRegex;
@@ -161,6 +192,15 @@ namespace LC_Localization_Task_Absolute
 
             rin($"   Loading fonts:");
             UpdatePreviewLayoutsFont(SelectedAssociativePropery.Properties);
+
+
+
+            //                                      if only starting (Somehow just cant show messagebox at startup fom public MainWindow() )
+            // Then MainWindow.Window_Loaded() will be triggered with this
+            if (!LoadErrors.Equals("") & !RichText.InternalModel.InitializingEvent & Configurazione.DeltaConfig.Internal.ShowLoadWarnings)
+            {
+                MessageBox.Show(LoadErrors + "\n\n(You can disable this warning in Settings, Internal section)", $"Loading exceptions @ {SelectedAssociativePropery_Shared.PropertyName}", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
 
@@ -189,6 +229,7 @@ namespace LC_Localization_Task_Absolute
                 }
                 else
                 {
+                    LoadErrors += $"¤ Cannot find Context Font file \"{Properties.ContextFont}\"\n\n";
                     rin($"    - [!] Context font file NOT FOUND (\"{Properties.ContextFont}\")");
                 }
 
@@ -210,6 +251,7 @@ namespace LC_Localization_Task_Absolute
                 }
                 else
                 {
+                    LoadErrors += $"¤ Cannot find Title Font file \"{Properties.TitleFont}\"\n\n";
                     rin($"    - [!] Title font file NOT FOUND (\"{Properties.TitleFont}\")");
                 }
 
@@ -260,6 +302,9 @@ namespace LC_Localization_Task_Absolute
 
             [JsonProperty("Topmost Window")]
             public bool AlwaysOnTop { get; set; } = true;
+
+            [JsonProperty("Show Load Warnings")]
+            public bool ShowLoadWarnings { get; set; } = true;
 
             [OnDeserialized]
             internal void OnDeserialized(StreamingContext context)

@@ -42,6 +42,7 @@ namespace LC_Localization_Task_Absolute
             ToggleCoinDescHighlightion_OnSwitch_I.Visibility = Settings.PreviewSettings.PreviewSettingsBaseSettings.HighlightCoinDescsOnManualSwitch ? Visible : Collapsed;
             InputPreviewUpdateDelay.Text = Settings.PreviewSettings.PreviewSettingsBaseSettings.PreviewUpdateDelay.ToString();
             ToggleTopmostState_I.Visibility = Settings.Internal.AlwaysOnTop ? Visible : Collapsed;
+            ToggleLoadWarnings_I.Visibility = Settings.Internal.ShowLoadWarnings ? Visible : Collapsed;
 
             rin("\n\n----------------------------------------------------");
 
@@ -211,6 +212,20 @@ namespace LC_Localization_Task_Absolute
 
 
 
+                    case "ToggleLoadWarnings":
+                        Configurazione.DeltaConfig.Internal.ShowLoadWarnings = !Configurazione.DeltaConfig.Internal.ShowLoadWarnings;
+                        ToggleLoadWarnings_I.Visibility = ToggleLoadWarnings_I.Visibility switch
+                        {
+                            Visible => Collapsed,
+                            _/*Collapsed*/ => Visible
+                        };
+
+                        ChangeJsonConfigViaRegex("Show Load Warnings", Configurazione.DeltaConfig.Internal.ShowLoadWarnings);
+
+                        break;
+
+
+
                     case "Recheck_PreviewUpdateDelay":
                         try
                         {
@@ -364,6 +379,7 @@ namespace LC_Localization_Task_Absolute
                             Configurazione.SelectedAssociativePropery_Shared = NewSelection;
                             Configurazione.DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.Selected = NewSelection.PropertyName;
 
+                            Configurazione.LoadErrors = "";
                             Configurazione.UpdateCustomLanguagePart(NewSelection);
                             UpdateSelectedCustomLanguageSettingsView();
 
