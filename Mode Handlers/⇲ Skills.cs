@@ -1,23 +1,13 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.IO;
-using System.Text;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Newtonsoft.Json;
+﻿using LC_Localization_Task_Absolute.Json;
 using RichText;
-using static System.Windows.Visibility;
-using static LC_Localization_Task_Absolute.MainWindow;
-using static LC_Localization_Task_Absolute.Requirements;
-using static LC_Localization_Task_Absolute.Mode_Handlers.Upstairs;
+using System.IO;
+using System.Windows;
+using System.Windows.Controls;
 using static LC_Localization_Task_Absolute.Json.BaseTypes.Type_Skills;
 using static LC_Localization_Task_Absolute.Json.DelegateDictionaries;
-using LC_Localization_Task_Absolute.Json;
+using static LC_Localization_Task_Absolute.MainWindow;
+using static LC_Localization_Task_Absolute.Mode_Handlers.Upstairs;
+using static System.Windows.Visibility;
 
 namespace LC_Localization_Task_Absolute.Mode_Handlers
 {
@@ -35,6 +25,9 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
 
         internal protected static Skills DeserializedInfo;
         internal protected static Dictionary<string, int> Skills_NameIDs = [];
+
+
+        internal protected static Dictionary<RichTextBox, string> LastPreviewUpdatesBank = [];
 
 
         internal protected static double LastRegisteredWidth = 0;
@@ -141,6 +134,7 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
             CurrentSkillUptieLevel = SwitchingUptieLevel;
 
             ResetSkillInfo();
+            LastPreviewUpdatesBank.Clear();
             
             SwitchToDesc();
 
@@ -212,6 +206,7 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                                                 if (!CoinDescription.Description.Equals(CoinDescription.EditorDescription))
                                                 {
                                                     ThisCoinDescPanel.SetLimbusRichText(CoinDescription.EditorDescription);
+                                                    LastPreviewUpdatesBank[ThisCoinDescPanel] = CoinDescription.EditorDescription;
 
                                                     (MainControl.FindName($"STE_Skills_Coin_{CoinNumber}") as RichTextBox)
                                                         .SetRichText(UILanguageLoader.LoadedLanguage.UnsavedChangesMarker
@@ -220,6 +215,7 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
                                                 else
                                                 {
                                                     ThisCoinDescPanel.SetLimbusRichText(CoinDescription.Description);
+                                                    LastPreviewUpdatesBank[ThisCoinDescPanel] = CoinDescription.Description;
                                                     (MainControl.FindName($"STE_Skills_Coin_{CoinNumber}") as RichTextBox)
                                                         .SetRichText(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — Skill Coin {CoinNumber}"]);
                                                 }
@@ -404,13 +400,17 @@ namespace LC_Localization_Task_Absolute.Mode_Handlers
             var FullLink = DelegateSkills[CurrentSkillID][CurrentSkillUptieLevel];
             /////////////////////////////////////////////////////////////////////
 
+            // ... -> MainWindow.Editor_TextChanged() -> update main desc
             if (!FullLink.Description.Equals(FullLink.EditorDescription))
             {
                 MainControl.Editor.Text = FullLink.EditorDescription;
+
+                LastPreviewUpdatesBank[MainControl.PreviewLayout_Skills_MainDesc] = FullLink.EditorDescription;
             }
             else
             {
                 MainControl.Editor.Text = FullLink.Description;
+                LastPreviewUpdatesBank[MainControl.PreviewLayout_Skills_MainDesc] = FullLink.Description;
             }
 
             if (MainControl.Editor.Text.Equals("")) PreviewUpdate_TargetSite.Visibility = Collapsed;

@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using LC_Localization_Task_Absolute;
+using LC_Localization_Task_Absolute.Limbus_Integration;
+using LC_Localization_Task_Absolute.Mode_Handlers;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
-using System.Windows.Media;
-using System.Windows;
-using LC_Localization_Task_Absolute.Limbus_Integration;
 using static LC_Localization_Task_Absolute.MainWindow;
 using static LC_Localization_Task_Absolute.Requirements;
-using LC_Localization_Task_Absolute;
-using System.Xml.Linq;
-using System.Xml;
-using System.Globalization;
-using System.Net.Mail;
-using System.Windows.Input;
 
 namespace RichText 
 {
@@ -30,7 +20,17 @@ namespace RichText
 
         internal static void UpdateLast()
         {
-            RichTextBoxApplicator.SetLimbusRichText(RichText.RichTextBoxApplicator.LastUpdateTarget, RichText.RichTextBoxApplicator.LastUpdateText);
+            if (Upstairs.ActiveProperties.Key == "Skills")
+            {
+                foreach(var SkillDescItem in Mode_Skills.LastPreviewUpdatesBank)
+                {
+                    RichTextBoxApplicator.SetLimbusRichText(SkillDescItem.Key, SkillDescItem.Value);
+                }
+            }
+            else
+            {
+                RichTextBoxApplicator.SetLimbusRichText(RichText.RichTextBoxApplicator.LastUpdateTarget, RichText.RichTextBoxApplicator.LastUpdateText);
+            }
         }
 
         internal static void SetLimbusRichText(this RichTextBox Target, string RichTextString)
