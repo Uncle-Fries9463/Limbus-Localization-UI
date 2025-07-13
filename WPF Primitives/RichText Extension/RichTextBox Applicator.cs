@@ -27,6 +27,12 @@ namespace RichText
         internal static string LastUpdateText = "";
 
         internal static bool IsProcessingLimbusText = false;
+
+        internal static void UpdateLast()
+        {
+            RichTextBoxApplicator.SetLimbusRichText(RichText.RichTextBoxApplicator.LastUpdateTarget, RichText.RichTextBoxApplicator.LastUpdateText);
+        }
+
         internal static void SetLimbusRichText(this RichTextBox Target, string RichTextString)
         {
             RichTextBoxApplicator.LastUpdateTarget = Target;

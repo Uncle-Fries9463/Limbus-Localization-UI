@@ -21,6 +21,7 @@ using static System.Windows.Visibility;
 using static LC_Localization_Task_Absolute.MainWindow;
 using static LC_Localization_Task_Absolute.Requirements;
 using static LC_Localization_Task_Absolute.UIThemesLoader;
+using static LC_Localization_Task_Absolute.ConfigRegexSaver;
 
 namespace LC_Localization_Task_Absolute
 {
@@ -144,7 +145,7 @@ namespace LC_Localization_Task_Absolute
             }
         }
 
-        // idontwanttoserializeidontwanttoserializeidontwanttoserialize
+
         private void OptionToggle(object sender, MouseButtonEventArgs e)
         {
             if (!Configurazione.SettingsLoadingEvent)
@@ -172,13 +173,11 @@ namespace LC_Localization_Task_Absolute
                             Visible => Collapsed,
                             _/*Collapsed*/ => Visible
                         };
-                        TempConfigFile = Regex.Replace(TempConfigFile, @"""Highlight <style>"": (true|false)(?<Afterward>(,)?(\r)?\n)", Match =>
-                        {
-                            return @$"""Highlight <style>"": {Configurazione.DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightStyle.ToString().ToLower()}{Match.Groups["Afterward"].Value}";
-                        });
-                        File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
 
-                        RichTextBoxApplicator.SetLimbusRichText(RichText.RichTextBoxApplicator.LastUpdateTarget, RichText.RichTextBoxApplicator.LastUpdateText);
+                        RichTextBoxApplicator.UpdateLast();
+
+                        ChangeJsonConfigViaRegex("Highlight <style>", Configurazione.DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightStyle);
+
                         break;
 
 
@@ -190,13 +189,9 @@ namespace LC_Localization_Task_Absolute
                             Visible => Collapsed,
                             _/*Collapsed*/ => Visible
                         };
-                        TempConfigFile = Regex.Replace(TempConfigFile, @"""Highlight Coin Descs on right click"": (true|false)(?<Afterward>(,)?(\r)?\n)", Match =>
-                        {
-                            return @$"""Highlight Coin Descs on right click"": {Configurazione.DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightCoinDescsOnRightClick.ToString().ToLower()}{Match.Groups["Afterward"].Value}";
-                        });
-                        File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
 
-                        RichTextBoxApplicator.SetLimbusRichText(RichText.RichTextBoxApplicator.LastUpdateTarget, RichText.RichTextBoxApplicator.LastUpdateText);
+                        ChangeJsonConfigViaRegex("Highlight Coin Descs on right click", Configurazione.DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightCoinDescsOnRightClick);
+
                         break;
 
 
@@ -208,13 +203,9 @@ namespace LC_Localization_Task_Absolute
                             Visible => Collapsed,
                             _/*Collapsed*/ => Visible
                         };
-                        TempConfigFile = Regex.Replace(TempConfigFile, @"""Highlight Coin Descs on manual switch"": (true|false)(?<Afterward>(,)?(\r)?\n)", Match =>
-                        {
-                            return @$"""Highlight Coin Descs on manual switch"": {Configurazione.DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightCoinDescsOnManualSwitch.ToString().ToLower()}{Match.Groups["Afterward"].Value}";
-                        });
-                        File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
 
-                        RichTextBoxApplicator.SetLimbusRichText(RichText.RichTextBoxApplicator.LastUpdateTarget, RichText.RichTextBoxApplicator.LastUpdateText);
+                        ChangeJsonConfigViaRegex("Highlight Coin Descs on manual switch", Configurazione.DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.HighlightCoinDescsOnManualSwitch);
+
                         break;
 
 
@@ -227,11 +218,9 @@ namespace LC_Localization_Task_Absolute
                             Visible => Collapsed,
                             _/*Collapsed*/ => Visible
                         };
-                        TempConfigFile = Regex.Replace(TempConfigFile, @"""Topmost Window"": (true|false)(?<Afterward>(,)?(\r)?\n)", Match =>
-                        {
-                            return @$"""Topmost Window"": {Configurazione.DeltaConfig.Internal.AlwaysOnTop.ToString().ToLower()}{Match.Groups["Afterward"].Value}";
-                        });
-                        File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
+
+                        ChangeJsonConfigViaRegex("Topmost Window", Configurazione.DeltaConfig.Internal.AlwaysOnTop);
+
                         break;
 
 
@@ -242,13 +231,11 @@ namespace LC_Localization_Task_Absolute
                             double InputDelay = double.Parse(InputPreviewUpdateDelay.Text.Replace(".", ","));
 
                             Configurazione.DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.PreviewUpdateDelay = InputDelay;
+
                             string StringedDelay = InputDelay.ToString();
                             InputPreviewUpdateDelay.Text = StringedDelay;
-                            TempConfigFile = Regex.Replace(TempConfigFile, @"""Preview Update Delay \(Seconds\)"": (\d+)(\.(\d+))?(?<Afterward>(,)?(\r)?\n)", Match =>
-                            {
-                                return @$"""Preview Update Delay (Seconds)"": {StringedDelay.Replace(",", ".")}{Match.Groups["Afterward"].Value}";
-                            });
-                            File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
+
+                            ChangeJsonConfigViaRegex("Preview Update Delay (Seconds)", Configurazione.DeltaConfig.PreviewSettings.PreviewSettingsBaseSettings.PreviewUpdateDelay);
                         }
                         catch
                         {
@@ -280,13 +267,10 @@ namespace LC_Localization_Task_Absolute
 
                             string StringWidthSkills = NewSkillsWidth.ToString();
                             InputSkillsPanelWidth.Text = StringWidthSkills;
-                            TempConfigFile = Regex.Replace(TempConfigFile, @"""Skills Area Width"": (\d+)(\.(\d+))?(?<Afterward>(,)?(\r)?\n)", Match =>
-                            {
-                                return @$"""Skills Area Width"": {StringWidthSkills.Replace(",", ".")}{Match.Groups["Afterward"].Value}";
-                            });
-                            File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
+
+                            ChangeJsonConfigViaRegex("Skills Area Width", Configurazione.DeltaConfig.ScanParameters.AreaWidth);
                         }
-                        catch (Exception ex) { rin(ex.ToString()); }
+                        catch (Exception ex) { MessageBox.Show(ex.ToString()); }
                         break;
 
 
@@ -301,22 +285,16 @@ namespace LC_Localization_Task_Absolute
 
                             if (!Input_Simplified.Equals(Current_Simplified))
                             {
-                                string Pattern_KeywordDir = new Regex(@"""Custom Language Associative Settings"": {(?<Between1>.*?)""Name"": ""<NAMEHERE>"",(?<Between2>.*?)""Keywords Directory"": ""(?<KeywordsDir>.*?)""(?<Afterward>(,)?(\r)?\n)").ToString();
-                                Pattern_KeywordDir = Pattern_KeywordDir.Replace(
-                                    "<NAMEHERE>",
-                                    SelectedPropertiesName.ToEscapeRegexString()
-                                );
-
                                 string FormattedPath = CustomLang_KeywordsDir.Text.Replace("\\", "/");
-                                TempConfigFile = Regex.Replace(TempConfigFile, Pattern_KeywordDir, Match =>
-                                {
-                                    return @$"""Custom Language Associative Settings"": {{{Match.Groups["Between1"].Value}""Name"": ""{SelectedPropertiesName}"",{Match.Groups["Between2"].Value}""Keywords Directory"": ""{FormattedPath}""{Match.Groups["Afterward"].Value}";
-                                }, RegexOptions.Singleline);
+
                                 CustomLang_KeywordsDir.Text = FormattedPath;
-                                File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
 
                                 Configurazione.SelectedAssociativePropery_Shared.Properties.KeywordsDirectory = FormattedPath;
                                 Configurazione.UpdateCustomLanguagePart(Configurazione.SelectedAssociativePropery_Shared);
+                                
+                                RichTextBoxApplicator.UpdateLast();
+
+                                ChangeJsonConfigViaRegex("Keywords Directory", FormattedPath, IsInsideCurrentCustomLangProperties: true);
                             }
                         }
                         else
@@ -335,23 +313,14 @@ namespace LC_Localization_Task_Absolute
 
                             if (!Input_Simplified.Equals(Current_Simplified))
                             {
-                                string TitleFontPath = Configurazione.SelectedAssociativePropery_Shared.Properties.TitleFont;
-                                string Pattern_TitleFont = new Regex(@"""Custom Language Associative Settings"": {(?<Between1>.*?)""Name"": ""<NAMEHERE>"",(?<Between2>.*?)""Title Font"": ""(?<TitleFontPath>.*?)""(?<Afterward>(,)?(\r)?\n)").ToString();
-                                Pattern_TitleFont = Pattern_TitleFont.Replace(
-                                    "<NAMEHERE>",
-                                    SelectedPropertiesName.ToEscapeRegexString()
-                                );
-
                                 string FormattedPath = CustomLang_TitleFont.Text.Replace("\\", "/");
-                                TempConfigFile = Regex.Replace(TempConfigFile, Pattern_TitleFont, Match =>
-                                {
-                                    return @$"""Custom Language Associative Settings"": {{{Match.Groups["Between1"].Value}""Name"": ""{SelectedPropertiesName}"",{Match.Groups["Between2"].Value}""Title Font"": ""{FormattedPath}""{Match.Groups["Afterward"].Value}";
-                                }, RegexOptions.Singleline);
+
                                 CustomLang_TitleFont.Text = FormattedPath;
-                                File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
 
                                 Configurazione.SelectedAssociativePropery_Shared.Properties.TitleFont = FormattedPath;
                                 Configurazione.UpdatePreviewLayoutsFont(Configurazione.SelectedAssociativePropery_Shared.Properties);
+
+                                ChangeJsonConfigViaRegex("Title Font", FormattedPath, IsInsideCurrentCustomLangProperties: true);
                             }
                         }
                         else
@@ -369,23 +338,14 @@ namespace LC_Localization_Task_Absolute
 
                             if (!Input_Simplified.Equals(Current_Simplified))
                             {
-                                string ContextFontPath = Configurazione.SelectedAssociativePropery_Shared.Properties.ContextFont;
-                                string Pattern_ContextFont = new Regex(@"""Custom Language Associative Settings"": {(?<Between1>.*?)""Name"": ""<NAMEHERE>"",(?<Between2>.*?)""Context Font"": ""(?<ContextFontPath>.*?)""(?<Afterward>(,)?(\r)?\n)").ToString();
-                                Pattern_ContextFont = Pattern_ContextFont.Replace(
-                                    "<NAMEHERE>",
-                                    SelectedPropertiesName.ToEscapeRegexString()
-                                );
-
                                 string FormattedPath = CustomLang_ContextFont.Text.Replace("\\", "/");
-                                TempConfigFile = Regex.Replace(TempConfigFile, Pattern_ContextFont, Match =>
-                                {
-                                    return @$"""Custom Language Associative Settings"": {{{Match.Groups["Between1"].Value}""Name"": ""{SelectedPropertiesName}"",{Match.Groups["Between2"].Value}""Context Font"": ""{FormattedPath}""{Match.Groups["Afterward"].Value}";
-                                }, RegexOptions.Singleline);
+
                                 CustomLang_ContextFont.Text = FormattedPath;
-                                File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
 
                                 Configurazione.SelectedAssociativePropery_Shared.Properties.ContextFont = FormattedPath;
                                 Configurazione.UpdatePreviewLayoutsFont(Configurazione.SelectedAssociativePropery_Shared.Properties);
+
+                                ChangeJsonConfigViaRegex("Context Font", FormattedPath, IsInsideCurrentCustomLangProperties: true);
                             }
                         }
                         else
@@ -413,28 +373,17 @@ namespace LC_Localization_Task_Absolute
                         var NewSelectionFound = Configurazione.DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.List.Where(x => x.PropertyName.Equals(NewSelectionName)).ToList();
                         if (NewSelectionFound.Count() > 0)
                         {
-
                             var NewSelection = NewSelectionFound[0];
 
                             Configurazione.SelectedAssociativePropery_Shared = NewSelection;
-
                             Configurazione.DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.Selected = NewSelection.PropertyName;
 
                             Configurazione.UpdateCustomLanguagePart(NewSelection);
                             UpdateSelectedCustomLanguageSettingsView();
 
+                            RichTextBoxApplicator.UpdateLast();
 
-
-
-                            TempConfigFile = File.ReadAllText(@"⇲ Assets Directory\Configurazione^.json");
-                            TempConfigFile = Regex.Replace(TempConfigFile, @"""Associative Properties Selected"": ""(.*?)""(?<Afterward>(,)?(\r)?\n)", Match =>
-                            {
-                                return @$"""Associative Properties Selected"": ""{NewSelection.PropertyName}""{Match.Groups["Afterward"].Value}";
-                            });
-                            File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
-
-
-                            RichTextBoxApplicator.SetLimbusRichText(RichText.RichTextBoxApplicator.LastUpdateTarget, RichText.RichTextBoxApplicator.LastUpdateText);
+                            ChangeJsonConfigViaRegex("Associative Properties Selected", NewSelection.PropertyName);
                         }
 
 
@@ -443,12 +392,9 @@ namespace LC_Localization_Task_Absolute
 
                     case "LanguageSelector":
                         NewSelectionName = (LanguageSelector.SelectedItem as TextBlock).Text;
-                        UILanguageLoader.InitializeUILanguage(@$"⇲ Assets Directory\[+] Languages\{NewSelectionName}.json");
-                        TempConfigFile = Regex.Replace(TempConfigFile, @"""UI Language"": ""(.*?)""(?<Afterward>(,)?(\r)?\n)", Match =>
-                        {
-                            return @$"""UI Language"": ""⇲ Assets Directory/[+] Languages/{NewSelectionName}.json""{Match.Groups["Afterward"].Value}";
-                        });
-                        File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
+                        UILanguageLoader.InitializeUILanguage(@$"⇲ Assets Directory/[+] Languages/{NewSelectionName}.json");
+
+                        ChangeJsonConfigViaRegex("UI Language", $"⇲ Assets Directory/[+] Languages/{NewSelectionName}.json");
 
                         break;
 
@@ -456,11 +402,8 @@ namespace LC_Localization_Task_Absolute
                     case "ThemeSelector":
                         NewSelectionName = (ThemeSelector.SelectedItem as TextBlock).Text;
                         UIThemesLoader.InitializeUITheme(@$"⇲ Assets Directory\[+] Themes\{NewSelectionName}");
-                        TempConfigFile = Regex.Replace(TempConfigFile, @"""UI Theme"": ""(.*?)""(?<Afterward>(,)?(\r)?\n)", Match =>
-                        {
-                            return @$"""UI Theme"": ""⇲ Assets Directory/[+] Themes/{NewSelectionName}""{Match.Groups["Afterward"].Value}";
-                        });
-                        File.WriteAllText(@"⇲ Assets Directory\Configurazione^.json", TempConfigFile);
+
+                        ChangeJsonConfigViaRegex("UI Theme", $"⇲ Assets Directory/[+] Themes/{NewSelectionName}");
 
                         break;
                 }
