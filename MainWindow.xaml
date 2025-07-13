@@ -783,12 +783,12 @@
                                                 <Grid>
                                                     <Image Source="/UI/Limbus/Backgrounds/E.G.O Gift Name Background.png" Margin="30 -12 0 0"/>
                                                     
-                                                    <Viewbox Width="280" Height="49" Stretch="Uniform" HorizontalAlignment="Center">
+                                                    <Viewbox Width="260" Height="49" Stretch="Uniform" HorizontalAlignment="Center">
                                                         <TextBlock x:Name="EGOGiftName_PreviewLayout"
                                                                    Panel.ZIndex="10"
                                                                    LineStackingStrategy="BlockLineHeight"
                                                                    LineHeight="24"
-                                                                   Width="280"
+                                                                   Width="260"
                                                                    TextAlignment="Center"
                                                                    VerticalAlignment="Center"
                                                                    FontSize="29"
