@@ -256,7 +256,8 @@ public partial class MainWindow : Window
                         PreviewUpdate_TargetSite.Visibility = Collapsed;
                     }
 
-                    
+                    Mode_Skills.LastPreviewUpdatesBank[PreviewUpdate_TargetSite] = EditorText.Replace("\r", "");
+
 
                     if (PreviewUpdate_TargetSite.Equals(MainControl.PreviewLayout_Skills_MainDesc))
                     {
