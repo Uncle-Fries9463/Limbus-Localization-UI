@@ -1706,7 +1706,7 @@ public partial class MainWindow : Window
 
                         if (PreviewUpdate_TargetSite.Equals(PreviewLayout_Skills_MainDesc))
                         {
-                            DelegateSkills[Mode_Skills.CurrentSkillID][Mode_Skills.CurrentSkillUptieLevel].Description = DelegateSkills[Mode_Skills.CurrentSkillID][Mode_Skills.CurrentSkillUptieLevel].EditorDescription;
+                            DelegateSkills[Mode_Skills.CurrentSkillID][Mode_Skills.CurrentSkillUptieLevel].Description = DelegateSkills[Mode_Skills.CurrentSkillID][Mode_Skills.CurrentSkillUptieLevel].EditorDescription.Replace("\\n", "\n");
 
                             UILanguage["Right Menu — Skill Desc"].SetRichText(UILanguageLoader.UILanguageElementsTextData["Right Menu — Skill Desc"]);
 
@@ -1718,7 +1718,7 @@ public partial class MainWindow : Window
                             var FullLinkSkill = DelegateSkills[Mode_Skills.CurrentSkillID][Mode_Skills.CurrentSkillUptieLevel].Coins[Mode_Skills.CurrentSkillCoinIndex].CoinDescriptions;
                             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                            FullLinkSkill[Mode_Skills.CurrentSkillCoinDescIndex].Description = FullLinkSkill[Mode_Skills.CurrentSkillCoinDescIndex].EditorDescription;
+                            FullLinkSkill[Mode_Skills.CurrentSkillCoinDescIndex].Description = FullLinkSkill[Mode_Skills.CurrentSkillCoinDescIndex].EditorDescription.Replace("\\n", "\n");
 
                             if (!FullLinkSkill.Where(x => !x.Description.Equals(x.EditorDescription)).Any())
                             {
@@ -1745,7 +1745,7 @@ public partial class MainWindow : Window
 
                         if (Mode_Passives.TargetSite_StringLine.Equals("Main Description"))
                         {
-                            FullLinkPassive.Description = FullLinkPassive.EditorDescription;
+                            FullLinkPassive.Description = FullLinkPassive.EditorDescription.Replace("\\n", "\n");
 
                             MainControl.STE_Passives_MainDescription
                                 .SetRichText(UILanguageLoader.UILanguageElementsTextData["Right Menu — Passive Desc"]);
@@ -1754,7 +1754,7 @@ public partial class MainWindow : Window
                         }
                         else if (Mode_Passives.TargetSite_StringLine.Equals("Summary Description"))
                         {
-                            FullLinkPassive.SummaryDescription = FullLinkPassive.EditorSummaryDescription;
+                            FullLinkPassive.SummaryDescription = FullLinkPassive.EditorSummaryDescription.Replace("\\n", "\n");
 
                             STE_Passives_SummaryDescription
                                 .SetRichText(UILanguageLoader.UILanguageElementsTextData["Right Menu — Passive Summary"]);
@@ -1772,7 +1772,7 @@ public partial class MainWindow : Window
 
                         if (Mode_Keywords.TargetSite_StringLine.Equals("Main Description"))
                         {
-                            FullLinkKeyword.Description = FullLinkKeyword.EditorDescription;
+                            FullLinkKeyword.Description = FullLinkKeyword.EditorDescription.Replace("\\n", "\n");
 
                             MainControl.STE_Keyword_MainDescription
                                 .SetRichText(UILanguageLoader.UILanguageElementsTextData["Right Menu — Keyword Desc"]);
@@ -1799,7 +1799,7 @@ public partial class MainWindow : Window
 
                         if (Mode_EGOGifts.TargetSite_StringLine.Equals("Main Description"))
                         {
-                            FullLinkEGOGift.Description = FullLinkEGOGift.EditorDescription;
+                            FullLinkEGOGift.Description = FullLinkEGOGift.EditorDescription.Replace("\\n", "\n");
 
                             MainControl.STE_EGOGift_MainDescription
                                 .SetRichText(UILanguageLoader.UILanguageElementsTextData["Right Menu — E.G.O Gift Desc"]);
@@ -1812,7 +1812,7 @@ public partial class MainWindow : Window
 
                             int TargetSimpleDescIndex = int.Parse(SimpleDescNumber) - 1;
 
-                            FullLinkEGOGift.SimpleDescriptions[TargetSimpleDescIndex].Description = FullLinkEGOGift.SimpleDescriptions[TargetSimpleDescIndex].EditorDescription;
+                            FullLinkEGOGift.SimpleDescriptions[TargetSimpleDescIndex].Description = FullLinkEGOGift.SimpleDescriptions[TargetSimpleDescIndex].EditorDescription.Replace("\\n", "\n");
 
                             (MainControl.FindName($"STE_EGOGift_SimpleDescription{SimpleDescNumber}") as RichTextBox)
                                 .SetRichText(UILanguageLoader.UILanguageElementsTextData[$"Right Menu — E.G.O Gift Simple Desc {SimpleDescNumber}"]);
