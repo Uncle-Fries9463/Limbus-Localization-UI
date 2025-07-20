@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LC_Localization_Task_Absolute"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="LC Localization Task Absolute"
+        Title="LC Localization Interface"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen" 
         ResizeMode="CanResizeWithGrip"
@@ -1685,7 +1685,7 @@
                                                         </TextBlock>
                                                         <TextBlock Foreground="#c6c3bd" Text="※" FontWeight="Light" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5"/>
                                                         <TextBlock Foreground="#c6c3bd" FontWeight="Black" Style="{StaticResource TextBlockDefaultDesk}" FontSize="28" FontFamily="UI/Fonts/#GOST Type BU" Margin="5">
-                                                           1.1:3
+                                                           1.1:4
                                                         </TextBlock>
                                                     </StackPanel>
                                                 </StackPanel>
