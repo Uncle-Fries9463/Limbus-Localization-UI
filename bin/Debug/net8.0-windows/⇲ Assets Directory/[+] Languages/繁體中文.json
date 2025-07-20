@@ -4,6 +4,7 @@
     "All fonts will be taken primarily from defined fonts in the 'Fonts' section, otherwise you can use the name of any font installed on your computer"
   ],
   "Default Font": "思源黑体TW-Bold",
+  "Custom Logo (⇲ Assets Directory/[+] Languages/Custom Logos)": "繁體中文.png",
   "UI Static": [
     {
       "Element ID": "Title",
@@ -12,7 +13,8 @@
       "Font Color": "#493227",
       "Font Size": 23,
       "Vertical Offset": 2,
-      "Horizontal Offset": 1.8
+      "Horizontal Offset": 1.8,
+      "Width": 520
     },
     {
       "Element ID": "Json Path [Shadow Text]",
@@ -201,7 +203,7 @@
     {
       "Element ID": "Editor Context Menu — TextMeshPro to Shorthands",
       "Font": "Unispace",
-      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"2038\"><u>TextMeshPro</u> 轉換為 <sprite name=\"9202\"><u>縮寫</u>",
+      "Text": "<spritesvoffset=-4><spritessize=+22><sprite name=\"2038\"><u>TextMeshPro</u> 轉換為 <sprite name=\"9202\"><u>關鍵詞縮寫</u>",
       "Width": 400
     },
     {
@@ -268,12 +270,12 @@
     },
     {
       "Element ID": "[Settings] Limbus Preview — Highlight Coin Desc on click",
-      "Text": "右鍵硬幣描述時高亮",
+      "Text": "右鍵硬幣描述時高亮顯示",
       "Font": "Segoe UI"
     },
     {
       "Element ID": "[Settings] Limbus Preview — Highlight Coin Desc on manual switch",
-      "Text": "預覽更新延遲（秒）",
+      "Text": "切換硬幣描述時高亮顯示",
       "Font": "Segoe UI"
     },
     {
@@ -389,7 +391,7 @@
     {
       "Element ID": "Json File Path",
       "Font": "思源黑体TW-Bold",
-      "Font Size": 25,
+      "Font Size": 24,
       "Font Weight": "Bold",
       "Horizontal Offset": 3.8,
       "Vertical Offset": 2.5
@@ -469,16 +471,19 @@
     {
       "Element ID": "[Settings] Custom Lanugage — Keywords Directory",
       "Font": "思源黑体TW-Bold",
+      "Font Size": 12,
       "Font Weight": "Bold"
     },
     {
       "Element ID": "[Settings] Custom Lanugage — Title Font",
       "Font": "思源黑体TW-Bold",
+      "Font Size": 12,
       "Font Weight": "Bold"
     },
     {
       "Element ID": "[Settings] Custom Lanugage — Context Font",
       "Font": "思源黑体TW-Bold",
+      "Font Size": 12,
       "Font Weight": "Bold"
     },
     {
@@ -522,6 +527,8 @@
   "Unsaved Changes Marker": "[$] <size=66%><color=#fc5a03><b>（已變更）</b></color></size>",
   "Make Scan Button tooltip": "將預覽匯出為PNG圖片（到路徑 <font=\"Consolas\"><b>⇲ Assets Directory\\[⇲] Scans<b></font>）",
   "Make Scan Button tooltip width": 400,
+  "Program Version at main menu": "版本",
+  "Startup Object name": "金枝共鳴",
   "Fonts": {
     "Font Files (⇲ Assets Directory/[+] Languages/Fonts)": [
       {
