@@ -267,7 +267,12 @@
     },
     {
       "Element ID": "[Settings] Limbus Preview — Highlight Coin Desc on manual switch",
-      "Text": "Preview update delay (Seconds)",
+      "Text": "Highlight Coin Desc on manual switch",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Limbus Preview — Preview update delay",
+      "Text": "Limbus Preview update delay",
       "Font": "Segoe UI"
     },
 

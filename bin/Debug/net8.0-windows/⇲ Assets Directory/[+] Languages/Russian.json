@@ -271,6 +271,11 @@
       "Text": "Подсвечивать описания монет при переключении",
       "Font": "Segoe UI"
     },
+    {
+      "Element ID": "[Settings] Limbus Preview — Preview update delay",
+      "Text": "Задержка обновления предпросмотра",
+      "Font": "Segoe UI"
+    },
 
 
     {
