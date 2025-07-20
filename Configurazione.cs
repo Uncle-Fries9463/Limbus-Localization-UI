@@ -126,7 +126,7 @@ namespace LC_Localization_Task_Absolute
                     {
                         //LoadErrors += $"¤ Cannot find fallback keywords directory \"{DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory}\" (Can it be on disk D:\\ or E:\\??)\n\n";
 
-                        LoadErrors += UILanguageLoader.LoadedLanguage.CustomLangLoadingWarnings.FallbackKeywordsNotFound;
+                        LoadErrors += UILanguageLoader.LoadedLanguage.CustomLangLoadingWarnings.FallbackKeywordsNotFound.Extern(DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory);
                     }
 
                     string SelectedAssociativePropertyName = DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.Selected;
