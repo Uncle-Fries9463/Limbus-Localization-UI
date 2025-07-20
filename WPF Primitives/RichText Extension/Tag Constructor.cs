@@ -77,6 +77,10 @@ namespace RichText
                                 {
                                     TargetRun.FontFamily = LimbusPreviewFormatter.LimbusEmbeddedFonts[TagBody[1].Replace("TEMPLATESPACE", " ")];
                                 }
+                                else if (UILanguageLoader.UILanguageLoadingEvent)
+                                {
+                                    TargetRun.FontFamily = new System.Windows.Media.FontFamily(TagBody[1].Replace("TEMPLATESPACE", " "));
+                                }
                             }
                             catch { }
 

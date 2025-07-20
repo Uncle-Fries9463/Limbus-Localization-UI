@@ -149,7 +149,7 @@ namespace RichText
                 }
                 else
                 {
-                    if ((KeywordsInterrogate.EGOGiftInlineImages.ContainsKey(ImageData.ImageID) & InternalModel.InitializingEvent) || Target.Equals(MainControl.PreviewLayout_Default))
+                    if (KeywordsInterrogate.EGOGiftInlineImages.ContainsKey(ImageData.ImageID) & (UILanguageLoader.UILanguageLoadingEvent || PreviewUpdate_TargetSite.Name.Equals("PreviewLayout_Default")))
                     {
                         KeywordImageSource = KeywordsInterrogate.EGOGiftInlineImages[ImageData.ImageID];
                     }
@@ -310,7 +310,7 @@ namespace RichText
             RichTextString = Regex.Replace(RichTextString, @"<spritessize=((\+|\-)\d+)>", "\uFFF5spritessize=$1\uFFF6");
             RichTextString = Regex.Replace(RichTextString, @"<font=""(.*?)"">", Match =>
             {
-                if (LimbusPreviewFormatter.LimbusEmbeddedFonts.ContainsKey(Match.Groups[1].Value) & RichTextBoxApplicator.IsProcessingLimbusText)
+                if ((LimbusPreviewFormatter.LimbusEmbeddedFonts.ContainsKey(Match.Groups[1].Value) & RichTextBoxApplicator.IsProcessingLimbusText) | UILanguageLoader.UILanguageLoadingEvent)
                 {
                     return $"\uFFF5font=\"{Match.Groups[1].Value}\"\uFFF6";
                 }

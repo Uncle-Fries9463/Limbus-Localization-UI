@@ -114,6 +114,38 @@ public partial class MainWindow : Window
             ["Unsaved Changes Window — Cancel"] = STE_UnsavedChangesWindow_Cancel,
             ["Unsaved Changes Window — Confirm Exit"] = STE_UnsavedChangesWindow_ConfirmExit,
             ["Unsaved Changes Window — Information Text"] = DTE_UnsavedChangesInfo,
+
+
+            ["[Settings] Limbus Preview — Section Name"] = SettingsControl.STE_Settings_LimbusPreview_SectionName,
+            ["[Settings] Limbus Preview — Highlight <style>"] = SettingsControl.STE_Settings_LimbusPreview_HighlightStyle,
+            ["[Settings] Limbus Preview — Highlight Coin Desc on click"] = SettingsControl.STE_Settings_LimbusPreview_HighlightCoinDescOnClick,
+            ["[Settings] Limbus Preview — Highlight Coin Desc on manual switch"] = SettingsControl.STE_Settings_LimbusPreview_HighlightCoinDescOnSwitch,
+            ["[Settings] Limbus Preview — Preview update delay"] = SettingsControl.STE_Settings_LimbusPreview_UpdateDelay,
+           
+            ["[Settings] Custom Lanugage — Section Name"] = SettingsControl.STE_Settings_CustomLanguage_SectionName,
+            ["[Settings] Custom Lanugage — Selected Properties"] = SettingsControl.STE_Settings_CustomLanguage_Selected,
+            ["[Settings] Custom Lanugage — Keywords Directory"] = SettingsControl.STE_Settings_CustomLanguage_KeywordsDirectory,
+            ["[Settings] Custom Lanugage — Title Font"] = SettingsControl.STE_Settings_CustomLanguage_TitleFont,
+            ["[Settings] Custom Lanugage — Context Font"] = SettingsControl.STE_Settings_CustomLanguage_ContextFont,
+
+
+            ["[Settings] Internal — Section Name"] = SettingsControl.STE_Settings_Internal_SectionName,
+            ["[Settings] Internal — Selected UI Lanugage"] = SettingsControl.STE_Settings_Internal_UILanguage,
+            ["[Settings] Internal — Selected UI Theme"] = SettingsControl.STE_Settings_Internal_UITheme,
+            ["[Settings] Internal — Toggle Topmost state"] = SettingsControl.STE_Settings_Internal_TopmostWindowState,
+            ["[Settings] Internal — Enable Load Warnings"] = SettingsControl.STE_Settings_Internal_EnableLoadWarnings,
+            ["[Settings] Internal — Dropdown lists Readme"] = SettingsControl.STE_Settings_Internal_Readme,
+
+
+            ["[Settings] Preview Scans — Section Name"] = SettingsControl.STE_Settings_PreviewScans_SectionName,
+            ["[Settings] Preview Scans — Toggle Scan Area view"] = SettingsControl.STE_Settings_PreviewScans_ToggleAreaView,
+            ["[Settings] Preview Scans — Width of Skills Preview"] = SettingsControl.STE_Settings_PreviewScans_SkillsAreaWidth,
+            ["[Settings] Preview Scans — Display Keyword Sprites"] = SettingsControl.STE_Settings_PreviewScans_DisplayKeywordSpritesToggle,
+            ["[Settings] Preview Scans — Display Keyword Underline"] = SettingsControl.STE_Settings_PreviewScans_DisplayKeywordUnderlineToggle,
+            ["[Settings] Preview Scans — Readme Title"] = SettingsControl.STE_Settings_PreviewScans_Readme_0,
+            ["[Settings] Preview Scans — Readme 1"] = SettingsControl.STE_Settings_PreviewScans_Readme_1,
+            ["[Settings] Preview Scans — Readme 2"] = SettingsControl.STE_Settings_PreviewScans_Readme_2,
+            ["[Settings] Preview Scans — Readme 3"] = SettingsControl.STE_Settings_PreviewScans_Readme_3,
         };
         UITextfieldElements = new()
         {
@@ -131,6 +163,12 @@ public partial class MainWindow : Window
             ["Right Menu — Keywords Format Insertion {4}"] = SWBT_Keywords_FormatInsertion_4,
             ["Right Menu — Keywords Format Insertion {5}"] = SWBT_Keywords_FormatInsertion_5,
             ["Right Menu — Keywords Format Insertion {6}"] = SWBT_Keywords_FormatInsertion_6,
+
+            ["[Settings] Limbus Preview — Preview update delay"] = SettingsControl.InputPreviewUpdateDelay,
+            ["[Settings] Custom Lanugage — Keywords Directory"] = SettingsControl.CustomLang_KeywordsDir,
+            ["[Settings] Custom Lanugage — Title Font"] = SettingsControl.CustomLang_TitleFont,
+            ["[Settings] Custom Lanugage — Context Font"] = SettingsControl.CustomLang_ContextFont,
+            ["[Settings] Custom Lanugage — Width of Skills Preview"] = SettingsControl.InputSkillsPanelWidth,
         };
     }
     #endregion
@@ -166,10 +204,6 @@ public partial class MainWindow : Window
 
     internal protected void InitMain()
     {
-        Mode_EGOGifts.OrganizedData.UpdateOrganizedInfo();
-        LimbusPreviewFormatter.InitializeLimbusEmbeddedFonts();
-        KeywordsInterrogate.LoadInlineImages();
-
         PreviewUpdate_TargetSite = PreviewLayout_Default;
 
         File.WriteAllText(@"⇲ Assets Directory\Latest loading.txt", "");
@@ -2156,7 +2190,7 @@ public partial class MainWindow : Window
     {
         if (!Configurazione.LoadErrors.Equals("") & Configurazione.DeltaConfig.Internal.ShowLoadWarnings)
         {
-            MessageBox.Show(Configurazione.LoadErrors + "\n\n(You can disable this warning in Settings, Internal section)", $"Loading exceptions @ {Configurazione.SelectedAssociativePropery_Shared.PropertyName}", MessageBoxButton.OK, MessageBoxImage.Information);
+            Configurazione.ShowLoadWarningsWindow();
         }
 
         if (DeltaConfig.TechnicalActions.KeywordsDictionary.Generate & !File.Exists("Keywords Multiple Meanings.json"))
@@ -2187,9 +2221,6 @@ public partial class MainWindow : Window
     internal protected static void ReloadConfig_Direct()
     {
         Configurazione.PullLoad();
-
-        // Update last textfield that was changed
-        RichTextBoxApplicator.SetLimbusRichText(RichText.RichTextBoxApplicator.LastUpdateTarget, RichText.RichTextBoxApplicator.LastUpdateText);
     }
 
     private void SavePreviewlayoutScan()

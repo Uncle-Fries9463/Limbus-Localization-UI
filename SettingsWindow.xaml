@@ -536,13 +536,15 @@ TargetType="{x:Type ScrollBar}">
             <Setter Property="Margin" Value="0 1 0 0"/>
             <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
         </Style>
-        <Style TargetType="TextBlock" x:Key="CommentSection">
+        <Style TargetType="RichTextBox" x:Key="CommentSection">
             <Setter Property="FontFamily" Value="/UI/Fonts/#Linotype Syntax Com Regular"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Foreground" Value="#FFC7BCBC"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="IsHitTestVisible" Value="False"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Margin" Value="0 1 0 0"/>
         </Style>
 
@@ -584,7 +586,7 @@ TargetType="{x:Type ScrollBar}">
                             <Grid x:Name="SH_Internal">
                                 <StackPanel>
                                     <StackPanel Margin="0 0 0 0" Visibility="Visible">
-                                        <RichTextBox Style="{StaticResource Header}">
+                                        <RichTextBox x:Name="STE_Settings_LimbusPreview_SectionName" Style="{StaticResource Header}">
                                             <FlowDocument>
                                                 <Paragraph Padding="0,1,0,0">
                                                     ⦁ Limbus Preview
@@ -597,7 +599,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_LimbusPreview_HighlightStyle" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0 1 0 0">
                                                             Highlight &lt;style&gt;
@@ -615,7 +617,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_LimbusPreview_HighlightCoinDescOnClick" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0 1 0 0">
                                                             Highlight Coin Descs on right click
@@ -633,7 +635,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_LimbusPreview_HighlightCoinDescOnSwitch" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0 1 0 0">
                                                             Highlight Coin Descs on manual switch
@@ -651,7 +653,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_LimbusPreview_UpdateDelay" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0 1 0 0">
                                                             Preview update delay (Seconds)
@@ -678,7 +680,7 @@ TargetType="{x:Type ScrollBar}">
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Margin="0 15 0 0" Visibility="Visible">
-                                        <RichTextBox Style="{StaticResource Header}">
+                                        <RichTextBox x:Name="STE_Settings_CustomLanguage_SectionName" Style="{StaticResource Header}">
                                             <FlowDocument>
                                                 <Paragraph Padding="0,1,0,0">
                                                     ⦁ Custom Language
@@ -693,7 +695,7 @@ TargetType="{x:Type ScrollBar}">
                                                         <ColumnDefinition/>
                                                         <ColumnDefinition/>
                                                     </Grid.ColumnDefinitions>
-                                                    <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                    <RichTextBox x:Name="STE_Settings_CustomLanguage_Selected" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                         <FlowDocument>
                                                             <Paragraph Padding="0,1,0,0">
                                                                 Selected
@@ -711,7 +713,7 @@ TargetType="{x:Type ScrollBar}">
                                                 <Border Style="{StaticResource BorderButton}" BorderThickness="1" Margin="10 5 10 0"/>
                                                 <Grid Margin="0 5 0 0">
                                                     <StackPanel>
-                                                        <RichTextBox Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                        <RichTextBox x:Name="STE_Settings_CustomLanguage_KeywordsDirectory" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                             <FlowDocument>
                                                                 <Paragraph Padding="0 1 0 0">
                                                                     Keywords directory
@@ -738,7 +740,7 @@ TargetType="{x:Type ScrollBar}">
                                                 </Grid>
                                                 <Grid Margin="0 5 0 0">
                                                     <StackPanel>
-                                                        <RichTextBox Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                        <RichTextBox x:Name="STE_Settings_CustomLanguage_TitleFont" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                             <FlowDocument>
                                                                 <Paragraph Padding="0 1 0 0">
                                                                     Title font
@@ -765,7 +767,7 @@ TargetType="{x:Type ScrollBar}">
                                                 </Grid>
                                                 <Grid Margin="0 5 0 0">
                                                     <StackPanel>
-                                                        <RichTextBox Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                        <RichTextBox x:Name="STE_Settings_CustomLanguage_ContextFont" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                             <FlowDocument>
                                                                 <Paragraph Padding="0 1 0 0">
                                                                     Context font
@@ -794,7 +796,7 @@ TargetType="{x:Type ScrollBar}">
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Margin="0 15 0 0">
-                                        <RichTextBox Style="{StaticResource Header}">
+                                        <RichTextBox x:Name="STE_Settings_Internal_SectionName" Style="{StaticResource Header}">
                                             <FlowDocument>
                                                 <Paragraph Padding="0,1,0,0">
                                                     ⦁ Internal
@@ -807,7 +809,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_Internal_UILanguage" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0,1,0,0">
                                                             UI Language
@@ -827,7 +829,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_Internal_UITheme" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0,1,0,0">
                                                             UI Theme
@@ -847,7 +849,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_Internal_TopmostWindowState" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0 1 0 0">
                                                             Topmost Window
@@ -865,7 +867,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_Internal_EnableLoadWarnings" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0 1 0 0">
                                                             Enable Load Warnings
@@ -878,15 +880,19 @@ TargetType="{x:Type ScrollBar}">
                                                     </TextBlock>
                                                 </Border>
                                             </Grid>
-                                            <TextBlock Style="{StaticResource CommentSection}" TextWrapping="Wrap" Margin="5 5 0 0">
-                                                Drop-down lists only consider files and folders from
-                                                <LineBreak />
-                                                «⇲ Assets Directory\[+] Languages» and «⇲ Assets Directory\[+] Themes» respectively
-                                            </TextBlock>
+                                            <RichTextBox x:Name="STE_Settings_Internal_Readme" Style="{StaticResource CommentSection}" Margin="5 5 0 0">
+                                                <FlowDocument>
+                                                    <Paragraph>
+                                                        Drop-down lists only consider files and folders from
+                                                        <LineBreak/>
+                                                        «⇲ Assets Directory\[+] Languages» and «⇲ Assets Directory\[+] Themes» respectively
+                                                    </Paragraph>
+                                                </FlowDocument>
+                                            </RichTextBox>
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Margin="0 15 0 0">
-                                        <RichTextBox Style="{StaticResource Header}">
+                                        <RichTextBox x:Name="STE_Settings_PreviewScans_SectionName" Style="{StaticResource Header}">
                                             <FlowDocument>
                                                 <Paragraph Padding="0,1,0,0">
                                                     ⦁ Preview scans
@@ -899,7 +905,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_PreviewScans_ToggleAreaView" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0 1 0 0">
                                                             Toggle scan area view
@@ -917,7 +923,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_PreviewScans_SkillsAreaWidth" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0 1 0 0">
                                                             Skills Panel Width
@@ -946,7 +952,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_PreviewScans_DisplayKeywordSpritesToggle" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0 1 0 0">
                                                             Display [KeywordID] Sprites (Per-session)
@@ -964,7 +970,7 @@ TargetType="{x:Type ScrollBar}">
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <RichTextBox Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                <RichTextBox x:Name="STE_Settings_PreviewScans_DisplayKeywordUnderlineToggle" Grid.Column="0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                     <FlowDocument>
                                                         <Paragraph Padding="0 1 0 0">
                                                             Display [KeywordID] Underline (Per-session)
@@ -979,7 +985,7 @@ TargetType="{x:Type ScrollBar}">
                                             </Grid>
                                             <Grid Margin="0 5 0 0">
                                                 <StackPanel>
-                                                    <RichTextBox Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
+                                                    <RichTextBox x:Name="STE_Settings_PreviewScans_Readme_0" Background="#FF191818" Style="{StaticResource SubName}" HorizontalAlignment="Left">
                                                         <FlowDocument>
                                                             <Paragraph Padding="0 1 0 0">
                                                                 Readme (Why Skills width adjustment only)
@@ -988,15 +994,27 @@ TargetType="{x:Type ScrollBar}">
                                                     </RichTextBox>
                                                     <Grid Margin="8 0 0 0">
                                                         <StackPanel>
-                                                            <TextBlock Style="{StaticResource CommentSection}" TextWrapping="Wrap">
-                                                                «Universal Template.json» (Skills .json file) file in «⇲ Assets Directory\[⇲] Scans» can be used for translating new Identities preview Skills and Passives both, Status Effects as well if you adjust this width to appropriate value. So it counts as Skills for viewer only if you write something in coins and they will be visible. Type 0 to reset to default width, all text even outside of window still being rendered and scanned.
-                                                            </TextBlock>
-                                                            <TextBlock Margin="0 5 0 0" Style="{StaticResource CommentSection}" TextWrapping="Wrap">
-                                                                If you would make copies and rename this file, it will still be recognized automatically by the special line "Template Marker": "(Don't remove)" inside.
-                                                            </TextBlock>
-                                                            <TextBlock Margin="0 5 0 0" Style="{StaticResource CommentSection}" TextWrapping="Wrap">
-                                                                Just use it for all.
-                                                            </TextBlock>
+                                                            <RichTextBox x:Name="STE_Settings_PreviewScans_Readme_1" Style="{StaticResource CommentSection}">
+                                                                <FlowDocument>
+                                                                    <Paragraph>
+                                                                        «Universal Template.json» (Skills .json file) file in «⇲ Assets Directory\[⇲] Scans» can be used for translating new Identities preview Skills and Passives both, Status Effects as well if you adjust this width to appropriate value. So it counts as Skills for viewer only if you write something in coins and they will be visible. Type 0 to reset to default width, all text even outside of window still being rendered and scanned.
+                                                                    </Paragraph>
+                                                                </FlowDocument>
+                                                            </RichTextBox>
+                                                            <RichTextBox x:Name="STE_Settings_PreviewScans_Readme_2" Margin="0 5 0 0" Style="{StaticResource CommentSection}">
+                                                                <FlowDocument>
+                                                                    <Paragraph>
+                                                                        If you would make copies and rename this file, it will still be recognized automatically by the special line "Template Marker": "(Don't remove)" inside.
+                                                                    </Paragraph>
+                                                                </FlowDocument>
+                                                            </RichTextBox>
+                                                            <RichTextBox x:Name="STE_Settings_PreviewScans_Readme_3" Margin="0 5 0 0" Style="{StaticResource CommentSection}">
+                                                                <FlowDocument>
+                                                                    <Paragraph>
+                                                                        Just use it for all.
+                                                                    </Paragraph>
+                                                                </FlowDocument>
+                                                            </RichTextBox>
                                                         </StackPanel>
                                                     </Grid>
                                                 </StackPanel>

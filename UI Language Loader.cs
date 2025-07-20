@@ -30,7 +30,7 @@ namespace LC_Localization_Task_Absolute
             public List<UIStaticTextItem> StaticUIElements { get; set; }
 
             [JsonProperty("Default [$] Insertion")]
-            public string DefaultInsertionText { get; set; } = "";
+            public string DefaultInsertionText { get; set; } = "…";
 
             [JsonProperty("Unsaved Changes Marker")]
             public string UnsavedChangesMarker { get; set; } = "";
@@ -40,6 +40,9 @@ namespace LC_Localization_Task_Absolute
 
             [JsonProperty("Unsaved Changes Info")]
             public UnsavedChangesInfo UnsavedChangesInfo { get; set; }
+
+            [JsonProperty("Custom Localization Load Warnings")]
+            public CustomLangLoadingWarnings CustomLangLoadingWarnings { get; set; }
 
             [JsonProperty("Fonts")]
             public FontsInfo Fonts { get; set; }
@@ -67,6 +70,38 @@ namespace LC_Localization_Task_Absolute
 
             [JsonProperty("Skills")]
             public UnsavedChangesInfo_Skills   Skills   { get; set; }
+        }
+        internal protected class CustomLangLoadingWarnings
+        {
+            [JsonProperty("Fallback Keywords Directory not found")]
+            public string FallbackKeywordsNotFound { get; set; } = "";
+
+            [JsonProperty("Selected Custom Language not found in list")]
+            public string CustomLanguagePropertyNotFound { get; set; } = "";
+
+            [JsonProperty("Custom Language Keywords Directory not found")]
+            public string KeywordsDirNotFound { get; set; } = "";
+
+            [JsonProperty("Custom Language Context Font not found")]
+            public string ContextFontMissing { get; set; } = "";
+
+            [JsonProperty("Custom Language Title Font not found")]
+            public string TitleFontMissing { get; set; } = "";
+
+            [JsonProperty("Custom Language Keywords Multiple Meanings Dictionary not found")]
+            public string MultipleKeywordsDictionaryMissing { get; set; } = "";
+
+            [JsonProperty("Warnings disabling notice")]
+            public string WarningsDisablingNotice { get; set; } = "";
+
+            [JsonProperty("Warnings window title")]
+            public string WarningsWindowTitle { get; set; } = "";
+
+            [OnDeserialized]
+            internal void OnInit(StreamingContext context)
+            {
+                rin(FallbackKeywordsNotFound);
+            }
         }
         internal protected class UnsavedChangesInfo_Passives
         {
@@ -189,23 +224,24 @@ namespace LC_Localization_Task_Absolute
         internal protected class FontFileInfo
         {
             [JsonProperty("File")]
-            public string File { get; set; }
+            public string File { get; set; } = "";
 
             [JsonProperty("Name")]
-            public string Name { get; set; }
+            public string Name { get; set; } = "";
 
             [OnDeserialized]
             internal void FontFileInfoSet(StreamingContext context)
             {
-                NullableControl.NullExterminate(this);
                 LoadedFontFamilies[Name] = FileToFontFamily(@$"⇲ Assets Directory\[+] Languages\Fonts\{File}");
             }
         }
 
 
-
+        internal protected static bool UILanguageLoadingEvent = false;
+        internal protected static string LastSeenDefaultInsertion = "";
         internal protected static void InitializeUILanguage(string SourceFile)
         {
+            UILanguageLoadingEvent = true;
             string LanugageFile;
             if (File.Exists(SourceFile))
             {
@@ -219,21 +255,32 @@ namespace LC_Localization_Task_Absolute
             LoadedFontFamilies.Clear();
             LoadedLanguage = JsonConvert.DeserializeObject<Language>(LanugageFile);
 
+            LastSeenDefaultInsertion = LoadedLanguage.DefaultInsertionText;
+
             foreach (UIStaticTextItem UIStaticItemData in LoadedLanguage.StaticUIElements)
             {
                 string TargetUIElementID = UIStaticItemData.ElementID;
                 string TargetUIElementText = UIStaticItemData.Text;
+                //rin(TargetUIElementID);
                 if (UILanguage.ContainsKey(TargetUIElementID))
                 {
                     string LoadFontAttach = "";
 
-                    if (!UIStaticItemData.Visible.IsNull())
+                    if (UIStaticItemData.ElementID.StartsWith("Editor Context Menu"))
                     {
-                        UILanguage[TargetUIElementID].Visibility = (bool)UIStaticItemData.Visible ? Visibility.Visible : Visibility.Collapsed;
-                    }
-                    else
-                    {
-                        UILanguage[TargetUIElementID].Visibility = Visibility.Visible;
+                        if (!UIStaticItemData.Visible.IsNull())
+                        {
+                            if (UIStaticItemData.Visible == false)
+                            {
+                                UILanguage[TargetUIElementID].Visibility = (bool)UIStaticItemData.Visible ? Visibility.Visible : Visibility.Collapsed;
+                                //rin($"Hide {TargetUIElementID}");
+                            }
+                        }
+                        else
+                        {
+                            UILanguage[TargetUIElementID].Visibility = Visibility.Visible;
+                            //rin($"Show {TargetUIElementID}");
+                        }
                     }
 
                     if (!UIStaticItemData.VericalOffset.IsNull())
@@ -256,7 +303,8 @@ namespace LC_Localization_Task_Absolute
                             UILanguage[TargetUIElementID].Margin.Bottom
                         );
                     }
-                        
+
+                    bool DefaultFontFromPCLoaded = false;
                     if (!UIStaticItemData.Font.IsNull())
                     {
                         if (LoadedFontFamilies.ContainsKey(UIStaticItemData.Font))
@@ -266,11 +314,13 @@ namespace LC_Localization_Task_Absolute
                         }
                         else
                         {
+                            DefaultFontFromPCLoaded = true;
                             UILanguage[TargetUIElementID].FontFamily = new FontFamily(UIStaticItemData.Font);
+                            //rin($"Apply {UIStaticItemData.Font} for {TargetUIElementID}");
                         }
                     }
                         
-                    if (LoadedFontFamilies.ContainsKey(LoadedLanguage.DefaultUIFont))
+                    if (LoadedFontFamilies.ContainsKey(LoadedLanguage.DefaultUIFont) & !DefaultFontFromPCLoaded)
                     {
                         if (LoadFontAttach.Equals(""))
                         {
@@ -330,7 +380,11 @@ namespace LC_Localization_Task_Absolute
                         {
                             DynamicTypeElements[TargetUIElementID] = UIStaticItemData.Text;
                             //rin($"------------------------------");
-                            UILanguage[TargetUIElementID].SetRichText(TargetUIElementText.Extern(LoadedLanguage.DefaultInsertionText));
+                            if (UILanguage[TargetUIElementID].GetText().Contains(LastSeenDefaultInsertion))
+                            {
+                                UILanguage[TargetUIElementID].SetRichText(TargetUIElementText.Extern(LoadedLanguage.DefaultInsertionText));
+                            }
+                            //rin($"{TargetUIElementID}: \"{UILanguage[TargetUIElementID].GetText()}\"");
                         }
                         else
                         {
@@ -338,7 +392,6 @@ namespace LC_Localization_Task_Absolute
                         }
                     }
                 }
-                
             }
 
             foreach (UITextfieldItem UITextfieldItemData in LoadedLanguage.TextfieldUIElements)
@@ -371,6 +424,7 @@ namespace LC_Localization_Task_Absolute
                     UITextfieldElements[TargetUIElementID].FontWeight = WeightFrom(UITextfieldItemData.FontWeight);
                 }
             }
+            UILanguageLoadingEvent = false;
         }
     }
 }

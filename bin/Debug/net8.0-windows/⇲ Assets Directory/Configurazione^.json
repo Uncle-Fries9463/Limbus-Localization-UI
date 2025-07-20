@@ -1,6 +1,6 @@
 {
   "Internal": {
-    "UI Language": "⇲ Assets Directory/[+] Languages/English.json",
+    "UI Language": "⇲ Assets Directory/[+] Languages/Russian.json",
     "UI Theme": "⇲ Assets Directory/[+] Themes/Limbus Localization UI",
     "Topmost Window": true,
     "Show Load Warnings": true
@@ -29,7 +29,7 @@
         "Directory": "C:/Program Files (x86)/Steam/steamapps/common/Limbus Company/LimbusCompany_Data/Assets/Resources_moved/Localize/en"
       },
       "Custom Language Associative Settings": {
-        "Associative Properties Selected": "English (Original)",
+        "Associative Properties Selected": "Russian (Crescent Corporation)",
         "Associative Properties List": [
           {
             "Name": "Example",
@@ -188,7 +188,8 @@
             }
           }
         ]
-      }
+      },
+      "Additional Keywords Directory": "Something here (Loads after custom language)"
     }
   },
   "Scan Parameters": {

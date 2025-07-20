@@ -1,5 +1,7 @@
 ﻿using LC_Localization_Task_Absolute.Limbus_Integration;
+using LC_Localization_Task_Absolute.Mode_Handlers;
 using Newtonsoft.Json;
+using RichText;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
@@ -96,6 +98,10 @@ namespace LC_Localization_Task_Absolute
 
         internal protected static void PullLoad()
         {
+            Mode_EGOGifts.OrganizedData.UpdateOrganizedInfo();
+            KeywordsInterrogate.LoadInlineImages();
+            LimbusPreviewFormatter.InitializeLimbusEmbeddedFonts();
+
             if (File.Exists(@"⇲ Assets Directory\Configurazione^.json"))
             {
                 try
@@ -118,7 +124,9 @@ namespace LC_Localization_Task_Absolute
                     }
                     else
                     {
-                        LoadErrors += $"¤ Cannot find fallback keywords directory \"{DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory}\" (Can it be on disk D:\\ or E:\\??)\n\n";
+                        //LoadErrors += $"¤ Cannot find fallback keywords directory \"{DeltaConfig.PreviewSettings.CustomLanguageProperties.KeywordsFallback.FallbackKeywordsDirectory}\" (Can it be on disk D:\\ or E:\\??)\n\n";
+
+                        LoadErrors += UILanguageLoader.LoadedLanguage.CustomLangLoadingWarnings.FallbackKeywordsNotFound;
                     }
 
                     string SelectedAssociativePropertyName = DeltaConfig.PreviewSettings.CustomLanguageProperties.AssociativeSettings.Selected;
@@ -141,8 +149,22 @@ namespace LC_Localization_Task_Absolute
                     }
                     else
                     {
-                        LoadErrors += $"¤ Cannot find Custom Language property named \"{SelectedAssociativePropertyName}\"\n\n";
+                        //LoadErrors += $"¤ Cannot find Custom Language property named \"{SelectedAssociativePropertyName}\"\n\n";
+
+                        LoadErrors += UILanguageLoader.LoadedLanguage.CustomLangLoadingWarnings.CustomLanguagePropertyNotFound.Extern(SelectedAssociativePropertyName);
                     }
+
+                    if (Directory.Exists(DeltaConfig.PreviewSettings.CustomLanguageProperties.AdditionalKeywordsDirectory))
+                    {
+                        KeywordsInterrogate.InitializeGlossaryFrom
+                        (
+                            KeywordsDirectory: DeltaConfig.PreviewSettings.CustomLanguageProperties.AdditionalKeywordsDirectory,
+                            WriteOverFallback: true
+                        );
+                    }
+
+                    RichTextBoxApplicator.UpdateLast();
+
                     SettingsLoadingEvent = false;
                 }
                 catch (Exception ex)
@@ -165,7 +187,9 @@ namespace LC_Localization_Task_Absolute
             }
             else
             {
-                LoadErrors += $"¤ Cannot find Custom Language keywords directory \"{SelectedAssociativePropery.Properties.KeywordsDirectory}\"\n\n";
+                //LoadErrors += $"¤ Cannot find Custom Language keywords directory \"{}\"\n\n";
+
+                LoadErrors += UILanguageLoader.LoadedLanguage.CustomLangLoadingWarnings.KeywordsDirNotFound.Extern(SelectedAssociativePropery.Properties.KeywordsDirectory);
             }
 
             if (!SelectedAssociativePropery.Properties.KeywordsMultipleMeaningsDictionary.Equals(""))
@@ -176,7 +200,9 @@ namespace LC_Localization_Task_Absolute
                 }
                 else
                 {
-                    LoadErrors += $"¤ Cannot find Keywords Multiple Meanings Dictionary \"{SelectedAssociativePropery.Properties.KeywordsDirectory}\"\n\n";
+                    //LoadErrors += $"¤ Cannot find Keywords Multiple Meanings Dictionary \"{}\"\n\n";
+
+                    LoadErrors += UILanguageLoader.LoadedLanguage.CustomLangLoadingWarnings.MultipleKeywordsDictionaryMissing.Extern(SelectedAssociativePropery.Properties.KeywordsDirectory);
                 }
             }
 
@@ -205,7 +231,7 @@ namespace LC_Localization_Task_Absolute
             // Then MainWindow.Window_Loaded() will be triggered with this
             if (!LoadErrors.Equals("") & !RichText.InternalModel.InitializingEvent & Configurazione.DeltaConfig.Internal.ShowLoadWarnings)
             {
-                MessageBox.Show(LoadErrors + "\n\n(You can disable this warning in Settings, Internal section)", $"Loading exceptions @ {SelectedAssociativePropery_Shared.PropertyName}", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowLoadWarningsWindow();
             }
         }
 
@@ -235,7 +261,8 @@ namespace LC_Localization_Task_Absolute
                 }
                 else
                 {
-                    LoadErrors += $"¤ Cannot find Context Font file \"{Properties.ContextFont}\"\n\n";
+                    //LoadErrors += $"¤ Cannot find Context Font file \"{Properties.ContextFont}\"\n\n";
+                    LoadErrors += UILanguageLoader.LoadedLanguage.CustomLangLoadingWarnings.ContextFontMissing.Extern(Properties.ContextFont);
                     rin($"    - [!] Context font file NOT FOUND (\"{Properties.ContextFont}\")");
                 }
 
@@ -257,7 +284,8 @@ namespace LC_Localization_Task_Absolute
                 }
                 else
                 {
-                    LoadErrors += $"¤ Cannot find Title Font file \"{Properties.TitleFont}\"\n\n";
+                    //LoadErrors += $"¤ Cannot find Title Font file \"{Properties.TitleFont}\"\n\n";
+                    LoadErrors += UILanguageLoader.LoadedLanguage.CustomLangLoadingWarnings.TitleFontMissing.Extern(Properties.TitleFont);
                     rin($"    - [!] Title font file NOT FOUND (\"{Properties.TitleFont}\")");
                 }
 
@@ -274,6 +302,19 @@ namespace LC_Localization_Task_Absolute
             return FormalTaskCompleted;
         }
         #endregion
+
+
+        internal protected static void ShowLoadWarningsWindow()
+        {
+            MessageBox.Show(
+                Configurazione.LoadErrors + UILanguageLoader.LoadedLanguage.CustomLangLoadingWarnings.WarningsDisablingNotice,
+
+                UILanguageLoader.LoadedLanguage.CustomLangLoadingWarnings.WarningsWindowTitle.Extern(Configurazione.SelectedAssociativePropery_Shared.PropertyName),
+
+                MessageBoxButton.OK,
+
+                MessageBoxImage.Information);
+        }
 
         internal protected class ShorthandInsertionProperty
         {
@@ -356,6 +397,9 @@ namespace LC_Localization_Task_Absolute
 
             [JsonProperty("Custom Language Associative Settings")]
             public CustomLanguageAssociativeSettings AssociativeSettings { get; set; }
+
+            [JsonProperty("Additional Keywords Directory")]
+            public string AdditionalKeywordsDirectory { get; set; } = "";
         }
         internal protected class FallbackKeywords
         {

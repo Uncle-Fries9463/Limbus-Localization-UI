@@ -247,6 +247,134 @@
       "Font:": "GOST Type BU",
       "Font Color": "#D2D2D2",
       "Font Size": 21
+    },
+
+
+    {
+      "Element ID": "[Settings] Limbus Preview — Section Name",
+      "Text": "⦁ Limbus Preview",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Limbus Preview — Highlight <style>",
+      "Text": "Highlight <style>",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Limbus Preview — Highlight Coin Desc on click",
+      "Text": "Highlight Coin Desc on click",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Limbus Preview — Highlight Coin Desc on manual switch",
+      "Text": "Preview update delay (Seconds)",
+      "Font": "Segoe UI"
+    },
+
+
+    {
+      "Element ID": "[Settings] Custom Lanugage — Section Name",
+      "Text": "⦁ Custom Lanugage",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Custom Lanugage — Selected Properties",
+      "Text": "Selected",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Custom Lanugage — Keywords Directory",
+      "Text": "Keywords Directory",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Custom Lanugage — Title Font",
+      "Text": "Title font",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Custom Lanugage — Context Font",
+      "Text": "Context font",
+      "Font": "Segoe UI"
+    },
+
+
+    {
+      "Element ID": "[Settings] Internal — Section Name",
+      "Text": "⦁ Internal",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Internal — Selected UI Lanugage",
+      "Text": "UI Language",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Internal — Selected UI Theme",
+      "Text": "UI Theme",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Internal — Toggle Topmost state",
+      "Text": "Topmost Window",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Internal — Enable Load Warnings",
+      "Text": "Enable Load Warnings",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Internal — Dropdown lists Readme",
+      "Text": "Drop-down lists only consider files and folders from\n<font=\"Consolas\"><b><color=#7177ff>⇲ Assets Directory\\[+] Languages</color></b></font> and <font=\"Consolas\"><b><color=#7177ff>⇲ Assets Directory\\[+] Themes</color></b></font> respectively",
+      "Font": "Segoe UI"
+    },
+
+
+    {
+      "Element ID": "[Settings] Preview Scans — Section Name",
+      "Text": "⦁ Preview Scans",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Preview Scans — Toggle Scan Area view",
+      "Text": "Toggle scan area view",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Preview Scans — Width of Skills Preview",
+      "Text": "Skills Panel Width",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Preview Scans — Display Keyword Sprites",
+      "Text": "Display [KeywordID] Sprites (Per-session)",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Preview Scans — Display Keyword Underline",
+      "Text": "Display [KeywordID] Underline (Per-session)",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Preview Scans — Readme Title",
+      "Text": "Readme (Why Skills width adjustment only)",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Preview Scans — Readme 1",
+      "Text": "<font=\"Consolas\"><b><color=#7177ff>Universal Template.json</color></b></font> (Skills .json file) file in \n<font=\"Consolas\"><b><color=#7177ff>⇲ Assets Directory\\[⇲] Scans</color></b></font> can be used for translating new Identities preview Skills and Passives both, Status Effects as well if you adjust this width to appropriate value. So it counts as Skills for viewer only if you write something in coins and they will be visible. Type 0 to reset to default width, all text even outside of window still being rendered and scanned.",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Preview Scans — Readme 2",
+      "Text": "If you would make copies and rename this file, it will still be recognized automatically by the special line <font=\"Consolas\"><b><color=#aaace7>\"Template Marker\": \"(Don't remove)\"</color></b></font> inside.",
+      "Font": "Segoe UI"
+    },
+    {
+      "Element ID": "[Settings] Preview Scans — Readme 3",
+      "Text": "Just use it for all.",
+      "Font": "Segoe UI"
     }
   ],
   "UI Textfields": [
@@ -323,6 +451,33 @@
       "Element ID": "Right Menu — Keywords Format Insertion {6}",
       "Font": "GOST Type BU",
       "Font Weight": "Bold"
+    },
+
+
+    {
+      "Element ID": "[Settings] Limbus Preview — Preview update delay",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "[Settings] Custom Lanugage — Keywords Directory",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "[Settings] Custom Lanugage — Title Font",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "[Settings] Custom Lanugage — Context Font",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
+    },
+    {
+      "Element ID": "[Settings] Custom Lanugage — Width of Skills Preview",
+      "Font": "GOST Type BU",
+      "Font Weight": "Bold"
     }
   ],
   "Unsaved Changes Info": {
@@ -345,6 +500,16 @@
       "ID Header": "\n\n<b>ID</b> <color=#f8c200>[$1]</color> 「<color=#afbff9>[$2]</color>」",
       "Uptie Level": "\n  > Uptie Level [$]"
     }
+  },
+  "Custom Localization Load Warnings": {
+    "Fallback Keywords Directory not found": "¤ Cannot find fallback keywords directory \"[$]\" (Can it be on disk D:\\ or E:\\??)\n\n",
+    "Selected Custom Language not found in list": "¤ Cannot find Custom Language property named \"[$]\"\n\n",
+    "Custom Language Keywords Directory not found": "¤ Cannot find Custom Language keywords directory \"[$]\"\n\n",
+    "Custom Language Context Font not found": "¤ Cannot find Context Font file \"[$]\"\n\n",
+    "Custom Language Title Font not found": "¤ Cannot find Title Font file \"[$]\"\n\n",
+    "Custom Language Keywords Multiple Meanings Dictionary not found": "¤ Cannot find Keywords Multiple Meanings Dictionary \"[$]\"\n\n",
+    "Warnings disabling notice": "\n\n(You can disable this warning in Settings at 'Internal' section)",
+    "Warnings window title": "Loading exceptions @ [$]"
   },
   "Default [$] Insertion": "…",
   "Unsaved Changes Marker": "[$] <size=66%><color=#fc5a03><b>(Changed)</b></color></size>",
