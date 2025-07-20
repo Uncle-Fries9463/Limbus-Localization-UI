@@ -32,6 +32,12 @@ namespace LC_Localization_Task_Absolute
             [JsonProperty("Default [$] Insertion")]
             public string DefaultInsertionText { get; set; } = "…";
 
+            [JsonProperty("Make Scan Button tooltip")]
+            public string MakeScanTooltip { get; set; } = "Export preview to PNG (To '⇲ Assets Directory\\[⇲] Scans' directory)";
+
+            [JsonProperty("Make Scan Button tooltip width")]
+            public double MakeScanTooltip_Width { get; set; } = 296;
+
             [JsonProperty("Unsaved Changes Marker")]
             public string UnsavedChangesMarker { get; set; } = "";
 
@@ -256,6 +262,9 @@ namespace LC_Localization_Task_Absolute
             LoadedLanguage = JsonConvert.DeserializeObject<Language>(LanugageFile);
 
             LastSeenDefaultInsertion = LoadedLanguage.DefaultInsertionText;
+
+            MainControl.MakePreviewScan_Tooltip.SetRichText(LoadedLanguage.MakeScanTooltip);
+            MainControl.MakePreviewScan_Tooltip.Width = LoadedLanguage.MakeScanTooltip_Width;
 
             foreach (UIStaticTextItem UIStaticItemData in LoadedLanguage.StaticUIElements)
             {

@@ -278,9 +278,13 @@
                                 </TextBlock>
                                 <Border.ToolTip>
                                     <ToolTip HorizontalOffset="20" Background="#E0676767">
-                                        <TextBlock x:Name="Tooltip_ReloadConfigButton" Foreground="White">
-                                            Export preview to PNG (⇲ Assets Directory\[⇲] Scans)
-                                        </TextBlock>
+                                        <RichTextBox x:Name="MakePreviewScan_Tooltip" Width="296" Foreground="White">
+                                            <FlowDocument>
+                                                <Paragraph>
+                                                    Export preview to PNG (⇲ Assets Directory\[⇲] Scans)
+                                                </Paragraph>
+                                            </FlowDocument>
+                                        </RichTextBox>
                                     </ToolTip>
                                 </Border.ToolTip>
                             </Border>
